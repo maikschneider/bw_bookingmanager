@@ -143,16 +143,13 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.calendar',
             'config' => [
-                'type' => 'inline',
-                'foreign_table' => '',
-                'minitems' => 0,
-                'maxitems' => 1,
-                'appearance' => [
-                    'collapseAll' => 0,
-                    'levelLinksPosition' => 'top',
-                    'showSynchronizationLink' => 1,
-                    'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink' => 1
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
+                'MM' => 'tx_bwbwgbookingmanager_calendar_timeslot_mm',
+                'MM_opposite_field' => 'timeslots',
+                'items' => [
+                    ['-', 0],
                 ],
             ],
         ],

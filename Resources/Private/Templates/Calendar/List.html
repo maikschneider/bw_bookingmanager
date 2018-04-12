@@ -21,18 +21,15 @@ Otherwise your changes will be overwritten the next time you save the extension 
 	<tr>
 		<th><f:translate key="tx_bwbookingmanager_domain_model_calendar.name" /></th>
 		<th> </th>
-		<th> </th>
 	</tr>
 
 	<f:for each="{calendars}" as="calendar">
 		<tr>
 			<td><f:link.action action="show" arguments="{calendar : calendar}"> {calendar.name}</f:link.action></td>
 			<td><f:link.action action="edit" arguments="{calendar : calendar}">Edit</f:link.action></td>
-			<td><f:link.action action="delete" arguments="{calendar : calendar}">Delete</f:link.action></td>
 		</tr>
 	</f:for>
 </table>
 
-<f:link.action action="new">New Calendar</f:link.action>
 </f:section>
 </html>

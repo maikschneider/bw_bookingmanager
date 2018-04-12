@@ -17,4 +17,5 @@ namespace Blueways\BwBookingmanager\Domain\Repository;
  */
 class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+
     }

@@ -26,13 +26,24 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     protected $calendarRepository = null;
 
     /**
+     * timeslotRepository
+     *
+     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     * @inject
+     */
+    protected $timeslotRepository = null;
+
+    public function initializeAction() {
+        $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
+    }
+
+    /**
      * action list
      *
      * @return void
      */
     public function listAction()
     {
-        $calendar = 0;
         $calendars = $this->calendarRepository->findAll();
         $this->view->assign('calendars', $calendars);
     }
@@ -45,6 +56,8 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
      */
     public function showAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
     {
+        $timeslots = $this->timeslotRepository->findByDateRange($calendar);
         $this->view->assign('calendar', $calendar);
+        $this->view->assign('timeslots', $timeslots);
     }
 }

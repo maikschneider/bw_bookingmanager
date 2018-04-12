@@ -113,10 +113,12 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.timeslots',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectSingle',
+                'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
+                'MM' => 'tx_bwbwgbookingmanager_calendar_timeslot_mm',
+                'MM_opposite_field' => 'calendar',
                 'minitems' => 0,
-                'maxitems' => 1,
+                'maxitems' => 999,
             ],
         ],
     
