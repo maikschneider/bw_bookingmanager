@@ -27,9 +27,16 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * timeslots
      *
-     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot>
      */
     protected $timeslots = null;
+
+    /**
+     * blockslots
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot>
+     */
+    protected $blockslots = null;
 
     /**
      * Returns the name
@@ -53,9 +60,97 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * __construct
+     */
+    public function __construct()
+    {
+        //Do not remove the next line: It would break the functionality
+        $this->initStorageObjects();
+    }
+
+    /**
+     * Initializes all ObjectStorage properties
+     * Do not modify this method!
+     * It will be rewritten on each save in the extension builder
+     * You may modify the constructor of this class instead
+     *
+     * @return void
+     */
+    protected function initStorageObjects()
+    {
+        $this->timeslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->blockslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    /**
+     * Adds a Blockslot
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot
+     * @return void
+     */
+    public function addBlockslot(\Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot)
+    {
+        $this->blockslots->attach($blockslot);
+    }
+
+    /**
+     * Removes a Blockslot
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslotToRemove The Blockslot to be removed
+     * @return void
+     */
+    public function removeBlockslot(\Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslotToRemove)
+    {
+        $this->blockslots->detach($blockslotToRemove);
+    }
+
+    /**
+     * Returns the blockslots
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot> $blockslots
+     */
+    public function getBlockslots()
+    {
+        return $this->blockslots;
+    }
+
+    /**
+     * Sets the blockslots
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot> $blockslots
+     * @return void
+     */
+    public function setBlockslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $blockslots)
+    {
+        $this->blockslots = $blockslots;
+    }
+
+    /**
+     * Adds a Timeslot
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @return void
+     */
+    public function addTimeslot(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot)
+    {
+        $this->timeslots->attach($timeslot);
+    }
+
+    /**
+     * Removes a Timeslot
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslotToRemove The Timeslot to be removed
+     * @return void
+     */
+    public function removeTimeslot(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslotToRemove)
+    {
+        $this->timeslots->detach($timeslotToRemove);
+    }
+
+    /**
      * Returns the timeslots
      *
-     * @return \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslots
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
      */
     public function getTimeslots()
     {
@@ -65,10 +160,10 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the timeslots
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslots
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
      * @return void
      */
-    public function setTimeslots(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslots)
+    public function setTimeslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $timeslots)
     {
         $this->timeslots = $timeslots;
     }

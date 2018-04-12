@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T12:09:26Z" product-name="bw_bookingmanager">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T14:50:57Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
 			<trans-unit id="start_date.description">
@@ -15,8 +15,8 @@
 			<trans-unit id="max_weight.description">
 				<source>maxWeight</source>
 			</trans-unit>
-			<trans-unit id="calendar.description">
-				<source>calendar</source>
+			<trans-unit id="entries.description">
+				<source>entries</source>
 			</trans-unit>
 		</body>
 	</file>

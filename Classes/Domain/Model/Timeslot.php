@@ -46,11 +46,12 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $maxWeight = 0;
 
     /**
-     * calendar
+     * entries
      *
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
+     * @cascade remove
      */
-    protected $calendar = null;
+    protected $entries = null;
 
     /**
      * Returns the startDate
@@ -137,23 +138,67 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the calendar
-     *
-     * @return \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * __construct
      */
-    public function getCalendar()
+    public function __construct()
     {
-        return $this->calendar;
+        //Do not remove the next line: It would break the functionality
+        $this->initStorageObjects();
     }
 
     /**
-     * Sets the calendar
+     * Initializes all ObjectStorage properties
+     * Do not modify this method!
+     * It will be rewritten on each save in the extension builder
+     * You may modify the constructor of this class instead
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @return void
      */
-    public function setCalendar($calendar)
+    protected function initStorageObjects()
     {
-        $this->calendar = $calendar;
+        $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    /**
+     * Adds a Entry
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
+     * @return void
+     */
+    public function addEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
+    {
+        $this->entries->attach($entry);
+    }
+
+    /**
+     * Removes a Entry
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove The Entry to be removed
+     * @return void
+     */
+    public function removeEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove)
+    {
+        $this->entries->detach($entryToRemove);
+    }
+
+    /**
+     * Returns the entries
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+    /**
+     * Sets the entries
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     * @return void
+     */
+    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
+    {
+        $this->entries = $entries;
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T12:09:26Z" product-name="bw_bookingmanager">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T14:50:57Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
@@ -11,6 +11,9 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.timeslots">
 				<source>Timeslots</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots">
+				<source>Blockslots</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
@@ -27,8 +30,56 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendar">
-				<source>Calendar</source>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries">
+				<source>Entries</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry">
+				<source>Entry</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date">
+				<source>Start Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.end_date">
+				<source>End Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.prename">
+				<source>Prename</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.street">
+				<source>Street</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.zip">
+				<source>Zip</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.city">
+				<source>City</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.phone">
+				<source>Phone</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
+				<source>Weight</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
+				<source>Blockslot</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.start_date">
+				<source>Start Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.end_date">
+				<source>End Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
+				<source>Reason</source>
 			</trans-unit>
 		</body>
 	</file>

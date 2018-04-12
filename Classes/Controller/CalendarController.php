@@ -33,7 +33,8 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
      */
     protected $timeslotRepository = null;
 
-    public function initializeAction() {
+    public function initializeAction()
+    {
         $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
     }
 

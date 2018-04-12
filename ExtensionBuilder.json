@@ -3,8 +3,8 @@
         {
             "config": {
                 "position": [
-                    190,
-                    60
+                    320,
+                    112
                 ]
             },
             "name": "New Model Object",
@@ -21,7 +21,7 @@
                 "objectsettings": {
                     "addDeletedField": true,
                     "addHiddenField": true,
-                    "addStarttimeEndtimeFields": true,
+                    "addStarttimeEndtimeFields": false,
                     "aggregateRoot": true,
                     "categorizable": false,
                     "description": "",
@@ -53,10 +53,21 @@
                             "propertyIsExcludeField": true,
                             "relationDescription": "",
                             "relationName": "timeslots",
-                            "relationType": "manyToOne",
+                            "relationType": "manyToMany",
                             "relationWire": "[wired]",
-                            "renderType": "selectSingle",
+                            "renderType": "selectMultipleSideBySide",
                             "uid": "910068709375"
+                        },
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": true,
+                            "relationDescription": "",
+                            "relationName": "blockslots",
+                            "relationType": "manyToMany",
+                            "relationWire": "[wired]",
+                            "renderType": "selectMultipleSideBySide",
+                            "uid": "586685244721"
                         }
                     ]
                 }
@@ -65,8 +76,8 @@
         {
             "config": {
                 "position": [
-                    37,
-                    407
+                    657,
+                    34
                 ]
             },
             "name": "New Model Object",
@@ -83,7 +94,7 @@
                 "objectsettings": {
                     "addDeletedField": true,
                     "addHiddenField": true,
-                    "addStarttimeEndtimeFields": true,
+                    "addStarttimeEndtimeFields": false,
                     "aggregateRoot": false,
                     "categorizable": false,
                     "description": "",
@@ -144,13 +155,233 @@
                             "lazyLoading": false,
                             "propertyIsExcludeField": true,
                             "relationDescription": "",
-                            "relationName": "calendar",
-                            "relationType": "zeroToOne",
-                            "relationWire": "",
-                            "renderType": "selectSingleBox",
-                            "uid": "680977822363"
+                            "relationName": "entries",
+                            "relationType": "zeroToMany",
+                            "relationWire": "[wired]",
+                            "renderType": "inline",
+                            "uid": "238388791500"
                         }
                     ]
+                }
+            }
+        },
+        {
+            "config": {
+                "position": [
+                    750,
+                    257
+                ]
+            },
+            "name": "New Model Object",
+            "value": {
+                "actionGroup": {
+                    "_default0_list": false,
+                    "_default1_show": false,
+                    "_default2_new_create": true,
+                    "_default3_edit_update": false,
+                    "_default4_delete": false,
+                    "customActions": []
+                },
+                "name": "Entry",
+                "objectsettings": {
+                    "addDeletedField": true,
+                    "addHiddenField": true,
+                    "addStarttimeEndtimeFields": false,
+                    "aggregateRoot": false,
+                    "categorizable": false,
+                    "description": "",
+                    "mapToTable": "",
+                    "parentClass": "",
+                    "sorting": false,
+                    "type": "Entity",
+                    "uid": "729987151064"
+                },
+                "propertyGroup": {
+                    "properties": [
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "startDate",
+                            "propertyType": "NativeDateTime",
+                            "uid": "41842374488"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "endDate",
+                            "propertyType": "NativeDateTime",
+                            "uid": "1222004054781"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "name",
+                            "propertyType": "String",
+                            "uid": "568739213266"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "prename",
+                            "propertyType": "String",
+                            "uid": "686523294052"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "street",
+                            "propertyType": "String",
+                            "uid": "559755984261"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "zip",
+                            "propertyType": "String",
+                            "uid": "1276655076751"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "city",
+                            "propertyType": "String",
+                            "uid": "1050214975380"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "phone",
+                            "propertyType": "String",
+                            "uid": "958082179656"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "email",
+                            "propertyType": "String",
+                            "uid": "736088746035"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "newsletter",
+                            "propertyType": "Boolean",
+                            "uid": "374104762195"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "weight",
+                            "propertyType": "Integer",
+                            "uid": "127232289090"
+                        }
+                    ]
+                },
+                "relationGroup": {
+                    "relations": []
+                }
+            }
+        },
+        {
+            "config": {
+                "position": [
+                    68,
+                    469
+                ]
+            },
+            "name": "New Model Object",
+            "value": {
+                "actionGroup": {
+                    "_default0_list": false,
+                    "_default1_show": false,
+                    "_default2_new_create": false,
+                    "_default3_edit_update": false,
+                    "_default4_delete": false,
+                    "customActions": []
+                },
+                "name": "Blockslot",
+                "objectsettings": {
+                    "addDeletedField": true,
+                    "addHiddenField": true,
+                    "addStarttimeEndtimeFields": false,
+                    "aggregateRoot": false,
+                    "categorizable": false,
+                    "description": "",
+                    "mapToTable": "",
+                    "parentClass": "",
+                    "sorting": false,
+                    "type": "Entity",
+                    "uid": "4995077891"
+                },
+                "propertyGroup": {
+                    "properties": [
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "startDate",
+                            "propertyType": "NativeDateTime",
+                            "uid": "318697058960"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "endDate",
+                            "propertyType": "NativeDateTime",
+                            "uid": "1127155018208"
+                        },
+                        {
+                            "allowedFileTypes": "",
+                            "maxItems": "1",
+                            "propertyDescription": "",
+                            "propertyIsExcludeField": true,
+                            "propertyIsRequired": false,
+                            "propertyName": "reason",
+                            "propertyType": "String",
+                            "uid": "1209247701331"
+                        }
+                    ]
+                },
+                "relationGroup": {
+                    "relations": []
                 }
             }
         }
@@ -172,8 +403,8 @@
         },
         "extensionKey": "bw_bookingmanager",
         "name": "Booking Manager",
-        "originalExtensionKey": "",
-        "originalVendorName": "",
+        "originalExtensionKey": "bw_bookingmanager",
+        "originalVendorName": "Blueways",
         "persons": [
             {
                 "company": "blueways",
@@ -199,6 +430,18 @@
         {
             "src": {
                 "moduleId": 0,
+                "terminal": "relationWire_1",
+                "uid": "586685244721"
+            },
+            "tgt": {
+                "moduleId": 3,
+                "terminal": "SOURCES",
+                "uid": "4995077891"
+            }
+        },
+        {
+            "src": {
+                "moduleId": 0,
                 "terminal": "relationWire_0",
                 "uid": "910068709375"
             },
@@ -207,10 +450,22 @@
                 "terminal": "SOURCES",
                 "uid": "531213773945"
             }
+        },
+        {
+            "src": {
+                "moduleId": 1,
+                "terminal": "relationWire_0",
+                "uid": "238388791500"
+            },
+            "tgt": {
+                "moduleId": 2,
+                "terminal": "SOURCES",
+                "uid": "729987151064"
+            }
         }
     ],
     "log": {
-        "last_modified": "2018-04-12 12:09",
+        "last_modified": "2018-04-12 02:50",
         "extension_builder_version": "8.6.0",
         "be_user": " (1)"
     }

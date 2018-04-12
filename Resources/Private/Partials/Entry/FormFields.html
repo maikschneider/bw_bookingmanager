@@ -1,0 +1,46 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<label for="startDate">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.start_date" />
+</label><br />
+	<f:form.textfield property="startDate" value="{entry.startDate->f:format.date()}" /><br />
+<label for="endDate">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.end_date" />
+</label><br />
+	<f:form.textfield property="endDate" value="{entry.endDate->f:format.date()}" /><br />
+<label for="name">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.name" />
+</label><br />
+	<f:form.textfield property="name" /><br />
+<label for="prename">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.prename" />
+</label><br />
+	<f:form.textfield property="prename" /><br />
+<label for="street">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.street" />
+</label><br />
+	<f:form.textfield property="street" /><br />
+<label for="zip">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.zip" />
+</label><br />
+	<f:form.textfield property="zip" /><br />
+<label for="city">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.city" />
+</label><br />
+	<f:form.textfield property="city" /><br />
+<label for="phone">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.phone" />
+</label><br />
+	<f:form.textfield property="phone" /><br />
+<label for="email">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.email" />
+</label><br />
+	<f:form.textfield property="email" /><br />
+<label for="newsletter">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.newsletter" />
+</label><br />
+	<f:form.checkbox property="newsletter" value="1" /><br />
+<label for="weight">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.weight" />
+</label><br />
+	<f:form.textfield property="weight" /><br />
+</html>

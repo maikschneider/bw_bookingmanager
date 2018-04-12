@@ -1,7 +1,7 @@
 <?php
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot',
+        'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot',
         'label' => 'start_date',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -13,14 +13,14 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,repeat_type,max_weight,entries',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.gif'
+        'searchFields' => 'start_date,end_date,reason',
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_blockslot.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, reason',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, reason'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -50,8 +50,8 @@ return [
                 'items' => [
                     ['', 0],
                 ],
-                'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
-                'foreign_table_where' => 'AND tx_bwbookingmanager_domain_model_timeslot.pid=###CURRENT_PID### AND tx_bwbookingmanager_domain_model_timeslot.sys_language_uid IN (-1,0)',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_blockslot',
+                'foreign_table_where' => 'AND tx_bwbookingmanager_domain_model_blockslot.pid=###CURRENT_PID### AND tx_bwbookingmanager_domain_model_blockslot.sys_language_uid IN (-1,0)',
             ],
         ],
         'l10n_diffsource' => [
@@ -74,7 +74,7 @@ return [
 
         'start_date' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.start_date',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.start_date',
             'config' => [
                 'dbType' => 'datetime',
                 'type' => 'input',
@@ -85,7 +85,7 @@ return [
         ],
         'end_date' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.end_date',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.end_date',
             'config' => [
                 'dbType' => 'datetime',
                 'type' => 'input',
@@ -94,41 +94,14 @@ return [
                 'default' => '0000-00-00 00:00:00'
             ],
         ],
-        'repeat_type' => [
+        'reason' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.reason',
             'config' => [
                 'type' => 'input',
-                'size' => 4,
-                'eval' => 'int'
-            ]
-        ],
-        'max_weight' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.max_weight',
-            'config' => [
-                'type' => 'input',
-                'size' => 4,
-                'eval' => 'int'
-            ]
-        ],
-        'entries' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.entries',
-            'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
-                'foreign_field' => 'timeslot',
-                'maxitems' => 9999,
-                'appearance' => [
-                    'collapseAll' => 0,
-                    'levelLinksPosition' => 'top',
-                    'showSynchronizationLink' => 1,
-                    'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink' => 1
-                ],
+                'size' => 30,
+                'eval' => 'trim'
             ],
-
         ],
     
     ],

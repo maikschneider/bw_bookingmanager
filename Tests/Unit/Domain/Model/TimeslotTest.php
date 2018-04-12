@@ -129,14 +129,63 @@ class TimeslotTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * @test
      */
-    public function getCalendarReturnsInitialValueFor()
+    public function getEntriesReturnsInitialValueForEntry()
     {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        self::assertEquals(
+            $newObjectStorage,
+            $this->subject->getEntries()
+        );
     }
 
     /**
      * @test
      */
-    public function setCalendarForSetsCalendar()
+    public function setEntriesForObjectStorageContainingEntrySetsEntries()
     {
+        $entry = new \Blueways\BwBookingmanager\Domain\Model\Entry();
+        $objectStorageHoldingExactlyOneEntries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneEntries->attach($entry);
+        $this->subject->setEntries($objectStorageHoldingExactlyOneEntries);
+
+        self::assertAttributeEquals(
+            $objectStorageHoldingExactlyOneEntries,
+            'entries',
+            $this->subject
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function addEntryToObjectStorageHoldingEntries()
+    {
+        $entry = new \Blueways\BwBookingmanager\Domain\Model\Entry();
+        $entriesObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $entriesObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($entry));
+        $this->inject($this->subject, 'entries', $entriesObjectStorageMock);
+
+        $this->subject->addEntry($entry);
+    }
+
+    /**
+     * @test
+     */
+    public function removeEntryFromObjectStorageHoldingEntries()
+    {
+        $entry = new \Blueways\BwBookingmanager\Domain\Model\Entry();
+        $entriesObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $entriesObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($entry));
+        $this->inject($this->subject, 'entries', $entriesObjectStorageMock);
+
+        $this->subject->removeEntry($entry);
     }
 }

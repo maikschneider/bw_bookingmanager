@@ -10,12 +10,14 @@ call_user_func(
             'Bookingmanager',
             [
                 'Calendar' => 'list, show',
-                'Timeslot' => 'list, show'
+                'Timeslot' => 'list, show',
+                'Entry' => 'new, create'
             ],
             // non-cacheable actions
             [
                 'Calendar' => '',
-                'Timeslot' => ''
+                'Timeslot' => '',
+                'Entry' => 'create'
             ]
         );
 

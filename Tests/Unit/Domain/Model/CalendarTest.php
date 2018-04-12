@@ -54,8 +54,9 @@ class CalendarTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function getTimeslotsReturnsInitialValueForTimeslot()
     {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         self::assertEquals(
-            null,
+            $newObjectStorage,
             $this->subject->getTimeslots()
         );
     }
@@ -63,15 +64,114 @@ class CalendarTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * @test
      */
-    public function setTimeslotsForTimeslotSetsTimeslots()
+    public function setTimeslotsForObjectStorageContainingTimeslotSetsTimeslots()
     {
-        $timeslotsFixture = new \Blueways\BwBookingmanager\Domain\Model\Timeslot();
-        $this->subject->setTimeslots($timeslotsFixture);
+        $timeslot = new \Blueways\BwBookingmanager\Domain\Model\Timeslot();
+        $objectStorageHoldingExactlyOneTimeslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneTimeslots->attach($timeslot);
+        $this->subject->setTimeslots($objectStorageHoldingExactlyOneTimeslots);
 
         self::assertAttributeEquals(
-            $timeslotsFixture,
+            $objectStorageHoldingExactlyOneTimeslots,
             'timeslots',
             $this->subject
         );
+    }
+
+    /**
+     * @test
+     */
+    public function addTimeslotToObjectStorageHoldingTimeslots()
+    {
+        $timeslot = new \Blueways\BwBookingmanager\Domain\Model\Timeslot();
+        $timeslotsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $timeslotsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($timeslot));
+        $this->inject($this->subject, 'timeslots', $timeslotsObjectStorageMock);
+
+        $this->subject->addTimeslot($timeslot);
+    }
+
+    /**
+     * @test
+     */
+    public function removeTimeslotFromObjectStorageHoldingTimeslots()
+    {
+        $timeslot = new \Blueways\BwBookingmanager\Domain\Model\Timeslot();
+        $timeslotsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $timeslotsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($timeslot));
+        $this->inject($this->subject, 'timeslots', $timeslotsObjectStorageMock);
+
+        $this->subject->removeTimeslot($timeslot);
+    }
+
+    /**
+     * @test
+     */
+    public function getBlockslotsReturnsInitialValueForBlockslot()
+    {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        self::assertEquals(
+            $newObjectStorage,
+            $this->subject->getBlockslots()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setBlockslotsForObjectStorageContainingBlockslotSetsBlockslots()
+    {
+        $blockslot = new \Blueways\BwBookingmanager\Domain\Model\Blockslot();
+        $objectStorageHoldingExactlyOneBlockslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneBlockslots->attach($blockslot);
+        $this->subject->setBlockslots($objectStorageHoldingExactlyOneBlockslots);
+
+        self::assertAttributeEquals(
+            $objectStorageHoldingExactlyOneBlockslots,
+            'blockslots',
+            $this->subject
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function addBlockslotToObjectStorageHoldingBlockslots()
+    {
+        $blockslot = new \Blueways\BwBookingmanager\Domain\Model\Blockslot();
+        $blockslotsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $blockslotsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($blockslot));
+        $this->inject($this->subject, 'blockslots', $blockslotsObjectStorageMock);
+
+        $this->subject->addBlockslot($blockslot);
+    }
+
+    /**
+     * @test
+     */
+    public function removeBlockslotFromObjectStorageHoldingBlockslots()
+    {
+        $blockslot = new \Blueways\BwBookingmanager\Domain\Model\Blockslot();
+        $blockslotsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $blockslotsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($blockslot));
+        $this->inject($this->subject, 'blockslots', $blockslotsObjectStorageMock);
+
+        $this->subject->removeBlockslot($blockslot);
     }
 }
