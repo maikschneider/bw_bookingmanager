@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T12:09:26Z" product-name="bw_bookingmanager">
+		<header/>
+		<body>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
+				<source>Calendar</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.timeslots">
+				<source>Timeslots</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
+				<source>Timeslot</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.start_date">
+				<source>Start Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.end_date">
+				<source>End Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type">
+				<source>Repeat Type</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
+				<source>Max Weight</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendar">
+				<source>Calendar</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

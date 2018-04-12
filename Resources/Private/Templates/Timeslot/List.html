@@ -1,0 +1,44 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="main">
+<h1>Listing for Timeslot</h1>
+
+<f:flashMessages />
+
+<table  class="tx_bwbookingmanager" >
+	<tr>
+		<th><f:translate key="tx_bwbookingmanager_domain_model_timeslot.start_date" /></th>
+		<th><f:translate key="tx_bwbookingmanager_domain_model_timeslot.end_date" /></th>
+		<th><f:translate key="tx_bwbookingmanager_domain_model_timeslot.repeat_type" /></th>
+		<th><f:translate key="tx_bwbookingmanager_domain_model_timeslot.max_weight" /></th>
+		<th> </th>
+		<th> </th>
+	</tr>
+
+	<f:for each="{timeslots}" as="timeslot">
+		<tr>
+			<td><f:link.action action="show" arguments="{timeslot : timeslot}"> {timeslot.startDate -> f:format.date()}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{timeslot : timeslot}"> {timeslot.endDate -> f:format.date()}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{timeslot : timeslot}"> {timeslot.repeatType}</f:link.action></td>
+			<td><f:link.action action="show" arguments="{timeslot : timeslot}"> {timeslot.maxWeight}</f:link.action></td>
+			<td><f:link.action action="edit" arguments="{timeslot : timeslot}">Edit</f:link.action></td>
+			<td><f:link.action action="delete" arguments="{timeslot : timeslot}">Delete</f:link.action></td>
+		</tr>
+	</f:for>
+</table>
+
+<f:link.action action="new">New Timeslot</f:link.action>
+</f:section>
+</html>
