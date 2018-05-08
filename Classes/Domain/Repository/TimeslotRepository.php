@@ -36,7 +36,8 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $query->logicalAnd([
                         $query->contains('calendars', $calendar),
                         $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
-                        $query->greaterThan('endDate', $startDate->format('Y-m-d H:i:s'))
+                        $query->lessThan('startDate', $endDate->format('Y-m-d 23:59:59')),
+                        $query->greaterThan('endDate', $startDate->format('Y-m-d 00:00:00'))
                     ])
                 ])
             );
