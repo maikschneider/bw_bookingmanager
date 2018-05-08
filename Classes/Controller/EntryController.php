@@ -28,9 +28,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = NULL)
     {
-        $newEntry = $newEntry ? $newEntry : new \Blueways\BwBookingmanager\Domain\Model\Entry();
-        $newEntry->setStartDate($timeslot->getStartDate());
-        $newEntry->setEndDate($timeslot->getEndDate());
+        $newEntry = $newEntry ? $newEntry : new \Blueways\BwBookingmanager\Domain\Model\Entry($calendar, $timeslot);
 
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslot', $timeslot);
