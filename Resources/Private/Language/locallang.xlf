@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T14:50:57Z" product-name="bw_bookingmanager">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
@@ -32,6 +32,9 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries">
 				<source>Entries</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
+				<source>Calendars</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry">
 				<source>Entry</source>
@@ -68,6 +71,9 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
 				<source>Weight</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
+				<source>Timeslot</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>

@@ -300,4 +300,30 @@ class EntryTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             $this->subject
         );
     }
+
+    /**
+     * @test
+     */
+    public function getTimeslotReturnsInitialValueForTimeslot()
+    {
+        self::assertEquals(
+            null,
+            $this->subject->getTimeslot()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setTimeslotForTimeslotSetsTimeslot()
+    {
+        $timeslotFixture = new \Blueways\BwBookingmanager\Domain\Model\Timeslot();
+        $this->subject->setTimeslot($timeslotFixture);
+
+        self::assertAttributeEquals(
+            $timeslotFixture,
+            'timeslot',
+            $this->subject
+        );
+    }
 }

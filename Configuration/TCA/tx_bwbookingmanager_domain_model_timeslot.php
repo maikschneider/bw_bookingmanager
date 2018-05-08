@@ -13,14 +13,14 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,repeat_type,max_weight,entries',
+        'searchFields' => 'start_date,end_date,repeat_type,max_weight,entries,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries, calendars',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries, calendars'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -129,6 +129,48 @@ return [
                 ],
             ],
 
+        ],
+        'calendars' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.calendars',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
+                'MM' => 'tx_bwbookingmanager_timeslot_calendar_mm',
+                'size' => 10,
+                'autoSizeMax' => 30,
+                'maxitems' => 9999,
+                'multiple' => 0,
+                'wizards' => [
+                    '_PADDING' => 1,
+                    '_VERTICAL' => 1,
+                    'edit' => [
+                        'module' => [
+                            'name' => 'wizard_edit',
+                        ],
+                        'type' => 'popup',
+                        'title' => 'Edit', // todo define label: LLL:EXT:.../Resources/Private/Language/locallang_tca.xlf:wizard.edit
+                        'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_edit.gif',
+                        'popup_onlyOpenIfSelected' => 1,
+                        'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+                    ],
+                    'add' => [
+                        'module' => [
+                            'name' => 'wizard_add',
+                        ],
+                        'type' => 'script',
+                        'title' => 'Create new', // todo define label: LLL:EXT:.../Resources/Private/Language/locallang_tca.xlf:wizard.add
+                        'icon' => 'EXT:backend/Resources/Public/Images/FormFieldWizard/wizard_add.gif',
+                        'params' => [
+                            'table' => 'tx_bwbookingmanager_domain_model_calendar',
+                            'pid' => '###CURRENT_PID###',
+                            'setValue' => 'prepend'
+                        ],
+                    ],
+                ],
+            ],
+            
         ],
     
     ],

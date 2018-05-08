@@ -19,29 +19,69 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
     public function findByDateRange(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
-        \DateTime $startDate = null,
-        \DateInterval $timeSpan = null
+        \DateTime $startDate,
+        \DateTime $endDate
         ){
-            // default startDate is now
-            if(null === $startDate) $startDate = new \DateTime('now');
-
-            // default endDate is startDate +1 month
-            if(null === $timeSpan) {
-                $timeSpan = new \DateInterval('P1M');
-            }
-
-            $maxStartDate = clone $startDate;
-            $maxStartDate->add($timeSpan);
-
             $query = $this->createQuery();
             $query->matching(
-                $query->logicalAnd(
-                    $query->equals('calendar', $calendar),
-                    $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d H:i:s')),
-                    $query->lessThanOrEqual('startDate', $maxStartDate->format('Y-m-d H:i:s'))
-                )
+                $query->logicalOr([
+                    // no repeatable events starting during date range
+                    $query->logicalAnd([
+                        $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
+                        $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d 00:00:00')),
+                        $query->lessThanOrEqual('startDate', $endDate->format('Y-m-d 23:59:59')),
+                    ]),
+                    // repeating events that end during or after date range
+                    $query->logicalAnd([
+                        $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
+                        $query->greaterThan('endDate', $startDate->format('Y-m-d H:i:s'))
+                    ])
+                ])
             );
 
             return $query->execute();
         }
+
+    public function findInCurrentMonth(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+        ){
+        $today = new \DateTime('now');
+        return $this->findInMonth($calendar, $today);
+    }
+
+    public function findInCurrentWeek(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+        ){
+        $today = new \DateTime('now');
+        return $this->findInWeek($calendar, $today);
+    }
+
+    public function findInMonth(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        \DateTime $dayInMonth
+    ){
+        $startDate = clone $dayInMonth;
+        $startDate->modify('first day of this month');
+
+        $endDate = clone $dayInMonth;
+        $endDate->modify('last day of this month');
+
+        return $this->findByDateRange($calendar, $startDate, $endDate);
+    }
+
+    public function findInWeek(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        \DateTime $dayInWeek
+    ){
+        // move one day further to catch right monday if current day is monday
+        $dayInWeek->modify('tomorrow');
+
+        $startDate = clone $dayInWeek;
+        $startDate->modify('last monday');
+
+        $endDate = clone $dayInWeek;
+        $endDate->modify('next sunday');
+
+        return $this->findByDateRange($calendar, $startDate, $endDate);
+    }
 }

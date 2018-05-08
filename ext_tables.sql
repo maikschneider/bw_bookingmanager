@@ -40,6 +40,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_timeslot (
 	repeat_type int(11) DEFAULT '0' NOT NULL,
 	max_weight int(11) DEFAULT '0' NOT NULL,
 	entries int(11) unsigned DEFAULT '0' NOT NULL,
+	calendars int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -154,11 +155,17 @@ CREATE TABLE tx_bwbookingmanager_calendar_blockslot_mm (
 	KEY uid_foreign (uid_foreign)
 );
 
-#
-# Table structure for table 'tx_bwbookingmanager_domain_model_entry'
-#
-CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 
-	timeslot int(11) unsigned DEFAULT '0' NOT NULL,
+#
+# Table structure for table 'tx_bwbookingmanager_timeslot_calendar_mm'
+#
+CREATE TABLE tx_bwbookingmanager_timeslot_calendar_mm (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 
+	PRIMARY KEY (uid_local,uid_foreign),
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
 );

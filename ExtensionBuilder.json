@@ -3,8 +3,8 @@
         {
             "config": {
                 "position": [
-                    320,
-                    112
+                    177,
+                    114
                 ]
             },
             "name": "New Model Object",
@@ -76,8 +76,8 @@
         {
             "config": {
                 "position": [
-                    657,
-                    34
+                    672,
+                    55
                 ]
             },
             "name": "New Model Object",
@@ -160,6 +160,17 @@
                             "relationWire": "[wired]",
                             "renderType": "inline",
                             "uid": "238388791500"
+                        },
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": true,
+                            "relationDescription": "",
+                            "relationName": "calendars",
+                            "relationType": "manyToMany",
+                            "relationWire": "[wired]",
+                            "renderType": "selectMultipleSideBySide",
+                            "uid": "1297615900361"
                         }
                     ]
                 }
@@ -168,8 +179,8 @@
         {
             "config": {
                 "position": [
-                    750,
-                    257
+                    517,
+                    554
                 ]
             },
             "name": "New Model Object",
@@ -311,15 +322,27 @@
                     ]
                 },
                 "relationGroup": {
-                    "relations": []
+                    "relations": [
+                        {
+                            "foreignRelationClass": "",
+                            "lazyLoading": false,
+                            "propertyIsExcludeField": true,
+                            "relationDescription": "",
+                            "relationName": "timeslot",
+                            "relationType": "manyToOne",
+                            "relationWire": "[wired]",
+                            "renderType": "selectSingle",
+                            "uid": "254104265740"
+                        }
+                    ]
                 }
             }
         },
         {
             "config": {
                 "position": [
-                    68,
-                    469
+                    45,
+                    433
                 ]
             },
             "name": "New Model Object",
@@ -462,10 +485,34 @@
                 "terminal": "SOURCES",
                 "uid": "729987151064"
             }
+        },
+        {
+            "src": {
+                "moduleId": 1,
+                "terminal": "relationWire_1",
+                "uid": "1297615900361"
+            },
+            "tgt": {
+                "moduleId": 0,
+                "terminal": "SOURCES",
+                "uid": "1107701005035"
+            }
+        },
+        {
+            "src": {
+                "moduleId": 2,
+                "terminal": "relationWire_0",
+                "uid": "254104265740"
+            },
+            "tgt": {
+                "moduleId": 1,
+                "terminal": "SOURCES",
+                "uid": "531213773945"
+            }
         }
     ],
     "log": {
-        "last_modified": "2018-04-12 02:50",
+        "last_modified": "2018-04-12 03:11",
         "extension_builder_version": "8.6.0",
         "be_user": " (1)"
     }

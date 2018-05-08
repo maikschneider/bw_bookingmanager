@@ -17,6 +17,11 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    const REPEAT_NO = 0;
+    const REPEAT_DAILY = 1;
+    const REPEAT_WEEKLY = 2;
+    const REPEAT_MONTHLY = 3;
+
     /**
      * startDate
      *
@@ -36,7 +41,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var int
      */
-    protected $repeatType = 0;
+    protected $repeatType = Timeslot::REPEAT_NO;
 
     /**
      * maxWeight
@@ -52,6 +57,13 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @cascade remove
      */
     protected $entries = null;
+
+    /**
+     * calendars
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
+     */
+    protected $calendars = null;
 
     /**
      * Returns the startDate
@@ -157,6 +169,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected function initStorageObjects()
     {
         $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->calendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -200,5 +213,48 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
     {
         $this->entries = $entries;
+    }
+
+    /**
+     * Adds a Calendar
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @return void
+     */
+    public function addCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
+    {
+        $this->calendars->attach($calendar);
+    }
+
+    /**
+     * Removes a Calendar
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove The Calendar to be removed
+     * @return void
+     */
+    public function removeCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove)
+    {
+        $this->calendars->detach($calendarToRemove);
+    }
+
+    /**
+     * Returns the calendars
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     */
+    public function getCalendars()
+    {
+        return $this->calendars;
+    }
+
+    /**
+     * Sets the calendars
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @return void
+     */
+    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
+    {
+        $this->calendars = $calendars;
     }
 }

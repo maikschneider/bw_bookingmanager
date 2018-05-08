@@ -188,4 +188,67 @@ class TimeslotTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 
         $this->subject->removeEntry($entry);
     }
+
+    /**
+     * @test
+     */
+    public function getCalendarsReturnsInitialValueForCalendar()
+    {
+        $newObjectStorage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        self::assertEquals(
+            $newObjectStorage,
+            $this->subject->getCalendars()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setCalendarsForObjectStorageContainingCalendarSetsCalendars()
+    {
+        $calendar = new \Blueways\BwBookingmanager\Domain\Model\Calendar();
+        $objectStorageHoldingExactlyOneCalendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $objectStorageHoldingExactlyOneCalendars->attach($calendar);
+        $this->subject->setCalendars($objectStorageHoldingExactlyOneCalendars);
+
+        self::assertAttributeEquals(
+            $objectStorageHoldingExactlyOneCalendars,
+            'calendars',
+            $this->subject
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function addCalendarToObjectStorageHoldingCalendars()
+    {
+        $calendar = new \Blueways\BwBookingmanager\Domain\Model\Calendar();
+        $calendarsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['attach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $calendarsObjectStorageMock->expects(self::once())->method('attach')->with(self::equalTo($calendar));
+        $this->inject($this->subject, 'calendars', $calendarsObjectStorageMock);
+
+        $this->subject->addCalendar($calendar);
+    }
+
+    /**
+     * @test
+     */
+    public function removeCalendarFromObjectStorageHoldingCalendars()
+    {
+        $calendar = new \Blueways\BwBookingmanager\Domain\Model\Calendar();
+        $calendarsObjectStorageMock = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
+            ->setMethods(['detach'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $calendarsObjectStorageMock->expects(self::once())->method('detach')->with(self::equalTo($calendar));
+        $this->inject($this->subject, 'calendars', $calendarsObjectStorageMock);
+
+        $this->subject->removeCalendar($calendar);
+    }
 }

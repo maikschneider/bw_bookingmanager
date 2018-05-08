@@ -13,12 +13,13 @@ in /Configuration/ExtensionBuilder/settings.yaml:
 Otherwise your changes will be overwritten the next time you save the extension in the extension builder
 
 <f:section name="main">
-<h1>Single View for Calendar "{calendar.name}"</h1>
+<h1>Single View for Calendar</h1>
 
 <f:debug>{_all}</f:debug>
 
 <f:flashMessages />
 <f:render partial="Calendar/Properties" arguments="{calendar:calendar}" />
 <f:link.action action="list">Back to list</f:link.action><br />
+<f:link.action action="new">New Calendar</f:link.action>
 	</f:section>
 </html>

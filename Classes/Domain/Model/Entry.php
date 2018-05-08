@@ -95,6 +95,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $weight = 0;
 
     /**
+     * timeslot
+     *
+     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     */
+    protected $timeslot = null;
+
+    /**
      * Returns the startDate
      *
      * @return \DateTime $startDate
@@ -333,5 +340,26 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setWeight($weight)
     {
         $this->weight = $weight;
+    }
+
+    /**
+     * Returns the timeslot
+     *
+     * @return \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     */
+    public function getTimeslot()
+    {
+        return $this->timeslot;
+    }
+
+    /**
+     * Sets the timeslot
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @return void
+     */
+    public function setTimeslot(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot)
+    {
+        $this->timeslot = $timeslot;
     }
 }

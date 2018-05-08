@@ -13,14 +13,14 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,name,prename,street,zip,city,phone,email,newsletter,weight',
+        'searchFields' => 'start_date,end_date,name,prename,street,zip,city,phone,email,newsletter,weight,timeslot',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_entry.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight, timeslot',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight, timeslot'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -178,6 +178,17 @@ return [
                 'size' => 4,
                 'eval' => 'int'
             ]
+        ],
+        'timeslot' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.timeslot',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
+                'minitems' => 0,
+                'maxitems' => 1,
+            ],
         ],
     
         'timeslot' => [
