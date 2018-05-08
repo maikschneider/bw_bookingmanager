@@ -62,6 +62,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * calendars
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
+     * @lazy
      */
     protected $calendars = null;
 

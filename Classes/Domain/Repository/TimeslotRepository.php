@@ -73,13 +73,12 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         \DateTime $dayInWeek
     ){
-        // move one day further to catch right monday if current day is monday
-        $dayInWeek->modify('tomorrow');
-
         $startDate = clone $dayInWeek;
+        $startDate->modify('tomorrow');
         $startDate->modify('last monday');
 
         $endDate = clone $dayInWeek;
+        $endDate->modify('yesterday');
         $endDate->modify('next sunday');
 
         return $this->findByDateRange($calendar, $startDate, $endDate);
