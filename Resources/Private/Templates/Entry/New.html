@@ -19,8 +19,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:render partial="FormErrors" arguments="{object:Entry}" />
 
-<f:form action="create"  name="newEntry" object="{newEntry}">
-<f:render partial="Entry/FormFields" />
+<f:form action="create" name="newEntry" object="{newEntry}" arguments="{calendar: calendar, timeslot: timeslot}">
+
+<f:render partial="Entry/FormFields" arguments="{_all}" />
 <f:form.submit value="Create new" />
 </f:form>
 </f:section>

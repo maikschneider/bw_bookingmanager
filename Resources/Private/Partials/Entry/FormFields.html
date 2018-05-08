@@ -2,11 +2,11 @@
 <label for="startDate">
 	<f:translate key="tx_bwbookingmanager_domain_model_entry.start_date" />
 </label><br />
-	<f:form.textfield property="startDate" value="{entry.startDate->f:format.date()}" /><br />
+	<f:form.textfield property="startDate" value="{newEntry.startDate->f:format.date()}" readonly="TRUE" /><br />
 <label for="endDate">
 	<f:translate key="tx_bwbookingmanager_domain_model_entry.end_date" />
 </label><br />
-	<f:form.textfield property="endDate" value="{entry.endDate->f:format.date()}" /><br />
+	<f:form.textfield property="endDate" value="{newEntry.endDate->f:format.date()}" readonly="TRUE" /><br />
 <label for="name">
 	<f:translate key="tx_bwbookingmanager_domain_model_entry.name" />
 </label><br />

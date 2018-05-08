@@ -7,7 +7,7 @@ call_user_func(
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Blueways.BwBookingmanager',
-            'Bookingmanager',
+            'Pi1',
             [
                 'Calendar' => 'list, show',
                 'Timeslot' => 'list, show',
@@ -32,7 +32,7 @@ call_user_func(
                         description = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bw_bookingmanager_domain_model_bookingmanager.description
                         tt_content_defValues {
                             CType = list
-                            list_type = bwbookingmanager_bookingmanager
+                            list_type = bwbookingmanager
                         }
                     }
                 }

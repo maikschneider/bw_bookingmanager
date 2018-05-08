@@ -7,7 +7,7 @@ call_user_func(
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
             'Blueways.BwBookingmanager',
-            'Bookingmanager',
+            'Pi1',
             'Booking Manager'
         );
 

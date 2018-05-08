@@ -1,15 +1,15 @@
 
-plugin.tx_bwbookingmanager_bookingmanager {
+plugin.tx_bwbookingmanager_pi1 {
     view {
         templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
-        templateRootPaths.1 = {$plugin.tx_bwbookingmanager_bookingmanager.view.templateRootPath}
+        templateRootPaths.1 = {$plugin.tx_bwbookingmanager_pi1.view.templateRootPath}
         partialRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Partials/
-        partialRootPaths.1 = {$plugin.tx_bwbookingmanager_bookingmanager.view.partialRootPath}
+        partialRootPaths.1 = {$plugin.tx_bwbookingmanager_pi1.view.partialRootPath}
         layoutRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Layouts/
-        layoutRootPaths.1 = {$plugin.tx_bwbookingmanager_bookingmanager.view.layoutRootPath}
+        layoutRootPaths.1 = {$plugin.tx_bwbookingmanager_pi1.view.layoutRootPath}
     }
     persistence {
-        storagePid = {$plugin.tx_bwbookingmanager_bookingmanager.persistence.storagePid}
+        storagePid = {$plugin.tx_bwbookingmanager_pi1.persistence.storagePid}
         #recursive = 1
     }
     features {
@@ -25,7 +25,7 @@ plugin.tx_bwbookingmanager_bookingmanager {
 }
 
 # these classes are only used in auto-generated templates
-plugin.tx_bwbookingmanager._CSS_DEFAULT_STYLE (
+plugin.tx_bwbookingmanager_pi1._CSS_DEFAULT_STYLE (
     textarea.f3-form-error {
         background-color:#FF9F9F;
         border: 1px #FF0000 solid;

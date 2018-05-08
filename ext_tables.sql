@@ -68,6 +68,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	timeslot int(11) unsigned DEFAULT '0' NOT NULL,
+	calendar int(11) unsigned DEFAULT '0' NOT NULL,
 
 	start_date datetime NOT NULL,
 	end_date datetime NOT NULL,

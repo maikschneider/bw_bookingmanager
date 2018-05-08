@@ -17,6 +17,32 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:debug>{_all}</f:debug>
 
+<table>
+  <thead>
+      <tr>
+        <th>UID</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Repeat type</th>
+        <th>Calendar UIDs</th>
+        <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+    <f:for each="{timeslots}" as="slot">
+      <tr>
+        <td>{slot.uid}</td>
+        <td>{slot.startDate->f:format.date()}</td>
+        <td>{slot.endDate->f:format.date()}</td>
+        <td>{slot.repeatType}</td>
+        <td><f:for each="{slot.calendars}" as="cal">{cal.uid}&nbsp;</f:for></td>
+        <td><f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot}">book</f:link.action></td>
+      </tr>
+    </f:for>
+  </tbody>
+</table>
+
+
 <f:flashMessages />
 <f:render partial="Calendar/Properties" arguments="{calendar:calendar}" />
 <f:link.action action="list">Back to list</f:link.action><br />

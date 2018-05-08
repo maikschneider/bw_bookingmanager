@@ -39,6 +39,9 @@
 			<trans-unit id="timeslot.description">
 				<source>timeslot</source>
 			</trans-unit>
+			<trans-unit id="calendar.description">
+				<source>calendar</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
