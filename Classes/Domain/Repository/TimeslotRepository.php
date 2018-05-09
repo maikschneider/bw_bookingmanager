@@ -44,6 +44,30 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
             return $query->execute();
         }
+
+    public function filterTimeslotsInDateRange(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        $timeslots,
+        \DateTime $startDate,
+        \DateTime $endDate
+        ){
+            $blockslots = $calendar->getBlockslots();
+
+            foreach ($calendar->getBlockslots() as $blockslot) {
+
+                $blockStartDate = $blockslot->getStartDate();
+                $blockEndDate = $blockslot->getEndDate();
+
+                if(
+                    ($blockStartDate <= $startDate && $blockEndDate > $startDate) ||
+                    ($blockStartDate >= $startDate && $blockStartDate < $endDate)
+                    ){
+                    var_dump('Block greift!');
+                }
+            }
+
+            return $timeslots;
+        }
     
     /**
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $timeslots
@@ -189,6 +213,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
         $timeslots = $this->repeatTimeslotsInDateRange($timeslots, $startDate, $endDate);
+        $timeslots = $this->filterTimeslotsInDateRange($calendar, $timeslots, $startDate, $endDate);
         
         return $timeslots;
     }
