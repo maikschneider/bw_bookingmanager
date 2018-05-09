@@ -67,6 +67,13 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $calendars = null;
 
     /**
+     * repeatEnd
+     *
+     * @var \DateTime
+     */
+    protected $repeatEnd = null;
+
+    /**
      * Returns the startDate
      *
      * @return \DateTime $startDate
@@ -257,5 +264,26 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
+    }
+
+    /**
+     * Returns the repeatEnd
+     *
+     * @return \DateTime $repeatEnd
+     */
+    public function getRepeatEnd()
+    {
+        return $this->repeatEnd;
+    }
+
+    /**
+     * Sets the repeatEnd
+     *
+     * @param \DateTime $repeatEnd
+     * @return void
+     */
+    public function setRepeatEnd(\DateTime $repeatEnd)
+    {
+        $this->repeatEnd = $repeatEnd;
     }
 }

@@ -14,14 +14,14 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,repeat_type,max_weight,entries,calendars',
+        'searchFields' => 'start_date,end_date,repeat_type,repeat_end,max_weight,entries,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries, calendars',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, calendars',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, max_weight, entries, calendars'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, calendars'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -142,6 +142,17 @@ return [
                 'MM' => 'tx_bwbookingmanager_calendar_timeslot_mm',
                 'size' => 10,
                 'maxitems' => 9999,
+            ],
+        ],
+        'repeat_end' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_end',
+            'config' => [
+                'dbType' => 'datetime',
+                'type' => 'input',
+                'size' => 12,
+                'eval' => 'datetime',
+                'default' => ''
             ],
         ],
     

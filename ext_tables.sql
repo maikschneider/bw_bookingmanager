@@ -41,6 +41,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_timeslot (
 	max_weight int(11) DEFAULT '0' NOT NULL,
 	entries int(11) unsigned DEFAULT '0' NOT NULL,
 	calendars int(11) unsigned DEFAULT '0' NOT NULL,
+	repeat_end datetime DEFAULT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

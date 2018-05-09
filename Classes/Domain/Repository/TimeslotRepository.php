@@ -78,19 +78,21 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $daysToFillTimeslots = $endDate->diff($startDate)->days + 1;
         $dateToStartFilling = $startDate;
 
-        // if timeslot starts during time range, fill only after this timeslot
-        if($timeslot->getStartDate() >= $startDate){
-            $daysToFillTimeslots = $endDate->diff($timeslot->getStartDate())->days;
-            $dateToStartFilling = clone $timeslot->getStartDate();
-            $dateToStartFilling->modify('+1 days');
-        }
-
         // create new timeslots and modify start and end date
         for($i=0; $i<$daysToFillTimeslots; $i++){
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
             $newEndDate = clone $dateToStartFilling;
             $newEndDate->modify('+'.$i.' days');
+
+            // dont add new timeslot if placed before actual timeslot or even at same time
+            if($newStartDate <= $timeslot->getStartDate()){
+                continue;
+            }
+            // dont add new timeslot if repeat end date is reached
+            if($timeslot->getRepeatEnd() && $timeslot->getRepeatEnd() <= $newStartDate){
+                continue;
+            }
 
             $newTimeslot = clone $timeslot;
             $newTimeslot->setStartDate($newStartDate);
@@ -103,6 +105,8 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
+     * Counts the occurences of a day of week in a date range
+     * credits to this crazy motherfucker: https://stackoverflow.com/questions/20068975/count-the-no-of-fridays-or-any-between-two-specific-dates/20071461#20071461
      * @param \DateTime $from
      * @param \DateTime $to
      * @param int $dayOfWeek
@@ -135,14 +139,19 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $newEndDate->modify('+'.$i.' weeks');
 
             // dont add new timeslot if placed before actual timeslot or even at same time
-            if($newStartDate > $timeslot->getStartDate()){
-
-                $newTimeslot = clone $timeslot;
-                $newTimeslot->setStartDate($newStartDate);
-                $newTimeslot->setEndDate($newEndDate);
-
-                $newTimeslots[] = $newTimeslot;
+            if($newStartDate <= $timeslot->getStartDate()){
+                continue;
             }
+            // dont add new timeslot if repeat end date is reached
+            if($timeslot->getRepeatEnd() && $timeslot->getRepeatEnd() <= $newStartDate){
+                continue;
+            }
+
+            $newTimeslot = clone $timeslot;
+            $newTimeslot->setStartDate($newStartDate);
+            $newTimeslot->setEndDate($newEndDate);
+
+            $newTimeslots[] = $newTimeslot;
         }
 
         return $newTimeslots;

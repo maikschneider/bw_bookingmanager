@@ -52,8 +52,4 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->redirect('list');
     }
 
-    public function errorAction() {
-        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
-    }
-
 }

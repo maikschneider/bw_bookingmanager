@@ -21,6 +21,9 @@
 			<trans-unit id="calendars.description">
 				<source>calendars</source>
 			</trans-unit>
+			<trans-unit id="repeat_end.description">
+				<source>repeat end</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

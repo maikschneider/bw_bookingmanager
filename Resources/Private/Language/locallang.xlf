@@ -36,6 +36,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
 				<source>Calendars</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
+				<source>Repeat End</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry">
 				<source>Entry</source>
 			</trans-unit>
