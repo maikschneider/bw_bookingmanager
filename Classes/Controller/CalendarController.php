@@ -57,8 +57,8 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
      */
     public function showAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
     {
-        // $timeslots = $this->timeslotRepository->findByDateRange($calendar);
-        $timeslots = $this->timeslotRepository->findInCurrentWeek($calendar);
+        $timeslots = $this->timeslotRepository->findInCurrentMonth($calendar);
+        // $timeslots = $this->timeslotRepository->findInCurrentWeek($calendar);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslots', $timeslots);
     }
