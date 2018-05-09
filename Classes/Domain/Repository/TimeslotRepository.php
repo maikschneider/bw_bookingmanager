@@ -85,6 +85,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $dateToStartFilling->modify('+1 days');
         }
 
+        // create new timeslots and modify start and end date
         for($i=0; $i<$daysToFillTimeslots; $i++){
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
@@ -101,9 +102,50 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $newTimeslots;
     }
 
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param int $dayOfWeek
+     */
+    private function dayCount($from, $to, $day) {
+
+        $wF = $from->format('w');
+        $wT = $to->format('w');
+        if ($wF < $wT)      $isExtraDay = $day >= $wF && $day <= $wT;
+        elseif ($wF == $wT) $isExtraDay = $wF == $day;
+        else                $isExtraDay = $day >= $wF || $day <= $wT;
+
+        return floor($from->diff($to)->days / 7) + $isExtraDay;
+    }
+
     private function repeatWeeklyTimeslotInDateRange($timeslot, \DateTime $startDate, \DateTime $endDate)
     {
-        return [];
+        $newTimeslots = [];
+
+        // default fill the all mondays (or tuesdays..) of date range
+        $daysToFillTimeslots = $this->dayCount($startDate, $endDate, $timeslot->getStartDate()->format('w'));
+        $dateToStartFilling = clone $startDate;
+        $dateToStartFilling->modify('-1 days');
+        $dateToStartFilling->modify('next '.$timeslot->getStartDate()->format('l'));
+
+        for($i=0; $i<$daysToFillTimeslots; $i++){
+            $newStartDate = clone $dateToStartFilling;
+            $newStartDate->modify('+'.$i.' weeks');
+            $newEndDate = clone $dateToStartFilling;
+            $newEndDate->modify('+'.$i.' weeks');
+
+            // dont add new timeslot if placed before actual timeslot or even at same time
+            if($newStartDate > $timeslot->getStartDate()){
+
+                $newTimeslot = clone $timeslot;
+                $newTimeslot->setStartDate($newStartDate);
+                $newTimeslot->setEndDate($newEndDate);
+
+                $newTimeslots[] = $newTimeslot;
+            }
+        }
+
+        return $newTimeslots;
     }
 
     private function repeatMonthlyTimeslotInDateRange($timeslot, \DateTime $startDate, \DateTime $endDate)

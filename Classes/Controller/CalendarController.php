@@ -66,7 +66,6 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $startDate = new \DateTime('now');
         if($day && $month && $year){
             $startDate = $startDate->createFromFormat('j-n-Y', $day.'-'.$month.'-'.$year);
-            $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
         }
 
         $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
