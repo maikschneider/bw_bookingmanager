@@ -39,6 +39,14 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $reason = '';
 
     /**
+     * calendars
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
+     * @lazy
+     */
+    protected $calendars = null;
+
+    /**
      * Returns the startDate
      *
      * @return \DateTime $startDate
@@ -99,5 +107,48 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setReason($reason)
     {
         $this->reason = $reason;
+    }
+
+    /**
+     * Adds a Calendar
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @return void
+     */
+    public function addCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
+    {
+        $this->calendars->attach($calendar);
+    }
+
+    /**
+     * Removes a Calendar
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove The Calendar to be removed
+     * @return void
+     */
+    public function removeCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove)
+    {
+        $this->calendars->detach($calendarToRemove);
+    }
+
+    /**
+     * Returns the calendars
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     */
+    public function getCalendars()
+    {
+        return $this->calendars;
+    }
+
+    /**
+     * Sets the calendars
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @return void
+     */
+    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
+    {
+        $this->calendars = $calendars;
     }
 }

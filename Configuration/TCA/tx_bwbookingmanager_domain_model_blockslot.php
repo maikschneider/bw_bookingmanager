@@ -103,6 +103,19 @@ return [
                 'eval' => 'trim'
             ],
         ],
+        'calendars' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.calendars',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_bwbookingmanager_domain_model_calendar',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
+                'MM' => 'tx_bwbookingmanager_calendar_blockslot_mm',
+                'size' => 10,
+                'maxitems' => 9999,
+            ],
+        ],
     
     ],
 ];

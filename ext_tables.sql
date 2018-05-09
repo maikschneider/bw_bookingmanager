@@ -110,6 +110,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_blockslot (
 	start_date datetime NOT NULL,
 	end_date datetime NOT NULL,
 	reason varchar(255) DEFAULT '' NOT NULL,
+	calendars int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -147,10 +148,9 @@ CREATE TABLE tx_bwbookingmanager_calendar_timeslot_mm (
 CREATE TABLE tx_bwbookingmanager_calendar_blockslot_mm (
 	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
 	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting int(11) unsigned DEFAULT '0' NOT NULL,
-	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) DEFAULT '0' NOT NULL,
+    sorting_foreign int(11) DEFAULT '0' NOT NULL,
 
-	PRIMARY KEY (uid_local,uid_foreign),
-	KEY uid_local (uid_local),
-	KEY uid_foreign (uid_foreign)
+    KEY uid_local (uid_local),
+    KEY uid_foreign (uid_foreign)
 );
