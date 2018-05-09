@@ -55,11 +55,24 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @return void
      */
-    public function showAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
+    public function showAction(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+        )
     {
-        $timeslots = $this->timeslotRepository->findInCurrentMonth($calendar);
+        $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : NULL;
+        $month = $this->request->hasArgument('month') ? $this->request->getArgument('month') : NULL;
+        $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : NULL;
+
+        $startDate = new \DateTime('now');
+        if($day && $month && $year){
+            $startDate = $startDate->createFromFormat('j-n-Y', $day.'-'.$month.'-'.$year);
+            $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
+        }
+
+        $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
         // $timeslots = $this->timeslotRepository->findInCurrentWeek($calendar);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslots', $timeslots);
     }
+
 }

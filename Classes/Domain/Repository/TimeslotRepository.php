@@ -85,9 +85,6 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $dateToStartFilling->modify('+1 days');
         }
 
-        var_dump($daysToFillTimeslots);
-        var_dump($dateToStartFilling);
-
         for($i=0; $i<$daysToFillTimeslots; $i++){
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
