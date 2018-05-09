@@ -27,6 +27,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type">
 				<source>Repeat Type</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.no">
+				<source>No repeat</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.daily">
+				<source>Daily repeat</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.weekly">
+				<source>Weekly repeat</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
+				<source>Monthly repeat</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
 			</trans-unit>
