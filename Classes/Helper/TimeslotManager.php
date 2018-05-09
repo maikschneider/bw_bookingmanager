@@ -108,11 +108,9 @@ class TimeslotManager
             $blockStartDate = $blockslot->getStartDate();
             $blockEndDate = $blockslot->getEndDate();
 
-            if(
-                ($blockStartDate <= $this->startDate && $blockEndDate > $this->startDate) ||
-                ($blockStartDate >= $this->startDate && $blockStartDate < $this->endDate)
-                ){
-                // add blockslot dates to filterCritera
+            // check if block is inside date range
+            // so add its dates to filterCritera
+            if(!($blockEndDate < $this->startDate || $blockStartDate > $this->endDate)){
                 $this->filterCritera['notIn'][] = [$blockStartDate, $blockEndDate];
             }
         }
