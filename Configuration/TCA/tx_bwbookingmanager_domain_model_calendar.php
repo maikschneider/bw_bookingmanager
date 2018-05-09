@@ -95,7 +95,7 @@ return [
                 'maxitems' => 9999,
             ],
         ],
-        'timeslots' => [
+        'blockslots' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.blockslots',
             'config' => [
