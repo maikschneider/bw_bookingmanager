@@ -27,6 +27,11 @@ class TimeslotManager
     protected $endDate = null;
 
     /**
+     * @var Array $filterCritera
+     */
+    protected $filterCritera;
+
+    /**
      * __construct
      */
     public function __construct(
@@ -48,6 +53,7 @@ class TimeslotManager
     public function getTimeslots()
     {
         $this->repeatTimeslots();
+        $this->createFilterCritera();
         $this->filterTimeslots();
 
         return $this->timeslots;
@@ -82,10 +88,19 @@ class TimeslotManager
     }
 
     /**
-     * removes slots that are in the past and overlayed by a blockslot
+     * create array of critera that timeslots need to pass
      */
-    private function filterTimeslots()
+    private function createFilterCritera()
     {
+        $this->filterCritera = [
+            'in' => [
+                [$this->startDate, $this->endDate]
+            ],
+            'notIn' => [
+
+            ]
+        ];
+
         $blockslots = $this->calendar->getBlockslots();
 
         foreach ($this->calendar->getBlockslots() as $blockslot) {
@@ -97,9 +112,40 @@ class TimeslotManager
                 ($blockStartDate <= $this->startDate && $blockEndDate > $this->startDate) ||
                 ($blockStartDate >= $this->startDate && $blockStartDate < $this->endDate)
                 ){
-                var_dump('Block greift!');
+                // add blockslot dates to filterCritera
+                $this->filterCritera['notIn'][] = [$blockStartDate, $blockEndDate];
             }
         }
+    }
+
+    /**
+     * removes timeslots that do not pass filterCritera
+     */
+    private function filterTimeslots(){
+
+        $this->timeslots = array_filter($this->timeslots, function($timeslot){
+            // check for date range to be within
+            // it is allowed that events start in the past, as long as they end in the given range or even alter
+            foreach ($this->filterCritera['in'] as $range) {
+                if(
+                    ($timeslot->getStartDate() < $range[0] && $timeslot->getEndDate() < $range[0]) ||
+                    ($timeslot->getStartDate() > $range[1])
+                ) return false;
+            }
+
+            // check for date range to be not within
+            // only this is valid: [slot] |blocked| [slot]
+            // this is not valid   [ slot |] blocked [| slot ]
+            foreach ($this->filterCritera['notIn'] as $range) {
+                if($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
+                    return true;
+                }
+                return false;
+            }
+
+            // all checks passed
+            return true;
+        });
     }
 
     /**
