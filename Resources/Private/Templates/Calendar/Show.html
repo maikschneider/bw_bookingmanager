@@ -40,9 +40,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
         <td>{slot.uid}</td>
         <td>{slot.startDate->f:format.date()}</td>
         <td>{slot.endDate->f:format.date()}</td>
-        <td>{slot.repeatType}</td>
+        <td>{slot.repeatType}</td>{slot.startDate->f:format.date()}
         <td><f:for each="{slot.calendars}" as="cal">{cal.uid}&nbsp;</f:for></td>
-        <td><f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot}">book</f:link.action></td>
+        <td><f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'c\')}', end: '{f:format.date(date: slot.endDate, format:\'c\')}'}">book</f:link.action></td>
       </tr>
     </f:for>
   </tbody>

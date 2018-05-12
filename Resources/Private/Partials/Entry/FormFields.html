@@ -1,4 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:comment>
 <label for="startDate">
 	<f:translate key="tx_bwbookingmanager_domain_model_entry.start_date" />
 </label><br />
@@ -7,6 +8,7 @@
 	<f:translate key="tx_bwbookingmanager_domain_model_entry.end_date" />
 </label><br />
 	<f:form.textfield property="endDate" value="{newEntry.endDate->f:format.date()}" readonly="TRUE" /><br />
+</f:comment>
 <label for="name">
 	<f:translate key="tx_bwbookingmanager_domain_model_entry.name" />
 </label><br />
