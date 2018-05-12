@@ -30,6 +30,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
         <th>Start date</th>
         <th>End date</th>
         <th>Repeat type</th>
+        <th>Entries</th>
         <th>Calendar UIDs</th>
         <th>Action</th>
       </tr>
@@ -38,11 +39,12 @@ Otherwise your changes will be overwritten the next time you save the extension 
     <f:for each="{timeslots}" as="slot">
       <tr>
         <td>{slot.uid}</td>
-        <td>{slot.startDate->f:format.date()}</td>
-        <td>{slot.endDate->f:format.date()}</td>
-        <td>{slot.repeatType}</td>{slot.startDate->f:format.date()}
+        <td>{f:format.date(date: slot.startDate, format:'d.m.y h:m:s')}</td>
+        <td>{f:format.date(date: slot.endDate, format:'d.m.y h:m:s')}</td>
+        <td>{slot.repeatType}</td>
+        <td><f:for each="{slot.entries}" as="entry">{f:format.date(date: entry.startDate, format:'d.m.y h:m:s')}<br /></f:for></td>
         <td><f:for each="{slot.calendars}" as="cal">{cal.uid}&nbsp;</f:for></td>
-        <td><f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'c\')}', end: '{f:format.date(date: slot.endDate, format:\'c\')}'}">book</f:link.action></td>
+        <td><f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'Y-m-d H:m:s\')}', end: '{f:format.date(date: slot.endDate, format:\'Y-m-d H:m:s\')}'}">book</f:link.action></td>
       </tr>
     </f:for>
   </tbody>

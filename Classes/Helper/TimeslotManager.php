@@ -55,6 +55,7 @@ class TimeslotManager
         $this->repeatTimeslots();
         $this->createFilterCritera();
         $this->filterTimeslots();
+        $this->filterEntries();
 
         return $this->timeslots;
     }
@@ -146,6 +147,22 @@ class TimeslotManager
         });
     }
 
+    private function filterEntries()
+    {
+        foreach($this->timeslots as $timeslot){
+            $timeslotStartDate = $timeslot->getStartDate();
+            $timeslotEndDate = $timeslot->getEndDate();
+
+            $entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+            foreach($timeslot->getEntries() as $entry){
+                if ($entry->getStartDate() == $timeslotStartDate && $entry->getEndDate() == $timeslotEndDate){
+                    $entries->attach($entry);
+                }
+            };
+            $timeslot->setEntries($entries);
+        }
+    }
+
     /**
      * duplicates daily timeslot for whole date range
      */
@@ -155,14 +172,16 @@ class TimeslotManager
 
         // default fill the whole date range with that timeslot
         $daysToFillTimeslots = $this->endDate->diff($this->startDate)->days + 1;
-        $dateToStartFilling = $this->startDate;
+        $dateToStartFilling = clone $timeslot->getStartDate();
+        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'), $this->startDate->format('d'));
+        $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         // create new timeslots and modify start and end date
         for($i=0; $i<$daysToFillTimeslots; $i++){
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
-            $newEndDate = clone $dateToStartFilling;
-            $newEndDate->modify('+'.$i.' days');
+            $newEndDate = clone $newStartDate;
+            $newEndDate->add($dateStartEndDiff);
 
             // dont add new timeslot if placed before actual timeslot or even at same time
             if($newStartDate <= $timeslot->getStartDate()){
@@ -210,15 +229,18 @@ class TimeslotManager
 
         // default fill the all mondays (or tuesdays..) of date range
         $daysToFillTimeslots = $this->dayCount($this->startDate, $this->endDate, $timeslot->getStartDate()->format('w'));
-        $dateToStartFilling = clone $this->startDate;
+
+        $dateToStartFilling = clone $timeslot->getStartDate();
+        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'), $this->startDate->format('d'));
         $dateToStartFilling->modify('-1 days');
         $dateToStartFilling->modify('next '.$timeslot->getStartDate()->format('l'));
+        $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         for($i=0; $i<$daysToFillTimeslots; $i++){
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' weeks');
-            $newEndDate = clone $dateToStartFilling;
-            $newEndDate->modify('+'.$i.' weeks');
+            $newEndDate = clone $newStartDate;
+            $newEndDate->add($dateStartEndDiff);
 
             // dont add new timeslot if placed before actual timeslot or even at same time
             if($newStartDate <= $timeslot->getStartDate()){
