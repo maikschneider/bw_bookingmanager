@@ -15,8 +15,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:section name="main">
 <h1>Single View for Calendar</h1>
 
-<f:debug>{_all}</f:debug>
-
 <f:alias map="{months: {0:1, 1:2, 2:3, 3:4, 4:5, 5:6, 6:7, 7:8, 8:9, 9:10, 10:11, 11:12}}">
   <f:for each="{months}" as="month">
     <f:link.action action="show" arguments="{calendar: calendar, day: '1', month: month, year: '2018'}">01.{month}.2018</f:link.action><br />
@@ -30,7 +28,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
         <th>Start date</th>
         <th>End date</th>
         <th>Repeat type</th>
-        <th>Entries</th>
+        <th>Entries (weight)</th>
         <th>Calendar UIDs</th>
         <th>Action</th>
       </tr>
@@ -42,9 +40,13 @@ Otherwise your changes will be overwritten the next time you save the extension 
         <td>{f:format.date(date: slot.startDate, format:'d.m.y h:m:s')}</td>
         <td>{f:format.date(date: slot.endDate, format:'d.m.y h:m:s')}</td>
         <td>{slot.repeatType}</td>
-        <td><f:for each="{slot.entries}" as="entry">{f:format.date(date: entry.startDate, format:'d.m.y h:m:s')}<br /></f:for></td>
+        <td>{slot.entries->f:count()} ({slot.bookedWeight})</td>
         <td><f:for each="{slot.calendars}" as="cal">{cal.uid}&nbsp;</f:for></td>
-        <td><f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'Y-m-d H:m:s\')}', end: '{f:format.date(date: slot.endDate, format:\'Y-m-d H:m:s\')}'}">book</f:link.action></td>
+        <td>
+          <f:if condition="{slot.isBookable}">
+            <f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'Y-m-d H:m:s\')}', end: '{f:format.date(date: slot.endDate, format:\'Y-m-d H:m:s\')}'}">book</f:link.action></td>
+          </f:if>
+        </td>
       </tr>
     </f:for>
   </tbody>

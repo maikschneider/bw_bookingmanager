@@ -286,4 +286,18 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->repeatEnd = $repeatEnd;
     }
+
+    public function getBookedWeight()
+    {
+        $weight = 0;
+        foreach ($this->entries as $entry) {
+            $weight += $entry->getWeight();
+        }
+        return $weight;
+    }
+
+    public function getIsBookable()
+    {
+        return $this->getBookedWeight() < $this->maxWeight;
+    }
 }
