@@ -40,7 +40,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
      * @return string HTML of form
-     * @dontvalidate $newEntry
      */
     public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = NULL)
     {
@@ -58,6 +57,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * action create
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
+     * @validate $newEntry \Blueways\BwBookingmanager\Domain\Validator\EntryValidator
      * @return void
      */
     public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
@@ -68,8 +68,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->redirect('list', 'Calendar');
     }
 
-    public function errorAction() {
-        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
-    }
+    // public function errorAction() {
+    //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
+    // }
 
 }
