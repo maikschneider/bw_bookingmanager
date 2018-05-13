@@ -1,0 +1,77 @@
+<T3DataStructure>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_tab.settings</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <switchableControllerActions>
+                        <TCEforms>
+                            <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode</label>
+                            <onChange>reload</onChange>
+                            <config>
+                                <type>select</type>
+                                <items>
+                                    <numIndex index="0">
+                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_list</numIndex>
+                                        <numIndex index="1">Calendar->list;Calendar->show;Entry->new</numIndex>
+                                    </numIndex>
+                                    <numIndex index="1">
+                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show</numIndex>
+                                        <numIndex index="1">Calendar->show;Entry->new</numIndex>
+                                    </numIndex>
+                                    <numIndex index="2">
+                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new</numIndex>
+                                        <numIndex index="1">Entry->new</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </switchableControllerActions>
+                    <settings.templateLayout>
+                        <TCEforms>
+                            <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout</label>
+                            <config>
+                                <type>select</type>
+                                <!-- <itemsProcFunc>Blueways\News\Hooks\ItemsProcFunc->user_templateLayout</itemsProcFunc> -->
+                                <renderType>selectSingle</renderType>
+                                <items>
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0"></numIndex>
+                                        <numIndex index="1"></numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.templateLayout>
+                </el>
+            </ROOT>
+        </sDEF>
+        <!-- SHOW SHEET -->
+        <show>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_tab.show</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.showPid>
+                        <TCEforms>
+                            <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_show.showPid</label>
+                            <config>
+                                <type>group</type>
+                                <internal_type>db</internal_type>
+                                <allowed>pages</allowed>
+                                <size>1</size>
+                                <maxitems>1</maxitems>
+                                <minitems>0</minitems>
+                            </config>
+                        </TCEforms>
+                    </settings.showPid>
+                </el>
+            </ROOT>
+        </show>
+    </sheets>
+</T3DataStructure>

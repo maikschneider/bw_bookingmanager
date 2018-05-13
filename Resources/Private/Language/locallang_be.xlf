@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
+        <header/>
+        <body>
+            <trans-unit id="flexforms_tab.settings">
+                <source>Settings</source>
+            </trans-unit>
+            <trans-unit id="flexforms_tab.show">
+                <source>Show</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode">
+                <source>Display mode</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode.calendar_list">
+                <source>Calendar list</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode.calendar_show">
+                <source>Calendar show</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode.entry_new">
+                <source>New entry</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.templateLayout">
+                <source>Template</source>
+            </trans-unit>
+            <trans-unit id="flexforms_show.showPid">
+                <source>Show page</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
