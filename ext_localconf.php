@@ -32,13 +32,14 @@ call_user_func(
                         description = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bw_bookingmanager_domain_model_bookingmanager.description
                         tt_content_defValues {
                             CType = list
-                            list_type = bwbookingmanager
+                            list_type = bw_bookingmanager_pi1
                         }
                     }
                 }
                 show = *
             }
-       }'
+       }
+       <INCLUDE_TYPOSCRIPT: source="FILE:EXT:bw_bookingmanager/Configuration/TSconfig/TCEFORM.txt">'
     );
     }
 );

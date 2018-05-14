@@ -6,9 +6,7 @@
             <trans-unit id="flexforms_tab.settings">
                 <source>Settings</source>
             </trans-unit>
-            <trans-unit id="flexforms_tab.show">
-                <source>Show</source>
-            </trans-unit>
+            <!-- <trans-unit id="flexforms_tab.show"><source>Show</source></trans-unit> -->
             <trans-unit id="flexforms_general.mode">
                 <source>Display mode</source>
             </trans-unit>
@@ -21,12 +19,27 @@
             <trans-unit id="flexforms_general.mode.entry_new">
                 <source>New entry</source>
             </trans-unit>
+            <trans-unit id="flexforms_general.calendarUid">
+                <source>Calendar</source>
+            </trans-unit>
             <trans-unit id="flexforms_general.templateLayout">
                 <source>Template</source>
             </trans-unit>
-            <trans-unit id="flexforms_show.showPid">
-                <source>Show page</source>
+            <trans-unit id="flexforms_general.templateLayout.default">
+                <source>Default</source>
             </trans-unit>
+            <trans-unit id="flexforms_general.showPid">
+                <source>Show PID</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.entryPid">
+                <source>New entry PID</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.backPid">
+    <source>Back PID</source>
+</trans-unit>
+<trans-unit id="flexforms_general.storagePid">
+    <source>Storage PID</source>
+</trans-unit>
         </body>
     </file>
 </xliff>

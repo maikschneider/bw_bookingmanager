@@ -1,77 +1,119 @@
 <T3DataStructure>
-    <sheets>
-        <sDEF>
-            <ROOT>
+    <meta type="array">
+        <langChildren>0</langChildren>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <type>array</type>
+        <el>
+            <persistence.storagePid>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_tab.settings</sheetTitle>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.storagePid</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Calendar->list</displayCond>
+                    <config>
+                        <type>group</type>
+                        <internal_type>db</internal_type>
+                        <allowed>pages</allowed>
+                        <size>2</size>
+                        <maxitems>99</maxitems>
+                        <minitems>0</minitems>
+                    </config>
                 </TCEforms>
-                <type>array</type>
-                <el>
-                    <switchableControllerActions>
-                        <TCEforms>
-                            <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode</label>
-                            <onChange>reload</onChange>
-                            <config>
-                                <type>select</type>
-                                <items>
-                                    <numIndex index="0">
-                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_list</numIndex>
-                                        <numIndex index="1">Calendar->list;Calendar->show;Entry->new</numIndex>
-                                    </numIndex>
-                                    <numIndex index="1">
-                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show</numIndex>
-                                        <numIndex index="1">Calendar->show;Entry->new</numIndex>
-                                    </numIndex>
-                                    <numIndex index="2">
-                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new</numIndex>
-                                        <numIndex index="1">Entry->new</numIndex>
-                                    </numIndex>
-                                </items>
-                            </config>
-                        </TCEforms>
-                    </switchableControllerActions>
-                    <settings.templateLayout>
-                        <TCEforms>
-                            <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout</label>
-                            <config>
-                                <type>select</type>
-                                <!-- <itemsProcFunc>Blueways\News\Hooks\ItemsProcFunc->user_templateLayout</itemsProcFunc> -->
-                                <renderType>selectSingle</renderType>
-                                <items>
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0"></numIndex>
-                                        <numIndex index="1"></numIndex>
-                                    </numIndex>
-                                </items>
-                            </config>
-                        </TCEforms>
-                    </settings.templateLayout>
-                </el>
-            </ROOT>
-        </sDEF>
-        <!-- SHOW SHEET -->
-        <show>
-            <ROOT>
+            </persistence.storagePid>
+            <switchableControllerActions>
                 <TCEforms>
-                    <sheetTitle>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_tab.show</sheetTitle>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode</label>
+                    <onChange>reload</onChange>
+                    <config>
+                        <type>select</type>
+                        <items>
+                            <numIndex index="0">
+                                <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_list</numIndex>
+                                <numIndex index="1">Calendar->list</numIndex>
+                            </numIndex>
+                            <numIndex index="1">
+                                <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show</numIndex>
+                                <numIndex index="1">Calendar->show</numIndex>
+                            </numIndex>
+                            <numIndex index="2">
+                                <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new</numIndex>
+                                <numIndex index="1">Entry->new</numIndex>
+                            </numIndex>
+                        </items>
+                    </config>
                 </TCEforms>
-                <type>array</type>
-                <el>
-                    <settings.showPid>
-                        <TCEforms>
-                            <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_show.showPid</label>
-                            <config>
-                                <type>group</type>
-                                <internal_type>db</internal_type>
-                                <allowed>pages</allowed>
-                                <size>1</size>
-                                <maxitems>1</maxitems>
-                                <minitems>0</minitems>
-                            </config>
-                        </TCEforms>
-                    </settings.showPid>
-                </el>
-            </ROOT>
-        </show>
-    </sheets>
+            </switchableControllerActions>
+            <settings.showPid>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.showPid</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Calendar->list</displayCond>
+                    <config>
+                        <type>group</type>
+                        <internal_type>db</internal_type>
+                        <allowed>pages</allowed>
+                        <size>1</size>
+                        <maxitems>1</maxitems>
+                        <minitems>0</minitems>
+                    </config>
+                </TCEforms>
+            </settings.showPid>
+            <settings.calendarPid>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.calendarUid</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Calendar->show</displayCond>
+                    <config>
+                        <type>group</type>
+                        <internal_type>db</internal_type>
+                        <allowed>tx_bwbookingmanager_domain_model_calendar</allowed>
+                        <size>1</size>
+                        <maxitems>1</maxitems>
+                        <minitems>0</minitems>
+                    </config>
+                </TCEforms>
+            </settings.calendarPid>
+            <settings.entryPid>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.entryPid</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Calendar->show</displayCond>
+                    <config>
+                        <type>group</type>
+                        <internal_type>db</internal_type>
+                        <allowed>pages</allowed>
+                        <size>1</size>
+                        <maxitems>1</maxitems>
+                        <minitems>0</minitems>
+                    </config>
+                </TCEforms>
+            </settings.entryPid>
+            <settings.backPid>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.backPid</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Entry->new</displayCond>
+                    <config>
+                        <type>group</type>
+                        <internal_type>db</internal_type>
+                        <allowed>pages</allowed>
+                        <size>1</size>
+                        <maxitems>1</maxitems>
+                        <minitems>0</minitems>
+                    </config>
+                </TCEforms>
+            </settings.backPid>
+            <settings.templateLayout>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout</label>
+                    <config>
+                        <type>select</type>
+                        <renderType>selectSingle</renderType>
+                        <items>
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout.default</numIndex>
+                                <numIndex index="1">default</numIndex>
+                            </numIndex>
+                        </items>
+                    </config>
+                </TCEforms>
+            </settings.templateLayout>
+        </el>
+    </ROOT>
 </T3DataStructure>

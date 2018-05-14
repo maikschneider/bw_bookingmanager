@@ -14,7 +14,7 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'start_date,end_date,name,prename,street,zip,city,phone,email,newsletter,weight,timeslot,calendar',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_entry.gif'
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_entry.gif',
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, calendar, timeslot, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight',
@@ -34,8 +34,8 @@ return [
                     [
                         'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
                         -1,
-                        'flags-multiple'
-                    ]
+                        'flags-multiple',
+                    ],
                 ],
                 'default' => 0,
             ],
@@ -66,8 +66,8 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
             ],
         ],
@@ -80,7 +80,7 @@ return [
                 'type' => 'input',
                 'size' => 12,
                 'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00'
+                'default' => '0000-00-00 00:00:00',
             ],
         ],
         'end_date' => [
@@ -91,7 +91,7 @@ return [
                 'type' => 'input',
                 'size' => 12,
                 'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00'
+                'default' => '0000-00-00 00:00:00',
             ],
         ],
         'name' => [
@@ -100,7 +100,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'prename' => [
@@ -109,7 +109,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'street' => [
@@ -118,7 +118,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'zip' => [
@@ -127,7 +127,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'city' => [
@@ -136,7 +136,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'phone' => [
@@ -145,7 +145,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'email' => [
@@ -154,7 +154,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'newsletter' => [
@@ -164,11 +164,11 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
                 'default' => 0,
-            ]
+            ],
         ],
         'weight' => [
             'exclude' => true,
@@ -176,8 +176,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 4,
-                'eval' => 'int'
-            ]
+                'eval' => 'int',
+            ],
         ],
         'timeslot' => [
             'exclude' => true,

@@ -1,0 +1,5 @@
+TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.sDEF{
+    settings\.templateLayout.addItems{
+        # style2 = Stylename 2
+    }
+}

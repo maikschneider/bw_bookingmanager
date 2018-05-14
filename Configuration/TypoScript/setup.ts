@@ -22,38 +22,10 @@ plugin.tx_bwbookingmanager_pi1 {
     mvc {
         #callDefaultActionIfActionCantBeResolved = 1
     }
+    settings{
+        showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
+        calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
+        entryPid = {$plugin.tx_bwbookingmanager_pi1.settings.entryPid}
+        backPid = {$plugin.tx_bwbookingmanager_pi1.settings.backPid}
+    }
 }
-
-# these classes are only used in auto-generated templates
-plugin.tx_bwbookingmanager_pi1._CSS_DEFAULT_STYLE (
-    textarea.f3-form-error {
-        background-color:#FF9F9F;
-        border: 1px #FF0000 solid;
-    }
-
-    input.f3-form-error {
-        background-color:#FF9F9F;
-        border: 1px #FF0000 solid;
-    }
-
-    .tx-bw-bookingmanager table {
-        border-collapse:separate;
-        border-spacing:10px;
-    }
-
-    .tx-bw-bookingmanager table th {
-        font-weight:bold;
-    }
-
-    .tx-bw-bookingmanager table td {
-        vertical-align:top;
-    }
-
-    .typo3-messages .message-error {
-        color:red;
-    }
-
-    .typo3-messages .message-ok {
-        color:green;
-    }
-)
