@@ -85,6 +85,26 @@
                     </config>
                 </TCEforms>
             </settings.backPid>
+            <settings.dateRange>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange</label>
+                    <displayCond>FIELD:switchableControllerActions:=:Calendar->show</displayCond>
+                    <config>
+                        <type>select</type>
+                        <renderType>selectSingle</renderType>
+                        <items>
+                            <numIndex index="0" type="array">
+                                <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.month</numIndex>
+                                <numIndex index="1">0</numIndex>
+                            </numIndex>
+                            <numIndex index="1" type="array">
+                                <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.week</numIndex>
+                                <numIndex index="1">1</numIndex>
+                            </numIndex>
+                        </items>
+                    </config>
+                </TCEforms>
+            </settings.dateRange>
             <settings.templateLayout>
                 <TCEforms>
                     <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout</label>

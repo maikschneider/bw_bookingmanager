@@ -40,6 +40,15 @@
             <trans-unit id="flexforms_general.storagePid">
                 <source>Storage PID</source>
             </trans-unit>
+            <trans-unit id="flexforms_general.dateRange">
+                <source>Date range</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange.month">
+                <source>Month</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange.week">
+                <source>Week</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

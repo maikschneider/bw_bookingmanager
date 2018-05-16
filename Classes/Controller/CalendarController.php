@@ -46,6 +46,12 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     public function listAction()
     {
         $calendars = $this->calendarRepository->findAll();
+
+        // set template
+        if ($this->settings['templateLayout'] != 'default') {
+            $this->view->setTemplate($this->settings['templateLayout']);
+        }
+
         $this->view->assign('calendars', $calendars);
     }
 
@@ -57,19 +63,31 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
      */
     public function showAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-        )
-    {
-        $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : NULL;
-        $month = $this->request->hasArgument('month') ? $this->request->getArgument('month') : NULL;
-        $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : NULL;
+    ) {
+        $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : null;
+        $month = $this->request->hasArgument('month') ? $this->request->getArgument('month') : null;
+        $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : null;
 
         $startDate = new \DateTime('now');
-        if($day && $month && $year){
-            $startDate = $startDate->createFromFormat('j-n-Y', $day.'-'.$month.'-'.$year);
+        if ($day && $month && $year) {
+            $startDate = $startDate->createFromFormat('j-n-Y', $day . '-' . $month . '-' . $year);
         }
 
-        $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
-        // $timeslots = $this->timeslotRepository->findInCurrentWeek($calendar);
+        // set template
+        if ($this->settings['templateLayout'] != 'default') {
+            $this->view->setTemplate($this->settings['templateLayout']);
+        }
+
+        // get timeslots by date range
+        switch($this->settings['dateRange']) {
+            case 1:
+                $timeslots = $this->timeslotRepository->findInWeek($calendar, $startDate);
+            break;
+            default:
+                $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
+            break;            
+        }
+        
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslots', $timeslots);
     }
