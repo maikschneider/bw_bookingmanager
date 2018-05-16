@@ -67,7 +67,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->entryRepository->add($newEntry);
 
         $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
-        $notificationManager->sendNotifications();
+        $notificationManager->notify();
 
         $this->forward('show', NULL, NULL, array('entry' => $newEntry));
     }

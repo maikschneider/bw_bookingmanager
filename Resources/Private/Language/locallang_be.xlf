@@ -3,10 +3,9 @@
     <file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
         <header/>
         <body>
-            <trans-unit id="flexforms_tab.settings">
-                <source>Settings</source>
+            <trans-unit id="flexforms_general">
+                <source>General</source>
             </trans-unit>
-            <!-- <trans-unit id="flexforms_tab.show"><source>Show</source></trans-unit> -->
             <trans-unit id="flexforms_general.mode">
                 <source>Display mode</source>
             </trans-unit>
@@ -48,6 +47,27 @@
             </trans-unit>
             <trans-unit id="flexforms_general.dateRange.week">
                 <source>Week</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email">
+                <source>Email</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email.doSendConfirmation">
+                <source>Send confirmation mail</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email.sender">
+                <source>Sender mail address</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email.subject">
+                <source>E-Mail subject</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email.subject">
+                <source>E-Mail subject</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email.template">
+                <source>E-Mail template</source>
+            </trans-unit>
+            <trans-unit id="flexforms_email.template.default">
+                <source>Default</source>
             </trans-unit>
         </body>
     </file>
