@@ -32,11 +32,11 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $email = '';
 
     /**
-     * condition
+     * hook
      *
-     * @var boolean
+     * @var string
      */
-    protected $condition = FALSE;
+    protected $hook = '';
 
     /**
      * Returns the name
@@ -81,34 +81,24 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the condition
+     * Returns the hook
      *
-     * @return bool $condition
+     * @return int $hook
      */
-    public function getCondition()
+    public function getHook()
     {
-        return $this->condition;
+        return $this->hook;
     }
 
     /**
-     * Sets the condition
+     * Sets the hook
      *
-     * @param bool $condition
+     * @param int $hook
      * @return void
      */
-    public function setCondition($condition)
+    public function setHook($hook)
     {
-        $this->condition = $condition;
-    }
-
-    /**
-     * Returns the boolean state of condition
-     *
-     * @return bool
-     */
-    public function isCondition()
-    {
-        return $this->condition;
+        $this->hook = $hook;
     }
 
     /**

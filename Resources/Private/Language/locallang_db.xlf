@@ -93,7 +93,7 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
 				<source>Timeslot</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.calendar">
 				<source>Calendar</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
@@ -117,8 +117,11 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email">
 				<source>Email</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.condition">
-				<source>Has condition</source>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
+				<source>Hook</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
+				<source>None</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">
 				<source>Calendars</source>

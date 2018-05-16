@@ -9,8 +9,8 @@
             <trans-unit id="email.description">
                 <source>email</source>
             </trans-unit>
-            <trans-unit id="condition.description">
-                <source>condition</source>
+            <trans-unit id="hook.description">
+                <source>hook</source>
             </trans-unit>
             <trans-unit id="calendars.description">
                 <source>calendars</source>

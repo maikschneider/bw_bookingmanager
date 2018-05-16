@@ -65,7 +65,20 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->initializeAction();
         $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $this->entryRepository->add($newEntry);
-        $this->redirect('list', 'Calendar');
+
+        $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
+        $notificationManager->sendNotifications();
+
+        $this->forward('show', NULL, NULL, array('entry' => $newEntry));
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
+     * @return void
+     */
+    public function showAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
+    {
+        $this->view->assign('entry', $entry);
     }
 
     // public function errorAction() {

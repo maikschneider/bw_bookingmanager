@@ -40,6 +40,13 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $blockslots = null;
 
     /**
+     * notifications
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification>
+     */
+    protected $notifications = null;
+
+    /**
      * Returns the name
      *
      * @return string $name
@@ -167,5 +174,48 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setTimeslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $timeslots)
     {
         $this->timeslots = $timeslots;
+    }
+
+    /**
+     * Sets the notifications
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
+     * @return void
+     */
+    public function setNotifications(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $notifications)
+    {
+        $this->notifications = $notifications;
+    }
+
+    /**
+     * Adds a Notification
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Notification $notification
+     * @return void
+     */
+    public function addNotification(\Blueways\BwBookingmanager\Domain\Model\Notification $notification)
+    {
+        $this->notifications->attach($notification);
+    }
+
+    /**
+     * Removes a Notification
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Notification $NotificationToRemove The Notification to be removed
+     * @return void
+     */
+    public function removeNotification(\Blueways\BwBookingmanager\Domain\Model\Notification $notificationToRemove)
+    {
+        $this->notifications->detach($notificationToRemove);
+    }
+
+    /**
+     * Returns the notifications
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }
