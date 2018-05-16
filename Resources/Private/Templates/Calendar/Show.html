@@ -44,7 +44,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
         <td><f:for each="{slot.calendars}" as="cal">{cal.uid}&nbsp;</f:for></td>
         <td>
           <f:if condition="{slot.isBookable}">
-            <f:link.action controller="Entry" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'Y-m-d H:m:s\')}', end: '{f:format.date(date: slot.endDate, format:\'Y-m-d H:m:s\')}'}">book</f:link.action></td>
+            <f:link.action controller="Entry" pageUid="{settings.entryPid}" action="new" arguments="{calendar: calendar, timeslot: slot, start: '{f:format.date(date: slot.startDate, format:\'Y-m-d H:m:s\')}', end: '{f:format.date(date: slot.endDate, format:\'Y-m-d H:m:s\')}'}">book</f:link.action></td>
           </f:if>
         </td>
       </tr>

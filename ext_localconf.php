@@ -32,7 +32,7 @@ call_user_func(
                         description = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bw_bookingmanager_domain_model_bookingmanager.description
                         tt_content_defValues {
                             CType = list
-                            list_type = bw_bookingmanager_pi1
+                            list_type = bwbookingmanager_pi1
                         }
                     }
                 }

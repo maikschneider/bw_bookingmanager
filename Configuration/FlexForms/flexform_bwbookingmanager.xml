@@ -6,20 +6,6 @@
     <ROOT>
         <type>array</type>
         <el>
-            <persistence.storagePid>
-                <TCEforms>
-                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.storagePid</label>
-                    <displayCond>FIELD:switchableControllerActions:=:Calendar->list</displayCond>
-                    <config>
-                        <type>group</type>
-                        <internal_type>db</internal_type>
-                        <allowed>pages</allowed>
-                        <size>2</size>
-                        <maxitems>99</maxitems>
-                        <minitems>0</minitems>
-                    </config>
-                </TCEforms>
-            </persistence.storagePid>
             <switchableControllerActions>
                 <TCEforms>
                     <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode</label>
@@ -37,7 +23,7 @@
                             </numIndex>
                             <numIndex index="2">
                                 <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new</numIndex>
-                                <numIndex index="1">Entry->new</numIndex>
+                                <numIndex index="1">Entry->new;Entry->create;Calendar->show;Calendar->list</numIndex>
                             </numIndex>
                         </items>
                     </config>
@@ -46,7 +32,7 @@
             <settings.showPid>
                 <TCEforms>
                     <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.showPid</label>
-                    <displayCond>FIELD:switchableControllerActions:=:Calendar->list</displayCond>
+                    <displayCond>FIELD:switchableControllerActions:!=:Calendar->show</displayCond>
                     <config>
                         <type>group</type>
                         <internal_type>db</internal_type>
@@ -88,7 +74,7 @@
             <settings.backPid>
                 <TCEforms>
                     <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.backPid</label>
-                    <displayCond>FIELD:switchableControllerActions:=:Entry->new</displayCond>
+                    <displayCond>FIELD:switchableControllerActions:=:Entry->new;Entry->create</displayCond>
                     <config>
                         <type>group</type>
                         <internal_type>db</internal_type>
@@ -114,6 +100,19 @@
                     </config>
                 </TCEforms>
             </settings.templateLayout>
+            <persistence.storagePid>
+                <TCEforms>
+                    <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.storagePid</label>
+                    <config>
+                        <type>group</type>
+                        <internal_type>db</internal_type>
+                        <allowed>pages</allowed>
+                        <size>2</size>
+                        <maxitems>99</maxitems>
+                        <minitems>0</minitems>
+                    </config>
+                </TCEforms>
+            </persistence.storagePid>
         </el>
     </ROOT>
 </T3DataStructure>

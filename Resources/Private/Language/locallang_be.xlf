@@ -35,11 +35,11 @@
                 <source>New entry PID</source>
             </trans-unit>
             <trans-unit id="flexforms_general.backPid">
-    <source>Back PID</source>
-</trans-unit>
-<trans-unit id="flexforms_general.storagePid">
-    <source>Storage PID</source>
-</trans-unit>
+                <source>Back PID</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.storagePid">
+                <source>Storage PID</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

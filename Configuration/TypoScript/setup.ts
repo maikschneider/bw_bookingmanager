@@ -23,7 +23,7 @@ plugin.tx_bwbookingmanager_pi1 {
         #callDefaultActionIfActionCantBeResolved = 1
     }
     settings{
-        showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
+        #showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
         calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
         entryPid = {$plugin.tx_bwbookingmanager_pi1.settings.entryPid}
         backPid = {$plugin.tx_bwbookingmanager_pi1.settings.backPid}
