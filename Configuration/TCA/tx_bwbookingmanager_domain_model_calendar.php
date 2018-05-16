@@ -13,14 +13,14 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'name,timeslots,blockslots',
+        'searchFields' => 'name,timeslots,blockslots,notifications',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -103,7 +103,21 @@ return [
                 'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_blockslot',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_blockslot',
-                'MM' => 'tx_bwbookingmanager_calendar_timeslot_mm',
+                'MM' => 'tx_bwbookingmanager_calendar_blockslot_mm',
+                'MM_opposite_field' => 'calendars',
+                'size' => 10,
+                'maxitems' => 9999,
+            ],
+        ],
+        'notifications' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.notifications',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_bwbookingmanager_domain_model_notification',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_notification',
+                'MM' => 'tx_bwbookingmanager_calendar_notification_mm',
                 'MM_opposite_field' => 'calendars',
                 'size' => 10,
                 'maxitems' => 9999,

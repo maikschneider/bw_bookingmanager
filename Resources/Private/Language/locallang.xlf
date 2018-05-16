@@ -15,6 +15,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots">
 				<source>Blockslots</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
+				<source>Notifications</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
 			</trans-unit>

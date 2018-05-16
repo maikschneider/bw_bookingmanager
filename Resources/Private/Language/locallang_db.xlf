@@ -15,6 +15,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots">
 				<source>Blockslots</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
+				<source>Notifications</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
 			</trans-unit>
@@ -104,6 +107,21 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
 				<source>Reason</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification">
+				<source>Notification</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.condition">
+				<source>Has condition</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">
+				<source>Calendars</source>
 			</trans-unit>
 		</body>
 	</file>

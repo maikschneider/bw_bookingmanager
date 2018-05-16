@@ -12,6 +12,9 @@
 			<trans-unit id="blockslots.description">
 				<source>blockslots</source>
 			</trans-unit>
+			<trans-unit id="notifications.description">
+				<source>notifications</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
