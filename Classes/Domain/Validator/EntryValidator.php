@@ -57,12 +57,12 @@ class EntryValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVal
     private function validateTimes()
     {
         // start time
-        if($this->timeslot->getStartDate()->format('H:m:s') != $this->entry->getStartDate()->format('H:m:s'))
+        if($this->timeslot->getStartDate()->format('H:i:s') != $this->entry->getStartDate()->format('H:i:s'))
         {
             $this->addError('Start time is not possible', 1526170536);
         }
         // end time
-        if($this->timeslot->getEndDate()->format('H:m:s') != $this->entry->getEndDate()->format('H:m:s'))
+        if($this->timeslot->getEndDate()->format('H:i:s') != $this->entry->getEndDate()->format('H:i:s'))
         {
             $this->addError('End time is not possible', 1526170536);
         }

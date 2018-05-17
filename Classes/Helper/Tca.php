@@ -15,13 +15,13 @@ class Tca{
         switch($repeatType){
             case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
                 $newTitle .= $startDate->format('l') .', ';
-                $newTitle .= $startDate->format('H:m') .' - ';
-                $newTitle .= $endDate->format('H:m');
+                $newTitle .= $startDate->format('H:i') .' - ';
+                $newTitle .= $endDate->format('H:i');
             break;
 
             default:
-                $newTitle .= $startDate->format('d.m.y, H:m') . ' - ';
-                $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:m' : 'd.m.y, H:m';
+                $newTitle .= $startDate->format('d.m.y, H:i') . ' - ';
+                $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
                 $newTitle .= $endDate->format($endDateFormat);
             break;
         }
