@@ -33,6 +33,12 @@
 			<trans-unit id="newsletter.description">
 				<source>newsletter</source>
 			</trans-unit>
+			<trans-unit id="special1.description">
+				<source>special1</source>
+			</trans-unit>
+			<trans-unit id="special2.description">
+				<source>special2</source>
+			</trans-unit>
 			<trans-unit id="weight.description">
 				<source>weight</source>
 			</trans-unit>

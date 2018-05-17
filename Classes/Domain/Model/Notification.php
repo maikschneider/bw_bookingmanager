@@ -208,4 +208,12 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->template = $template;
     }
 
+    /**
+     * checks if a hook is set and not default (=NONE)
+     * @return boolean
+     */
+    public function hasHook()
+    {
+        return ($this->hook && $this->hook!='' && $this->hook!='0');
+    }
 }

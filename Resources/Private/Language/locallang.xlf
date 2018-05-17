@@ -75,6 +75,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter">
 				<source>Newsletter</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1">
+				<source>Special 1</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special2">
+				<source>Special 2</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
 				<source>Weight</source>
 			</trans-unit>

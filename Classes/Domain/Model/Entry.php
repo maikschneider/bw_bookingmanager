@@ -88,6 +88,20 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $newsletter = false;
 
     /**
+     * special1
+     *
+     * @var bool
+     */
+    protected $special1 = false;
+
+    /**
+     * special2
+     *
+     * @var bool
+     */
+    protected $special2 = false;
+
+    /**
      * weight
      *
      * @var int
@@ -347,6 +361,68 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function isNewsletter()
     {
         return $this->newsletter;
+    }
+
+    /**
+     * Returns the special1
+     *
+     * @return bool $special1
+     */
+    public function getSpecial1()
+    {
+        return $this->special1;
+    }
+
+    /**
+     * Sets the special1
+     *
+     * @param bool $special1
+     * @return void
+     */
+    public function setSpecial1($special1)
+    {
+        $this->special1 = $special1;
+    }
+
+    /**
+     * Returns the boolean state of special1
+     *
+     * @return bool
+     */
+    public function isSpecial1()
+    {
+        return $this->special1;
+    }
+
+    /**
+     * Returns the special1
+     *
+     * @return bool $special1
+     */
+    public function getSpecial2()
+    {
+        return $this->special2;
+    }
+
+    /**
+     * Sets the special2
+     *
+     * @param bool $special2
+     * @return void
+     */
+    public function setSpecial2($special2)
+    {
+        $this->special2 = $special2;
+    }
+
+    /**
+     * Returns the boolean state of special2
+     *
+     * @return bool
+     */
+    public function isSpecial2()
+    {
+        return $this->special2;
     }
 
     /**
