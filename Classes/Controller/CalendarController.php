@@ -74,6 +74,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : null;
 
         $startDate = new \DateTime('now');
+        $startDate->setTime(0,0,0);
         if ($day && $month && $year) {
             $startDate = $startDate->createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
         }

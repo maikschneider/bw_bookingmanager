@@ -54,6 +54,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $endDate = clone $dayInMonth;
         $endDate->modify('last day of this month');
+        $endDate->setTime(23, 59, 59);
 
         $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
         $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
@@ -72,6 +73,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $endDate = clone $dayInWeek;
         $endDate->modify('yesterday');
         $endDate->modify('next sunday');
+        $endDate->setTime(23, 59, 59);
 
         $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
         $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
