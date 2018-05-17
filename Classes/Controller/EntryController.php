@@ -66,10 +66,13 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $this->entryRepository->add($newEntry);
 
+        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager->persistAll();
+
         $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
         $notificationManager->notify();
 
-        $this->forward('show', NULL, NULL, array('entry' => $newEntry));
+        $this->redirect('show', NULL, NULL, array('entry' => $newEntry));
     }
 
     /**

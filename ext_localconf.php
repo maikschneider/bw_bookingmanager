@@ -11,7 +11,7 @@ call_user_func(
             [
                 'Calendar' => 'list, show',
                 'Timeslot' => 'list, show',
-                'Entry' => 'new, create'
+                'Entry' => 'new, create, show'
             ],
             // non-cacheable actions
             [
