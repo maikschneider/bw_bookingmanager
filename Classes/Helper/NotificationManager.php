@@ -43,9 +43,11 @@ class NotificationManager
     }
 
     private function sendConfirmation()
-    {   
+    {
         // abbort if not activated
-        if (!$this->extbaseFrameworkConfiguration['settings']['mail']['doSendConfirmation']) return false;
+        if (!$this->extbaseFrameworkConfiguration['settings']['mail']['doSendConfirmation']) {
+            return false;
+        }
 
         $from = $this->extbaseFrameworkConfiguration['settings']['mail']['sender'];
         $to = $this->entry->getEmail();
@@ -64,9 +66,15 @@ class NotificationManager
         }
     }
 
-    private function sendNotification()
+    private function sendNotification($notification)
     {
+        $from = $this->extbaseFrameworkConfiguration['settings']['mail']['sender'];
+        $to = $notification->getEmail();
+        $subject = $notification->getEmailSubject();
+        $template = $notification->getTemplate();
+        $body = $this->getMailBody('Email/' . $template);
 
+        $this->sendMail($from, $to, $subject, $body);
     }
 
     private function sendMail($from, $to, $subject, $body)
@@ -76,7 +84,7 @@ class NotificationManager
             ->setFrom($from)
             ->setSubject($subject)
             ->setBody($body, 'text/html');
-        
+
         $message->send();
         var_dump($message->isSent());
     }

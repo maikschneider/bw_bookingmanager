@@ -15,6 +15,12 @@
             <trans-unit id="calendars.description">
                 <source>calendars</source>
             </trans-unit>
+            <trans-unit id="template.description">
+                <source>template</source>
+            </trans-unit>
+            <trans-unit id="email_subject.description">
+                <source>email subject</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

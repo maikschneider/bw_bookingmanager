@@ -39,6 +39,20 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $hook = '';
 
     /**
+     * template
+     *
+     * @var string
+     */
+    protected $template = '';
+
+    /**
+     * emailSubject
+     *
+     * @var string
+     */
+    protected $emailSubject = '';
+
+    /**
      * Returns the name
      *
      * @return string $name
@@ -57,6 +71,27 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Returns the emailSubject
+     *
+     * @return string $emailSubject
+     */
+    public function getEmailSubject()
+    {
+        return $this->emailSubject;
+    }
+
+    /**
+     * Sets the emailSubject
+     *
+     * @param string $emailSubject
+     * @return void
+     */
+    public function setEmailSubject($emailSubject)
+    {
+        $this->emailSubject = $emailSubject;
     }
 
     /**
@@ -150,6 +185,27 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
+    }
+
+    /**
+     * Returns the template
+     *
+     * @return string $template
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * Sets the template
+     *
+     * @param string $template
+     * @return void
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 
 }

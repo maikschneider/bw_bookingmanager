@@ -126,6 +126,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">
 				<source>Calendars</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.template">
+				<source>Email Template</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.template.default">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject">
+				<source>Email Subject</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
+				<source>New Booking</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
