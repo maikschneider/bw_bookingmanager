@@ -129,6 +129,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
 				<source>None</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
+				<source>Special 1 is checked</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked">
+				<source>Special 2 is checked</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">
 				<source>Calendars</source>
 			</trans-unit>

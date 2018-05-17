@@ -21,6 +21,10 @@ call_user_func(
             ]
         );
 
+    // notification hooks
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['special1IsChecked'][] = 'Blueways\BwBookingmanager\Hooks\IsCheckedSpecialHook';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['special2IsChecked'][] = 'Blueways\BwBookingmanager\Hooks\IsCheckedSpecialHook';
+
     // wizards
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         'mod {

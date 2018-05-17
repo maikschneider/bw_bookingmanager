@@ -74,11 +74,11 @@ class NotificationManager
     {
         foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification'][$notification->getHook()] ?? [] as $className) {
             $_procObj = GeneralUtility::makeInstance($className);
-            $_procObj->executeHook($this);
+            $_procObj->executeHook($this, $notification);
         }
     }
 
-    private function sendNotification($notification)
+    public function sendNotification($notification)
     {
         $from = $this->extbaseFrameworkConfiguration['settings']['mail']['sender'];
         $to = $notification->getEmail();
@@ -117,5 +117,10 @@ class NotificationManager
         $emailBody = $emailView->render();
 
         return $emailBody;
+    }
+
+    public function getEntry()
+    {
+        return $this->entry;
     }
 }
