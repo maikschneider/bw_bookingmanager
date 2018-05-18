@@ -14,7 +14,7 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'name,timeslots,blockslots,notifications',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.gif'
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications',

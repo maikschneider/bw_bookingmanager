@@ -15,7 +15,7 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'start_date,end_date,reason,calendars',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_blockslot.gif'
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_blockslot.svg'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, reason, calendars',

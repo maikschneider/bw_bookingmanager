@@ -15,7 +15,7 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'name,email,email_subject,template,hook,calendars',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_notification.gif',
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_notification.svg',
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, email, email_subject, template, hook, calendars',
