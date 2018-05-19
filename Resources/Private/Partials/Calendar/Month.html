@@ -1,5 +1,43 @@
+<div class="row">
+    <div class="columns">
+        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.prevMonth.day, month: configuration.prevMonth.month, year: configuration.prevMonth.year}">prev week</f:link.action>
+    </div>
+    <div class="columns text-center">
+        <h2>{f:format.date(date:configuration.weeks.1.0.date, format:'F Y')}</h2>
+    </div>
+    <div class="columns text-right">
+        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.nextMonth.day, month: configuration.nextMonth.month, year: configuration.nextMonth.year}">next week</f:link.action>
+    </div>
+</div>
+
+<hr />
+
+<f:for each="{configuration.weeks}" as="week">
 <div class="row small-up-7">
-    <f:for each="{configuration.days}" as="day">
-        <div class="cell">{f:format.date(date:day.date, format:'d')}</div>
+    <f:for each="{week}" as="day">
+        <div class="column">
+            <f:if condition="{day.isNotInMonth}">
+                <f:then>
+                    
+                </f:then>
+                <f:else>
+                    <h3>{f:format.date(date:day.date, format:'j')}</h3>
+                    <hr />
+                    <ul>
+                        <f:for each="{day.timeslots}" as="timeslot">
+                            <li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate, format:'H:i')}
+                                <p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
+                                <f:if condition="{timeslot.isBookable}">
+                                    <f:link.action controller="Entry" pageUid="{settings.entryPid}" action="new" arguments="{calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">book</f:link.action>
+                                </f:if>
+                            </li>
+                        </f:for>
+                    </ul>
+                </f:else>
+            </f:if>
+        </div>
     </f:for>
 </div>
+</f:for>
+
+<f:debug>{_all}</f:debug>

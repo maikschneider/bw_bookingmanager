@@ -24,19 +24,7 @@ class RenderConfiguration
         $prevWeek = clone $weekStart;
         $prevWeek->modify('-1 week');
 
-        $days = [];
-
-        for ($i = 0; $i < 7; $i++) {
-
-            $days[$i] = [
-                'date' => clone $weekStart,
-                'timeslots' => $this->getTimeslotsForDay($weekStart),
-                'isCurrentDay' => $this->isCurrentDay($weekStart),
-            ];
-
-            $weekStart->modify('+1 day');
-
-        }
+        $days = $this->getDaysArrayForWeek($weekStart);
 
         return array(
             'days' => $days,
@@ -51,6 +39,73 @@ class RenderConfiguration
                 'day' => $prevWeek->format('j'),
                 'month' => $prevWeek->format('m'),
                 'year' => $prevWeek->format('Y'),
+            ],
+        );
+
+    }
+
+    private function getDaysArrayForWeek($weekStart)
+    {
+        $days = [];
+
+        for ($i = 0; $i < 7; $i++) {
+
+            $days[$i] = [
+                'date' => clone $weekStart,
+                'timeslots' => $this->getTimeslotsForDay($weekStart),
+                'isCurrentDay' => $this->isCurrentDay($weekStart),
+                'isNotInMonth' => !($weekStart->format('m') == $this->startDate->format('m'))
+            ];
+
+            $weekStart->modify('+1 day');
+        }
+        return $days;
+    }
+
+    public function getConfigurationForMonth()
+    {
+        $monthStart = clone $this->startDate;
+        $monthStart->modify('first day of this month');
+        $monthStart->modify('last monday');
+        $monthStart->setTime(0, 0, 0);
+
+        $monthEnd = clone $this->startDate;
+        $monthEnd->modify('last day of this month');
+        $monthEnd->setTime(23, 59, 59);
+
+        $nextMonth = clone $this->startDate;
+        $nextMonth->modify('+1 month');
+        $prevMonth = clone $this->startDate;
+        $prevMonth->modify('-1 month');
+
+        // #weeks = #mondays
+        $numberOfWeeks = \Blueways\BwBookingmanager\Helper\TimeslotManager::dayCount($monthStart, $monthEnd, 1);
+
+        $weeks = [];
+
+        for ($i = 0; $i < $numberOfWeeks; $i++) {
+
+            $weekStart = clone $monthStart;
+
+            $weeks[] = $this->getDaysArrayForWeek($weekStart);
+
+            $monthStart->modify('next monday');
+
+        }
+
+        return array(
+            'weeks' => $weeks,
+            'nextMonth' => [
+                'date' => $nextMonth,
+                'day' => $nextMonth->format('j'),
+                'month' => $nextMonth->format('m'),
+                'year' => $nextMonth->format('Y'),
+            ],
+            'prevMonth' => [
+                'date' => $prevMonth,
+                'day' => $prevMonth->format('j'),
+                'month' => $prevMonth->format('m'),
+                'year' => $prevMonth->format('Y'),
             ],
         );
 
@@ -78,11 +133,6 @@ class RenderConfiguration
     private function isCurrentDay($day)
     {
         return $this->isSameDay($day, $this->startDate);
-    }
-
-    public function getConfigurationForMonth()
-    {
-
     }
 
     public function setTimeslots($timeslots)

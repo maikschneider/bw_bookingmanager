@@ -209,7 +209,7 @@ class TimeslotManager
      * @param \DateTime $to
      * @param int $dayOfWeek
      */
-    private function dayCount($from, $to, $day) {
+    public static function dayCount($from, $to, $day) {
 
         $wF = $from->format('w');
         $wT = $to->format('w');
