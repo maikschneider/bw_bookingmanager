@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="columns">
+        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.prevWeek.day, month: configuration.prevWeek.month, year: configuration.prevWeek.year}">prev week</f:link.action>
+    </div>
+    <div class="columns text-center">
+        <h2>{f:format.date(date:configuration.days.0.date, format:'d.m.')} - {f:format.date(date:configuration.days.6.date, format:'d.m.')}</h2>
+    </div>
+    <div class="columns text-right">
+        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.nextWeek.day, month: configuration.nextWeek.month, year: configuration.nextWeek.year}">next week</f:link.action>
+    </div>
+</div>
+
+<hr />
+
+<div class="row small-up-7">
+    <f:for each="{configuration.days}" as="day">
+        <div class="column">
+            <h3>{f:format.date(date:day.date, format:'l')}</h3>
+            <hr />
+            <ul>
+            <f:for each="{day.timeslots}" as="timeslot">
+                <li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate, format:'H:i')}
+                    <p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
+                    <f:if condition="{timeslot.isBookable}">
+                        <f:link.action controller="Entry" pageUid="{settings.entryPid}" action="new" arguments="{calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">book</f:link.action>
+                    </f:if>
+                </li>
+            </f:for>
+            </ul>
+        </div>
+    </f:for>
+</div>

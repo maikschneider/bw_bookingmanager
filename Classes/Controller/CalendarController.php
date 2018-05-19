@@ -84,18 +84,26 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             $this->view->setTemplate($this->settings['templateLayout']);
         }
 
+        // get configuration array for template rendering
+        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($startDate);
+
         // get timeslots by date range
         switch($this->settings['dateRange']) {
             case 1:
                 $timeslots = $this->timeslotRepository->findInWeek($calendar, $startDate);
+                $calendarConfiguration->setTimeslots($timeslots);
+                $configuration = $calendarConfiguration->getConfigurationForWeek();
             break;
             default:
                 $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
+                $calendarConfiguration->setTimeslots($timeslots);
+                $configuration = $calendarConfiguration->getConfigurationForMonth();
             break;            
         }
-        
+
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslots', $timeslots);
+        $this->view->assign('configuration', $configuration);
     }
 
 }

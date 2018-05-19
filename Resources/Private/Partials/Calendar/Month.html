@@ -1,0 +1,5 @@
+<div class="row small-up-7">
+    <f:for each="{configuration.days}" as="day">
+        <div class="cell">{f:format.date(date:day.date, format:'d')}</div>
+    </f:for>
+</div>
