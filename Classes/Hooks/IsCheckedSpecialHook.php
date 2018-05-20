@@ -11,7 +11,6 @@ class IsCheckedSpecialHook
     /**
      * @var Blueways\BwBookingmanager\Domain\Model\Notification $notification
      */
-
     public function executeHook($notificationManager, $notification)
     {
         $this->notificationManager = $notificationManager;

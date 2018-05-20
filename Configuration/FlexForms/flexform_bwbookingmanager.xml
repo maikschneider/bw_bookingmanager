@@ -28,7 +28,7 @@
                                     </numIndex>
                                     <numIndex index="2">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new</numIndex>
-                                        <numIndex index="1">Entry->new;Entry->create;Entry->show</numIndex>
+                                        <numIndex index="1">Entry->new;Entry->create;Entry->show;Entry->delete</numIndex>
                                     </numIndex>
                                 </items>
                             </config>
@@ -79,7 +79,7 @@
                     <settings.backPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.backPid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Entry->new;Entry->create</displayCond>
+                            <displayCond>FIELD:switchableControllerActions:=:Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>

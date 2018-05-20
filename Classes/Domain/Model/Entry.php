@@ -123,6 +123,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $timeslot = null;
 
     /**
+     * token
+     *
+     * @var string
+     */
+    protected $token = '';
+
+    /**
      * __construct
      * 
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
@@ -204,6 +211,27 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Returns the token
+     *
+     * @return string $token
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Sets the token
+     *
+     * @param string $token
+     * @return void
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
     }
 
     /**
@@ -486,5 +514,15 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
     {
         $this->calendar = $calendar;
+    }
+
+    public function generateToken()
+    {
+        $this->token = bin2hex(random_bytes(64));
+    }
+
+    public function isValidToken($token)
+    {
+        return $token && $this->token === $token ? true : false;
     }
 }

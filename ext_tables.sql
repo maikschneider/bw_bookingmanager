@@ -81,6 +81,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	city varchar(255) DEFAULT '' NOT NULL,
 	phone varchar(255) DEFAULT '' NOT NULL,
 	email varchar(255) DEFAULT '' NOT NULL,
+	token varchar(255) DEFAULT '' NOT NULL,
 	newsletter smallint(5) unsigned DEFAULT '0' NOT NULL,
 	special1 smallint(5) unsigned DEFAULT '0' NOT NULL,
 	special2 smallint(5) unsigned DEFAULT '0' NOT NULL,

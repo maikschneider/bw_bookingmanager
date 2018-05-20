@@ -21,15 +21,16 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
      * @inject
      */
-    protected $entryRepository = NULL;
+    protected $entryRepository = null;
 
-    public function initializeAction() {
+    public function initializeAction()
+    {
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
 
         // convert dateTime from new action
         if ($this->arguments->hasArgument('newEntry')) {
-            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',\TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,'d-m-Y-H:i:s');
-            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',\TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,'d-m-Y-H:i:s');
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
         }
     }
 
@@ -41,10 +42,10 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
      * @return string HTML of form
      */
-    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = NULL)
+    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
     {
-        $start = $this->request->hasArgument('start') ? new \DateTime($this->request->getArgument('start')) : NULL;
-        $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : NULL;
+        $start = $this->request->hasArgument('start') ? new \DateTime($this->request->getArgument('start')) : null;
+        $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : null;
 
         $newEntry = $newEntry ? $newEntry : new \Blueways\BwBookingmanager\Domain\Model\Entry($calendar, $timeslot, $start, $end);
 
@@ -64,6 +65,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $this->initializeAction();
         $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $newEntry->generateToken();
         $this->entryRepository->add($newEntry);
 
         // persist by hand to get uid field and make redirect possible
@@ -74,16 +76,44 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
         $notificationManager->notify();
 
-        $this->redirect('show', NULL, NULL, array('entry' => $newEntry));
+        $this->redirect('show', null, null, array('entry' => $newEntry, 'token' => $newEntry->getToken()));
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
+     * @param string $token
+     * @return void
+     */
+    public function showAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry, $token = null)
+    {
+        $deleteable = $entry->isValidToken($token);
+
+        $this->view->assign('deleteable', $deleteable);
+        $this->view->assign('entry', $entry);
     }
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
      * @return void
      */
-    public function showAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
+    public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {
-        $this->view->assign('entry', $entry);
+        // check token und delete
+        if($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token']){
+           if($entry->isValidToken($this->request->getArgument('entry')['token'])){
+               $this->entryRepository->remove($entry);
+           }
+        }
+
+        // redirect to backPid
+        if($this->settings['backPid']){
+            $uriBuilder = $this->uriBuilder;
+            $uri = $uriBuilder
+                ->setTargetPageUid($this->settings['backPid'])
+                ->build();
+            $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
+        }
+
     }
 
     // public function errorAction() {

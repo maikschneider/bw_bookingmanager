@@ -4,18 +4,10 @@ overwrite settings in /Configuration/ExtensionBuilder/settings.yaml: Resources: 
 your changes will be overwritten the next time you save the extension in the extension builder
 
 <f:section name="main">
-    <h1>Entry Show</h1>
+    <h1>Entry was deleted</h1>
 
     <f:flashMessages />
 
-    <f:if condition="{deleteable}">
-        <f:form action="delete" name="entry" object="{entry}">
-            <f:form.hidden property="token" value="{entry.token}" />
-            <f:form.submit value="Delete" />
-        </f:form>
-    </f:if>
-
-    <f:link.action controller="Calendar" action="show" pageUid="{settings.showPid}" arguments="{calendar : entry.calendar}">back to {entry.calendar.name}</f:link.action>
 </f:section>
 
 </html>
