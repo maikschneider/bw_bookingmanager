@@ -1,8 +1,11 @@
 <?php
 namespace Blueways\BwBookingmanager\Hooks;
 
-class IsCheckedSpecialHook
+class NotificationSpecial2IsCheckedHook
 {
+    const HOOK_ID = 'special2IsChecked';
+    const HOOK_LABEL = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked';
+
     /**
      * @var Blueways\BwBookingmanager\Helper\NotificationManager $notificationManager
      */
@@ -16,18 +19,10 @@ class IsCheckedSpecialHook
         $this->notificationManager = $notificationManager;
         $this->notification = $notification;
 
-        $this->checkSpecials();
-    }
-
-    private function checkSpecials()
-    {
-        if ($this->notification->getHook() === 'special1IsChecked' && $this->notificationManager->getEntry()->isSpecial1()) {
-            $this->notificationManager->sendNotification($this->notification);
-        }
-
-        if ($this->notification->getHook() === 'special2IsChecked' && $this->notificationManager->getEntry()->isSpecial2()) {
+        if ($this->notification->getHook() === NotificationSpecial2IsCheckedHook::HOOK_ID && $this->notificationManager->getEntry()->isSpecial2()) {
             $this->notificationManager->sendNotification($this->notification);
         }
 
     }
+
 }
