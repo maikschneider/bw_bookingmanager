@@ -99,14 +99,12 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {
         // check token und delete
-        if($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token']){
-           if($entry->isValidToken($this->request->getArgument('entry')['token'])){
-               $this->entryRepository->remove($entry);
-           }
+        if ($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token'])) {
+            $this->entryRepository->remove($entry);
         }
 
         // redirect to backPid
-        if($this->settings['backPid']){
+        if ($this->settings['backPid']) {
             $uriBuilder = $this->uriBuilder;
             $uri = $uriBuilder
                 ->setTargetPageUid($this->settings['backPid'])
