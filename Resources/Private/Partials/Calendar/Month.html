@@ -1,12 +1,12 @@
 <div class="row">
     <div class="columns">
-        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.prevMonth.day, month: configuration.prevMonth.month, year: configuration.prevMonth.year}">prev week</f:link.action>
+        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.prevMonth.day, month: configuration.prevMonth.month, year: configuration.prevMonth.year}">prev month</f:link.action>
     </div>
     <div class="columns text-center">
         <h2>{f:format.date(date:configuration.weeks.1.0.date, format:'F Y')}</h2>
     </div>
     <div class="columns text-right">
-        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.nextMonth.day, month: configuration.nextMonth.month, year: configuration.nextMonth.year}">next week</f:link.action>
+        <f:link.action class="button" action="show" arguments="{calendar: calendar, day: configuration.nextMonth.day, month: configuration.nextMonth.month, year: configuration.nextMonth.year}">next month</f:link.action>
     </div>
 </div>
 
@@ -39,5 +39,3 @@
     </f:for>
 </div>
 </f:for>
-
-<f:debug>{_all}</f:debug>
