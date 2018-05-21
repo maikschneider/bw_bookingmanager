@@ -120,22 +120,9 @@ return [
             ]
         ],
         'entries' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.entries',
             'config' => [
-                'type' => 'inline',
-                'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
-                'foreign_field' => 'timeslot',
-                'maxitems' => 9999,
-                'appearance' => [
-                    'collapseAll' => 0,
-                    'levelLinksPosition' => 'top',
-                    'showSynchronizationLink' => 1,
-                    'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink' => 1
-                ],
+                'type' => 'passthrough',
             ],
-
         ],
         'calendars' => [
             'exclude' => true,
