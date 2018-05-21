@@ -74,6 +74,13 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $repeatEnd = null;
 
     /**
+     * validationHooks
+     *
+     * @var int
+     */
+    protected $validationHooks = 0;
+
+    /**
      * Returns the startDate
      *
      * @return \DateTime $startDate
@@ -155,6 +162,27 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setMaxWeight($maxWeight)
     {
         $this->maxWeight = $maxWeight;
+    }
+
+    /**
+     * Returns the validationHooks
+     *
+     * @return int $validationHooks
+     */
+    public function getValidationHooks()
+    {
+        return $this->validationHooks;
+    }
+
+    /**
+     * Sets the validationHooks
+     *
+     * @param int $validationHooks
+     * @return void
+     */
+    public function setValidationHooks($validationHooks)
+    {
+        $this->validationHooks = $validationHooks;
     }
 
     /**
@@ -287,6 +315,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->repeatEnd = $repeatEnd;
     }
 
+    /**
+     * It's important to call this function only on timeslot objects, that
+     * have been processed by the TimeslotManager
+     */
     public function getBookedWeight()
     {
         $weight = 0;
@@ -296,6 +328,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $weight;
     }
 
+    /**
+     * It's important to call this function only on timeslot objects, that
+     * have been processed by the TimeslotManager
+     */
     public function getIsBookable()
     {
         return $this->getBookedWeight() < $this->maxWeight;

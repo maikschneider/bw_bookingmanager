@@ -28,6 +28,7 @@ class EntryValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVal
 
         $this->validateDates();
         $this->validateWeight();
+        $this->validateHooks();
         
         if(sizeof($this->result->getErrors())){
             return FALSE;
@@ -109,5 +110,23 @@ class EntryValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractVal
         if($this->timeslot->getMaxWeight() < ($bookedWeight + $this->entry->getWeight())){
             $this->addError('Selected timeslot has not enough free space or is booked out', 1526170536);
         }
+    }
+
+    private function validateHooks()
+    {
+        foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/entry']['validation'] ?? [] as $className) {
+            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($className);
+            $_procObj->executeHook($this);
+        }
+    }
+
+    public function getEntry()
+    {
+        return $this->entry;
+    }
+
+    public function addValidationHookError($message, $timestap)
+    {
+        $this->addError($message, $timestap);
     }
 }

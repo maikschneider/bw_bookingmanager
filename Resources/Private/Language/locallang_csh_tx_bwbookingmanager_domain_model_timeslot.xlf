@@ -24,6 +24,9 @@
 			<trans-unit id="repeat_end.description">
 				<source>repeat end</source>
 			</trans-unit>
+			<trans-unit id="validation_hooks.description">
+				<source>validation hooks</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
