@@ -21,7 +21,15 @@ return [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, is_bookable_hooks, calendars',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, is_bookable_hooks, calendars'],
+        '1' => [
+            'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, 
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette, max_weight, entries, is_bookable_hooks, calendars'],
+    ],
+    'palettes' => [
+        'datesPalette' => [
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates',
+            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end'
+        ]
     ],
     'columns' => [
         'sys_language_uid' => [

@@ -72,6 +72,18 @@
             <trans-unit id="bwbookingmanager-folder">
                 <source>Booking Manager</source>
             </trans-unit>
+            <trans-unit id="tca.timeslot.palettes.dates">
+                <source>Dates</source>
+            </trans-unit>
+            <trans-unit id="tca.entry.palettes.general">
+                <source>General</source>
+            </trans-unit>
+            <trans-unit id="tca.entry.palettes.contactData">
+                <source>Contact data</source>
+            </trans-unit>
+            <trans-unit id="tca.entry.palettes.special">
+                <source>Additional</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
