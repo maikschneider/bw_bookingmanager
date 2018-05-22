@@ -23,7 +23,7 @@ return [
     'types' => [
         '1' => [
             'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, 
-            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette, max_weight, entries, is_bookable_hooks, calendars'],
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette, max_weight, is_bookable_hooks, calendars'],
     ],
     'palettes' => [
         'datesPalette' => [
@@ -137,8 +137,22 @@ return [
             ]
         ],
         'entries' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.entries',
             'config' => [
-                'type' => 'passthrough',
+                'type' => 'inline',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
+                'foreign_field' => 'timeslot',
+                'maxitems' => 9999,
+                'appearance' => [
+                    'collapseAll' => 0,
+                    'levelLinksPosition' => 'top',
+                    'showSynchronizationLink' => 1,
+                    'showPossibleLocalizationRecords' => 1,
+                    'showAllLocalizationLink' => 1
+                ],
+
+
             ],
         ],
         'calendars' => [
