@@ -331,8 +331,9 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * converts number of $isBookableHooks to array of activated hooks
      * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
+     * @return Array
      */
-    public function getBookableHooksArray()
+    public function getIsBookableHooksArray()
     {
         return array_map(
             function ($value) {
@@ -344,7 +345,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getIsBookableByHooks()
     {
-        $activeHooks = $this->getBookableHooksArray();
+        $activeHooks = $this->getIsBookableHooksArray();
 
         foreach ($activeHooks as $key => $isActiveHook) {
             // dont call hook if not checked via TCA
@@ -371,6 +372,12 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getIsBookable()
     {
+        // check date (only if in future)
+        $now = new \DateTime('now');
+        if($this->getStartDate() < $now){
+            return false;
+        }
+
         // check weight
         if ($this->getBookedWeight() >= $this->maxWeight) {
             return false;
