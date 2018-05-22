@@ -14,14 +14,14 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,repeat_type,repeat_end,max_weight,entries,validation_hooks,calendars',
+        'searchFields' => 'start_date,end_date,repeat_type,repeat_end,max_weight,entries,is_bookable_hooks,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.svg'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, validation_hooks, calendars',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, is_bookable_hooks, calendars',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, validation_hooks, calendars'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, is_bookable_hooks, calendars'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -119,9 +119,9 @@ return [
                 'default' => 1
             ]
         ],
-        'validation_hooks' => [
+        'is_bookable_hooks' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.validation_hooks',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.is_bookable_hooks',
             'config' => [
                 'type' => 'check',
                 'items' => [

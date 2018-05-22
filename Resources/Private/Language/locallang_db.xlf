@@ -54,10 +54,10 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
 				<source>Repeat End</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.validation_hooks">
-				<source>Validation Hooks</source>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.is_bookable_hooks">
+				<source>Is bookable hooks</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.validation_hooks.24h">
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.is_bookable_hooks.24h">
 				<source>Needs to be booked one day in advance</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry">

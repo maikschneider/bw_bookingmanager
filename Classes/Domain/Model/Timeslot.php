@@ -74,11 +74,11 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $repeatEnd = null;
 
     /**
-     * validationHooks
+     * isBookableHooks
      *
      * @var int
      */
-    protected $validationHooks = 0;
+    protected $isBookableHooks = 0;
 
     /**
      * Returns the startDate
@@ -165,24 +165,24 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the validationHooks
+     * Returns the isBookableHooks
      *
-     * @return int $validationHooks
+     * @return int $isBookableHooks
      */
-    public function getValidationHooks()
+    public function getIsBookableHooks()
     {
-        return $this->validationHooks;
+        return $this->isBookableHooks;
     }
 
     /**
-     * Sets the validationHooks
+     * Sets the isBookableHooks
      *
-     * @param int $validationHooks
+     * @param int $isBookableHooks
      * @return void
      */
-    public function setValidationHooks($validationHooks)
+    public function setIsBookableHooks($isBookableHooks)
     {
-        $this->validationHooks = $validationHooks;
+        $this->isBookableHooks = $isBookableHooks;
     }
 
     /**
@@ -329,11 +329,58 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * converts number of $isBookableHooks to array of activated hooks
+     * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
+     */
+    public function getBookableHooksArray()
+    {
+        return array_map(
+            function ($value) {
+                return $value === '1';
+            },
+            array_reverse(str_split(decbin($this->getIsBookableHooks())))
+        );
+    }
+
+    public function getIsBookableByHooks()
+    {
+        $activeHooks = $this->getBookableHooksArray();
+
+        foreach ($activeHooks as $key => $isActiveHook) {
+            // dont call hook if not checked via TCA
+            if (!$isActiveHook) {
+                continue;
+            }
+
+            // get the hook from offset of global registed hooks array, make instance and call it
+            $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
+            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
+            if (!$_procObj->isBookable($this)) {
+                return false;
+            }
+
+        }
+
+        return true;
+
+    }
+
+    /**
      * It's important to call this function only on timeslot objects, that
      * have been processed by the TimeslotManager
      */
     public function getIsBookable()
     {
-        return $this->getBookedWeight() < $this->maxWeight;
+        // check weight
+        if ($this->getBookedWeight() >= $this->maxWeight) {
+            return false;
+        }
+
+        // check activated hooks hooks
+        if(!$this->getIsBookableByHooks()) {
+            return false;
+        }
+
+        return true;
     }
 }
