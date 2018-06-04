@@ -108,11 +108,26 @@
             <trans-unit id="administration.entryListing.table.weight">
                 <source>Weight</source>
             </trans-unit>
-            <trans-unit id="administration.calendar">
+            <trans-unit id="administration.filter.calendar">
                 <source>Calendar</source>
             </trans-unit>
-            <trans-unit id="administration.timerange">
+            <trans-unit id="administration.filter.timerange">
                 <source>Time range</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.hidden">
+                <source>Display hidden entries</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.searchWord">
+                <source>Search word</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortingField">
+                <source>Sorting field</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortingDirection.asc">
+                <source>Ascending</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortingDirection.desc">
+                <source>Descending</source>
             </trans-unit>
         </body>
     </file>

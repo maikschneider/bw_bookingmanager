@@ -25,12 +25,12 @@ class AdministrationDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntit
     /**
      * @var string
      */
-    protected $sortingField = 'datetime';
+    protected $sortingField = 'start_date';
 
     /**
      * @var string
      */
-    protected $sortingDirection = 'desc';
+    protected $sortingDirection = 'asc';
 
     /**
      * @var string

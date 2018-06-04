@@ -17,4 +17,26 @@ namespace Blueways\BwBookingmanager\Domain\Repository;
  */
 class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    public function findInRange(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        \DateTime $startDate,
+        \DateTime $endDate
+        ){
+            $query = $this->createQuery();
+            $query->matching(
+                $query->logicalAnd([
+                    $query->equals('calendar', $calendar),
+                    $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d 00:00:00')),
+                    $query->lessThanOrEqual('startDate', $endDate->format('Y-m-d 23:59:59')),
+                ]),
+                $query->setOrderings(
+                    [
+                        'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                    ]
+                )
+            );
+
+            return $query->execute();
+        }
+
     }
