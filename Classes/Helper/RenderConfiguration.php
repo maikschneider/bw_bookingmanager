@@ -6,10 +6,26 @@ class RenderConfiguration
     protected $timeslots;
     protected $startDate;
     protected $endDate;
+    protected $calendar;
 
-    public function __construct($startDate = null)
+    public function __construct($startDate = null, $endDate = null, $calendar = null)
     {
         $this->startDate = $startDate;
+        $this->endDate = $endDate;
+        $this->calendar = $calendar;
+    }
+
+    public function getConfigurationForList()
+    {
+        $startDate = clone $this->startDate;
+        $daysInRange = $this->startDate->diff($this->endDate)->days;
+
+        $days = $this->getDaysArrayForRange($this->startDate, $daysInRange);
+
+        return array(
+            'days' => $days,
+        );
+
     }
 
     public function getConfigurationForWeek()
@@ -44,22 +60,28 @@ class RenderConfiguration
 
     }
 
-    private function getDaysArrayForWeek($weekStart)
+    private function getDaysArrayForRange($startDate, $daysCount)
     {
         $days = [];
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < $daysCount; $i++) {
 
             $days[$i] = [
-                'date' => clone $weekStart,
-                'timeslots' => $this->getTimeslotsForDay($weekStart),
-                'isCurrentDay' => $this->isCurrentDay($weekStart),
-                'isNotInMonth' => !($weekStart->format('m') == $this->startDate->format('m'))
+                'date' => clone $startDate,
+                'timeslots' => $this->getTimeslotsForDay($startDate),
+                'isCurrentDay' => $this->isCurrentDay($startDate),
+                'isNotInMonth' => !($startDate->format('m') == $this->startDate->format('m')),
             ];
 
-            $weekStart->modify('+1 day');
+            $startDate->modify('+1 day');
         }
         return $days;
+
+    }
+
+    private function getDaysArrayForWeek($weekStart)
+    {
+        return $this->getDaysArrayForRange($weekStart, 7);
     }
 
     public function getConfigurationForMonth()
@@ -123,6 +145,20 @@ class RenderConfiguration
             }
         }
         return $timeslots;
+    }
+
+    private function getEntriesForDay($day)
+    {
+        $entries = [];
+        $dayEnd = clone $day;
+        $dayEnd->setTime(23, 59, 59);
+
+        foreach ($this->calendar->getEntries() as $entry) {
+            if (!($entry->getEndDate() < $day || $entry->getStartDate() > $dayEnd)) {
+                $entries[] = $entry;
+            }
+        }
+        return $entries;
     }
 
     private function isSameDay($day1, $day2)

@@ -1,0 +1,96 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+{namespace be = TYPO3\CMS\Backend\ViewHelpers} {namespace bu = TYPO3\CMS\Beuser\ViewHelpers} {namespace core = TYPO3\CMS\Core\ViewHelpers}
+
+<f:layout name="Backend/Default" />
+
+<f:section name="content">
+
+    <h1>
+        <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.entryListing.headline"
+        />
+    </h1>
+
+    <f:if condition="{calendars} == 0">
+        <f:then>
+            <div class="alert alert-info">
+                <div class="message-body">
+                    <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.nocalendarfound" />
+                </div>
+            </div>
+        </f:then>
+        <f:else>
+            <f:be.infobox title="Filter options" state="-1" iconName="filter" disableIcon="false">
+                <div id="setting-container">
+                    <f:form class="settings" action="index" method="GET">
+                        <div class="row form-horizontal">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="timeRestriction" class="col-xs-4 control-label">
+                                        <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.calendar" />
+                                    </label>
+                                    <div class="col-xs-8">
+                                        <div class="input">
+                                            <f:form.select class="form-control" property="calendars" options="{calendars}" optionLabelField="name">
+                                            </f:form.select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-horizontal">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="timeRestriction" class="col-xs-4 control-label">
+                                        <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.timerange" />
+                                    </label>
+
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <f:form.textfield type="datetime" property="timeRestriction" id="timeRestriction" class="form-control t3js-datetimepicker"
+                                                data="{date-type:'date',date-offset:'0'}" />
+                                            <span class="input-group-btn">
+                                                <label class="btn btn-default" for="timeRestriction">
+                                                    <span class="fa fa-calendar"></span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="timeRestriction" class="col-xs-1 control-label">
+                                        -
+                                    </label>
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <f:form.textfield type="datetime" property="timeRestrictionHigh" id="timeRestrictionHigh" class="form-control t3js-datetimepicker"
+                                                data="{date-type:'date',date-offset:'0'}" />
+                                            <span class="input-group-btn">
+                                                <label class="btn btn-default" for="timeRestrictionHigh">
+                                                    <span class="fa fa-calendar"></span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-horizontal">
+                            <div class="col-xs-9 col-xs-offset-2">
+                                <f:form.button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-refresh"></i> refresh</f:form.button>
+                            </div>
+                        </div>
+                    </f:form>
+                </div>
+            </f:be.infobox>
+
+
+            <f:be.tableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'weight'}" recordsPerPage="30"  sortField="start_date" enableClickMenu="false" clickTitleMode="info" />
+        </f:else>
+    </f:if>
+</f:section>
+
+</html>

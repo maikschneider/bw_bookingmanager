@@ -1,0 +1,53 @@
+@startuml
+
+
+class Calendar {
+- name : String
+}
+
+class Entry {
+- startDate : DateTime
+- endDate : DateTime
+- name : String 
+- prename : String 
+- street : String 
+- zip : String 
+- city : String 
+- phone : String 
+- email : String 
+- newsletter : Boolean
+- special1 : Boolean
+- special2 : Boolean
+- weight : Integer
+}
+
+class Blockslot {
+- startDate : DateTime
+- endDate : DateTime
+- reason : String
+}
+
+class Notification{
+- name : String
+- email : String
+- hook : String
+- template : String
+- emailSubject : String
+}
+
+class Timeslot{
+- startDate : DateTime
+- endDate : DateTime
+- repeatType : REPEAT_TYPE
+- repeatEnd : DateTime
+- maxWeight : Integer
+- isBookableHooks : Integer
+}
+
+Calendar "m" - "n" Timeslot
+Calendar "m" - "n" Blockslot
+Calendar "m" - "n" Entry
+Calendar "m" - "n" Notification
+Entry "n" - "1" Timeslot
+
+@enduml

@@ -84,6 +84,36 @@
             <trans-unit id="tca.entry.palettes.special">
                 <source>Additional</source>
             </trans-unit>
+            <trans-unit id="module.entryListing">
+                <source>Entry listing</source>
+            </trans-unit>
+            <trans-unit id="module.timeslotListing">
+                <source>Timeslot listing</source>
+            </trans-unit>
+            <trans-unit id="administration.nocalendarfound">
+                <source>No calendar record was found on selected page.</source>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.headline">
+                <source>Booked entries</source>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.date">
+                <source>Date</source>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.time">
+                <source>Time</source>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.name">
+                <source>Name</source>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.weight">
+                <source>Weight</source>
+            </trans-unit>
+            <trans-unit id="administration.calendar">
+                <source>Calendar</source>
+            </trans-unit>
+            <trans-unit id="administration.timerange">
+                <source>Time range</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

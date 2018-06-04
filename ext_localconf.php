@@ -25,6 +25,10 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['sendNotification'][] = 'Blueways\BwBookingmanager\Hooks\NotificationSpecial2IsCheckedHook';
         // entry validation hook
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][] = 'Blueways\BwBookingmanager\Hooks\TimeslotIsBookableHook';
+        // table list hook
+        // entry validation hook
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList']['buildQueryParameters'][] = 'Blueways\BwBookingmanager\Hooks\TableListHook';
+
 
         // wizards
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
