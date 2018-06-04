@@ -72,7 +72,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
-        $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
+        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
 
         parent::initializeAction();
 
@@ -180,6 +180,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $endDate = $endDate->createFromFormat('j-n-Y H:i:s', $endDay . '-' . $endMonth . '-' . $endYear . ' 00:00:00');
         }
 
+        $this->view->assign('page', $this->pageUid);
         $this->view->assign('demand', $demand);
         $this->view->assign('moduleToken', $this->getToken(true));
         $this->view->assign('calendar', $calendar);
