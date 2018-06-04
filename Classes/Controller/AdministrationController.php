@@ -2,14 +2,16 @@
 namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
-
 use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Lang\LanguageService;
-use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 
 /***
@@ -72,7 +74,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
-        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
+        $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
 
         parent::initializeAction();
 
@@ -88,10 +90,12 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/News/AdministrationModule');
+
         }
 
         $this->createMenu();
-        // $this->createButtons();
+        $this->createButtons();
     }
 
     /**
@@ -123,6 +127,39 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     }
 
     /**
+     * Create the panel of buttons
+     *
+     */
+    protected function createButtons()
+    {
+        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+
+        if ($this->request->getControllerActionName() === 'index') {
+            $toggleButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setDataAttributes([
+                    'togglelink' => '1',
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                ])
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:administration.toggleForm'))
+                ->setIcon($this->iconFactory->getIcon('actions-filter', Icon::SIZE_SMALL));
+            $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+        }
+
+        // Refresh
+        $path = VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >= VersionNumberUtility::convertVersionNumberToInteger('8.6') ? 'Resources/Private/Language/' : '';
+        $refreshButton = $buttonBar->makeLinkButton()
+            ->setHref(GeneralUtility::getIndpEnv('REQUEST_URI'))
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:lang/' . $path . 'locallang_core.xlf:labels.reload'))
+            ->setIcon($this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
+        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
+    }
+
+    /**
      * Creates the URI for a backend action
      *
      * @param string $controller
@@ -140,10 +177,12 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     public function indexAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
     ) {
+        $hideForm = true;
         $demandVars = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
         $demand = GeneralUtility::makeInstance(AdministrationDemand::class);
         // override default demand values with values from GET request
         if (is_array($demandVars['demand'])) {
+            $hideForm = false;
             foreach ($demandVars['demand'] as $key => $value) {
                 if (property_exists(AdministrationDemand::class, $key)) {
                     $getter = 'set' . ucfirst($key);
@@ -159,27 +198,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $calendar = $calendars->getFirst();
         }
 
-        $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : null;
-        $month = $this->request->hasArgument('month') ? $this->request->getArgument('month') : null;
-        $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : null;
-
-        $endDay = $this->request->hasArgument('endDay') ? $this->request->getArgument('endDay') : null;
-        $endMonth = $this->request->hasArgument('endMonth') ? $this->request->getArgument('endMonth') : null;
-        $endYear = $this->request->hasArgument('endYear') ? $this->request->getArgument('endYear') : null;
-
-        $startDate = new \DateTime('now');
-        $startDate->setTime(0, 0, 0);
-        if ($day && $month && $year) {
-            $startDate = $startDate->createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
-        }
-
-        $endDate = clone $startDate;
-        $endDate->modify('+1 month');
-        $endDate->setTime(23, 59, 59);
-        if ($endDay && $endMonth && $endYear) {
-            $endDate = $endDate->createFromFormat('j-n-Y H:i:s', $endDay . '-' . $endMonth . '-' . $endYear . ' 00:00:00');
-        }
-
+        $this->view->assign('hideForm', $hideForm);
         $this->view->assign('page', $this->pageUid);
         $this->view->assign('demand', $demand);
         $this->view->assign('moduleToken', $this->getToken(true));

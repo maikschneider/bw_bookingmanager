@@ -1,14 +1,11 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
-{namespace be = TYPO3\CMS\Backend\ViewHelpers} 
-{namespace bu = TYPO3\CMS\Beuser\ViewHelpers} 
-{namespace core = TYPO3\CMS\Core\ViewHelpers}
+{namespace be = TYPO3\CMS\Backend\ViewHelpers} {namespace bu = TYPO3\CMS\Beuser\ViewHelpers} {namespace core = TYPO3\CMS\Core\ViewHelpers}
 
 <f:layout name="Backend/Default" />
 
 <f:section name="content">
 
-    <f:debug>{_all}</f:debug>
     <h1>
         <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.entryListing.headline"
         />
@@ -23,8 +20,9 @@
             </div>
         </f:then>
         <f:else>
-            <f:be.infobox title="Filter options" state="-1" iconName="filter" disableIcon="false">
-                <div id="setting-container">
+            <div id="setting-container" style="{f:if(condition:hideForm,then:'display:none',else:'')}">
+                <f:be.infobox title="Filter options" state="-1" iconName="filter" disableIcon="false">
+
                     <f:form class="settings" method="GET" name="demand" object="{demand}">
                         <input type="hidden" name="M" value="web_BwBookingmanagerTxBookingmanagerM1">
                         <input type="hidden" name="moduleToken" value="{moduleToken}">
@@ -149,12 +147,13 @@
                             </div>
                         </div>
                     </f:form>
-                </div>
-            </f:be.infobox>
+                </f:be.infobox>
+            </div>
 
             {namespace bw=Blueways\BwBookingmanager\ViewHelpers}
-            <bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'name', 1: 'prename', 2: 'email', 3: 'weight', 4: '_CONTROL_'}" recordsPerPage="100" sortField="start_date"
-                enableClickMenu="false" noControlPanels="false" clickTitleMode="info" />
+            <bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'name', 1: 'prename', 2: 'email', 3: 'weight', 4: '_CONTROL_'}"
+                recordsPerPage="100" sortField="start_date" enableClickMenu="false" noControlPanels="false" clickTitleMode="info"
+            />
         </f:else>
     </f:if>
 </f:section>
