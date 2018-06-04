@@ -52,6 +52,11 @@ class AdministrationDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntit
      */
     protected $hidden;
 
+    /**
+     * @var int
+     */
+    protected $calendarUid = 0;
+
     public function __construct()
     {
         $now = new \DateTime('now');
@@ -136,6 +141,22 @@ class AdministrationDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntit
     public function setHidden($hidden)
     {
         $this->hidden = $hidden;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCalendarUid()
+    {
+        return $this->calendarUid;
+    }
+
+    /**
+     * @param int $calendarUid
+     */
+    public function setCalendarUid($calendarUid)
+    {
+        $this->calendarUid = $calendarUid;
     }
 
     /**

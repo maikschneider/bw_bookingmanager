@@ -174,9 +174,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         return $uriBuilder->reset()->uriFor($action, $parameters, $controller);
     }
 
-    public function indexAction(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
-    ) {
+    public function indexAction() {
         $hideForm = true;
         $demandVars = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
         $demand = GeneralUtility::makeInstance(AdministrationDemand::class);
