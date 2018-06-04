@@ -77,11 +77,15 @@
                                     </label>
 
                                     <div class="col-xs-8">
-                                        <f:form.select class="form-control" property="sortingField" options="{ title:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.orderBy.title\')}',
-                                        start_date:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.orderBy.datetime\')}',
-                                        tstamp:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.orderBy.tstamp\')}',
-                                        archive:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_db.xlf:tx_news_domain_model_news.archive\')}',
-                                        author:'{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.author_formlabel\')}' }"
+                                        <f:form.select class="form-control" property="sortingField" options="{
+                                        start_date:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.startDate\')}',
+                                        end_date:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.endDate\')}',
+                                        name:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.name\')}',
+                                        prename:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.prename\')}',
+                                        phone:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.phone\')}',
+                                        email:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.email\')}',
+                                        weight:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.weight\')}'
+                                        }"
                                         />
                                     </div>
                                 </div>
@@ -143,7 +147,8 @@
                         <div class="row form-horizontal">
                             <div class="col-xs-9 col-xs-offset-2">
                                 <f:form.button class="btn btn-primary" type="submit">
-                                    <i class="fa fa-refresh"></i> refresh</f:form.button>
+                                    <i class="fa fa-refresh"></i> <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.submit"
+                                    /></f:form.button>
                             </div>
                         </div>
                     </f:form>

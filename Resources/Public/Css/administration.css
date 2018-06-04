@@ -4,3 +4,6 @@
 #recordlist-tx_bwbookingmanager_domain_model_entry .t3js-record-edit-multiple{
     display: none;
 }
+.media, .media-body{
+    overflow: visible;
+}

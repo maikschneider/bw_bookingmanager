@@ -129,6 +129,30 @@
             <trans-unit id="administration.filter.sortingDirection.desc">
                 <source>Descending</source>
             </trans-unit>
+            <trans-unit id="administration.filter.sortField.startDate">
+                <source>Start date</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.endDate">
+                <source>End date</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.name">
+                <source>Name</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.prename">
+                <source>Prename</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.phone">
+                <source>Phone</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.email">
+                <source>Email</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.weight">
+                <source>Weight</source>
+            </trans-unit>
+            <trans-unit id="administration.filter.submit">
+                <source>Refresh</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
