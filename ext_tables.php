@@ -35,6 +35,20 @@ call_user_func(
                     'labels' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_m1.xlf',
                 )
             );
+
+            // icons
+            $icons = [
+                'apps-pagetree-folder-contains-bm' => 'ext-bwbookingmanager-folder-tree.svg',
+            ];
+            $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+            foreach ($icons as $identifier => $path) {
+                $iconRegistry->registerIcon(
+                    $identifier,
+                    \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+                    ['source' => 'EXT:bw_bookingmanager/Resources/Public/Icons/' . $path]
+                );
+            }
+
         }
 
     }

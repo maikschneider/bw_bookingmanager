@@ -109,7 +109,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         $actions = [
             ['action' => 'index', 'label' => 'entryListing'],
-            ['action' => 'timeslot', 'label' => 'timeslotListing'],
+            // ['action' => 'timeslot', 'label' => 'timeslotListing'],
         ];
 
         foreach ($actions as $action) {
