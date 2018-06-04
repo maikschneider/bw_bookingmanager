@@ -6,6 +6,7 @@
 
 <f:section name="content">
 
+    <f:debug>{_all}</f:debug>
     <h1>
         <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.entryListing.headline"
         />
@@ -22,7 +23,11 @@
         <f:else>
             <f:be.infobox title="Filter options" state="-1" iconName="filter" disableIcon="false">
                 <div id="setting-container">
-                    <f:form class="settings" action="index" method="GET">
+                    <f:form class="settings" method="GET" name="demand" object="{demand}">
+                        <input type="hidden" name="M" value="web_BwBookingmanagerTxBookingmanagerM1">
+                        <input type="hidden" name="moduleToken" value="{moduleToken}">
+                        <input type="hidden" name="id" value="11">
+
                         <div class="row form-horizontal">
                             <div class="col-xs-6">
                                 <div class="form-group">
@@ -39,18 +44,37 @@
                             </div>
                         </div>
                         <div class="row form-horizontal">
+
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <label for="timeRestriction" class="col-xs-4 control-label">
+                                    <label for="startDate" class="col-xs-4 control-label">
+                                        Sorting field
+                                    </label>
+
+                                    <div class="col-xs-8">
+                                        <f:form.select class="form-control" property="sortingField" options="{ title:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.orderBy.title\')}',
+                                        datetime:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.orderBy.datetime\')}',
+                                        tstamp:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:flexforms_general.orderBy.tstamp\')}',
+                                        archive:'{f:translate(key: \'LLL:EXT:news/Resources/Private/Language/locallang_db.xlf:tx_news_domain_model_news.archive\')}',
+                                        author:'{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.author_formlabel\')}' }"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-horizontal">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="startDate" class="col-xs-4 control-label">
                                         <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.timerange" />
                                     </label>
 
                                     <div class="col-xs-8">
                                         <div class="input-group">
-                                            <f:form.textfield type="datetime" property="timeRestriction" id="timeRestriction" class="form-control t3js-datetimepicker"
-                                                data="{date-type:'date',date-offset:'0'}" />
+                                            <f:form.textfield type="datetime" property="startDate" id="startDate" class="form-control t3js-datetimepicker" data="{date-type:'date',date-offset:'0',date-format:'DD.MM.YYYY'}"
+                                            />
                                             <span class="input-group-btn">
-                                                <label class="btn btn-default" for="timeRestriction">
+                                                <label class="btn btn-default" for="startDate">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
                                             </span>
@@ -60,15 +84,15 @@
                             </div>
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <label for="timeRestriction" class="col-xs-1 control-label">
+                                    <label for="endDate" class="col-xs-1 control-label">
                                         -
                                     </label>
                                     <div class="col-xs-8">
                                         <div class="input-group">
-                                            <f:form.textfield type="datetime" property="timeRestrictionHigh" id="timeRestrictionHigh" class="form-control t3js-datetimepicker"
-                                                data="{date-type:'date',date-offset:'0'}" />
+                                            <f:form.textfield type="datetime" property="endDate" id="endDate" class="form-control t3js-datetimepicker" data="{date-type:'date',date-offset:'0',date-format:'DD.MM.YYYY'}"
+                                            />
                                             <span class="input-group-btn">
-                                                <label class="btn btn-default" for="timeRestrictionHigh">
+                                                <label class="btn btn-default" for="endDate">
                                                     <span class="fa fa-calendar"></span>
                                                 </label>
                                             </span>
@@ -88,7 +112,8 @@
             </f:be.infobox>
 
 
-            <f:be.tableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'weight'}" recordsPerPage="30"  sortField="start_date" enableClickMenu="false" clickTitleMode="info" />
+            <f:be.tableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'weight'}" recordsPerPage="30" sortField="start_date"
+                enableClickMenu="false" clickTitleMode="info" />
         </f:else>
     </f:if>
 </f:section>

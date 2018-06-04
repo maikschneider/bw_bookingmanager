@@ -1,12 +1,16 @@
 <?php
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
+
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+
 
 /***
  *
@@ -83,9 +87,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         if ($view instanceof BackendTemplateView) {
             $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
-            $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? ['MM-DD-YYYY', 'HH:mm MM-DD-YYYY'] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
-            $pageRenderer->addInlineSetting('DateTimePicker', 'DateFormat', $dateFormat);
-            
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
         }
 
@@ -139,6 +140,18 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     public function indexAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
     ) {
+        $demandVars = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
+        $demand = GeneralUtility::makeInstance(AdministrationDemand::class);
+        // override default demand values with values from GET request
+        if (is_array($demandVars['demand'])) {
+            foreach ($demandVars['demand'] as $key => $value) {
+                if (property_exists(AdministrationDemand::class, $key)) {
+                    $getter = 'set' . ucfirst($key);
+                    $demand->$getter($value);
+                }
+            }
+        }
+
         $calendars = $this->calendarRepository->findAll();
 
         // use first calendar as default
@@ -166,9 +179,27 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         if ($endDay && $endMonth && $endYear) {
             $endDate = $endDate->createFromFormat('j-n-Y H:i:s', $endDay . '-' . $endMonth . '-' . $endYear . ' 00:00:00');
         }
-        
+
+        $this->view->assign('demand', $demand);
+        $this->view->assign('moduleToken', $this->getToken(true));
         $this->view->assign('calendar', $calendar);
         $this->view->assign('calendars', $calendars);
+    }
+
+    /**
+     * Get a CSRF token
+     *
+     * @param bool $tokenOnly Set it to TRUE to get only the token, otherwise including the &moduleToken= as prefix
+     * @return string
+     */
+    protected function getToken($tokenOnly = false)
+    {
+        $token = FormProtectionFactory::get()->generateToken('moduleCall', 'web_BwBookingmanagerTxBookingmanagerM1');
+        if ($tokenOnly) {
+            return $token;
+        } else {
+            return '&moduleToken=' . $token;
+        }
     }
 
     public function timeslotAction()
