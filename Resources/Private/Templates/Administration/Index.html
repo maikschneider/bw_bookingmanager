@@ -150,9 +150,9 @@
                 </div>
             </f:be.infobox>
 
-
-            <f:be.tableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'weight'}" recordsPerPage="30" sortField="start_date"
-                enableClickMenu="false" clickTitleMode="info" />
+            {namespace bw=Blueways\BwBookingmanager\ViewHelpers}
+            <bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'name', 1: 'prename', 2: 'email', 3: 'weight', 4: '_CONTROL_'}" recordsPerPage="100" sortField="start_date"
+                enableClickMenu="false" noControlPanels="false" clickTitleMode="edit" />
         </f:else>
     </f:if>
 </f:section>

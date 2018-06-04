@@ -59,13 +59,10 @@ class Tca
         $startDate = new \DateTime($record['start_date']);
         $endDate = new \DateTime($record['end_date']);
 
-        $newTitle .= '[';
+
         $newTitle .= $startDate->format('d.m.y, H:i') . '-';
         $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
         $newTitle .= $endDate->format($endDateFormat);
-        $newTitle .= '] ';
-
-        $newTitle .= $record['prename'].' '.$record['name'].' '.$record['email'];
 
         $params['title'] = $newTitle;
         return $params;
