@@ -155,7 +155,7 @@ class TimeslotManager
 
             $entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
             foreach($timeslot->getEntries() as $entry){
-                if ($entry->getStartDate() == $timeslotStartDate && $entry->getEndDate() == $timeslotEndDate){
+                if ($entry->getCalendar() == $this->calendar && $entry->getStartDate() == $timeslotStartDate && $entry->getEndDate() == $timeslotEndDate){
                     $entries->attach($entry);
                 }
             };
