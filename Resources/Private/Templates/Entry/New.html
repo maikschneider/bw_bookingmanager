@@ -30,6 +30,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:form.submit value="Create new" />
 </f:form>
-<f:link.action controller="Calendar" action="show" pageUid="{settings.showPid}" arguments="{calendar : calendar}">back to {calendar.name}</f:link.action>
+<f:link.action controller="Calendar" action="show" pageUid="{f:if(condition:settings.backPid, then:settings.backPid, else:page)}" arguments="{calendar : calendar}">back to {calendar.name}</f:link.action>
 </f:section>
 </html>

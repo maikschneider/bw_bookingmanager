@@ -25,6 +25,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     public function initializeAction()
     {
+        $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
 
         // convert dateTime from new action
@@ -42,13 +43,14 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
      * @return string HTML of form
      */
-    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
+    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
     {
         $start = $this->request->hasArgument('start') ? new \DateTime($this->request->getArgument('start')) : null;
         $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : null;
 
         $newEntry = $newEntry ? $newEntry : new \Blueways\BwBookingmanager\Domain\Model\Entry($calendar, $timeslot, $start, $end);
 
+        $this->view->assign('page', $this->pageUid);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslot', $timeslot);
         $this->view->assign('newEntry', $newEntry);
@@ -88,6 +90,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $deleteable = $entry->isValidToken($token);
 
+        $this->view->assign('page', $this->pageUid);
         $this->view->assign('deleteable', $deleteable);
         $this->view->assign('entry', $entry);
     }

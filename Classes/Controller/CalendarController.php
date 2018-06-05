@@ -26,6 +26,13 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     protected $calendarRepository = null;
 
     /**
+     * Page uid
+     *
+     * @var int
+     */
+    protected $pageUid = 0;
+
+    /**
      * timeslotRepository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
@@ -35,6 +42,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 
     public function initializeAction()
     {
+        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
         $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
     }
 
@@ -101,6 +109,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             break;            
         }
 
+        $this->view->assign('page', $this->pageUid);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslots', $timeslots);
         $this->view->assign('configuration', $configuration);
