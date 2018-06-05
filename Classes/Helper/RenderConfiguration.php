@@ -168,7 +168,8 @@ class RenderConfiguration
 
     private function isCurrentDay($day)
     {
-        return $this->isSameDay($day, $this->startDate);
+        $now = new \DateTime('now');
+        return $now->format('d.m.Y') === $day->format('d.m.Y');
     }
 
     public function setTimeslots($timeslots)
