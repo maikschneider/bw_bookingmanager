@@ -156,6 +156,69 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
 				<source>New Booking</source>
 			</trans-unit>
+			<trans-unit id="date.dayNames.short.0">
+				<source>Su</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.1">
+				<source>Mo</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.2">
+				<source>Tu</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.3">
+				<source>We</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.4">
+				<source>Th</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.5">
+				<source>Fr</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.6">
+				<source>Sa</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.1">
+				<source>January</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.2">
+				<source>February</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.3">
+				<source>March</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.4">
+				<source>April</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.5">
+				<source>May</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.6">
+				<source>June</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.7">
+				<source>July</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.8">
+				<source>August</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.9">
+				<source>September</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.10">
+				<source>October</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.11">
+				<source>November</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.12">
+				<source>December</source>
+			</trans-unit>
+			<trans-unit id="date.nextMonth">
+				<source>Next month</source>
+			</trans-unit>
+			<trans-unit id="date.prevMonth">
+				<source>Previous month</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
