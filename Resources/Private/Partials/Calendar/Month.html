@@ -28,7 +28,16 @@
                             <li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate, format:'H:i')}
                                 <p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
                                 <f:if condition="{timeslot.isBookable}">
-                                    <f:link.action controller="Entry" pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid, else:page)}" action="new" arguments="{calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">book</f:link.action>
+                                    <f:link.action 
+                                        controller="Entry" 
+                                        pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid, else:page)}" 
+                                        pageType="{f:if(condition:settings.ajax.enable, then:settings.ajax.typeNum, else:0)}" 
+                                        class="bw_bookingmanager__ajaxLink"
+                                        data="{ajax-container:'bw_bookingmanager__newEntry'}"
+                                        action="new" 
+                                        arguments="{calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
+                                            book
+                                        </f:link.action>
                                 </f:if>
                             </li>
                         </f:for>

@@ -8,6 +8,10 @@ keep Otherwise your changes will be overwritten the next time you save the exten
 
   <f:flashMessages />
 
+  <f:if condition="{settings.ajax.enable}">
+    <div id="bw_bookingmanager__newEntry"></div>
+  </f:if>
+  
   <f:if condition="{settings.dateRange}==0">
     <f:render partial="Calendar/Month" arguments="{_all}"></f:render>
   </f:if>

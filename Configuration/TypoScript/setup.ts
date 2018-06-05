@@ -31,5 +31,29 @@ plugin.tx_bwbookingmanager_pi1 {
             jquery = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.jquery}
             bookingmanager = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.bookingmanager}
         }
+        ajax{
+            enable = {$plugin.tx_bwbookingmanager_pi1.settings.ajax.enable}
+            typeNum = {$plugin.tx_bwbookingmanager_pi1.settings.ajax.typeNum}
+        }
+    }
+}
+
+BOOKINGMANAGER = PAGE
+BOOKINGMANAGER {
+    typeNum < plugin.tx_bwbookingmanager_pi1.settings.ajax.typeNum
+    config{
+        disableAllHeaderCode = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        no_cache = 0
+        contentObjectExceptionHandler = 0
+        disableCharsetHeader = 0
+    }
+    10 = USER
+    10 {
+      userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+      extensionName = BwBookingmanager
+      pluginName = Pi1
+      vendorName = Blueways
     }
 }

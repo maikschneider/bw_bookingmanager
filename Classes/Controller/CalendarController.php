@@ -46,11 +46,13 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
         
         // include javascript
-        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Page\\PageRenderer');
-        $jqueryJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['jquery']);
-        $bookingmanagerJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['bookingmanager']);        
-        if($jqueryJs) $pageRenderer->addJsFooterFile($jqueryJs, null, false, false, '', true);
-        if($bookingmanagerJs) $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
+        if($this->settings['ajax']['enable']){
+            $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Page\\PageRenderer');
+            $jqueryJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['jquery']);
+            $bookingmanagerJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['bookingmanager']);        
+            if($jqueryJs) $pageRenderer->addJsFooterFile($jqueryJs, null, false, false, '', true);
+            if($bookingmanagerJs) $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
+        }
     }
 
     /**
