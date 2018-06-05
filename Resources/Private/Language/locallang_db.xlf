@@ -108,6 +108,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.calendar">
 				<source>Calendar</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.form.headline.general">
+				<source>Personal details</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
 			</trans-unit>

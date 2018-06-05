@@ -45,7 +45,7 @@ BOOKINGMANAGER {
         disableAllHeaderCode = 1
         xhtml_cleaning = 0
         admPanel = 0
-        no_cache = 0
+        no_cache = 1
         contentObjectExceptionHandler = 0
         disableCharsetHeader = 0
     }
