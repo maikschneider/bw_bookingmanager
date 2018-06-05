@@ -91,7 +91,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/News/AdministrationModule');
-
+            
+            if ($this->request->getControllerActionName() === 'timeslot') {
+                $pageRenderer->loadRequireJsModule(
+                    'TYPO3/CMS/BwBookingmanager/AdministrationModuleCalendar',
+                    'function(module){ module.init(); }'
+                );
+            }
         }
 
         $this->createMenu();
@@ -109,13 +115,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         $actions = [
             ['action' => 'index', 'label' => 'entryListing'],
-            // ['action' => 'timeslot', 'label' => 'timeslotListing'],
+            ['action' => 'timeslot', 'label' => 'timeslotListing'],
         ];
 
         foreach ($actions as $action) {
             $item = $menu->makeMenuItem()
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:module.' . $action['label']))
-                ->setHref($this->getHref('Administration', $action))
+                ->setHref($this->getHref('Administration', $action['action']))
                 ->setActive($this->request->getControllerActionName() === $action['action']);
             $menu->addMenuItem($item);
         }
@@ -222,6 +228,8 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
     public function timeslotAction()
     {
+        $calendars = $this->calendarRepository->findAll();
+
         $calendars = $this->calendarRepository->findAll();
         $this->view->assign('calendars', $calendars);
     }

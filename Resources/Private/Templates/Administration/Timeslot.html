@@ -1,0 +1,26 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+{namespace be = TYPO3\CMS\Backend\ViewHelpers} {namespace bu = TYPO3\CMS\Beuser\ViewHelpers} {namespace core = TYPO3\CMS\Core\ViewHelpers}
+
+<f:layout name="Backend/Default" />
+
+<f:section name="content">
+
+    <h1>
+        <f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.entryListing.headline"
+        />
+    </h1>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <f:render partial="Administration/CalendarWeek" arguments="{_all}" />
+            </div>
+            <div class="col-md-4">
+                <f:render partial="Administration/CalendarMonth" arguments="{_all}" />
+            </div>
+        </div>
+    </div>
+    
+</f:section>
+</html>
