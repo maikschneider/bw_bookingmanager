@@ -17,5 +17,9 @@ plugin.tx_bwbookingmanager_pi1 {
         calendarPid = 
         entryPid = 
         backPid = 
+        javascript{
+            #jquery = EXT:bw_bookingmanager/Resources/Public/JavaScript/jquery-3.3.1.min.js
+            bookingmanager = EXT:bw_bookingmanager/Resources/Public/JavaScript/BookingManager.js
+        }
     }
 }
