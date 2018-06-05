@@ -22,7 +22,7 @@ plugin.tx_bwbookingmanager_pi1 {
             bookingmanager = EXT:bw_bookingmanager/Resources/Public/JavaScript/BookingManager.js
         }
         ajax{
-            enable = 1
+            enable = 0
             typeNum = 555
         }
     }
