@@ -103,6 +103,9 @@ class TimeslotManager
         ];
 
         $blockslots = $this->calendar->getBlockslots();
+        // @TODO: blockslots erneut testen: musste diesesn test einbauen,
+        // weil NULL zurück kam
+        if(!$blockslots) return;
 
         foreach ($this->calendar->getBlockslots() as $blockslot) {
 

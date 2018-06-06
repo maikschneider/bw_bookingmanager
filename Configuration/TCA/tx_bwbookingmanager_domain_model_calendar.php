@@ -13,16 +13,27 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
+        'type' => 'record_type',
         'searchFields' => 'name,timeslots,blockslots,notifications',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications'],
     ],
     'columns' => [
+        'record_type' => [
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type',
+            'config' => [
+                'type' => 'select',
+                'items' => [
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', '1']
+                ],
+                'default' => '1'
+            ]
+        ],
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',

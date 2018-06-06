@@ -17,6 +17,8 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    const ENTRY_TYPE_CLASSNAME = 'Blueways\\BwBookingmanager\\Domain\\Model\\Entry';
+
     /**
      * name
      *
@@ -217,5 +219,15 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getNotifications()
     {
         return $this->notifications;
+    }
+
+    /**
+     * Return the class name of entries that get associated with this type of calendar
+     * 
+     * @return string
+     */
+    public function getEntryTypeClassname()
+    {
+        return static::ENTRY_TYPE_CLASSNAME;
     }
 }

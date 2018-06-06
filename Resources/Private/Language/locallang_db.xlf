@@ -6,6 +6,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
 				<source>Calendar</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.record_type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.record_type.1">
+				<source>Default calendar</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.name">
 				<source>Name</source>
 			</trans-unit>

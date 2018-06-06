@@ -48,7 +48,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $start = $this->request->hasArgument('start') ? new \DateTime($this->request->getArgument('start')) : null;
         $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : null;
 
-        $newEntry = $newEntry ? $newEntry : new \Blueways\BwBookingmanager\Domain\Model\Entry($calendar, $timeslot, $start, $end);
+        $newEntry = $newEntry ? $newEntry : \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar->getEntryTypeClassname(), $calendar, $timeslot, $start, $end);
 
         $this->view->assign('page', $this->pageUid);
         $this->view->assign('calendar', $calendar);
