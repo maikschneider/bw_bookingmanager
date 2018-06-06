@@ -31,7 +31,7 @@ return [
                 'items' => [
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', 'Blueways\BwBookingmanager\Domain\Model\Calendar']
                 ],
-                'default' => 'Blueways\BwBookingmanager\Domain\Model\Calendar'
+                'default' => 'Blueways\BwBookingmanager\Domain\Model\Calendar',
             ]
         ],
         'sys_language_uid' => [
