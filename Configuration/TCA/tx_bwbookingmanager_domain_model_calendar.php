@@ -21,7 +21,7 @@ return [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications'],
+        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications'],
     ],
     'columns' => [
         'record_type' => [
@@ -29,9 +29,9 @@ return [
             'config' => [
                 'type' => 'select',
                 'items' => [
-                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', '1']
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', 'Blueways\BwBookingmanager\Domain\Model\Calendar']
                 ],
-                'default' => '1'
+                'default' => 'Blueways\BwBookingmanager\Domain\Model\Calendar'
             ]
         ],
         'sys_language_uid' => [
