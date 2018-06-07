@@ -48,6 +48,9 @@
 			<trans-unit id="calendar.description">
 				<source>calendar</source>
 			</trans-unit>
+			<trans-unit id="record_type.description">
+				<source>record_type</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

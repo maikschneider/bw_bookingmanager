@@ -74,6 +74,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	timeslot int(11) unsigned DEFAULT '0' NOT NULL,
 	calendar int(11) unsigned DEFAULT '0' NOT NULL,
 
+	record_type varchar(255) DEFAULT '' NOT NULL,
 	start_date datetime NOT NULL,
 	end_date datetime NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,

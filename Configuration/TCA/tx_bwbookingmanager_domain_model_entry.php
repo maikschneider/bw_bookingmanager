@@ -11,6 +11,7 @@ return [
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
+        'type' => 'record_type',
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
@@ -21,12 +22,17 @@ return [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, token, hidden, calendar, timeslot, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight,special1, special2',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, token, hidden, 
+        'Blueways\BwBookingmanager\Domain\Model\Entry' => ['showitem' => '
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.topPalette;topPalette, 
             --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general;generalPalette, 
             --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData;contactDataPalette, 
             --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.special;specialPalette'],
     ],
      'palettes' => [
+        'topPalette' => [
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.topPalette',
+            'showitem' => 'record_type, sys_language_uid, l10n_parent, l10n_diffsource, token, hidden,'
+        ],
         'generalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general',
             'showitem' => 'calendar, timeslot, start_date, end_date'
@@ -41,6 +47,16 @@ return [
         ],
     ],
     'columns' => [
+        'record_type' => [
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.record_type',
+            'config' => [
+                'type' => 'select',
+                'items' => [
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.record_type.1', 'Blueways\BwBookingmanager\Domain\Model\Entry']
+                ],
+                'default' => 'Blueways\BwBookingmanager\Domain\Model\Entry',
+            ]
+        ],
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
