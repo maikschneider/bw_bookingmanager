@@ -15,7 +15,7 @@ return [
         ],
         'type' => 'record_type',
         'searchFields' => 'name,timeslots,blockslots,notifications',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg'
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg',
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications',
@@ -29,10 +29,10 @@ return [
             'config' => [
                 'type' => 'select',
                 'items' => [
-                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', 'Blueways\BwBookingmanager\Domain\Model\Calendar']
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', 'Blueways\BwBookingmanager\Domain\Model\Calendar'],
                 ],
                 'default' => 'Blueways\BwBookingmanager\Domain\Model\Calendar',
-            ]
+            ],
         ],
         'sys_language_uid' => [
             'exclude' => true,
@@ -45,8 +45,8 @@ return [
                     [
                         'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
                         -1,
-                        'flags-multiple'
-                    ]
+                        'flags-multiple',
+                    ],
                 ],
                 'default' => 0,
             ],
@@ -77,8 +77,8 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
             ],
         ],
@@ -89,7 +89,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'timeslots' => [
@@ -134,6 +134,6 @@ return [
                 'maxitems' => 9999,
             ],
         ],
-    
+
     ],
 ];

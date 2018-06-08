@@ -23,10 +23,17 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected $entryRepository = null;
 
+    /**
+     * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
+     * @inject
+     */
+    protected $calendarRepository = null;
+
     public function initializeAction()
     {
         $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
+        $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
 
         // convert dateTime from new action
         if ($this->arguments->hasArgument('newEntry')) {
@@ -54,6 +61,19 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslot', $timeslot);
         $this->view->assign('newEntry', $newEntry);
+    }
+
+    public function initializeCreateAction()
+    {
+        $arguments = $this->request->getArguments();
+        $calendarUid = $arguments['newEntry']['calendar']['__identity'];
+
+        $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
+        $entityClass = $calendar->getEntryTypeClassname();
+
+        /** @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user */
+        $newEntry = $this->arguments['newEntry'];
+        $newEntry->setDataType($entityClass);
     }
 
     /**
