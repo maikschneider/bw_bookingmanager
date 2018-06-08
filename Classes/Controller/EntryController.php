@@ -35,6 +35,12 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
 
+        // override settings, if used as parameter from ajax call 
+        if ($this->request->hasArgument('settings')) {
+            $newSettings = $this->request->getArgument('settings');
+            $this->settings = $newSettings;
+        }
+
         // convert dateTime from new action
         if ($this->arguments->hasArgument('newEntry')) {
             $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
@@ -56,6 +62,11 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : null;
 
         $newEntry = $newEntry ? $newEntry : \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar->getEntryTypeClassname(), $calendar, $timeslot, $start, $end);
+
+        // set template
+        if ($this->settings['templateLayout'] != 'default') {
+            $this->view->setTemplate($this->settings['templateLayout']);
+        }
 
         $this->view->assign('page', $this->pageUid);
         $this->view->assign('calendar', $calendar);

@@ -1,6 +1,7 @@
 <div class="row">
     <div class="columns">
-        <f:link.action title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.prevMonth')}" class="button" action="show" arguments="{calendar: calendar, day: configuration.prevMonth.day, month: configuration.prevMonth.month, year: configuration.prevMonth.year}">prev month</f:link.action>
+        <f:link.action title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.prevMonth')}"
+            class="button" action="show" arguments="{calendar: calendar, day: configuration.prevMonth.day, month: configuration.prevMonth.month, year: configuration.prevMonth.year}">prev month</f:link.action>
     </div>
     <div class="columns text-center">
         <h2>
@@ -9,7 +10,8 @@
         </h2>
     </div>
     <div class="columns text-right">
-        <f:link.action title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.nextMonth')}" class="button" action="show" arguments="{calendar: calendar, day: configuration.nextMonth.day, month: configuration.nextMonth.month, year: configuration.nextMonth.year}">next month</f:link.action>
+        <f:link.action title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.nextMonth')}"
+            class="button" action="show" arguments="{calendar: calendar, day: configuration.nextMonth.day, month: configuration.nextMonth.month, year: configuration.nextMonth.year}">next month</f:link.action>
     </div>
 </div>
 
@@ -57,7 +59,7 @@
                                     <f:if condition="{timeslot.isBookable}">
                                         <f:link.action controller="Entry" pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid, else:page)}" pageType="{f:if(condition:settings.ajax.enable, then:settings.ajax.typeNum, else:0)}"
                                             class="bw_bookingmanager__ajaxLink" data="{ajax-container:'bw_bookingmanager__newEntry'}"
-                                            action="new" arguments="{calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
+                                            action="new" arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
                                             book
                                         </f:link.action>
                                     </f:if>
