@@ -228,6 +228,42 @@
 			<trans-unit id="date.monthNames.12">
 				<source>December</source>
 			</trans-unit>
+			<trans-unit id="date.monthNames.short.1">
+				<source>Jan</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.2">
+				<source>Feb</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.3">
+				<source>Mar</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.4">
+				<source>Apr</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.5">
+				<source>May</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.6">
+				<source>Jun</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.7">
+				<source>Jul</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.8">
+				<source>Aug</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.9">
+				<source>Sep</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.10">
+				<source>Oct</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.11">
+				<source>Nov</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.12">
+				<source>Dec</source>
+			</trans-unit>
 			<trans-unit id="date.nextMonth">
 				<source>Next month</source>
 			</trans-unit>
