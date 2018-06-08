@@ -329,6 +329,15 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * It's important to call this function only on timeslot objects, that
+     * have been processed by the TimeslotManager
+     */
+    public function getFreeWeight()
+    {
+        return $this->maxWeight - $this->getBookedWeight();
+    }
+
+    /**
      * converts number of $isBookableHooks to array of activated hooks
      * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
      * @return Array
