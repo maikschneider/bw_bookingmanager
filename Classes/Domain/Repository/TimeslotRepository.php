@@ -21,34 +21,34 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         \DateTime $startDate,
         \DateTime $endDate
-        ){
-            $query = $this->createQuery();
-            $query->matching(
-                $query->logicalOr([
-                    // no repeatable events starting during date range
-                    $query->logicalAnd([
-                        $query->contains('calendars', $calendar),
-                        $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
-                        $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d 00:00:00')),
-                        $query->lessThanOrEqual('startDate', $endDate->format('Y-m-d 23:59:59')),
-                    ]),
-                    // repeating events that end during or after date range
-                    // these events can be in the past and occur in range after repeat function
-                    $query->logicalAnd([
-                        $query->contains('calendars', $calendar),
-                        $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
-                        $query->lessThan('startDate', $endDate->format('Y-m-d 23:59:59'))
-                    ])
-                ])
-            );
+    ) {
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalOr([
+                // no repeatable events starting during date range
+                $query->logicalAnd([
+                    $query->contains('calendars', $calendar),
+                    $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
+                    $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d 00:00:00')),
+                    $query->lessThanOrEqual('startDate', $endDate->format('Y-m-d 23:59:59')),
+                ]),
+                // repeating events that end during or after date range
+                // these events can be in the past and occur in range after repeat function
+                $query->logicalAnd([
+                    $query->contains('calendars', $calendar),
+                    $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
+                    $query->lessThan('startDate', $endDate->format('Y-m-d 23:59:59')),
+                ]),
+            ])
+        );
 
-            return $query->execute();
-        }
+        return $query->execute();
+    }
 
     public function findInMonth(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         \DateTime $dayInMonth
-    ){
+    ) {
         $startDate = clone $dayInMonth;
         $startDate->modify('first day of this month');
 
@@ -65,7 +65,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findInWeek(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         \DateTime $dayInWeek
-    ){
+    ) {
         $startDate = clone $dayInWeek;
         $startDate->modify('tomorrow');
         $startDate->modify('last monday');
@@ -73,6 +73,24 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $endDate = clone $dayInWeek;
         $endDate->modify('yesterday');
         $endDate->modify('next sunday');
+        $endDate->setTime(23, 59, 59);
+
+        $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
+        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
+
+        return $timeslotManager->getTimeslots();
+    }
+
+    public function findInDays(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        \DateTime $startDate,
+        int $days = 1
+    ) {
+        $startDate = clone $startDate;
+        $startDate->setTime(0, 0, 0);
+
+        $endDate = clone $startDate;
+        $endDate->modify('+' . $days . ' days');
         $endDate->setTime(23, 59, 59);
 
         $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);

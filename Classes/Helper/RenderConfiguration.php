@@ -133,6 +133,40 @@ class RenderConfiguration
 
     }
 
+    public function getConfigurationForDays($daysCount)
+    {
+        $daysStart = clone $this->startDate;
+        $daysStart->setTime(0, 0, 0);
+
+        $daysEnd = clone $this->startDate;
+        $daysEnd->modify('+' . $daysCount . ' days');
+        $daysEnd->setTime(23, 59, 59);
+
+        $nextdays = clone $this->startDate;
+        $nextdays->modify('+' . ($daysCount + 1) . ' days');
+        $prevdays = clone $this->startDate;
+        $prevdays->modify('-' . ($daysCount + 1) . ' days');
+
+        $days = $this->getDaysArrayForRange($daysStart, $daysCount);
+
+        return array(
+            'days' => $days,
+            'nextDays' => [
+                'date' => $nextdays,
+                'day' => $nextdays->format('j'),
+                'month' => $nextdays->format('m'),
+                'year' => $nextdays->format('Y'),
+            ],
+            'prevdays' => [
+                'date' => $prevdays,
+                'day' => $prevdays->format('j'),
+                'month' => $prevdays->format('m'),
+                'year' => $prevdays->format('Y'),
+            ],
+        );
+
+    }
+
     private function getTimeslotsForDay($day)
     {
         $timeslots = [];

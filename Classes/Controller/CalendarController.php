@@ -112,6 +112,13 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
                 $calendarConfiguration->setTimeslots($timeslots);
                 $configuration = $calendarConfiguration->getConfigurationForWeek();
             break;
+            case 2:
+                // @todo get $dayCount from flexform setting
+                $days = 30;
+                $timeslots = $this->timeslotRepository->findInDays($calendar, $startDate, $days);
+                $calendarConfiguration->setTimeslots($timeslots);
+                $configuration = $calendarConfiguration->getConfigurationForDays($days);
+            break;
             default:
                 $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
                 $calendarConfiguration->setTimeslots($timeslots);
