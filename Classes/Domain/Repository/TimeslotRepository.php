@@ -27,7 +27,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->logicalOr([
                 // no repeatable events starting during date range
                 $query->logicalAnd([
-                    $query->contains('calendars', $calendar),
+                    $query->contains('calendars', $calendar->getUid()),
                     $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
                     $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d 00:00:00')),
                     $query->lessThanOrEqual('startDate', $endDate->format('Y-m-d 23:59:59')),
@@ -35,7 +35,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 // repeating events that end during or after date range
                 // these events can be in the past and occur in range after repeat function
                 $query->logicalAnd([
-                    $query->contains('calendars', $calendar),
+                    $query->contains('calendars', $calendar->getUid()),
                     $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
                     $query->lessThan('startDate', $endDate->format('Y-m-d 23:59:59')),
                 ]),
@@ -56,7 +56,11 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $endDate->modify('last day of this month');
         $endDate->setTime(23, 59, 59);
 
-        $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
+        // @TODO: This function does not return any Timeslots when called by ajax request
+        // use all timeslots as a fix
+        // $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
+        $timeslots = $calendar->getTimeslots();
+
         $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
 
         return $timeslotManager->getTimeslots();
