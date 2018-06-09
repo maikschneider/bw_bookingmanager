@@ -54,6 +54,13 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             if($jqueryJs) $pageRenderer->addJsFooterFile($jqueryJs, null, false, false, '', true);
             if($bookingmanagerJs) $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
         }
+
+        // override settings, if used as parameter from ajax call
+        if ($this->request->hasArgument('settings')) {
+            $newSettings = $this->request->getArgument('settings');
+            $this->settings = $newSettings;
+        }
+
     }
 
     /**
