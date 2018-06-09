@@ -6,6 +6,8 @@ BOOKINGMANAGER.AJAX = {
     link: null,
     url: null,
     container: null,
+    containerName: null,
+    replacedHtml: [],
 
     init: function () {
         this.initElements();
@@ -37,7 +39,8 @@ BOOKINGMANAGER.AJAX = {
         if (self.link.hasClass('active')) return;
 
         var url = $(link).attr('href');
-        self.container = $('#' + $(link).attr('data-ajax-container'));
+        self.containerName = '#' + $(link).attr('data-ajax-container');
+        self.container = $(self.containerName);
 
         $(self.container).addClass('loading');
 
@@ -48,7 +51,8 @@ BOOKINGMANAGER.AJAX = {
     },
 
     onAjaxSucces: function (data) {
-        this.container.replaceWith(data);
+        var replacedHtml = this.container.replaceWith(data);
+        this.handleReplacedHtml(replacedHtml);
         this.container.removeClass('loading');
         this.ajaxLinks.removeClass('active');
         this.link.addClass('active');
@@ -68,6 +72,39 @@ BOOKINGMANAGER.AJAX = {
         if (firstLink) this.onAjaxLinkClick(firstLink);
 
         BOOKINGMANAGER.LOAD_THIRD_LINK = false;
+    },
+
+    handleReplacedHtml: function (replacedHtml) {
+
+        // save html only if it has form inside
+        if ($('form', replacedHtml).length) {
+            this.replacedHtml = replacedHtml;
+        }
+
+        var oldForm = $('form', this.replacedHtml);
+        // remove hidden fields in old html
+        $('input[type="hidden"]', oldForm).remove();
+        // transform input data to array
+        var oldFormData = $(oldForm).serializeArray();
+        // insert input data in new form
+        this.populateFormData($(this.containerName).find('form'), oldFormData);
+
+    },
+
+    populateFormData: function (frm, oldFormData) {
+        for (var i = 0; i < oldFormData.length; i++) {
+            var data = oldFormData[i];
+            var ctrl = $('[name="' + data.name + '"]', frm);
+            switch (ctrl.prop("type")) {
+                case "radio": case "checkbox":
+                    ctrl.each(function () {
+                        if ($(this).attr('value') == data.value) $(this).attr("checked", data.value);
+                    });
+                    break;
+                default:
+                    ctrl.val(data.value);
+            }
+        }
     }
 
 }
