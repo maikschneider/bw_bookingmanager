@@ -71,6 +71,7 @@ class RenderConfiguration
                 'timeslots' => $this->getTimeslotsForDay($startDate),
                 'isCurrentDay' => $this->isCurrentDay($startDate),
                 'isNotInMonth' => !($startDate->format('m') == $this->startDate->format('m')),
+                'isInPast' => $this->isInPast($startDate)
             ];
 
             $startDate->modify('+1 day');
@@ -209,5 +210,11 @@ class RenderConfiguration
     public function setTimeslots($timeslots)
     {
         $this->timeslots = $timeslots;
+    }
+
+    private function isInPast($day)
+    {
+        $now = new \DateTime('now');
+        return $day < $now;
     }
 }
