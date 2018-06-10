@@ -8,6 +8,7 @@ BOOKINGMANAGER.AJAX = {
     container: null,
     containerName: null,
     replacedHtml: [],
+    loadingContainer: '#bw_bookingmanager',
 
     init: function () {
         this.initElements();
@@ -42,7 +43,7 @@ BOOKINGMANAGER.AJAX = {
         self.containerName = '#' + $(link).attr('data-ajax-container');
         self.container = $(self.containerName);
 
-        $(self.container).addClass('loading');
+        $(self.loadingContainer).addClass('loading');
 
         // actual request
         $.get(url, self.onAjaxSucces.bind(self))
@@ -53,12 +54,13 @@ BOOKINGMANAGER.AJAX = {
     onAjaxSucces: function (data) {
         var replacedHtml = this.container.replaceWith(data);
         this.handleReplacedHtml(replacedHtml);
-        this.container.removeClass('loading');
+        $(this.loadingContainer).removeClass('loading').removeClass('error');
         this.ajaxLinks.removeClass('active');
         this.link.addClass('active');
     },
 
     onAjaxFail: function () {
+        $(this.loadingContainer).addClass('error');
         console.error('Ajax get request failed.');
     },
 
