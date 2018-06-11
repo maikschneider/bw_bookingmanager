@@ -54,7 +54,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * entries
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
-     * @cascade remove
+     * @lazy
      */
     protected $entries = null;
 

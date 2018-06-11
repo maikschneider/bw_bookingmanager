@@ -37,6 +37,7 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * blockslots
      *
+     * @lazy
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot>
      */
     protected $blockslots = null;
@@ -44,6 +45,7 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * notifications
      *
+     * @lazy
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification>
      */
     protected $notifications = null;
