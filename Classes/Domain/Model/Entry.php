@@ -21,6 +21,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * startDate
      *
      * @var \DateTime
+     * @validate NotEmpty, DateTime
      */
     protected $startDate = null;
 
@@ -28,6 +29,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * endDate
      *
      * @var \DateTime
+     * @validate NotEmpty, DateTime
      */
     protected $endDate = null;
 
@@ -35,6 +37,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * name
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $name = '';
 
@@ -42,6 +45,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * prename
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $prename = '';
 
@@ -49,6 +53,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * street
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $street = '';
 
@@ -56,6 +61,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * zip
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $zip = '';
 
@@ -63,6 +69,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * city
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $city = '';
 
@@ -70,6 +77,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * phone
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $phone = '';
 
@@ -77,6 +85,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * email
      *
      * @var string
+     * @validate NotEmpty, EmailAddress
      */
     protected $email = '';
 
@@ -105,20 +114,25 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * weight
      *
      * @var int
+     * @validate Integer
      */
-    protected $weight = 0;
+    protected $weight = 1;
 
     /**
      * calendar
      *
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @lazy
+     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @validate NotEmpty
      */
     protected $calendar = null;
 
     /**
      * timeslot
      *
+     * @lazy
      * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     * @validate NotEmpty
      */
     protected $timeslot = null;
 

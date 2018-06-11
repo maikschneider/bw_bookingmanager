@@ -35,16 +35,39 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
 
-        // override settings, if used as parameter from ajax call 
+        // override settings, if used as parameter from ajax call
         if ($this->request->hasArgument('settings')) {
             $newSettings = $this->request->getArgument('settings');
             $this->settings = $newSettings;
         }
 
-        // convert dateTime from new action
+        // in newAction and createAction
         if ($this->arguments->hasArgument('newEntry')) {
+            // convert dateTime from new action
             $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
             $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
+
+            
+            $arguments = $this->request->getArguments();
+            $calendarUid = isset($arguments['calendar']) ? $arguments['calendar'] : $arguments['newEntry']['calendar']['__identity'];
+            $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
+            $entityClass = $calendar->getEntryTypeClassname();
+
+            // override validator and entity class
+            if ($entityClass !== \Blueways\BwBookingmanager\Domain\Model\Calendar::ENTRY_TYPE_CLASSNAME) {
+
+                $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
+                $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
+                $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryValidator');
+                $validatorConjunction->addValidator($entryValidator);
+                
+                $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
+
+                /** @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user */
+                $newEntry = $this->arguments['newEntry'];
+                $newEntry->setDataType($entityClass);
+            }
+
         }
     }
 
@@ -56,7 +79,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
      * @return string HTML of form
      */
-    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
+    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
     {
         $start = $this->request->hasArgument('start') ? new \DateTime($this->request->getArgument('start')) : null;
         $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : null;
@@ -74,24 +97,10 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->view->assign('newEntry', $newEntry);
     }
 
-    public function initializeCreateAction()
-    {
-        $arguments = $this->request->getArguments();
-        $calendarUid = $arguments['newEntry']['calendar']['__identity'];
-
-        $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
-        $entityClass = $calendar->getEntryTypeClassname();
-
-        /** @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user */
-        $newEntry = $this->arguments['newEntry'];
-        $newEntry->setDataType($entityClass);
-    }
-
     /**
      * action create
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
-     * @validate $newEntry \Blueways\BwBookingmanager\Domain\Validator\EntryValidator
      * @return void
      */
     public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
