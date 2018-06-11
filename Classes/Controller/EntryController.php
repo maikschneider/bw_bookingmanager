@@ -58,17 +58,17 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
                 $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
                 $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
-                $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryValidator');
+                $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
                 $validatorConjunction->addValidator($entryValidator);
-                
+
                 $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
 
                 /** @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user */
                 $newEntry = $this->arguments['newEntry'];
                 $newEntry->setDataType($entityClass);
             }
-
         }
+
     }
 
     /**
