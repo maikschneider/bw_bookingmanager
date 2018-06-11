@@ -3,7 +3,6 @@ namespace Blueways\BwBookingmanager\Helper;
 
 class Tca
 {
-
     public function getTimeslotLabel(&$params, $parentObject)
     {
         $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
@@ -15,23 +14,23 @@ class Tca
 
         $repeatType = $record['repeat_type'];
         switch ($repeatType) {
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
-                $newTitle .= $startDate->format('l') . ', ';
-                $newTitle .= $startDate->format('H:i') . ' - ';
-                $newTitle .= $endDate->format('H:i');
-                break;
+        case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
+            $newTitle .= $startDate->format('l') . ', ';
+            $newTitle .= $startDate->format('H:i') . ' - ';
+            $newTitle .= $endDate->format('H:i');
+            break;
 
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY:
-                $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
-                $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
-                $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
-                break;
-            
-            default:
-                $newTitle .= $startDate->format('d.m.y, H:i') . ' - ';
-                $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
-                $newTitle .= $endDate->format($endDateFormat);
-                break;
+        case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY:
+            $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
+            $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
+            $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
+            break;
+
+        default:
+            $newTitle .= $startDate->format('d.m.y, H:i') . ' - ';
+            $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
+            $newTitle .= $endDate->format($endDateFormat);
+            break;
         }
 
         $params['title'] = $newTitle;

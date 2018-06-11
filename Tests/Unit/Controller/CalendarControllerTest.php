@@ -32,7 +32,6 @@ class CalendarControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function listActionFetchesAllCalendarsFromRepositoryAndAssignsThemToView()
     {
-
         $allCalendars = $this->getMockBuilder(\TYPO3\CMS\Extbase\Persistence\ObjectStorage::class)
             ->disableOriginalConstructor()
             ->getMock();

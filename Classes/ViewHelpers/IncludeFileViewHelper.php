@@ -52,7 +52,7 @@ class IncludeFileViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
             if (strtolower(substr($path, -3)) === '.js') {
                 $pageRenderer->addJsFile($path, null, $compress);
 
-                // CSS
+            // CSS
             } elseif (strtolower(substr($path, -4)) === '.css') {
                 $pageRenderer->addCssFile($path, 'stylesheet', 'all', '', $compress);
             }
@@ -61,7 +61,7 @@ class IncludeFileViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
             if (strtolower(substr($path, -3)) === '.js') {
                 $pageRenderer->addJsFile($path, null, $compress);
 
-                // CSS
+            // CSS
             } elseif (strtolower(substr($path, -4)) === '.css') {
                 $pageRenderer->addCssFile($path, 'stylesheet', 'all', '', $compress);
             }

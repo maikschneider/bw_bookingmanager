@@ -1,6 +1,18 @@
 <?php
 namespace Blueways\BwBookingmanager\Helper;
 
+/**
+ * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
+ *
+ * PHP version 7.2
+ *
+ * @package  BwBookingManager
+ * @author   Maik Schneider <m.schneider@blueways.de>
+ * @license  MIT https://opensource.org/licenses/MIT
+ * @version  GIT: <git_id />
+ * @link     http://www.blueways.de
+ */
+
 class RenderConfiguration
 {
     protected $timeslots;
@@ -25,7 +37,6 @@ class RenderConfiguration
         return array(
             'days' => $days,
         );
-
     }
 
     public function getConfigurationForWeek()
@@ -57,7 +68,6 @@ class RenderConfiguration
                 'year' => $prevWeek->format('Y'),
             ],
         );
-
     }
 
     private function getDaysArrayForRange($startDate, $daysCount)
@@ -65,7 +75,6 @@ class RenderConfiguration
         $days = [];
 
         for ($i = 0; $i < $daysCount; $i++) {
-
             $days[$i] = [
                 'date' => clone $startDate,
                 'timeslots' => $this->getTimeslotsForDay($startDate),
@@ -77,7 +86,6 @@ class RenderConfiguration
             $startDate->modify('+1 day');
         }
         return $days;
-
     }
 
     private function getDaysArrayForWeek($weekStart)
@@ -107,13 +115,11 @@ class RenderConfiguration
         $weeks = [];
 
         for ($i = 0; $i < $numberOfWeeks; $i++) {
-
             $weekStart = clone $monthStart;
 
             $weeks[] = $this->getDaysArrayForWeek($weekStart);
 
             $monthStart->modify('next monday');
-
         }
 
         return array(
@@ -131,7 +137,6 @@ class RenderConfiguration
                 'year' => $prevMonth->format('Y'),
             ],
         );
-
     }
 
     public function getConfigurationForDays($daysCount)
@@ -165,7 +170,6 @@ class RenderConfiguration
                 'year' => $prevdays->format('Y'),
             ],
         );
-
     }
 
     private function getTimeslotsForDay($day)

@@ -1,29 +1,29 @@
 <?php
 namespace Blueways\BwBookingmanager\Controller;
 
+/**
+ * Administration controller for TYPO3 Backend module
+ *
+ * PHP version 7.2
+ *
+ * @package  BwBookingManager
+ * @author   Maik Schneider <m.schneider@blueways.de>
+ * @license  MIT https://opensource.org/licenses/MIT
+ * @version  GIT: <git_id />
+ * @link     http://www.blueways.de
+ */
+
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Lang\LanguageService;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Backend\Template\Components\ButtonBar;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-
-
-/***
- *
- * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
- ***/
 
 /**
  * AdministrationController
@@ -77,7 +77,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
 
         parent::initializeAction();
-
     }
 
     protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
@@ -91,7 +90,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/News/AdministrationModule');
-
         }
 
         $this->createMenu();
@@ -174,7 +172,8 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         return $uriBuilder->reset()->uriFor($action, $parameters, $controller);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $hideForm = true;
         $demandVars = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
         $demand = GeneralUtility::makeInstance(AdministrationDemand::class);
@@ -235,5 +234,4 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         return $GLOBALS['LANG'];
     }
-
 }

@@ -62,10 +62,9 @@ class RecordListConstraint
         }
 
         // calendar
-        if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !==0 ) {
-            $parameters['where'][] = "calendar=" .$arguments['calendarUid']; 
+        if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !==0) {
+            $parameters['where'][] = "calendar=" .$arguments['calendarUid'];
         }
-
     }
 
     /**

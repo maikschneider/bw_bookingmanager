@@ -190,5 +190,4 @@ class AdministrationDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntit
     {
         $this->endDate = $endDate;
     }
-
 }

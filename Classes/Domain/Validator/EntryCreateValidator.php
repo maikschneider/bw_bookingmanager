@@ -107,5 +107,4 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
             $this->addError('Selected timeslot has not enough free space or is booked out', 1526170536);
         }
     }
-
 }

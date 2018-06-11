@@ -368,11 +368,9 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             if (!$_procObj->isBookable($this)) {
                 return false;
             }
-
         }
 
         return true;
-
     }
 
     /**
@@ -383,7 +381,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         // check date (only if in future)
         $now = new \DateTime('now');
-        if($this->getStartDate() < $now){
+        if ($this->getStartDate() < $now) {
             return false;
         }
 
@@ -393,7 +391,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         }
 
         // check activated hooks hooks
-        if(!$this->getIsBookableByHooks()) {
+        if (!$this->getIsBookableByHooks()) {
             return false;
         }
 

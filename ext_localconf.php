@@ -3,7 +3,6 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
     function () {
-
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Blueways.BwBookingmanager',
             'Pi1',
@@ -54,6 +53,5 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = array(
             'className' => 'Blueways\\BwBookingmanager\\Xclass\\Extbase\\Mvc\\Controller\\Argument',
         );
-
     }
 );

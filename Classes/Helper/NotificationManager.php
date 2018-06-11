@@ -1,11 +1,20 @@
 <?php
 namespace Blueways\BwBookingmanager\Helper;
 
+/**
+ * This is fwefewfew
+ *
+ * PHP version 7.2
+ *
+ * @package  BwBookingManager
+ * @author   Maik Schneider <m.schneider@blueways.de>
+ * @license  MIT https: //opensource.org/licenses/MIT
+ * @version  GIT: <git_id />
+ * @link     http://www.blueways.de
+ */
+
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * This class oganizes the correct arrangement of timeslots
- */
 class NotificationManager
 {
     /**
@@ -61,7 +70,6 @@ class NotificationManager
     private function sendNotifications()
     {
         foreach ($this->notifications as $notification) {
-
             if ($notification->hasHook()) {
                 $this->triggerHook($notification);
             } else {
@@ -103,7 +111,6 @@ class NotificationManager
 
     private function getMailBody($templateName)
     {
-
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 
         $emailView = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');

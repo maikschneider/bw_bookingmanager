@@ -225,7 +225,7 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     /**
      * Return the class name of entries that get associated with this type of calendar
-     * 
+     *
      * @return string
      */
     public function getEntryTypeClassname()

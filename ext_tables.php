@@ -48,8 +48,6 @@ call_user_func(
                     ['source' => 'EXT:bw_bookingmanager/Resources/Public/Icons/' . $path]
                 );
             }
-
         }
-
     }
 );

@@ -1,20 +1,18 @@
 <?php
 namespace Blueways\BwBookingmanager\Controller;
 
-/***
- *
+/**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
+ * PHP version 7.2
  *
- *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
- ***/
-
-/**
- * EntryController
+ * @package BwBookingManager
+ * @author  Maik Schneider <m.schneider@blueways.de>
+ * @license MIT https://opensource.org/licenses/MIT
+ * @version GIT: <git_id />
+ * @link    http://www.blueways.de
  */
+
 class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
@@ -47,7 +45,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
             $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
 
-            
+
             $arguments = $this->request->getArguments();
             $calendarUid = isset($arguments['calendar']) ? $arguments['calendar'] : $arguments['newEntry']['calendar']['__identity'];
             $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
@@ -55,7 +53,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             // override validator and entity class
             if ($entityClass !== \Blueways\BwBookingmanager\Domain\Model\Calendar::ENTRY_TYPE_CLASSNAME) {
-
                 $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
                 $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
                 $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
@@ -63,20 +60,21 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
                 $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
 
-                /** @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user */
+                /**
+ * @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user
+*/
                 $newEntry = $this->arguments['newEntry'];
                 $newEntry->setDataType($entityClass);
             }
         }
-
     }
 
     /**
      * action new
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
+     * @param  \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param  \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @param  \Blueways\BwBookingmanager\Domain\Model\Entry    $newEntry
      * @return string HTML of form
      */
     public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
@@ -100,7 +98,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * action create
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
+     * @param  \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
      * @return void
      */
     public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
@@ -123,7 +121,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
-     * @param string $token
+     * @param string                                        $token
      * @return void
      */
     public function showAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry, $token = null)
@@ -154,11 +152,9 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 ->build();
             $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
         }
-
     }
 
     // public function errorAction() {
     //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
     // }
-
 }

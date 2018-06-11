@@ -145,7 +145,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     /**
      * __construct
-     * 
+     *
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
      * @param \DateTime $startDate
@@ -153,15 +153,23 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      */
     public function __construct(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = NULL, 
-        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = NULL,
-        \DateTime $startDate = NULL,
-        \DateTime $endDate = NULL)
-    {
-        if($calendar) $this->setCalendar($calendar);
-        if($timeslot) $this->setTimeslot($timeslot);
-        if($startDate) $this->setStartDate($startDate);
-        if($endDate) $this->setEndDate($endDate);
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null,
+        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null,
+        \DateTime $startDate = null,
+        \DateTime $endDate = null
+    ) {
+        if ($calendar) {
+            $this->setCalendar($calendar);
+        }
+        if ($timeslot) {
+            $this->setTimeslot($timeslot);
+        }
+        if ($startDate) {
+            $this->setStartDate($startDate);
+        }
+        if ($endDate) {
+            $this->setEndDate($endDate);
+        }
     }
 
     /**
