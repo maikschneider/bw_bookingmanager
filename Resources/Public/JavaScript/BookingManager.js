@@ -2,116 +2,117 @@ var BOOKINGMANAGER = BOOKINGMANAGER || {};
 
 BOOKINGMANAGER.AJAX = {
 
-    ajaxLinks: null,
-    link: null,
-    url: null,
-    container: null,
-    containerName: null,
-    replacedHtml: [],
-    loadingContainer: '#bw_bookingmanager',
+  ajaxLinks: null,
+  link: null,
+  url: null,
+  container: null,
+  containerName: null,
+  replacedHtml: [],
+  loadingContainer: '#bw_bookingmanager',
 
-    init: function () {
-        this.initElements();
-        this.initEvents();
-    },
+  init: function () {
+    this.initElements();
+    this.initEvents();
+  },
 
-    initElements: function () {
-        this.ajaxLinks = $('a.bw_bookingmanager__ajaxLink');
-    },
+  initElements: function () {
+    this.ajaxLinks = $('a.bw_bookingmanager__ajaxLink');
+  },
 
-    initEvents: function () {
-        var self = this;
+  initEvents: function () {
+    var self = this;
 
-        $(self.ajaxLinks).on('click', function (e) {
-            e.preventDefault();
-            self.onAjaxLinkClick(this);
-        });
+    $(self.ajaxLinks).on('click', function (e) {
+      e.preventDefault();
+      self.onAjaxLinkClick(this);
+    });
 
-        if (BOOKINGMANAGER.LOAD_THIRD_LINK) self.loadThirdLink();
-    },
+    if (BOOKINGMANAGER.LOAD_THIRD_LINK) self.loadThirdLink();
+  },
 
-    onAjaxLinkClick: function (link) {
+  onAjaxLinkClick: function (link) {
 
-        var self = this;
+    var self = this;
 
-        self.link = $(link);
+    self.link = $(link);
 
-        // abbort if link was already clicked
-        if (self.link.hasClass('active')) return;
+    // abbort if link was already clicked
+    if (self.link.hasClass('active')) return;
 
-        var url = $(link).attr('href');
-        self.containerName = '#' + $(link).attr('data-ajax-container');
-        self.container = $(self.containerName);
+    var url = $(link).attr('href');
+    self.containerName = '#' + $(link).attr('data-ajax-container');
+    self.container = $(self.containerName);
 
-        $(self.loadingContainer).addClass('loading');
+    $(self.loadingContainer).addClass('loading');
 
-        // actual request
-        $.get(url, self.onAjaxSucces.bind(self))
-            .fail(self.onAjaxFail.bind(self))
-            .done(self.afterAjaxCall.bind(self));
-    },
+    // actual request
+    $.get(url, self.onAjaxSucces.bind(self))
+      .fail(self.onAjaxFail.bind(self))
+      .done(self.afterAjaxCall.bind(self));
+  },
 
-    onAjaxSucces: function (data) {
-        var replacedHtml = this.container.replaceWith(data);
-        if(Foundation) $(document).foundation();
-        this.handleReplacedHtml(replacedHtml);
-        $(this.loadingContainer).removeClass('loading').removeClass('error');
-        this.ajaxLinks.removeClass('active');
-        this.link.addClass('active');
-    },
+  onAjaxSucces: function (data) {
+    var replacedHtml = this.container.replaceWith(data);
+    if (Foundation) $(document).foundation();
+    this.handleReplacedHtml(replacedHtml);
+    $(this.loadingContainer).removeClass('loading').removeClass('error');
+    this.ajaxLinks.removeClass('active');
+    this.link.addClass('active');
+  },
 
-    onAjaxFail: function () {
-        $(this.loadingContainer).addClass('error');
-        console.error('Ajax get request failed.');
-    },
+  onAjaxFail: function () {
+    $(this.loadingContainer).addClass('error');
+    console.error('Ajax get request failed.');
+  },
 
-    afterAjaxCall: function () {
-        if (BOOKINGMANAGER.LOAD_THIRD_LINK) this.init();
-    },
+  afterAjaxCall: function () {
+    if (BOOKINGMANAGER.LOAD_THIRD_LINK) this.init();
+  },
 
-    loadThirdLink: function () {
-        // load the third link (1,2 are month navigation)
-        var firstLink = this.ajaxLinks[2] || false;
-        if (firstLink) this.onAjaxLinkClick(firstLink);
+  loadThirdLink: function () {
+    // load the third link (1,2 are month navigation)
+    var firstLink = this.ajaxLinks[2] || false;
+    if (firstLink) this.onAjaxLinkClick(firstLink);
 
-        BOOKINGMANAGER.LOAD_THIRD_LINK = false;
-    },
+    BOOKINGMANAGER.LOAD_THIRD_LINK = false;
+  },
 
-    handleReplacedHtml: function (replacedHtml) {
+  handleReplacedHtml: function (replacedHtml) {
 
-        // save html only if it has form inside
-        if ($('form', replacedHtml).length) {
-            this.replacedHtml = replacedHtml;
-        }
-
-        var oldForm = $('form', this.replacedHtml);
-        // remove hidden fields in old html
-        $('input[type="hidden"]', oldForm).remove();
-        // transform input data to array
-        var oldFormData = $(oldForm).serializeArray();
-        // insert input data in new form
-        this.populateFormData($(this.containerName).find('form'), oldFormData);
-
-    },
-
-    populateFormData: function (frm, oldFormData) {
-        for (var i = 0; i < oldFormData.length; i++) {
-            var data = oldFormData[i];
-            var ctrl = $('[name="' + data.name + '"]', frm);
-            switch (ctrl.prop("type")) {
-                case "radio": case "checkbox":
-                    ctrl.each(function () {
-                        if ($(this).attr('value') == data.value) $(this).attr("checked", data.value);
-                    });
-                    break;
-                default:
-                    ctrl.val(data.value);
-            }
-        }
+    // save html only if it has form inside
+    if ($('form', replacedHtml).length) {
+      this.replacedHtml = replacedHtml;
     }
+
+    var oldForm = $('form', this.replacedHtml);
+    // remove hidden fields in old html
+    $('input[type="hidden"]', oldForm).remove();
+    // transform input data to array
+    var oldFormData = $(oldForm).serializeArray();
+    // insert input data in new form
+    this.populateFormData($(this.containerName).find('form'), oldFormData);
+
+  },
+
+  populateFormData: function (frm, oldFormData) {
+    for (var i = 0; i < oldFormData.length; i++) {
+      var data = oldFormData[i];
+      var ctrl = $('[name="' + data.name + '"]', frm);
+      ctrl = ctrl.length > 1 ? $(ctrl[1]) : ctrl;
+      switch (ctrl.prop("type")) {
+        case "radio": case "checkbox":
+          ctrl.each(function () {
+            if ($(this).attr('value') == data.value) $(this).attr("checked", data.value);
+          });
+          break;
+        default:
+          ctrl.val(data.value);
+      }
+    }
+  }
 
 }
 
 $(function () {
-    BOOKINGMANAGER.AJAX.init();
+  BOOKINGMANAGER.AJAX.init();
 });
