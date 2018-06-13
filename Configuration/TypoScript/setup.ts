@@ -29,6 +29,7 @@ plugin.tx_bwbookingmanager_pi1 {
         backPid = {$plugin.tx_bwbookingmanager_pi1.settings.backPid}
         javascript{
             jquery = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.jquery}
+            customValidators = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.customValidators}
             bookingmanager = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.bookingmanager}
         }
         ajax{

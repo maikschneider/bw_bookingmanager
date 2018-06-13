@@ -53,6 +53,7 @@ BOOKINGMANAGER.AJAX = {
 
     onAjaxSucces: function (data) {
         var replacedHtml = this.container.replaceWith(data);
+        if(Foundation) $(document).foundation();
         this.handleReplacedHtml(replacedHtml);
         $(this.loadingContainer).removeClass('loading').removeClass('error');
         this.ajaxLinks.removeClass('active');

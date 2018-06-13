@@ -13,13 +13,14 @@ plugin.tx_bwbookingmanager_pi1 {
         storagePid =
     }
     settings {
-        showPid = 
-        calendarPid = 
-        entryPid = 
-        backPid = 
+        showPid =
+        calendarPid =
+        entryPid =
+        backPid =
         javascript{
             #jquery = EXT:bw_bookingmanager/Resources/Public/JavaScript/jquery-3.3.1.min.js
             bookingmanager = EXT:bw_bookingmanager/Resources/Public/JavaScript/BookingManager.js
+            customValidators = EXT:bw_bookingmanager/Resources/Public/JavaScript/Bookingmanager.Abide.js
         }
         ajax{
             enable = 0
