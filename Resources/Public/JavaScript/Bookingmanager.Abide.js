@@ -10,7 +10,7 @@ function selectboxValidator(
   required, /* is the element required according to the `[required]` attribute */
   parent    /* parent of the jQuery element `$el` */
 ) {
-  return $('option:selected', $el).val() !== 0;
+  return $('option:selected', $el).val() != 0;
 };
 
 /**

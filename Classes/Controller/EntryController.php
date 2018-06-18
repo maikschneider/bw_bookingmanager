@@ -89,6 +89,9 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->view->setTemplate($this->settings['templateLayout']);
         }
 
+        // To fix strange bug: override controllerActionName
+        $this->request->setControllerActionName('new');
+
         $this->view->assign('page', $this->pageUid);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslot', $timeslot);
