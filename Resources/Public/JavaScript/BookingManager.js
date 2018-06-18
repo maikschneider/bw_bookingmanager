@@ -1,5 +1,50 @@
 var BOOKINGMANAGER = BOOKINGMANAGER || {};
 
+BOOKINGMANAGER.TIMESELECT = {
+
+  timeslotLinks: null,
+  dayDivs: null,
+
+  init: function () {
+    this.initElements();
+    this.initEvents();
+  },
+
+  initElements: function () {
+    this.timeslotLinks = $('a.bw_bookingmanager__timeslotsLink');
+    this.dayDivs = $('.bw_bookingmanager__dayList__day');
+  },
+
+  initEvents: function () {
+    var self = this;
+
+    $(self.timeslotLinks).on('click', function (e) {
+      e.preventDefault();
+      self.onTimeslotLinkClick(this);
+    });
+
+    if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) self.loadFirstTimeslot();
+  },
+
+  onTimeslotLinkClick: function (link) {
+    $(this.timeslotLinks).removeClass('active');
+    $(link).addClass('active');
+    var dayId = $(link).attr('href');
+    $(this.dayDivs).hide();
+    $(dayId).show();
+    $(dayId).find('a').first().trigger('click');
+  },
+
+  loadFirstTimeslot: function () {
+    // load the third link (1,2 are month navigation)
+    var firstLink = this.timeslotLinks[0] || false;
+    if (firstLink) this.onTimeslotLinkClick(firstLink);
+
+    BOOKINGMANAGER.LOAD_FIRST_TIMESLOT = false;
+  },
+
+}
+
 BOOKINGMANAGER.AJAX = {
 
   ajaxLinks: null,
@@ -67,6 +112,7 @@ BOOKINGMANAGER.AJAX = {
 
   afterAjaxCall: function () {
     if (BOOKINGMANAGER.LOAD_THIRD_LINK) this.init();
+    if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) BOOKINGMANAGER.TIMESELECT.init();
   },
 
   loadThirdLink: function () {
@@ -115,4 +161,5 @@ BOOKINGMANAGER.AJAX = {
 
 $(function () {
   BOOKINGMANAGER.AJAX.init();
+  BOOKINGMANAGER.TIMESELECT.init();
 });
