@@ -82,10 +82,23 @@ class RenderConfiguration
                 'isNotInMonth' => !($startDate->format('m') == $this->startDate->format('m')),
                 'isInPast' => $this->isInPast($startDate)
             ];
+            $days[$i]['isBookable'] = $this->getDayIsBookable($days[$i]['timeslots']);
 
             $startDate->modify('+1 day');
         }
         return $days;
+    }
+
+    private function getDayIsBookable($timeslots)
+    {
+        $isBookable = false;
+        foreach ($timeslots as $timeslot) {
+            $slotIsBookable = $timeslot->getIsBookable();
+            if ($slotIsBookable) {
+                $isBookable = true;
+            }
+        }
+        return $isBookable;
     }
 
     private function getDaysArrayForWeek($weekStart)
