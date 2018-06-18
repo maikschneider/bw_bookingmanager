@@ -65,7 +65,7 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
-                <target>maximale Breite</target>
+                <target>Maximale Anzahl an Terminen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries">
 				<source>Entries</source>
@@ -149,7 +149,7 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
 				<source>Weight</source>
-                <target>Breite</target>
+                <target>Anzahl an Terminen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
 				<source>Timeslot</source>

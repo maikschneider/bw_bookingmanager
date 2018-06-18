@@ -145,7 +145,7 @@
             </trans-unit>
             <trans-unit id="administration.entryListing.table.weight">
                 <source>Weight</source>
-                <target>Breite</target>
+                <target>Anzahl an Terminen</target>
             </trans-unit>
             <trans-unit id="administration.filter.calendar">
                 <source>Calendar</source>
@@ -201,7 +201,7 @@
             </trans-unit>
             <trans-unit id="administration.filter.sortField.weight">
                 <source>Weight</source>
-                <target>Breite</target>
+                <target>Anzahl an Terminen</target>
             </trans-unit>
             <trans-unit id="administration.filter.submit">
                 <source>Refresh</source>
