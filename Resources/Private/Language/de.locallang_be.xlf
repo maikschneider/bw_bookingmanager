@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
+        <header/>
+        <body>
+            <trans-unit id="flexforms_general">
+                <source>General</source>
+                <target>Allgemein</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode">
+                <source>Display mode</source>
+                <target>Anzeige Art</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode.calendar_list">
+                <source>Calendar list</source>
+                <target>Kalender Liste</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode.calendar_show">
+                <source>Calendar show</source>
+                <target>Kalender Einzelansicht</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.mode.entry_new">
+                <source>New entry</source>
+                <target>Neuer Eintrag</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.calendarUid">
+                <source>Calendar</source>
+                <target>Kalender</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.templateLayout">
+                <source>Template</source>
+                <target>Template</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.templateLayout.default">
+                <source>Default</source>
+                <target>Standard</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.showPid">
+                <source>Show PID</source>
+                <target>PID Einzelansicht</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.entryPid">
+                <source>New entry PID</source>
+                <target>PID neuer Eintrag</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.backPid">
+                <source>Back PID</source>
+                <target>PID für Zurück</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.storagePid">
+                <source>Storage PID</source>
+                <target>PID der Daten</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange">
+                <source>Date range</source>
+                <target>Zeitraum</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange.month">
+                <source>Month</source>
+                <target>Monat</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange.week">
+                <source>Week</source>
+                <target>Woche</target>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange.days">
+                <source>Days</source>
+                <target>Tage</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email">
+                <source>Email</source>
+                <target>E-Mail</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email.doSendConfirmation">
+                <source>Send confirmation mail</source>
+                <target>Bestätigungsmail senden</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email.sender">
+                <source>Sender mail address</source>
+                <target>Sender E-Mail Adresse</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email.subject">
+                <source>E-Mail subject</source>
+                <target>E-Mail Betreff</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email.subject">
+                <source>E-Mail subject</source>
+                <target>E-Mail Betreff</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email.template">
+                <source>E-Mail template</source>
+                <target>E-Mail Template</target>
+            </trans-unit>
+            <trans-unit id="flexforms_email.template.default">
+                <source>Default</source>
+                <target>Standard</target>
+            </trans-unit>
+            <trans-unit id="bwbookingmanager-folder">
+                <source>Booking Manager</source>
+                <target>Buchungsmanager</target>
+            </trans-unit>
+            <trans-unit id="tca.timeslot.palettes.dates">
+                <source>Dates</source>
+                <target>Termine</target>
+            </trans-unit>
+            <trans-unit id="tca.entry.palettes.general">
+                <source>General</source>
+                <target>Allgemein</target>
+            </trans-unit>
+            <trans-unit id="tca.entry.palettes.contactData">
+                <source>Contact data</source>
+                <target>Kontakt Daten</target>
+            </trans-unit>
+            <trans-unit id="tca.entry.palettes.special">
+                <source>Additional</source>
+                <target>Zusatz</target>
+            </trans-unit>
+            <trans-unit id="module.entryListing">
+                <source>Entry listing</source>
+                <target>Listenansicht Einträge</target>
+            </trans-unit>
+            <trans-unit id="module.timeslotListing">
+                <source>Timeslot listing</source>
+                <target>Listenansicht Timeslots</target>
+            </trans-unit>
+            <trans-unit id="administration.nocalendarfound">
+                <source>No calendar record was found on selected page.</source>
+                <target>Für die Ausgewählte Seite wurden keine Kalendereinträge gefunden.</target>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.headline">
+                <source>Booked entries</source>
+                <target>gebuchte Einträge</target>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.date">
+                <source>Date</source>
+                <target>Termin</target>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.time">
+                <source>Time</source>
+                <target>Zeit</target>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.name">
+                <source>Name</source>
+                <target>Name</target>
+            </trans-unit>
+            <trans-unit id="administration.entryListing.table.weight">
+                <source>Weight</source>
+                <target>Anzahl an Terminen</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.calendar">
+                <source>Calendar</source>
+                <target>Kalender</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.timerange">
+                <source>Time range</source>
+                <target>Zeitspanne</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.hidden">
+                <source>Display hidden entries</source>
+                <target>Zeige versteckte Einträge</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.searchWord">
+                <source>Search word</source>
+                <target>Suchwort</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortingField">
+                <source>Sorting field</source>
+                <target>Feld nach dem sortiert werden soll</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortingDirection.asc">
+                <source>Ascending</source>
+                <target>Aufsteigend</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortingDirection.desc">
+                <source>Descending</source>
+                <target>Absteigend</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.startDate">
+                <source>Start date</source>
+                <target>Start Datum</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.endDate">
+                <source>End date</source>
+                <target>End Datum</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.name">
+                <source>Name</source>
+                <target>Familienname</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.prename">
+                <source>Prename</source>
+                <target>Vorname</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.phone">
+                <source>Phone</source>
+                <target>Telefonnummer</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.email">
+                <source>Email</source>
+                <target>E-Mail</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.sortField.weight">
+                <source>Weight</source>
+                <target>Anzahl an Terminen</target>
+            </trans-unit>
+            <trans-unit id="administration.filter.submit">
+                <source>Refresh</source>
+                <target>Aktualisieren</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
