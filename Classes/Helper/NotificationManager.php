@@ -92,7 +92,7 @@ class NotificationManager
         $to = $notification->getEmail();
         $subject = $notification->getEmailSubject();
         $template = $notification->getTemplate();
-        $body = $this->getMailBody('Email/' . $template);
+        $body = $this->getMailBody($template);
 
         $this->sendMail($from, $to, $subject, $body);
     }
@@ -106,7 +106,6 @@ class NotificationManager
             ->setBody($body, 'text/html');
 
         $message->send();
-        var_dump($message->isSent());
     }
 
     private function getMailBody($templateName)
