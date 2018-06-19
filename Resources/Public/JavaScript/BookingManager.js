@@ -73,6 +73,7 @@ BOOKINGMANAGER.AJAX = {
     });
 
     if (BOOKINGMANAGER.LOAD_THIRD_LINK) self.loadThirdLink();
+    if (BOOKINGMANAGER.LOAD_FIRST_LINK) self.loadFirstLink();
   },
 
   onAjaxLinkClick: function (link) {
@@ -112,6 +113,7 @@ BOOKINGMANAGER.AJAX = {
 
   afterAjaxCall: function () {
     if (BOOKINGMANAGER.LOAD_THIRD_LINK) this.init();
+    if (BOOKINGMANAGER.LOAD_FIRST_LINK) this.init();
     if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) BOOKINGMANAGER.TIMESELECT.init();
   },
 
@@ -121,6 +123,13 @@ BOOKINGMANAGER.AJAX = {
     if (firstLink) this.onAjaxLinkClick(firstLink);
 
     BOOKINGMANAGER.LOAD_THIRD_LINK = false;
+  },
+
+  loadFirstLink: function () {
+    var firstLink = this.ajaxLinks[0] || false;
+    if (firstLink) this.onAjaxLinkClick(firstLink);
+
+    BOOKINGMANAGER.LOAD_FIRST_LINK = false;
   },
 
   handleReplacedHtml: function (replacedHtml) {

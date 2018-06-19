@@ -5,359 +5,363 @@
 		<body>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
 				<source>Calendar</source>
-                <target>Kalender</target>
+				<target>Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.record_type">
 				<source>Type</source>
-                <target>Typ</target>
+				<target>Typ</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.record_type.1">
 				<source>Default calendar</source>
-                <target>Standard Kalender</target>
+				<target>Standard Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.name">
 				<source>Name</source>
-                <target>Name</target>
+				<target>Name</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.timeslots">
 				<source>Timeslots</source>
-                <target>Timeslots</target>
+				<target>Timeslots</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots">
 				<source>Blockslots</source>
-                <target>Blockslots</target>
+				<target>Blockslots</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
 				<source>Notifications</source>
-                <target>Benachrichtigungen</target>
+				<target>Benachrichtigungen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
-                <target>Timeslots</target>
+				<target>Timeslots</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.start_date">
 				<source>Start Date</source>
-                <target>Start Datum</target>
+				<target>Start Datum</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.end_date">
 				<source>End Date</source>
-                <target>End Datum</target>
+				<target>End Datum</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type">
 				<source>Repeat Type</source>
-                <target>Wiederholungsart</target>
+				<target>Wiederholungsart</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.no">
 				<source>No repeat</source>
-                <target>keine Wiederholungen</target>
+				<target>keine Wiederholungen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.daily">
 				<source>Daily repeat</source>
-                <target>tägliche Wiederholung</target>
+				<target>tägliche Wiederholung</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.weekly">
 				<source>Weekly repeat</source>
-                <target>wöchentliche Wiederholung</target>
+				<target>wöchentliche Wiederholung</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
 				<source>Monthly repeat</source>
-                <target>monatliche Wiederholung</target>
+				<target>monatliche Wiederholung</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
-                <target>Maximale Anzahl an Terminen</target>
+				<target>Maximale Anzahl an Terminen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries">
 				<source>Entries</source>
-                <target>Einträge</target>
+				<target>Einträge</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
 				<source>Calendars</source>
-                <target>Kalender</target>
+				<target>Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
 				<source>Repeat End</source>
-                <target>Wiederholung Ende</target>
+				<target>Wiederholung Ende</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.is_bookable_hooks">
 				<source>Options</source>
-                <target>Optionen</target>
+				<target>Optionen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.is_bookable_hooks.24h">
 				<source>Needs to be booked one day in advance</source>
-                <target>Muss einen Tag im Voraus gebucht werden</target>
+				<target>Muss einen Tag im Voraus gebucht werden</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry">
 				<source>Entry</source>
-                <target>Eintrag</target>
+				<target>Eintrag</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.record_type">
 				<source>Type</source>
-                <target>Typ</target>
+				<target>Typ</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.record_type.1">
 				<source>Default</source>
-                <target>Standard</target>
+				<target>Standard</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date">
 				<source>Start Date</source>
-                <target>Start Datum</target>
+				<target>Start Datum</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.end_date">
 				<source>End Date</source>
-                <target>End Datum</target>
+				<target>End Datum</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.name">
 				<source>Name</source>
-                <target>Familienname</target>
+				<target>Familienname</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.prename">
 				<source>Prename</source>
-                <target>Vorname</target>
+				<target>Vorname</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.street">
 				<source>Street</source>
-                <target>Straße</target>
+				<target>Straße</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.zip">
 				<source>Zip</source>
-                <target>PLZ</target>
+				<target>PLZ</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.city">
 				<source>City</source>
-                <target>Wohnort</target>
+				<target>Wohnort</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.phone">
 				<source>Phone</source>
-                <target>Telefonnummer</target>
+				<target>Telefonnummer</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.email">
 				<source>Email</source>
-                <target>E-Mail</target>
+				<target>E-Mail</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter">
 				<source>Newsletter</source>
-                <target>Newsletter</target>
+				<target>Newsletter</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1">
 				<source>Special 1</source>
-                <target>Special 1</target>
+				<target>Special 1</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special2">
 				<source>Special 2</source>
-                <target>Special 2</target>
+				<target>Special 2</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
 				<source>Weight</source>
-                <target>Anzahl an Terminen</target>
+				<target>Anzahl an Terminen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
 				<source>Timeslot</source>
-                <target>Timeslot</target>
+				<target>Timeslot</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.calendar">
 				<source>Calendar</source>
-                <target>Kalender</target>
+				<target>Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.form.headline.general">
 				<source>Personal details</source>
-                <target>Personenangaben</target>
+				<target>Personenangaben</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
-                <target>Blockslot</target>
+				<target>Blockslot</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.start_date">
 				<source>Start Date</source>
-                <target>Start Datum</target>
+				<target>Start Datum</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.end_date">
 				<source>End Date</source>
-                <target>End Datum</target>
+				<target>End Datum</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
 				<source>Reason</source>
-                <target>Grund</target>
+				<target>Grund</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification">
 				<source>Notification</source>
-                <target>Benachrichtigung</target>
+				<target>Benachrichtigung</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.name">
 				<source>Name</source>
-                <target>Name</target>
+				<target>Name</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email">
 				<source>Email</source>
-                <target>E-Mail</target>
+				<target>E-Mail</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
 				<source>Hook</source>
-                <target>Hook</target>
+				<target>Hook</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
 				<source>None</source>
-                <target>keine</target>
+				<target>keine</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
 				<source>Special 1 is checked</source>
-                <target>Special 1 ist ausgewählt</target>
+				<target>Special 1 ist ausgewählt</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked">
 				<source>Special 2 is checked</source>
-                <target>Special 3 ist ausgewählt</target>
+				<target>Special 3 ist ausgewählt</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">
 				<source>Calendars</source>
-                <target>Kalender</target>
+				<target>Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.template">
 				<source>Email Template</source>
-                <target>Email Template</target>
+				<target>Email Template</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.template.default">
 				<source>Default</source>
-                <target>Standard</target>
+				<target>Standard</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject">
 				<source>Email Subject</source>
-                <target>E-Mail Betreff</target>
+				<target>E-Mail Betreff</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
 				<source>New Booking</source>
-                <target>Neue Buchung</target>
+				<target>Neue Buchung</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.0">
 				<source>Su</source>
-                <target>So</target>
+				<target>So</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.1">
 				<source>Mo</source>
-                <target>Mo</target>
+				<target>Mo</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.2">
 				<source>Tu</source>
-                <target>Di</target>
+				<target>Di</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.3">
 				<source>We</source>
-                <target>Mi</target>
+				<target>Mi</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.4">
 				<source>Th</source>
-                <target>Do</target>
+				<target>Do</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.5">
 				<source>Fr</source>
-                <target>Fr</target>
+				<target>Fr</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.6">
 				<source>Sa</source>
-                <target>Sa</target>
+				<target>Sa</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.1">
 				<source>January</source>
-                <target>Januar</target>
+				<target>Januar</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.2">
 				<source>February</source>
-                <target>Februar</target>
+				<target>Februar</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.3">
 				<source>March</source>
-                <target>März</target>
+				<target>März</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.4">
 				<source>April</source>
-                <target>April</target>
+				<target>April</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.5">
 				<source>May</source>
-                <target>Mai</target>
+				<target>Mai</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.6">
 				<source>June</source>
-                <target>Juni</target>
+				<target>Juni</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.7">
 				<source>July</source>
-                <target>Juli</target>
+				<target>Juli</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.8">
 				<source>August</source>
-                <target>August</target>
+				<target>August</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.9">
 				<source>September</source>
-                <target>September</target>
+				<target>September</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.10">
 				<source>October</source>
-                <target>Oktober</target>
+				<target>Oktober</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.11">
 				<source>November</source>
-                <target>November</target>
+				<target>November</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.12">
 				<source>December</source>
-                <target>Dezember</target>
+				<target>Dezember</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.1">
 				<source>Jan</source>
-                <target>Jan</target>
+				<target>Jan</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.2">
 				<source>Feb</source>
-                <target>Feb</target>
+				<target>Feb</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.3">
 				<source>Mar</source>
-                <target>Mär</target>
+				<target>Mär</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.4">
 				<source>Apr</source>
-                <target>Apr</target>
+				<target>Apr</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.5">
 				<source>May</source>
-                <target>Mai</target>
+				<target>Mai</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.6">
 				<source>Jun</source>
-                <target>Jun</target>
+				<target>Jun</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.7">
 				<source>Jul</source>
-                <target>Jul</target>
+				<target>Jul</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.8">
 				<source>Aug</source>
-                <target>Aug</target>
+				<target>Aug</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.9">
 				<source>Sep</source>
-                <target>Sep</target>
+				<target>Sep</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.10">
 				<source>Oct</source>
-                <target>Okt</target>
+				<target>Okt</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.11">
 				<source>Nov</source>
-                <target>Nov</target>
+				<target>Nov</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.short.12">
 				<source>Dec</source>
-                <target>Dez</target>
+				<target>Dez</target>
 			</trans-unit>
 			<trans-unit id="date.nextMonth">
 				<source>Next month</source>
-                <target>nächster Monat</target>
+				<target>nächster Monat</target>
 			</trans-unit>
 			<trans-unit id="date.prevMonth">
 				<source>Previous month</source>
-                <target>vorheriger Monat</target>
+				<target>vorheriger Monat</target>
+			</trans-unit>
+			<trans-unit id="date.oclock">
+				<source>o'clock</source>
+				<target>Uhr</target>
 			</trans-unit>
 		</body>
 	</file>
