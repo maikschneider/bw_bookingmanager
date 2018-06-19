@@ -245,7 +245,7 @@ class TimeslotManager
         $dateToStartFilling = clone $timeslot->getStartDate();
         $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'), $this->startDate->format('d'));
         $dateToStartFilling->modify('-1 days');
-        $dateToStartFilling->modify('next '.$timeslot->getStartDate()->format('l'));
+        $dateToStartFilling->modify('next '.$timeslot->getStartDate()->format('l H:i:s'));
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
