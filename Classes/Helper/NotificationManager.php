@@ -62,7 +62,7 @@ class NotificationManager
         $to = $this->entry->getEmail();
         $subject = $this->extbaseFrameworkConfiguration['settings']['mail']['subject'];
         $template = $this->extbaseFrameworkConfiguration['settings']['mail']['template'];
-        $body = $this->getMailBody('Email/' . $template);
+        $body = $this->getMailBody($template);
 
         $this->sendMail($from, $to, $subject, $body);
     }
