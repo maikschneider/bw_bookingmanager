@@ -127,7 +127,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
                 break;
             case 2:
                 // @todo get $dayCount from flexform setting
-                $days = 30;
+                $days = 70;
                 $timeslots = $this->timeslotRepository->findInDays($calendar, $startDate, $days);
                 $calendarConfiguration->setTimeslots($timeslots);
                 $configuration = $calendarConfiguration->getConfigurationForDays($days);
