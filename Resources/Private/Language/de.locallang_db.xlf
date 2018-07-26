@@ -65,7 +65,7 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
-				<target>Maximale Anzahl an Terminen</target>
+				<target>Maximales Gewicht</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries">
 				<source>Entries</source>
@@ -139,6 +139,14 @@
 				<source>Newsletter</source>
 				<target>Newsletter</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.confirmed">
+				<source>Confirmed</source>
+				<target>Bestätigt</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.confirmed.yes">
+				<source>yes</source>
+				<target>ja</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1">
 				<source>Special 1</source>
 				<target>Special 1</target>
@@ -149,7 +157,7 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
 				<source>Weight</source>
-				<target>Anzahl an Terminen</target>
+				<target>Gewicht</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
 				<source>Timeslot</source>

@@ -105,6 +105,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter">
 				<source>Newsletter</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.confirmed">
+				<source>Confirmed</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.confirmed.yes">
+				<source>yes</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1">
 				<source>Special 1</source>
 			</trans-unit>

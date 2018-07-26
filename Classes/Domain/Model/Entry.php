@@ -97,6 +97,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $newsletter = false;
 
     /**
+     * confirmed
+     *
+     * @var bool
+     */
+    protected $confirmed = false;
+
+    /**
      * special1
      *
      * @var bool
@@ -411,6 +418,37 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function isNewsletter()
     {
         return $this->newsletter;
+    }
+
+    /**
+     * Returns the confirmed
+     *
+     * @return bool $confirmed
+     */
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * Sets the confirmed
+     *
+     * @param bool $confirmed
+     * @return void
+     */
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+    }
+
+    /**
+     * Returns the boolean state of confirmed
+     *
+     * @return bool
+     */
+    public function isConfirmed()
+    {
+        return $this->confirmed;
     }
 
     /**

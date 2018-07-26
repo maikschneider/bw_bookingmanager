@@ -109,7 +109,7 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
 				<source>Weight</source>
-                <target>Anzahl an Terminen</target>
+                <target>Gewicht</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
 				<source>Timeslot</source>
@@ -130,6 +130,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
 				<source>Reason</source>
                 <target>Grund</target>
+			</trans-unit>
+			<trans-unit id="administration.filter.confirmation">
+				<source>Confirmation</source>
+				<target>Bestätigungen</target>
+			</trans-unit>
+			<trans-unit id="administration.filter.showConfirmed">
+				<source>Show confirmed entries</source>
+				<target>Zeige bestätigte Buchungen an</target>
+			</trans-unit>
+			<trans-unit id="administration.filter.showUnconfirmed">
+				<source>Show not confirmed entries</source>
+				<target>Zeige nicht bestätigte Buchungen an</target>
 			</trans-unit>
 		</body>
 	</file>
