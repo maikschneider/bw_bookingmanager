@@ -153,6 +153,15 @@
             <trans-unit id="administration.filter.sortField.weight">
                 <source>Weight</source>
             </trans-unit>
+            <trans-unit id="administration.filter.confirmation">
+				<source>Confirmation</source>
+			</trans-unit>
+			<trans-unit id="administration.filter.showConfirmed">
+				<source>Show confirmed entries</source>
+			</trans-unit>
+			<trans-unit id="administration.filter.showUnconfirmed">
+				<source>Show not confirmed entries</source>
+			</trans-unit>
             <trans-unit id="administration.filter.submit">
                 <source>Refresh</source>
             </trans-unit>

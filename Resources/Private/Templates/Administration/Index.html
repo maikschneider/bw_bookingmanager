@@ -144,6 +144,31 @@
                                 </div>
                             </div>
                         </div>
+												<div class="row form-horizontal">
+													<div class="col-xs-6">
+														<div class="form-group">
+															<label class="col-xs-4 control-label">
+																<f:translate
+																	key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.confirmation"
+																/>
+															</label>
+
+															<div class="col-xs-8 form-check">
+																<f:form.checkbox class="form-check-input" property="showConfirmed" value="1" id="showConfirmed"/>
+																<label for="showConfirmed" class="form-check-label">
+																	<f:translate
+																		key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.showConfirmed"/>
+																</label><br />
+
+																<f:form.checkbox class="form-check-input" property="showUnconfirmed" value="1" id="showUnconfirmed"/>
+																<label for="showUnconfirmed" class="form-check-label">
+																	<f:translate
+																		key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.showUnconfirmed"/>
+																</label>
+															</div>
+														</div>
+													</div>
+												</div>
                         <div class="row form-horizontal">
                             <div class="col-xs-9 col-xs-offset-2">
                                 <f:form.button class="btn btn-primary" type="submit">
@@ -156,8 +181,8 @@
             </div>
 
             {namespace bw=Blueways\BwBookingmanager\ViewHelpers}
-            <bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'name', 1: 'prename', 2: 'email', 3: 'phone', 4: 'weight', 5: '_CONTROL_'}"
-                recordsPerPage="100" sortField="start_date" enableClickMenu="false" noControlPanels="false" clickTitleMode="info"
+            <bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'confirmed', 1: 'name', 2: 'prename', 3: 'email', 4: 'phone', 5: 'weight', 6: '_CONTROL_'}"
+                recordsPerPage="100" sortField="start_date" enableClickMenu="false" noControlPanels="false" clickTitleMode="edit"
             />
         </f:else>
     </f:if>

@@ -57,6 +57,48 @@ class AdministrationDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntit
      */
     protected $calendarUid = 0;
 
+    /**
+     * @var int
+     */
+    protected $showConfirmed = 1;
+
+    /**
+     * @var int
+     */
+    protected $showUnconfirmed = 1;
+
+    /**
+     * @return int
+     */
+    public function getShowConfirmed()
+    {
+        return $this->showConfirmed;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShowUnconfirmed()
+    {
+        return $this->showUnconfirmed;
+    }
+
+    /**
+     * @param int $showUnconfirmed
+     */
+    public function setShowUnconfirmed($showUnconfirmed)
+    {
+        $this->showUnconfirmed = $showUnconfirmed;
+    }
+
+    /**
+     * @param int $showConfirmed
+     */
+    public function setShowConfirmed($showConfirmed)
+    {
+        $this->showConfirmed = $showConfirmed;
+    }
+
     public function __construct()
     {
         $now = new \DateTime('now');

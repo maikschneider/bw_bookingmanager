@@ -61,6 +61,18 @@ class RecordListConstraint
             }
         }
 
+        // confirmation
+        $showConfirmed = (int)$arguments['showConfirmed'];
+        if (!$showConfirmed) {
+            $parameters['where'][] = 'confirmed=0';
+        }
+        $showUnconfirmed = (int)$arguments['showUnconfirmed'];
+        if (!$showUnconfirmed) {
+            $parameters['where'][] = 'confirmed=1';
+        }
+
+
+
         // calendar
         if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !==0) {
             $parameters['where'][] = "calendar=" .$arguments['calendarUid'];
