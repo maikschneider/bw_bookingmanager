@@ -131,18 +131,6 @@
 				<source>Reason</source>
                 <target>Grund</target>
 			</trans-unit>
-			<trans-unit id="administration.filter.confirmation">
-				<source>Confirmation</source>
-				<target>Bestätigungen</target>
-			</trans-unit>
-			<trans-unit id="administration.filter.showConfirmed">
-				<source>Show confirmed entries</source>
-				<target>Zeige bestätigte Buchungen an</target>
-			</trans-unit>
-			<trans-unit id="administration.filter.showUnconfirmed">
-				<source>Show not confirmed entries</source>
-				<target>Zeige nicht bestätigte Buchungen an</target>
-			</trans-unit>
 		</body>
 	</file>
 </xliff>
