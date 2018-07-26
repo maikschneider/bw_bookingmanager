@@ -63,11 +63,11 @@ class RecordListConstraint
 
         // confirmation
         $showConfirmed = (int)$arguments['showConfirmed'];
-        if (!$showConfirmed) {
+        if (isset($arguments['showConfirmed']) && $showConfirmed === 0) {
             $parameters['where'][] = 'confirmed=0';
         }
         $showUnconfirmed = (int)$arguments['showUnconfirmed'];
-        if (!$showUnconfirmed) {
+        if (isset($arguments['showUnconfirmed']) && $showUnconfirmed === 0) {
             $parameters['where'][] = 'confirmed=1';
         }
 
