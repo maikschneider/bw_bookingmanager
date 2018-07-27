@@ -119,8 +119,11 @@ BOOKINGMANAGER.AJAX = {
 
   loadThirdLink: function () {
     // load the third link (1,2 are month navigation)
+    // if there is no third link (e.g. whole month is booked out) the second
+    // link is clicked (= next month) to switch to load next month view and start all over
     var firstLink = this.ajaxLinks[2] || false;
     if (firstLink) this.onAjaxLinkClick(firstLink);
+    else this.onAjaxLinkClick(this.ajaxLinks[1]);
 
     BOOKINGMANAGER.LOAD_THIRD_LINK = false;
   },
