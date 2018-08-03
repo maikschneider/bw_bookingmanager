@@ -111,6 +111,9 @@
             <trans-unit id="administration.entryListing.table.weight">
                 <source>Weight</source>
             </trans-unit>
+            <trans-unit id="administration.filter.buttonTitle">
+				<source>Show/hide filter</source>
+			</trans-unit>
             <trans-unit id="administration.filter.calendar">
                 <source>Calendar</source>
             </trans-unit>

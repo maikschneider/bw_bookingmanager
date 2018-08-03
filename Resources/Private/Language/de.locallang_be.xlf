@@ -147,6 +147,10 @@
                 <source>Weight</source>
                 <target>Gewicht</target>
             </trans-unit>
+            <trans-unit id="administration.filter.buttonTitle">
+            	<source>Filter anzeigen/verstecken</source>
+				<source>Show/hide filter</source>
+			</trans-unit>
             <trans-unit id="administration.filter.calendar">
                 <source>Calendar</source>
                 <target>Kalender</target>

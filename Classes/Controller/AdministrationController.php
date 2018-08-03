@@ -15,12 +15,14 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Lang\LanguageService;
@@ -135,6 +137,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $uriBuilder = $this->objectManager->get(UriBuilder::class);
         $uriBuilder->setRequest($this->request);
 
+        // Filter Button
         if ($this->request->getControllerActionName() === 'index') {
             $toggleButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
@@ -143,9 +146,38 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
                     'toggle' => 'tooltip',
                     'placement' => 'bottom',
                 ])
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:administration.toggleForm'))
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.buttonTitle'))
                 ->setIcon($this->iconFactory->getIcon('actions-filter', Icon::SIZE_SMALL));
             $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+        }
+
+        // New Entry Button
+        $buttons = [
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_entry',
+                'label' => 'flexforms_general.mode.entry_new',
+                'action' => 'newEntry',
+                'icon' => 'ext-bwbookingmanager-type-entry'
+            ]
+        ];
+        foreach ($buttons as $key => $tableConfiguration) {
+            if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList($this->getBackendUser()->groupData['tables_modify'],
+                    $tableConfiguration['table'])
+            ) {
+                $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+                $viewButton = $buttonBar->makeLinkButton()
+                    ->setHref($uriBuilder->reset()->setRequest($this->request)->uriFor($tableConfiguration['action'],
+                        [], 'Administration'))
+                    ->setDataAttributes([
+                        'toggle' => 'tooltip',
+                        'placement' => 'bottom',
+                        'title' => $title
+                    ])
+                    ->setTitle($title)
+                    ->setIcon($this->iconFactory->getIcon($tableConfiguration['icon'], Icon::SIZE_SMALL,
+                        'overlay-new'));
+                $buttonBar->addButton($viewButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
+            }
         }
 
         // Refresh
@@ -233,5 +265,46 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     protected function getLanguageService()
     {
         return $GLOBALS['LANG'];
+    }
+
+    /**
+     * Get backend user
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * Redirect to tceform creating a new record
+     *
+     * @param string $table table name
+     */
+    private function redirectToCreateNewRecord($table)
+    {
+        $pid = $this->pageUid;
+        if ($pid === 0 && isset($this->tsConfiguration['defaultPid.'])
+            && is_array($this->tsConfiguration['defaultPid.'])
+            && isset($this->tsConfiguration['defaultPid.'][$table])
+        ) {
+            $pid = (int)$this->tsConfiguration['defaultPid.'][$table];
+        }
+
+        $returnUrl = 'index.php?M=web_NewsTxNewsM2&id=' . $this->pageUid . $this->getToken();
+        $url = BackendUtilityCore::getModuleUrl('record_edit', [
+            'edit[' . $table . '][' . $pid . ']' => 'new',
+            'returnUrl' => $returnUrl
+        ]);
+        HttpUtility::redirect($url);
+    }
+
+    /**
+     * Redirect to form to create a category record
+     */
+    public function newEntryAction()
+    {
+        $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_entry');
     }
 }
