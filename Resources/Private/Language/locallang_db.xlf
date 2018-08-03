@@ -75,6 +75,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.record_type.1">
 				<source>Default</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.hidden">
+				<source>Deactivated</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date">
 				<source>Start Date</source>
 			</trans-unit>

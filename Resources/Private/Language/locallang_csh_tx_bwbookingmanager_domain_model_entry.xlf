@@ -3,6 +3,9 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
+			<trans-unit id="hidden.description">
+				<source>hidden</source>
+			</trans-unit>
 			<trans-unit id="start_date.description">
 				<source>startDate</source>
 			</trans-unit>

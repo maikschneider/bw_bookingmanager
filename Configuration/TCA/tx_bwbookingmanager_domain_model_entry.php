@@ -31,7 +31,7 @@ return [
      'palettes' => [
         'topPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.topPalette',
-            'showitem' => 'confirmed, --linebreak--, record_type, sys_language_uid, l10n_parent, l10n_diffsource, token, hidden,'
+            'showitem' => 'confirmed, record_type, sys_language_uid, l10n_parent, l10n_diffsource, token, hidden,'
         ],
         'generalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general',
@@ -95,12 +95,12 @@ return [
         ],
         'hidden' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.hidden',
             'config' => [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.confirmed.yes',
                     ],
                 ],
             ],

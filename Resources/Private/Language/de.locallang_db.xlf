@@ -99,6 +99,10 @@
 				<source>Default</source>
 				<target>Standard</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.hidden">
+				<source>Deactivated</source>
+				<target>Deaktiviert</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date">
 				<source>Start Date</source>
 				<target>Start Datum</target>
