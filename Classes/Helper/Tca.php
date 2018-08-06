@@ -18,6 +18,8 @@ class Tca
             $newTitle .= $startDate->format('l') . ', ';
             $newTitle .= $startDate->format('H:i') . ' - ';
             $newTitle .= $endDate->format('H:i');
+            $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
+            $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
             break;
 
         case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY:
@@ -66,4 +68,5 @@ class Tca
         $params['title'] = $newTitle;
         return $params;
     }
+
 }
