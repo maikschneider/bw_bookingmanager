@@ -265,6 +265,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
+                'foreign_table_where' => ' AND tx_bwbookingmanager_domain_model_timeslot.pid=###CURRENT_PID###',
                 'minitems' => 0,
                 'maxitems' => 1,
             ],
