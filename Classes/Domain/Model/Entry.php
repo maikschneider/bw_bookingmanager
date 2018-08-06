@@ -45,7 +45,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * prename
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
+     * @validate NotEmpty, StringLengthValidator(minimum=2, maximum=50)
      */
     protected $prename = '';
 
