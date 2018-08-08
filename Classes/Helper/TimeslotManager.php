@@ -143,7 +143,7 @@ class TimeslotManager
                 // this is not valid   [ slot |] blocked [| slot ]
                 foreach ($this->filterCritera['notIn'] as $range) {
                     if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
-                        return true;
+                        continue;
                     }
                     return false;
                 }
