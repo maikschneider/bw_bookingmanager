@@ -1,0 +1,105 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers">
+
+
+<f:section name="Main">
+	<link rel="stylesheet" href="{css}" type="text/css" />
+
+
+
+		<div class="row">
+			<div class="col-xs-4">
+				<ul class="list-group">
+					<f:for each="{calendars}" as="c" iteration="i">
+						<li class="list-group-item {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}">{c.calendar.name}</li>
+					</f:for>
+				</ul>
+			</div>
+			<div class="col-xs-8">
+				<f:for each="{calendars}" as="c" iteration="i">
+
+					<div class="calendar-{c.calendar.uid} calendar-view calendar-view--month">
+
+						<div class="bw_bookingmanager__calendarMonth__header">
+							<div class="grid-x small-up-7">
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.1"/>
+								</div>
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.2"/>
+								</div>
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.3"/>
+								</div>
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.4"/>
+								</div>
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.5"/>
+								</div>
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.6"/>
+								</div>
+								<div class="cell text-center">
+									<f:translate
+										key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.0"/>
+								</div>
+							</div>
+						</div>
+
+						<div class="bw_bookingmanager__calendarMonth__body grid-y">
+							<f:for each="{c.monthView.weeks}" as="week">
+								<div class="grid-x small-up-7 cell auto bw_bookingmanager__week">
+									<f:for each="{week}" as="day">
+
+										<f:for each="{day.timeslots}" as="timeslot">
+											<f:if condition="{timeslot.isBookable}">
+												<f:then>
+													<f:link.action controller="Entry"
+																				 pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid, else:page)}"
+																				 pageType="{f:if(condition:settings.ajax.enable, then:settings.ajax.typeNum, else:0)}"
+																				 class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link bw_bookingmanager__ajaxLink {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')}"
+																				 data="{ajax-container:'bw_bookingmanager__newEntry'}" action="new"
+																				 arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
+														{f:format.date(date:day.date, format:'j')}
+													</f:link.action>
+												</f:then>
+												<f:else>
+													<div
+														class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {f:if(condition:day.isInPast, then:'bw_bookingmanager__day--isInPast')}">
+														{f:format.date(date:day.date, format:'j')}
+													</div>
+												</f:else>
+											</f:if>
+										</f:for>
+
+										<f:if condition="{day.timeslots->f:count()}==0">
+											<div
+												class="cell grid-x align-middle align-center bw_bookingmanager__day {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {f:if(condition:day.isNotInMonth, then:'bw_bookingmanager__day--notInMonth')} {f:if(condition:day.isInPast, then:'bw_bookingmanager__day--isInPast')}">
+												{f:format.date(date:day.date, format:'j')}
+											</div>
+										</f:if>
+
+									</f:for>
+								</div>
+							</f:for>
+						</div>
+
+					</div>
+
+					<div class="calendar-{c.calendar.uid} calendar-view calendar-view--list">
+
+					</div>
+
+				</f:for>
+			</div>
+		</div>
+</f:section>
+
+</html>

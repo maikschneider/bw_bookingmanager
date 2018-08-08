@@ -17,4 +17,10 @@ namespace Blueways\BwBookingmanager\Domain\Repository;
  */
 class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    public function findAllIgnorePid()
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        return $query->execute();
+    }
 }

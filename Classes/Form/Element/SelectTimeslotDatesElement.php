@@ -103,19 +103,25 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $row = $this->data['databaseRow'];
 
         $startDate = null;
-        if($row['start_date']) {
+        if($row['start_date'] && $row['start_date'] !== '0000-00-00 00:00:00') {
             $startDate = new \DateTime($row['start_date']);
+            $startDate = $startDate->getTimestamp();
         }
         $endDate = null;
-        if ($row['start_date']) {
+        if ($row['end_date'] && $row['end_date'] !== '0000-00-00 00:00:00') {
             $endDate = new \DateTime($row['end_date']);
+            $endDate = $endDate->getTimestamp();
         }
+
+        $now = new \DateTime('now');
+        $now = $now->getTimestamp();
 
         $savedData = [
             'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'][0] : null,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'now' => $now
         ];
 
         return $savedData;
