@@ -114,7 +114,10 @@ BOOKINGMANAGER.AJAX = {
   afterAjaxCall: function () {
     if (BOOKINGMANAGER.LOAD_THIRD_LINK) this.init();
     if (BOOKINGMANAGER.LOAD_FIRST_LINK) this.init();
-    if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) BOOKINGMANAGER.TIMESELECT.init();
+    if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) {
+      this.init();
+      BOOKINGMANAGER.TIMESELECT.init();
+    }
   },
 
   loadThirdLink: function () {

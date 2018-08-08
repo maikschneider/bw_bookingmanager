@@ -1,0 +1,30 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers">
+<f:layout name="Administration/Default"/>
+
+<f:section name="Main">
+	<f:debug>{_all}</f:debug>
+
+	<f:if condition="{savedData.startDate} && {savedData.endDate}">
+		<f:then>
+			{f:format.date(date:savedData.startDate, format:'d.m.Y H:i')} - {f:format.date(date:savedData.endDate,
+			format:'d.m.Y H:i')}
+		</f:then>
+		<f:else>
+			No time selected
+		</f:else>
+	</f:if>
+
+
+		<button class="btn btn-default t3js-timeslotdatesselect-trigger"
+						data-url="{wizardUri}"
+						data-severity="notice"
+						data-modal-title="Select date"
+						data-current-calendar="{savedData.calendar}"
+						data-current-timeslot="{savedData.timeslot}">
+			<span class="t3-icon fa fa-calendar"></span>
+			Select time
+		</button>
+
+</f:section>
+</html>

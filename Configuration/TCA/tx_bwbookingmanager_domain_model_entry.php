@@ -35,7 +35,7 @@ return [
         ],
         'generalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general',
-            'showitem' => 'calendar, timeslot, start_date, end_date'
+            'showitem' => 'calendar, timeslot_dates_select, timeslot, start_date, end_date'
         ],
         'contactDataPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData',
@@ -281,5 +281,12 @@ return [
                 'maxitems' => 1,
             ],
         ],
+        'timeslot_dates_select' => [
+            'label' => 'Select Date',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'selectTimeslotDates'
+            ]
+        ]
     ],
 ];

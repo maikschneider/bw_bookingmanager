@@ -53,5 +53,12 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = array(
             'className' => 'Blueways\\BwBookingmanager\\Xclass\\Extbase\\Mvc\\Controller\\Argument',
         );
+
+        // register custom TCA node field
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1533721566] = [
+            'nodeName' => 'selectTimeslotDates',
+            'priority' => '70',
+            'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslotDatesElement::class,
+        ];
     }
 );
