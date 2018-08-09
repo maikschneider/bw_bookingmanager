@@ -397,4 +397,9 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
         return true;
     }
+
+    public function getStartEndTimestamp()
+    {
+        return $this->getStartDate()->getTimestamp() . '' . $this->getEndDate()->getTimestamp();
+    }
 }

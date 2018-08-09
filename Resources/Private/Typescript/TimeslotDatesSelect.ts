@@ -27,6 +27,10 @@ class TimeslotDatesSelect {
   private sidebarLinks: JQuery;
   private viewButtonSwitch: JQuery;
 
+  private calendarDataLinks: JQuery;
+  private savedLink: JQuery;
+  private newDataLink: JQuery;
+
 
   /**
    * @method init
@@ -43,6 +47,47 @@ class TimeslotDatesSelect {
   {
     this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
     this.viewButtonSwitch.on('click', this.onViewButtonClick.bind(this));
+    this.calendarDataLinks.on('click', this.onDataLinkClick.bind(this));
+    if(this.savedLink) this.savedLink.on('click', this.onSavedLinkClick.bind(this));
+  }
+
+  /**
+   * Click on the blue button (preselected date)
+   * @param {JQueryEventObject} e
+   */
+  private onSavedLinkClick(e: JQueryEventObject)
+  {
+    e.preventDefault();
+    // reset day selection
+    if(this.newDataLink){
+      this.newDataLink = null;
+      this.calendarDataLinks.removeClass('active');
+      $(e.currentTarget).removeClass('old');
+    }
+  }
+
+  private onDataLinkClick(e: JQueryEventObject)
+  {
+    e.preventDefault();
+    const link = $(e.currentTarget);
+
+    // abbort if clicked again
+    if(link.hasClass('active')){
+
+      this.newDataLink = null;
+      this.calendarDataLinks.removeClass('active');
+      if (this.savedLink) this.savedLink.removeClass('old');
+
+    }
+    // new data link gets selected
+    else {
+
+      this.newDataLink = link;
+      this.calendarDataLinks.removeClass('active');
+      link.addClass('active');
+      if (this.savedLink) this.savedLink.addClass('old');
+
+    }
   }
 
   private onViewButtonClick(e: JQueryEventObject)
@@ -66,10 +111,14 @@ class TimeslotDatesSelect {
 
   private cacheDom()
   {
+    this.newDataLink = null;
     this.calendarTabs = this.currentModal.find('.calendar-tab');
     this.calendarViews = this.currentModal.find('.calendar-view');
     this.sidebarLinks = this.currentModal.find('a.list-group-item');
     this.viewButtonSwitch = this.currentModal.find('.btn[name="view"]');
+    this.calendarDataLinks = this.currentModal.find('.calendar-data-link');
+    this.savedLink = this.currentModal.find('.bw_bookingmanager__day--isSelectedDay');
+    if(!this.savedLink.length) this.savedLink = null;
   }
 
   private show()
