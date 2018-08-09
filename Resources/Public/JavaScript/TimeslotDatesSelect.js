@@ -14,9 +14,31 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
          * @private
          */
         TimeslotDatesSelect.prototype.init = function () {
+            this.cacheDom();
+            this.bindEvents();
         };
-        TimeslotDatesSelect.prototype.init = function () {
-            console.log('ready');
+        TimeslotDatesSelect.prototype.bindEvents = function () {
+            this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
+            this.viewButtonSwitch.on('click', this.onViewButtonClick.bind(this));
+        };
+        TimeslotDatesSelect.prototype.onViewButtonClick = function (e) {
+            e.preventDefault();
+            this.calendarViews.toggleClass('active');
+            $(e.currentTarget).toggleClass('active');
+        };
+        TimeslotDatesSelect.prototype.onSidebarLinkClick = function (e) {
+            e.preventDefault();
+            this.sidebarLinks.removeClass('active');
+            e.currentTarget.classList.add('active');
+            this.calendarTabs.removeClass('active');
+            var tabId = e.currentTarget.getAttribute('href');
+            this.calendarTabs.filter(tabId).addClass('active');
+        };
+        TimeslotDatesSelect.prototype.cacheDom = function () {
+            this.calendarTabs = this.currentModal.find('.calendar-tab');
+            this.calendarViews = this.currentModal.find('.calendar-view');
+            this.sidebarLinks = this.currentModal.find('a.list-group-item');
+            this.viewButtonSwitch = this.currentModal.find('.btn[name="view"]');
         };
         TimeslotDatesSelect.prototype.show = function () {
             var wizardUri = this.trigger.data('wizard-uri');
@@ -31,7 +53,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                 size: Modal.sizes.default,
                 title: modalTitle,
                 style: Modal.styles.light,
-                ajaxCallback: this.init,
+                ajaxCallback: this.init.bind(this),
                 buttons: [
                     {
                         text: modalViewButtonText,

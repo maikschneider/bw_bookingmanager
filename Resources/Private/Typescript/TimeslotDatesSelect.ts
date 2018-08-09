@@ -22,6 +22,10 @@ class TimeslotDatesSelect {
 
   private trigger: JQuery;
   private currentModal: JQuery;
+  private calendarTabs: JQuery;
+  private calendarViews: JQuery;
+  private sidebarLinks: JQuery;
+  private viewButtonSwitch: JQuery;
 
 
   /**
@@ -31,12 +35,41 @@ class TimeslotDatesSelect {
    */
   private init(): void
   {
-
+    this.cacheDom();
+    this.bindEvents();
   }
 
-  private init()
+  private bindEvents()
   {
-    console.log('ready');
+    this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
+    this.viewButtonSwitch.on('click', this.onViewButtonClick.bind(this));
+  }
+
+  private onViewButtonClick(e: JQueryEventObject)
+  {
+    e.preventDefault();
+    this.calendarViews.toggleClass('active');
+    $(e.currentTarget).toggleClass('active');
+  }
+
+  private onSidebarLinkClick(e: JQueryEventObject)
+  {
+    e.preventDefault();
+
+    this.sidebarLinks.removeClass('active');
+    e.currentTarget.classList.add('active');
+
+    this.calendarTabs.removeClass('active');
+    const tabId = e.currentTarget.getAttribute('href');
+    this.calendarTabs.filter(tabId).addClass('active');
+  }
+
+  private cacheDom()
+  {
+    this.calendarTabs = this.currentModal.find('.calendar-tab');
+    this.calendarViews = this.currentModal.find('.calendar-view');
+    this.sidebarLinks = this.currentModal.find('a.list-group-item');
+    this.viewButtonSwitch = this.currentModal.find('.btn[name="view"]');
   }
 
   private show()
@@ -54,7 +87,7 @@ class TimeslotDatesSelect {
       size: Modal.sizes.default,
       title: modalTitle,
       style: Modal.styles.light,
-      ajaxCallback: this.init,
+      ajaxCallback: this.init.bind(this),
       buttons: [
         {
           text: modalViewButtonText,
