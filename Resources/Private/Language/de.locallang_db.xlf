@@ -95,6 +95,18 @@
 				<source>Type</source>
 				<target>Typ</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.date">
+				<source>Date</source>
+				<target>Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.date.select">
+				<source>Select date</source>
+				<target>Datum wählen</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.date.none">
+				<source>No date selected</source>
+				<target>Kein Datum gesetzt</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.record_type.1">
 				<source>Default</source>
 				<target>Standard</target>

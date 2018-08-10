@@ -282,7 +282,7 @@ return [
             ],
         ],
         'timeslot_dates_select' => [
-            'label' => 'Select Date',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.date',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'selectTimeslotDates'

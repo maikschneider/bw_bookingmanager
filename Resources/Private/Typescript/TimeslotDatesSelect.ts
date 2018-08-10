@@ -25,7 +25,13 @@ class TimeslotDatesSelect {
   private calendarTabs: JQuery;
   private calendarViews: JQuery;
   private sidebarLinks: JQuery;
-  private viewButtonSwitch: JQuery;
+  private calendarSelectField: JQuery;
+  private hiddenStartDateField: JQuery;
+  private hiddenEndDateField: JQuery;
+  private hiddenTimeslotField: JQuery;
+  private startDateText: JQuery;
+  private endDateText: JQuery;
+
 
   private calendarDataLinks: JQuery;
   private savedLink: JQuery;
@@ -46,7 +52,6 @@ class TimeslotDatesSelect {
   private bindEvents()
   {
     this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
-    this.viewButtonSwitch.on('click', this.onViewButtonClick.bind(this));
     this.calendarDataLinks.on('click', this.onDataLinkClick.bind(this));
     if(this.savedLink) this.savedLink.on('click', this.onSavedLinkClick.bind(this));
   }
@@ -115,7 +120,6 @@ class TimeslotDatesSelect {
     this.calendarTabs = this.currentModal.find('.calendar-tab');
     this.calendarViews = this.currentModal.find('.calendar-view');
     this.sidebarLinks = this.currentModal.find('a.list-group-item');
-    this.viewButtonSwitch = this.currentModal.find('.btn[name="view"]');
     this.calendarDataLinks = this.currentModal.find('.calendar-data-link');
     this.savedLink = this.currentModal.find('.bw_bookingmanager__day--isSelectedDay');
     if(!this.savedLink.length) this.savedLink = null;
@@ -128,12 +132,19 @@ class TimeslotDatesSelect {
     const modalSaveButtonText = this.trigger.data('modal-save-button-text');
     const modalViewButtonText = this.trigger.data('modal-view-button-text');
     const modalCancelButtonText = this.trigger.data('modal-cancel-button-text');
-    const calendarUid = $('select[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[calendar]"] option:selected').val();
+
+    this.calendarSelectField = $('select[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[calendar]"]');
+    this.hiddenStartDateField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[start_date]"]');
+    this.hiddenEndDateField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[end_date]"]');
+    this.hiddenTimeslotField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[timeslot]"]');
+
+    this.startDateText = $('#savedStartDate');
+    this.endDateText = $('#savedEndDate');
 
     this.currentModal = Modal.advanced({
       type: 'ajax',
       content: wizardUri,
-      size: Modal.sizes.default,
+      size: Modal.sizes.large,
       title: modalTitle,
       style: Modal.styles.light,
       ajaxCallback: this.init.bind(this),
@@ -143,9 +154,7 @@ class TimeslotDatesSelect {
           name: 'view',
           icon: 'actions-system-list-open',
           btnClass: 'btn-default btn-left',
-          trigger: function () {
-
-          }
+          trigger: this.onViewButtonClick.bind(this)
         },
         {
           text: modalCancelButtonText,
@@ -168,12 +177,25 @@ class TimeslotDatesSelect {
           dataAttributes: {
             action: 'save'
           },
-          trigger: function () {
-            Modal.currentModal.trigger('modal-dismiss');
-          }
+          trigger: this.save.bind(this)
         }
       ]
     });
+    //this.currentModal.addClass('JFJWFJEJFEFHIWEFHWOIFHWEIFOHEWOIFHWIFHWE');
+  }
+
+  private save()
+  {
+    if(this.newDataLink){
+      this.calendarSelectField.val(this.newDataLink.data('calendar'));
+      this.hiddenStartDateField.val(this.newDataLink.data('start-date'));
+      this.hiddenEndDateField.val(this.newDataLink.data('end-date'));
+      this.hiddenTimeslotField.val(this.newDataLink.data('timeslot'));
+
+      this.startDateText.html(this.newDataLink.data('start-date-text'));
+      this.endDateText.html(this.newDataLink.data('end-date-text'));
+    }
+    Modal.currentModal.trigger('modal-dismiss');
   }
 
   public initializeTrigger(): void {
