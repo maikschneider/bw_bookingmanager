@@ -35,7 +35,7 @@ return [
         ],
         'generalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general',
-            'showitem' => 'calendar, timeslot_dates_select, timeslot, start_date, end_date'
+            'showitem' => 'calendar, timeslot_dates_select, --linebreak--, timeslot, start_date, end_date'
         ],
         'contactDataPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData',
@@ -118,7 +118,7 @@ return [
             'config' => [
                 'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
+                'renderType' => 'hidden',
                 'eval' => 'datetime',
                 'default' => '0000-00-00 00:00:00',
             ],
@@ -129,7 +129,7 @@ return [
             'config' => [
                 'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
+                'renderType' => 'hidden',
                 'eval' => 'datetime',
                 'default' => '0000-00-00 00:00:00',
             ],
@@ -262,8 +262,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.timeslot',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
+                'type' => 'input',
+                'renderType' => 'hidden',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
                 'foreign_table_where' => ' AND tx_bwbookingmanager_domain_model_timeslot.pid=###CURRENT_PID###',
                 'minitems' => 0,

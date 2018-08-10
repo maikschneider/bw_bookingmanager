@@ -118,7 +118,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
 
         $savedData = [
             'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
-            'timeslot' => !empty($row['timeslot']) ? $row['timeslot'][0] : null,
+            'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'now' => $now
