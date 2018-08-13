@@ -44,7 +44,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             var link = $(e.currentTarget).data('day-detail');
             this.dayDetailDivs.filter('#' + link).addClass('active');
         };
-        TimeslotDatesSelect.prototype.onDayDetailLinkMouseleave = function (e) {
+        TimeslotDatesSelect.prototype.onDayDetailLinkMouseleave = function () {
             this.dayDetailDivs.removeClass('active');
             var selectedDiv = this.dayDetailDivs.filter('.daydetail--selected');
             var blueDiv = this.dayDetailDivs.filter('.daydetail--blue');
@@ -82,6 +82,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                 daylink.removeClass('active');
                 this.newDataLink = null;
                 this.calendarDataLinks.removeClass('active');
+                this.calendarDataLinks.filter('.saved-active').addClass('active');
+                this.onDayDetailLinkMouseleave();
                 if (this.savedLink)
                     this.savedLink.removeClass('old');
             }

@@ -84,7 +84,7 @@ class TimeslotDatesSelect {
     this.dayDetailDivs.filter('#'+link).addClass('active');
   }
 
-  private onDayDetailLinkMouseleave(e: JQueryEventObject) {
+  private onDayDetailLinkMouseleave() {
       this.dayDetailDivs.removeClass('active');
       const selectedDiv = this.dayDetailDivs.filter('.daydetail--selected');
       const blueDiv = this.dayDetailDivs.filter('.daydetail--blue');
@@ -137,8 +137,10 @@ class TimeslotDatesSelect {
 		daylink.removeClass('active');
       this.newDataLink = null;
       this.calendarDataLinks.removeClass('active');
+      this.calendarDataLinks.filter('.saved-active').addClass('active');
+      this.onDayDetailLinkMouseleave();
       if (this.savedLink) this.savedLink.removeClass('old');
-      
+
     }
     // new data link gets selected
     else {
