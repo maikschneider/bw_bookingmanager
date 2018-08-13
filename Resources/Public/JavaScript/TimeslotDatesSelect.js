@@ -20,6 +20,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
         TimeslotDatesSelect.prototype.bindEvents = function () {
             this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
             this.calendarDataLinks.on('click', this.onDataLinkClick.bind(this));
+            this.dayDetailLinks.on('click', this.onDayDetailLinkClick.bind(this));
             this.dayDetailLinks.on('mouseenter', this.onDayDetailLinkMouseenter.bind(this));
             this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
             if (this.savedLink)
@@ -54,12 +55,42 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                 $(blueDiv).addClass('active');
             }
         };
+        TimeslotDatesSelect.prototype.onDayDetailLinkClick = function (e) {
+            e.preventDefault();
+            var daylink = $(e.currentTarget);
+            this.dayDetailDivs.removeClass('daydetail--selected');
+            // reset if clicked again
+            if (daylink.hasClass('active')) {
+                daylink.removeClass('active');
+                this.newDataLink = null;
+                this.calendarDataLinks.removeClass('active');
+                if (this.savedLink)
+                    this.savedLink.removeClass('old');
+            }
+            // new day -> new link gets selected
+            else {
+                this.dayDetailLinks.removeClass('active');
+                daylink.addClass('active');
+                var dayDetailDiv = this.dayDetailDivs.filter('#' + daylink.data('day-detail'));
+                // add class to make the day detail view of the new day link active after mouseleave
+                dayDetailDiv.addClass('daydetail--selected');
+                var firstDataLink = dayDetailDiv.find('.calendar-data-link').first();
+                console.log(firstDataLink);
+                this.newDataLink = firstDataLink;
+                this.calendarDataLinks.removeClass('active');
+                firstDataLink.addClass('active');
+                if (this.savedLink)
+                    this.savedLink.addClass('old');
+            }
+        };
         TimeslotDatesSelect.prototype.onDataLinkClick = function (e) {
             e.preventDefault();
             var link = $(e.currentTarget);
             this.dayDetailDivs.removeClass('daydetail--selected');
+            var daylink = this.dayDetailLinks.filter('[data-day-detail="' + link.data('day-link') + '"]');
             // abbort if clicked again
             if (link.hasClass('active')) {
+                daylink.removeClass('active');
                 this.newDataLink = null;
                 this.calendarDataLinks.removeClass('active');
                 if (this.savedLink)
@@ -67,13 +98,14 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             }
             // new data link gets selected
             else {
+                daylink.addClass('active');
                 this.newDataLink = link;
                 this.calendarDataLinks.removeClass('active');
                 link.addClass('active');
                 if (this.savedLink)
                     this.savedLink.addClass('old');
                 // add class to make the day detail view of the new day link active after mouseleave
-                this.dayDetailDivs.filter('#' + link.data('day-detail')).addClass('daydetail--selected');
+                this.dayDetailDivs.filter('#' + link.data('day-link')).addClass('daydetail--selected');
             }
         };
         TimeslotDatesSelect.prototype.onViewButtonClick = function (e) {
@@ -95,6 +127,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             this.calendarViews = this.currentModal.find('.calendar-view');
             this.sidebarLinks = this.currentModal.find('a.list-group-item');
             this.calendarDataLinks = this.currentModal.find('.calendar-data-link');
+            this.multipleTimeslotsLinks = this.currentModal.find('.multiple-timeslots-link');
             this.savedLink = this.currentModal.find('.bw_bookingmanager__day--isSelectedDay');
             this.dayDetailLinks = this.currentModal.find('[data-day-detail]');
             this.dayDetailDivs = this.currentModal.find('.daydetail');
