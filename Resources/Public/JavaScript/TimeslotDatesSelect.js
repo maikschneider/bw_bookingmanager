@@ -58,36 +58,25 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
         TimeslotDatesSelect.prototype.onDayDetailLinkClick = function (e) {
             e.preventDefault();
             var daylink = $(e.currentTarget);
-            this.dayDetailDivs.removeClass('daydetail--selected');
-            // reset if clicked again
+            var dayDetailDiv = this.dayDetailDivs.filter('#' + daylink.data('day-detail'));
+            // reset if clicked again (click active data link again)
             if (daylink.hasClass('active')) {
-                daylink.removeClass('active');
-                this.newDataLink = null;
-                this.calendarDataLinks.removeClass('active');
-                if (this.savedLink)
-                    this.savedLink.removeClass('old');
+                var activeDataLink = dayDetailDiv.find('.calendar-data-link.active');
+                activeDataLink.trigger('click');
             }
-            // new day -> new link gets selected
+            // new day -> click data link
             else {
-                this.dayDetailLinks.removeClass('active');
-                daylink.addClass('active');
-                var dayDetailDiv = this.dayDetailDivs.filter('#' + daylink.data('day-detail'));
-                // add class to make the day detail view of the new day link active after mouseleave
-                dayDetailDiv.addClass('daydetail--selected');
                 var firstDataLink = dayDetailDiv.find('.calendar-data-link').first();
-                console.log(firstDataLink);
-                this.newDataLink = firstDataLink;
-                this.calendarDataLinks.removeClass('active');
-                firstDataLink.addClass('active');
-                if (this.savedLink)
-                    this.savedLink.addClass('old');
+                firstDataLink.trigger('click');
             }
         };
         TimeslotDatesSelect.prototype.onDataLinkClick = function (e) {
             e.preventDefault();
             var link = $(e.currentTarget);
             this.dayDetailDivs.removeClass('daydetail--selected');
+            this.dayDetailLinks.removeClass('active');
             var daylink = this.dayDetailLinks.filter('[data-day-detail="' + link.data('day-link') + '"]');
+            var dayDetailDiv = this.dayDetailDivs.filter('#' + link.data('day-link'));
             // abbort if clicked again
             if (link.hasClass('active')) {
                 daylink.removeClass('active');
@@ -99,13 +88,12 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             // new data link gets selected
             else {
                 daylink.addClass('active');
+                dayDetailDiv.addClass('daydetail--selected');
                 this.newDataLink = link;
                 this.calendarDataLinks.removeClass('active');
                 link.addClass('active');
                 if (this.savedLink)
                     this.savedLink.addClass('old');
-                // add class to make the day detail view of the new day link active after mouseleave
-                this.dayDetailDivs.filter('#' + link.data('day-link')).addClass('daydetail--selected');
             }
         };
         TimeslotDatesSelect.prototype.onViewButtonClick = function (e) {

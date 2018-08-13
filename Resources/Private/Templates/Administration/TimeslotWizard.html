@@ -87,33 +87,7 @@
 												</div>
 											</f:if>
 
-											<f:if condition="{day.timeslots->f:count()}==1">
-												<f:if condition="{day.isBookable}">
-													<f:then>
-														<a
-															href="#"
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link {isCurrentDay} {isInThisDay}"
-															data-calendar="{c.calendar.uid}"
-															data-timeslot="{day.timeslots.0.uid}"
-															data-start-date="{f:format.date(date: day.timeslots.0.startDate, format:'H:i d-m-Y')}"
-															data-end-date="{f:format.date(date: day.timeslots.0.endDate, format:'H:i d-m-Y')}"
-															data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.startDate, format:\'N\')}')}, {f:format.date(date: day.timeslots.0.startDate, format:'d.m.Y H:i')}"
-															data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.endDate,
-			format:\'N\')}')}, {f:format.date(date: day.timeslots.0.endDate, format:'d.m.Y H:i')}"
-															data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
-															{f:format.date(date:day.date, format:'j')}
-														</a>
-													</f:then>
-													<f:else>
-														<div
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast} {isInThisDay}" data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
-															{f:format.date(date:day.date, format:'j')}
-														</div>
-													</f:else>
-												</f:if>
-											</f:if>
-
-											<f:if condition="{day.timeslots->f:count()}>1">
+											<f:if condition="{day.timeslots->f:count()}">
 
 												<f:if condition="{day.isBookable}">
 													<f:then>
@@ -121,7 +95,7 @@
 															href="#"
 															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link bw_bookingmanager__ajaxLink {isCurrentDay} {isInThisDay} multiple-timeslots-link"
 															data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
-															{f:format.date(date:day.date, format:'j')}+
+															{f:format.date(date:day.date, format:'j')}
 														</a>
 													</f:then>
 													<f:else>
@@ -175,12 +149,12 @@
 												href="#"
 												class="calendar-data-link {f:if(condition:'{currentStartEndTimestamp}=={timeslot.startEndTimestamp}', then:'active')}"
 												data-calendar="{c.calendar.uid}"
-												data-timeslot="{day.timeslots.0.uid}"
-												data-start-date="{f:format.date(date: day.timeslots.0.startDate, format:'H:i d-m-Y')}"
-												data-end-date="{f:format.date(date: day.timeslots.0.endDate, format:'H:i d-m-Y')}"
-												data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.startDate, format:\'N\')}')}, {f:format.date(date: day.timeslots.0.startDate, format:'d.m.Y H:i')}"
-												data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.endDate,
-			format:\'N\')}')}, {f:format.date(date: day.timeslots.0.endDate, format:'d.m.Y H:i')}"
+												data-timeslot="{timeslot.uid}"
+												data-start-date="{f:format.date(date: timeslot.startDate, format:'H:i d-m-Y')}"
+												data-end-date="{f:format.date(date: timeslot.endDate, format:'H:i d-m-Y')}"
+												data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:timeslot.startDate, format:\'N\')}')}, {f:format.date(date: timeslot.startDate, format:'d.m.Y H:i')}"
+												data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:timeslot.endDate,
+			format:\'N\')}')}, {f:format.date(date: timeslot.endDate, format:'d.m.Y H:i')}"
 												data-day-link="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
 											<i class="fa fa-circle-o" aria-hidden="true"></i><i
 												class="fa fa-check-circle" aria-hidden="true"></i> {f:format.date(date:timeslot.startDate, format:'H:i')} -

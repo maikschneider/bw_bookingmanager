@@ -103,33 +103,17 @@ class TimeslotDatesSelect {
   	e.preventDefault();
 
   	const daylink = $(e.currentTarget);
+  	const dayDetailDiv = this.dayDetailDivs.filter('#' + daylink.data('day-detail'));
 
-	  this.dayDetailDivs.removeClass('daydetail--selected');
-
-	  // reset if clicked again
+	  // reset if clicked again (click active data link again)
 	  if (daylink.hasClass('active')) {
-
-		  daylink.removeClass('active');
-		  this.newDataLink = null;
-		  this.calendarDataLinks.removeClass('active');
-		  if (this.savedLink) this.savedLink.removeClass('old');
-
-
+		  const activeDataLink = dayDetailDiv.find('.calendar-data-link.active');
+		  activeDataLink.trigger('click');
 	  }
-	  // new day -> new link gets selected
+	  // new day -> click data link
 	  else {
-			this.dayDetailLinks.removeClass('active');
-			daylink.addClass('active');
-		  const dayDetailDiv = this.dayDetailDivs.filter('#' + daylink.data('day-detail'));
-		  // add class to make the day detail view of the new day link active after mouseleave
-		  dayDetailDiv.addClass('daydetail--selected');
-
 		  const firstDataLink = dayDetailDiv.find('.calendar-data-link').first();
-		  console.log(firstDataLink);
-		  this.newDataLink = firstDataLink;
-		  this.calendarDataLinks.removeClass('active');
-		  firstDataLink.addClass('active');
-		  if (this.savedLink) this.savedLink.addClass('old');
+		  firstDataLink.trigger('click');
 	  }
 
   }
@@ -142,7 +126,10 @@ class TimeslotDatesSelect {
 
 
     this.dayDetailDivs.removeClass('daydetail--selected');
+    this.dayDetailLinks.removeClass('active');
+
 	  const daylink = this.dayDetailLinks.filter('[data-day-detail="'+link.data('day-link')+'"]');
+	  const dayDetailDiv = this.dayDetailDivs.filter('#' + link.data('day-link'));
 
     // abbort if clicked again
     if(link.hasClass('active')){
@@ -151,20 +138,18 @@ class TimeslotDatesSelect {
       this.newDataLink = null;
       this.calendarDataLinks.removeClass('active');
       if (this.savedLink) this.savedLink.removeClass('old');
-
-
+      
     }
     // new data link gets selected
     else {
 
     	daylink.addClass('active');
+		dayDetailDiv.addClass('daydetail--selected');
+
       this.newDataLink = link;
       this.calendarDataLinks.removeClass('active');
       link.addClass('active');
       if (this.savedLink) this.savedLink.addClass('old');
-      // add class to make the day detail view of the new day link active after mouseleave
-      this.dayDetailDivs.filter('#'+link.data('day-link')).addClass('daydetail--selected');
-
     }
 
   }
