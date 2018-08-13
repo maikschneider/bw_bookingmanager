@@ -5,6 +5,8 @@
 <f:section name="Main">
 	<link rel="stylesheet" href="{css}" type="text/css" />
 
+	<f:debug>{_all}</f:debug>
+
 		<div class="row">
 			<div class="col-xs-12 col-md-3">
 				<ul class="list-group">
@@ -58,9 +60,29 @@
 									<div class="grid-x small-up-7 cell auto bw_bookingmanager__week">
 										<f:for each="{week}" as="day">
 
+											<f:comment>
+												CREATE CSS CLASSES
+											</f:comment>
+											<f:variable name="isInThisDay" value=""/>
+											<f:variable name="isCurrentDay" value=""/>
+											<f:variable name="isInPast" value=""/>
+
+											<f:for each="{day.timeslots}" as="timeslot">
+												<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
+													<f:variable name="isInThisDay"
+																value="bw_bookingmanager__day--isSelectedDay"/>
+												</f:if>
+											</f:for>
+											<f:if condition="{day.isCurrentDay}">
+												<f:variable name="isCurrentDay" value="bw_bookingmanager__day--isCurrentDay" />
+											</f:if>
+											<f:if condition="{day.isCurrentDay}">
+												<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
+											</f:if>
+
 											<f:if condition="{day.timeslots->f:count()}==0">
 												<div
-													class="cell grid-x align-middle align-center bw_bookingmanager__day {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {f:if(condition:day.isNotInMonth, then:'bw_bookingmanager__day--notInMonth')} {f:if(condition:day.isInPast, then:'bw_bookingmanager__day--isInPast')}">
+													class="cell grid-x align-middle align-center bw_bookingmanager__day {isCurrentDay} {f:if(condition:day.isNotInMonth, then:'bw_bookingmanager__day--notInMonth')} {isInPast}">
 													{f:format.date(date:day.date, format:'j')}
 												</div>
 											</f:if>
@@ -68,15 +90,23 @@
 											<f:if condition="{day.timeslots->f:count()}==1">
 												<f:if condition="{day.isBookable}">
 													<f:then>
-														<a href="#" class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {f:if(condition:'{currentStartEndTimestamp}=={day.timeslots.0.startEndTimestamp}', then:'bw_bookingmanager__day--isSelectedDay')} calendar-data-link" data-calendar="{c.calendar.uid}" data-timeslot="{day.timeslots.0.uid}" data-start-date="{f:format.date(date: day.timeslots.0.startDate, format:'H:i d-m-Y')}" data-end-date="{f:format.date(date: day.timeslots.0.endDate, format:'H:i d-m-Y')}" data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.startDate,
-				format:\'N\')}')}, {f:format.date(date: day.timeslots.0.startDate, format:'d.m.Y H:i')}" data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.endDate,
-				format:\'N\')}')}, {f:format.date(date: day.timeslots.0.endDate, format:'d.m.Y H:i')}">
+														<a
+															href="#"
+															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link {isCurrentDay} {isInThisDay} calendar-data-link"
+															data-calendar="{c.calendar.uid}"
+															data-timeslot="{day.timeslots.0.uid}"
+															data-start-date="{f:format.date(date: day.timeslots.0.startDate, format:'H:i d-m-Y')}"
+															data-end-date="{f:format.date(date: day.timeslots.0.endDate, format:'H:i d-m-Y')}"
+															data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.startDate, format:\'N\')}')}, {f:format.date(date: day.timeslots.0.startDate, format:'d.m.Y H:i')}"
+															data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:day.timeslots.0.endDate,
+			format:\'N\')}')}, {f:format.date(date: day.timeslots.0.endDate, format:'d.m.Y H:i')}"
+															data-day-detail="daydetail{f:format.date(date:day.date, format:'d-m-y')}">
 															{f:format.date(date:day.date, format:'j')}
 														</a>
 													</f:then>
 													<f:else>
 														<div
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {f:if(condition:day.isInPast, then:'bw_bookingmanager__day--isInPast')} {f:if(condition:'{currentStartEndTimestamp}=={day.timeslots.0.startEndTimestamp}', then:'bw_bookingmanager__day--isSelectedDay')}">
+															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast} {isInThisDay}" data-day-detail="daydetail{f:format.date(date:day.date, format:'d-m-y')}">
 															{f:format.date(date:day.date, format:'j')}
 														</div>
 													</f:else>
@@ -84,10 +114,13 @@
 											</f:if>
 
 											<f:if condition="{day.timeslots->f:count()}>1">
+
+
+
 												<f:if condition="{day.isBookable}">
 													<f:then>
 														<a
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link bw_bookingmanager__ajaxLink {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')}"
+															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link bw_bookingmanager__ajaxLink {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {isInThisDay}"
 															data="{ajax-container:'bw_bookingmanager__newEntry'}" action="new"
 															arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
 															{f:format.date(date:day.date, format:'j')}+
@@ -95,7 +128,7 @@
 													</f:then>
 													<f:else>
 														<div
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {f:if(condition:day.isCurrentDay, then:'bw_bookingmanager__day--isCurrentDay')} {f:if(condition:day.isInPast, then:'bw_bookingmanager__day--isInPast')}">
+															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast}">
 															{f:format.date(date:day.date, format:'j')}
 														</div>
 													</f:else>
@@ -119,7 +152,37 @@
 			</div>
 
 			<div class="col-xs-12 col-md-3">
-				Sidebar
+				<f:for each="{calendars}" as="c" iteration="i">
+
+					<div id="calendar-tab-{c.calendar.uid}" class="calendar-tab {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}">
+
+						<f:for each="{c.listView.days}" as="day">
+
+							<f:variable name="isInThisDay" value=""/>
+							<f:for each="{day.timeslots}" as="timeslot">
+								<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
+									<f:variable name="isInThisDay"
+												value="active daydetail--blue"/>
+								</f:if>
+							</f:for>
+
+							<div class="daydetail {isInThisDay}" id="daydetail{f:format.date(date:day.date, format:'d-m-y')}">
+								<h3>{f:format.date(date:day.date, format:'d.m.Y')}</h3>
+								<p>{day.timeslots->f:count()} Timeslots</p>
+
+								<f:for each="{day.timeslots}" as="timeslot">
+									<div class="daydetail__timeslot">
+										{f:format.date(date:timeslot.startDate, format:'H:i')}
+									</div>
+								</f:for>
+
+							</div>
+
+						</f:for>
+
+					</div>
+
+				</f:for>
 			</div>
 		</div>
 </f:section>

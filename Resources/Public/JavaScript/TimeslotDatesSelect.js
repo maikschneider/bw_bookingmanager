@@ -20,6 +20,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
         TimeslotDatesSelect.prototype.bindEvents = function () {
             this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
             this.calendarDataLinks.on('click', this.onDataLinkClick.bind(this));
+            this.dayDetailLinks.on('mouseenter', this.onDayDetailLinkMouseenter.bind(this));
+            this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
             if (this.savedLink)
                 this.savedLink.on('click', this.onSavedLinkClick.bind(this));
         };
@@ -36,9 +38,26 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                 $(e.currentTarget).removeClass('old');
             }
         };
+        TimeslotDatesSelect.prototype.onDayDetailLinkMouseenter = function (e) {
+            this.dayDetailDivs.removeClass('active');
+            var link = $(e.currentTarget).data('day-detail');
+            this.dayDetailDivs.filter('#' + link).addClass('active');
+        };
+        TimeslotDatesSelect.prototype.onDayDetailLinkMouseleave = function (e) {
+            this.dayDetailDivs.removeClass('active');
+            var selectedDiv = this.dayDetailDivs.filter('.daydetail--selected');
+            var blueDiv = this.dayDetailDivs.filter('.daydetail--blue');
+            if (selectedDiv.length) {
+                $(selectedDiv).addClass('active');
+            }
+            else if (blueDiv.length) {
+                $(blueDiv).addClass('active');
+            }
+        };
         TimeslotDatesSelect.prototype.onDataLinkClick = function (e) {
             e.preventDefault();
             var link = $(e.currentTarget);
+            this.dayDetailDivs.removeClass('daydetail--selected');
             // abbort if clicked again
             if (link.hasClass('active')) {
                 this.newDataLink = null;
@@ -53,6 +72,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                 link.addClass('active');
                 if (this.savedLink)
                     this.savedLink.addClass('old');
+                // add class to make the day detail view of the new day link active after mouseleave
+                this.dayDetailDivs.filter('#' + link.data('day-detail')).addClass('daydetail--selected');
             }
         };
         TimeslotDatesSelect.prototype.onViewButtonClick = function (e) {
@@ -75,6 +96,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             this.sidebarLinks = this.currentModal.find('a.list-group-item');
             this.calendarDataLinks = this.currentModal.find('.calendar-data-link');
             this.savedLink = this.currentModal.find('.bw_bookingmanager__day--isSelectedDay');
+            this.dayDetailLinks = this.currentModal.find('[data-day-detail]');
+            this.dayDetailDivs = this.currentModal.find('.daydetail');
             if (!this.savedLink.length)
                 this.savedLink = null;
         };
