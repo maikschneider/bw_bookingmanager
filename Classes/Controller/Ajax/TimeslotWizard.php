@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 /**
  * Wizard for rendering timeslot dates picker
@@ -52,6 +53,16 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected $timeslotRepository = null;
 
     /**
+     * @var array
+     */
+    protected $queryParams = null;
+
+    /**
+     * @var UriBuilder
+     */
+    protected $uriBuilder;
+
+    /**
      * @param StandaloneView $templateView
      */
     public function __construct(StandaloneView $templateView = null)
@@ -67,6 +78,7 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
         $this->timeslotRepository = $objectManager->get('Blueways\\BwBookingmanager\\Domain\\Repository\\TimeslotRepository');
         $this->calendarRepository = $objectManager->get('Blueways\\BwBookingmanager\\Domain\\Repository\\CalendarRepository');
+        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
     }
 
     public function getConfiguration(ServerRequestInterface $request, ResponseInterface $response)
@@ -74,6 +86,7 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if ($this->isSignatureValid($request)) {
 
             $queryParams = json_decode($request->getQueryParams()['arguments'], true);
+            $this->queryParams = $queryParams;
 
             $viewData = [
                 'currentCalendar' => $queryParams['calendar'],
@@ -111,6 +124,8 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             $calendarsArray[$key]['calendar'] = $calendar;
             $calendarsArray[$key]['monthView'] = $renderConfiguration->getConfigurationForMonth();
+            $calendarsArray[$key]['monthView']['prevMonth'] = $this->getWizardUriForNewDate($calendarsArray[$key]['monthView']['prevMonth']['date']);
+            $calendarsArray[$key]['monthView']['nextMonth'] = $this->getWizardUriForNewDate($calendarsArray[$key]['monthView']['nextMonth']['date']);
             $calendarsArray[$key]['listView'] = $renderConfiguration->getConfigurationForDays(150);
 
         }
@@ -128,5 +143,26 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $token = GeneralUtility::hmac($request->getQueryParams()['arguments'], 'ajax_wizard_timeslots');
         return $token === $request->getQueryParams()['signature'];
+    }
+
+    /**
+     * @param array $focusPoints
+     * @param File $image
+     * @return string
+     */
+    protected function getWizardUri(array $savedData): string
+    {
+        $routeName = 'ajax_wizard_timeslots';
+        $uriArguments['arguments'] = json_encode($savedData);
+        $uriArguments['signature'] = GeneralUtility::hmac($uriArguments['arguments'], $routeName);
+        return (string)$this->uriBuilder->buildUriFromRoute($routeName, $uriArguments);
+    }
+
+    private function getWizardUriForNewDate(\DateTime $date) : string
+    {
+        $savedData = $this->queryParams;
+        $date->modify('first day of this month');
+        $savedData['now'] = $date->getTimestamp();
+        return $this->getWizardUri($savedData);
     }
 }

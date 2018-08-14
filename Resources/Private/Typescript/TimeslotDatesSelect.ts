@@ -4,6 +4,7 @@ import Modal = require('TYPO3/CMS/Backend/Modal');
 import $ = require('jquery');
 import 'jquery-ui/draggable';
 import 'jquery-ui/resizable';
+import Icons = require('TYPO3/CMS/Backend/Icons');
 
 
 declare global {
@@ -34,7 +35,7 @@ class TimeslotDatesSelect {
   private dayDetailLinks: JQuery;
   private dayDetailDivs: JQuery;
   private multipleTimeslotsLinks: JQuery;
-
+  private modalReloadLinks: JQuery;
 
   private calendarDataLinks: JQuery;
   private savedLink: JQuery;
@@ -59,6 +60,7 @@ class TimeslotDatesSelect {
     this.dayDetailLinks.on('click', this.onDayDetailLinkClick.bind(this));
     this.dayDetailLinks.on('mouseenter', this.onDayDetailLinkMouseenter.bind(this));
     this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
+    this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
     if(this.savedLink) this.savedLink.on('click', this.onSavedLinkClick.bind(this));
   }
 
@@ -186,6 +188,7 @@ class TimeslotDatesSelect {
     this.savedLink = this.currentModal.find('.bw_bookingmanager__day--isSelectedDay');
     this.dayDetailLinks = this.currentModal.find('[data-day-detail]');
     this.dayDetailDivs = this.currentModal.find('.daydetail');
+    this.modalReloadLinks = this.currentModal.find('.modal-reload');
     if(!this.savedLink.length) this.savedLink = null;
   }
 
@@ -206,46 +209,45 @@ class TimeslotDatesSelect {
     this.endDateText = $('#savedEndDate');
 
     this.currentModal = Modal.advanced({
-      type: 'ajax',
-      content: wizardUri,
-      size: Modal.sizes.large,
-      title: modalTitle,
-      style: Modal.styles.light,
-      ajaxCallback: this.init.bind(this),
-      buttons: [
-        {
-          text: modalViewButtonText,
-          name: 'view',
-          icon: 'actions-system-list-open',
-          btnClass: 'btn-default btn-left',
-          trigger: this.onViewButtonClick.bind(this)
-        },
-        {
-          text: modalCancelButtonText,
-          name: 'dismiss',
-          icon: 'actions-close',
-          btnClass: 'btn-default',
-          dataAttributes: {
-            action: 'dismiss'
-          },
-          trigger: function () {
-            Modal.currentModal.trigger('modal-dismiss');
-          }
-        },
-        {
-          text: modalSaveButtonText,
-          name: 'save',
-          icon: 'actions-document-save',
-          active: true,
-          btnClass: 'btn-primary',
-          dataAttributes: {
-            action: 'save'
-          },
-          trigger: this.save.bind(this)
-        }
-      ]
-    });
-    //this.currentModal.addClass('JFJWFJEJFEFHIWEFHWOIFHWEIFOHEWOIFHWIFHWE');
+		type: 'ajax',
+		content: wizardUri,
+		size: Modal.sizes.large,
+		title: modalTitle,
+		style: Modal.styles.light,
+		ajaxCallback: this.init.bind(this),
+		buttons: [
+			{
+				text: modalViewButtonText,
+				name: 'view',
+				icon: 'actions-system-list-open',
+				btnClass: 'btn-default btn-left',
+				trigger: this.onViewButtonClick.bind(this)
+			},
+			{
+				text: modalCancelButtonText,
+				name: 'dismiss',
+				icon: 'actions-close',
+				btnClass: 'btn-default',
+				dataAttributes: {
+					action: 'dismiss'
+				},
+				trigger: function () {
+					Modal.currentModal.trigger('modal-dismiss');
+				}
+			},
+			{
+				text: modalSaveButtonText,
+				name: 'save',
+				icon: 'actions-document-save',
+				active: true,
+				btnClass: 'btn-primary',
+				dataAttributes: {
+					action: 'save'
+				},
+				trigger: this.save.bind(this)
+			}
+		]
+	});
   }
 
   private save()
@@ -260,6 +262,30 @@ class TimeslotDatesSelect {
       this.endDateText.html(this.newDataLink.data('end-date-text'));
     }
     Modal.currentModal.trigger('modal-dismiss');
+  }
+
+  private onReloadModalLinkClick(e: JQueryEventObject)
+  {
+	  e.preventDefault();
+      const reloadLink = $(e.currentTarget).attr('href');
+
+	  const contentTarget = '.t3js-modal-body';
+	  const $loaderTarget = this.currentModal.find(contentTarget);
+	  Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
+		  $loaderTarget.html('<div class="modal-loading">' + icon + '</div>');
+		  $.get(
+			  reloadLink,
+			  (response: string): void => {
+				  this.currentModal.find(contentTarget)
+					  .empty()
+					  .append(response);
+				  this.init();
+				  this.currentModal.trigger('modal-loaded');
+			  },
+			  'html'
+		  );
+	  });
+
   }
 
   public initializeTrigger(): void {

@@ -1,4 +1,4 @@
-define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/draggable", "jquery-ui/resizable"], function (require, exports, Modal, $) {
+define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Backend/Icons", "jquery-ui/draggable", "jquery-ui/resizable"], function (require, exports, Modal, $, Icons) {
     "use strict";
     /**
     * Module: TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
@@ -23,6 +23,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             this.dayDetailLinks.on('click', this.onDayDetailLinkClick.bind(this));
             this.dayDetailLinks.on('mouseenter', this.onDayDetailLinkMouseenter.bind(this));
             this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
+            this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
             if (this.savedLink)
                 this.savedLink.on('click', this.onSavedLinkClick.bind(this));
         };
@@ -121,6 +122,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
             this.savedLink = this.currentModal.find('.bw_bookingmanager__day--isSelectedDay');
             this.dayDetailLinks = this.currentModal.find('[data-day-detail]');
             this.dayDetailDivs = this.currentModal.find('.daydetail');
+            this.modalReloadLinks = this.currentModal.find('.modal-reload');
             if (!this.savedLink.length)
                 this.savedLink = null;
         };
@@ -176,7 +178,6 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                     }
                 ]
             });
-            //this.currentModal.addClass('JFJWFJEJFEFHIWEFHWOIFHWEIFOHEWOIFHWIFHWE');
         };
         TimeslotDatesSelect.prototype.save = function () {
             if (this.newDataLink) {
@@ -188,6 +189,23 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "jquery-ui/dr
                 this.endDateText.html(this.newDataLink.data('end-date-text'));
             }
             Modal.currentModal.trigger('modal-dismiss');
+        };
+        TimeslotDatesSelect.prototype.onReloadModalLinkClick = function (e) {
+            var _this = this;
+            e.preventDefault();
+            var reloadLink = $(e.currentTarget).attr('href');
+            var contentTarget = '.t3js-modal-body';
+            var $loaderTarget = this.currentModal.find(contentTarget);
+            Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
+                $loaderTarget.html('<div class="modal-loading">' + icon + '</div>');
+                $.get(reloadLink, function (response) {
+                    _this.currentModal.find(contentTarget)
+                        .empty()
+                        .append(response);
+                    _this.init();
+                    _this.currentModal.trigger('modal-loaded');
+                }, 'html');
+            });
         };
         TimeslotDatesSelect.prototype.initializeTrigger = function () {
             var _this = this;

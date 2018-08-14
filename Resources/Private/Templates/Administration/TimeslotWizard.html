@@ -9,6 +9,7 @@
 
 		<div class="row">
 			<div class="col-xs-12 col-md-3">
+				<h2>Calendars</h2>
 				<ul class="list-group">
 					<f:for each="{calendars}" as="c" iteration="i">
 						<a class="list-group-item {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}" href="#calendar-tab-{c.calendar.uid}">{c.calendar.name}</a>
@@ -24,9 +25,18 @@
 
 							<div class="bw_bookingmanager__calendarMonth__header">
 								<div class="grid-x">
-									<div class="small-12 cell">
+									<div class="cell shrink text-right">
+										<h2><a href="{c.monthView.prevMonth}" class="modal-reload"
+												title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.prevMonth')}"><i
+												class="fa fa-chevron-left"></i></a></h2>
+									</div>
+									<div class="text-center auto cell">
 										<h2 class="text-center">
 										{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:c.monthView.weeks.1.0.date, format:\'n\')}')} {f:format.date(date:c.monthView.weeks.1.0.date, format:'Y')}</h2>
+									</div>
+									<div class="cell shrink text-right">
+										<h2><a href="{c.monthView.nextMonth}" class="modal-reload" title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.nextMonth')}"><i class="fa fa-chevron-right"></i></a>
+										</h2>
 									</div>
 								</div>
 								<div class="grid-x small-up-7">
@@ -180,6 +190,7 @@
 			</div>
 
 			<div class="col-xs-12 col-md-3">
+				<h2>&nbsp;</h2>
 				<f:for each="{calendars}" as="c" iteration="i">
 
 					<div id="calendar-tab-{c.calendar.uid}" class="calendar-tab {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}">
@@ -200,21 +211,37 @@
 
 								<f:for each="{day.timeslots}" as="timeslot">
 									<div class="daydetail__timeslot">
-										<a
-												href="#"
-												class="calendar-data-link {f:if(condition:'{currentStartEndTimestamp}=={timeslot.startEndTimestamp}', then:'active saved-active')}"
-												data-calendar="{c.calendar.uid}"
-												data-timeslot="{timeslot.uid}"
-												data-start-date="{f:format.date(date: timeslot.startDate, format:'H:i d-m-Y')}"
-												data-end-date="{f:format.date(date: timeslot.endDate, format:'H:i d-m-Y')}"
-												data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:timeslot.startDate, format:\'N\')}')}, {f:format.date(date: timeslot.startDate, format:'d.m.Y H:i')}"
-												data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:timeslot.endDate,
+										<f:if condition="{timeslot.isBookable} || {currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
+											<f:then>
+												<a
+														href="#"
+														class="calendar-data-link {f:if(condition:'{currentStartEndTimestamp}=={timeslot.startEndTimestamp}', then:'active saved-active')}"
+														data-calendar="{c.calendar.uid}"
+														data-timeslot="{timeslot.uid}"
+														data-start-date="{f:format.date(date: timeslot.startDate, format:'H:i d-m-Y')}"
+														data-end-date="{f:format.date(date: timeslot.endDate, format:'H:i d-m-Y')}"
+														data-start-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:timeslot.startDate, format:\'N\')}')}, {f:format.date(date: timeslot.startDate, format:'d.m.Y H:i')}"
+														data-end-date-text="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:timeslot.endDate,
 			format:\'N\')}')}, {f:format.date(date: timeslot.endDate, format:'d.m.Y H:i')}"
-												data-day-link="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
-											<i class="fa fa-circle-o" aria-hidden="true"></i><i
-												class="fa fa-check-circle" aria-hidden="true"></i> {f:format.date(date:timeslot.startDate, format:'H:i')} -
-											{f:format.date(date:timeslot.endDate, format:'H:i')} ({timeslot.bookedWeight}/{timeslot.maxWeight})
-										</a>
+														data-day-link="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
+													<i class="fa fa-circle-o" aria-hidden="true"></i><i
+														class="fa fa-check-circle" aria-hidden="true"></i>
+													{f:format.date(date:timeslot.startDate, format:'H:i')} -
+													{f:format.date(date:timeslot.endDate, format:'H:i')}
+													({timeslot.bookedWeight}/{timeslot.maxWeight})
+												</a>
+											</f:then>
+											<f:else>
+												<div class="calendar-link-full {f:if(condition:'{currentStartEndTimestamp}=={timeslot.startEndTimestamp}', then:'active saved-active')}">
+													<i class="fa fa-times" aria-hidden="true"></i></i><i
+														class="fa fa-check-circle" aria-hidden="true"></i>
+													{f:format.date(date:timeslot.startDate, format:'H:i')} -
+													{f:format.date(date:timeslot.endDate, format:'H:i')}
+													({timeslot.bookedWeight}/{timeslot.maxWeight})
+												</div>
+											</f:else>
+										</f:if>
+
 									</div>
 								</f:for>
 
