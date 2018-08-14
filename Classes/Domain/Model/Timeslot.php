@@ -27,14 +27,14 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \DateTime
      */
-    protected $startDate = null;
+    protected $startDate;
 
     /**
      * endDate
      *
      * @var \DateTime
      */
-    protected $endDate = null;
+    protected $endDate;
 
     /**
      * repeatType
@@ -71,7 +71,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \DateTime
      */
-    protected $repeatEnd = null;
+    protected $repeatEnd;
 
     /**
      * isBookableHooks

@@ -23,7 +23,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \DateTime
      * @validate NotEmpty, DateTime
      */
-    protected $startDate = null;
+    protected $startDate;
 
     /**
      * endDate
@@ -31,7 +31,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \DateTime
      * @validate NotEmpty, DateTime
      */
-    protected $endDate = null;
+    protected $endDate;
 
     /**
      * name
