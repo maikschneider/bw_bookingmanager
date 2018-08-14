@@ -23,6 +23,12 @@
 						<div class="calendar-view calendar-view--month active">
 
 							<div class="bw_bookingmanager__calendarMonth__header">
+								<div class="grid-x">
+									<div class="small-12 cell">
+										<h2 class="text-center">
+										{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:c.monthView.weeks.1.0.date, format:\'n\')}')} {f:format.date(date:c.monthView.weeks.1.0.date, format:'Y')}</h2>
+									</div>
+								</div>
 								<div class="grid-x small-up-7">
 									<div class="cell text-center">
 										<f:translate
@@ -76,7 +82,7 @@
 											<f:if condition="{day.isCurrentDay}">
 												<f:variable name="isCurrentDay" value="bw_bookingmanager__day--isCurrentDay" />
 											</f:if>
-											<f:if condition="{day.isCurrentDay}">
+											<f:if condition="{day.isInPast}">
 												<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
 											</f:if>
 
@@ -116,7 +122,50 @@
 						</div>
 
 						<div class="calendar-view calendar-view--list">
-							LIST VIEW
+
+							<f:for each="{c.listView.days}" as="day">
+
+								<f:variable name="isInThisDay" value=""/>
+								<f:variable name="isCurrentDay" value=""/>
+								<f:variable name="isInPast" value=""/>
+
+								<f:for each="{day.timeslots}" as="timeslot">
+									<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
+										<f:variable name="isInThisDay"
+												value="active daydetail--blue"/>
+									</f:if>
+								</f:for>
+								<f:if condition="{day.isCurrentDay}">
+									<f:variable name="isCurrentDay" value="bw_bookingmanager__day--isCurrentDay"/>
+								</f:if>
+								<f:if condition="{day.isInPast}">
+									<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
+								</f:if>
+
+
+
+									<f:if condition="{day.isBookable}">
+										<f:then>
+											<a
+													href="#"
+													class="{isCurrentDay} {isInThisDay} bw_bookingmanager__day bw_bookingmanager__day--list bw_bookingmanager__day--link"
+													data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
+												{f:format.date(date:day.date, format:'j.')}
+												{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:day.date, format:\'n\')}')} {f:format.date(date:day.date, format:'Y')}
+											</a>
+										</f:then>
+										<f:else>
+											<div
+													class="bw_bookingmanager__day bw_bookingmanager__day--list bw_bookingmanager__day--full {isCurrentDay} {isInPast}"
+													data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
+												{f:format.date(date:day.date, format:'j')}
+											</div>
+										</f:else>
+									</f:if>
+
+
+							</f:for>
+
 						</div>
 
 					</div>
