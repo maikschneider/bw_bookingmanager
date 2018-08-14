@@ -37,14 +37,14 @@ CREATE TABLE tx_bwbookingmanager_domain_model_timeslot (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
-	start_date datetime NOT NULL,
-	end_date datetime NOT NULL,
+	start_date int(11) DEFAULT '0' NOT NULL,
+	end_date int(11) DEFAULT '0' NOT NULL,
 	repeat_type int(11) DEFAULT '0' NOT NULL,
 	max_weight int(11) DEFAULT '0' NOT NULL,
 	is_bookable_hooks int(11) DEFAULT '0' NOT NULL,
 	entries int(11) unsigned DEFAULT '0' NOT NULL,
 	calendars int(11) unsigned DEFAULT '0' NOT NULL,
-	repeat_end datetime DEFAULT NULL,
+	repeat_end int(11) DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -75,8 +75,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	calendar int(11) unsigned DEFAULT '0' NOT NULL,
 
 	record_type varchar(255) DEFAULT '' NOT NULL,
-	start_date datetime NOT NULL,
-	end_date datetime NOT NULL,
+	start_date int(11) DEFAULT '0' NOT NULL,
+	end_date int(11) DEFAULT '0' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
 	prename varchar(255) DEFAULT '' NOT NULL,
 	street varchar(255) DEFAULT '' NOT NULL,
@@ -147,8 +147,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_blockslot (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
-	start_date datetime NOT NULL,
-	end_date datetime NOT NULL,
+	start_date int(11) DEFAULT '0' NOT NULL,
+	end_date int(11) DEFAULT '0' NOT NULL,
 	reason varchar(255) DEFAULT '' NOT NULL,
 	calendars int(11) unsigned DEFAULT '0' NOT NULL,
 
