@@ -255,6 +255,10 @@
 				<source>Su</source>
 				<target>So</target>
 			</trans-unit>
+			<trans-unit id="date.dayNames.short.7">
+				<source>Su</source>
+				<target>So</target>
+			</trans-unit>
 			<trans-unit id="date.dayNames.short.1">
 				<source>Mo</source>
 				<target>Mo</target>

@@ -99,14 +99,14 @@
 													<f:then>
 														<a
 															href="#"
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link bw_bookingmanager__ajaxLink {isCurrentDay} {isInThisDay} multiple-timeslots-link"
+															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link bw_bookingmanager__day--link bw_bookingmanager__ajaxLink {isCurrentDay} {isInThisDay}"
 															data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
 															{f:format.date(date:day.date, format:'j')}
 														</a>
 													</f:then>
 													<f:else>
 														<div
-															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast}"
+															class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast} {isInThisDay}"
 															data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
 															{f:format.date(date:day.date, format:'j')}
 														</div>
@@ -128,11 +128,12 @@
 								<f:variable name="isInThisDay" value=""/>
 								<f:variable name="isCurrentDay" value=""/>
 								<f:variable name="isInPast" value=""/>
+								<f:variable name="hasNoSlot" value=""/>
 
 								<f:for each="{day.timeslots}" as="timeslot">
 									<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
 										<f:variable name="isInThisDay"
-												value="active daydetail--blue"/>
+												value="bw_bookingmanager__day--isSelectedDay"/>
 									</f:if>
 								</f:for>
 								<f:if condition="{day.isCurrentDay}">
@@ -140,6 +141,9 @@
 								</f:if>
 								<f:if condition="{day.isInPast}">
 									<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
+								</f:if>
+								<f:if condition="{day.timeslots->f:count()}==0">
+									<f:variable name="hasNoSlot" value="bw_bookingmanager__day--isInPast"/>
 								</f:if>
 
 
@@ -156,9 +160,11 @@
 										</f:then>
 										<f:else>
 											<div
-													class="bw_bookingmanager__day bw_bookingmanager__day--list bw_bookingmanager__day--full {isCurrentDay} {isInPast}"
+													class="bw_bookingmanager__day bw_bookingmanager__day--list bw_bookingmanager__day--full {isCurrentDay} {isInPast} {hasNoSlot}"
 													data-day-detail="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
-												{f:format.date(date:day.date, format:'j')}
+												{f:format.date(date:day.date, format:'j.')}
+												{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:day.date,
+												format:\'n\')}')} {f:format.date(date:day.date, format:'Y')}
 											</div>
 										</f:else>
 									</f:if>
@@ -190,7 +196,7 @@
 
 							<div class="daydetail {isInThisDay}" id="calendar{c.calendar.uid}-daydetail{f:format.date(date:day.date, format:'d-m-y')}">
 								<h3>{f:format.date(date:day.date, format:'d.m.Y')}</h3>
-								<p>{day.timeslots->f:count()} Timeslots</p>
+								<p>{day.timeslots->f:count()} Timeslots:</p>
 
 								<f:for each="{day.timeslots}" as="timeslot">
 									<div class="daydetail__timeslot">

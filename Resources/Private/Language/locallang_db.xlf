@@ -192,6 +192,9 @@
 			<trans-unit id="date.dayNames.short.0">
 				<source>Su</source>
 			</trans-unit>
+			<trans-unit id="date.dayNames.short.7">
+				<source>Su</source>
+			</trans-unit>
 			<trans-unit id="date.dayNames.short.1">
 				<source>Mo</source>
 			</trans-unit>

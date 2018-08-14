@@ -106,7 +106,7 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         foreach($calendars as $key => $calendar){
 
-            $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
+            $timeslots = $this->timeslotRepository->findInDays($calendar, $startDate, 150);
             $renderConfiguration->setTimeslots($timeslots);
 
             $calendarsArray[$key]['calendar'] = $calendar;
