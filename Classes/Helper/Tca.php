@@ -8,9 +8,9 @@ class Tca
         $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
         $newTitle = '';
 
-        $startDate = new \DateTime($record['start_date']);
-        $endDate = new \DateTime($record['end_date']);
-        $repeatEnd = new \DateTime($record['repeat_end']);
+        $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
+        $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
+        $repeatEnd = new \DateTime(date('Y-m-d H:i:sP', $record['repeat_end']));
 
         $repeatType = $record['repeat_type'];
         switch ($repeatType) {
@@ -43,8 +43,8 @@ class Tca
     {
         $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
 
-        $startDate = new \DateTime($record['start_date']);
-        $endDate = new \DateTime($record['end_date']);
+        $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
+        $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
 
         $newTitle = $record['reason'] . ' (' . $startDate->format('d.m.y') . ' - ' . $endDate->format('d.m.y') . ')';
 
@@ -57,8 +57,8 @@ class Tca
         $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
         $newTitle = '';
 
-        $startDate = new \DateTime($record['start_date']);
-        $endDate = new \DateTime($record['end_date']);
+        $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
+        $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
 
 
         $newTitle .= $startDate->format('d.m.y, H:i') . '-';

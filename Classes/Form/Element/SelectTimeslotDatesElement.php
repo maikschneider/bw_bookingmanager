@@ -101,15 +101,15 @@ class SelectTimeslotDatesElement extends AbstractFormElement
     private function getSavedData()
     {
         $row = $this->data['databaseRow'];
-
+        
         $startDate = null;
-        if($row['start_date'] && $row['start_date'] !== '0000-00-00 00:00:00') {
-            $startDate = new \DateTime($row['start_date']);
+        if($row['start_date']) {
+            $startDate = new \DateTime(date('Y-m-d H:i:sP', $row['start_date']));
             $startDate = $startDate->getTimestamp();
         }
         $endDate = null;
-        if ($row['end_date'] && $row['end_date'] !== '0000-00-00 00:00:00') {
-            $endDate = new \DateTime($row['end_date']);
+        if ($row['end_date']) {
+            $endDate = new \DateTime(date('Y-m-d H:i:sP', $row['end_date']));
             $endDate = $endDate->getTimestamp();
         }
 

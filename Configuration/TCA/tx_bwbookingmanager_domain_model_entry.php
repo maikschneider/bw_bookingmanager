@@ -116,22 +116,18 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.start_date',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
                 'renderType' => 'hidden',
-                'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00',
+                'eval' => 'datetime,required',
             ],
         ],
         'end_date' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.end_date',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
                 'renderType' => 'hidden',
-                'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00',
+                'eval' => 'datetime,required',
             ],
         ],
         'name' => [
