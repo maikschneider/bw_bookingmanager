@@ -220,7 +220,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             }
         }
 
-        $calendars = $this->calendarRepository->findAllIgnorePid();
+        $calendars = $this->calendarRepository->findAll();
 
         // use first calendar as default
         if (!$calendars && count($calendars)) {
