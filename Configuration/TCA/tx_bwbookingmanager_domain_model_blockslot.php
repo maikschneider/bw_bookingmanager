@@ -78,7 +78,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.start_date',
             'config' => [
                 'type' => 'input',
-                'renderType' => 'hidden',
                 'eval' => 'datetime,required',
             ],
         ],
@@ -87,7 +86,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.end_date',
             'config' => [
                 'type' => 'input',
-                'renderType' => 'hidden',
                 'eval' => 'datetime',
             ],
         ],
