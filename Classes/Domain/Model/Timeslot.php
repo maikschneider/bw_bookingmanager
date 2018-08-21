@@ -402,4 +402,23 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->getStartDate()->getTimestamp() . '' . $this->getEndDate()->getTimestamp();
     }
+
+    public function getDisplayStartDate()
+    {
+        $date = $this->startDate;
+        if ($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
+    }
+
+    public function getDisplayEndDate()
+    {
+        $date = $this->endDate;
+        if($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
+    }
+
 }

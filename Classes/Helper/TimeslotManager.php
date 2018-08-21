@@ -183,10 +183,19 @@ class TimeslotManager
         $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'), $this->startDate->format('d'));
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
+        $timezone = new \DateTimeZone("Europe/Berlin");
+
         // create new timeslots and modify start and end date
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
+
+            $transitions = $timezone->getTransitions($newStartDate->getTimestamp(), $newStartDate->getTimestamp());
+            $isDST = $transitions[0]['isdst'];
+            if (!$isDST) {
+                $newStartDate->modify('+1 hour');
+            }
+
             $newEndDate = clone $newStartDate;
             $newEndDate->add($dateStartEndDiff);
 
@@ -202,7 +211,6 @@ class TimeslotManager
             $newTimeslot = clone $timeslot;
             $newTimeslot->setStartDate($newStartDate);
             $newTimeslot->setEndDate($newEndDate);
-
             $newTimeslots[] = $newTimeslot;
         }
 
@@ -248,9 +256,18 @@ class TimeslotManager
         $dateToStartFilling->modify('next '.$timeslot->getStartDate()->format('l H:i:s'));
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
+        $timezone = new \DateTimeZone('Europe/Berlin');
+
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' weeks');
+
+            $transitions = $timezone->getTransitions($newStartDate->getTimestamp(), $newStartDate->getTimestamp());
+            $isDST = $transitions[0]['isdst'];
+            if (!$isDST) {
+                $newStartDate->modify('+1 hour');
+            }
+
             $newEndDate = clone $newStartDate;
             $newEndDate->add($dateStartEndDiff);
 

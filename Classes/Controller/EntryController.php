@@ -42,8 +42,11 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // in newAction and createAction
         if ($this->arguments->hasArgument('newEntry')) {
             // convert dateTime from new action
-            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
-            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'd-m-Y-H:i:s');
+
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'U');
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'U');
 
 
             $arguments = $this->request->getArguments();
@@ -79,8 +82,21 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
     {
-        $start = $this->request->hasArgument('start') ? new \DateTime($this->request->getArgument('start')) : null;
-        $end = $this->request->hasArgument('end') ? new \DateTime($this->request->getArgument('end')) : null;
+        /*
+        $start = $this->request->hasArgument('start') ? new \DateTime(date('Y-m-d H:i:sP',
+            $this->request->getArgument('start')), new \DateTimeZone('UTC')) : null;
+        $end = $this->request->hasArgument('end') ? new \DateTime(date('Y-m-d H:i:sP',
+            $this->request->getArgument('end')), new \DateTimeZone('UTC')) : null;
+        */
+        $start = null;
+        $end = null;
+
+        if($this->request->hasArgument('start') && $this->request->hasArgument('end')) {
+            $end = new \DateTime();
+            $end->setTimestamp($this->request->getArgument('end'));
+            $start = new \DateTime();
+            $start->setTimestamp($this->request->getArgument('start'));
+        }
 
         $newEntry = $newEntry ? $newEntry : \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar->getEntryTypeClassname(), $calendar, $timeslot, $start, $end);
 

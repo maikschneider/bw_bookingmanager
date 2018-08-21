@@ -101,20 +101,23 @@ class SelectTimeslotDatesElement extends AbstractFormElement
     private function getSavedData()
     {
         $row = $this->data['databaseRow'];
-        
-        $startDate = null;
-        if($row['start_date']) {
-            $startDate = new \DateTime(date('Y-m-d H:i:sP', $row['start_date']));
-            $startDate = $startDate->getTimestamp();
-        }
-        $endDate = null;
-        if ($row['end_date']) {
-            $endDate = new \DateTime(date('Y-m-d H:i:sP', $row['end_date']));
-            $endDate = $endDate->getTimestamp();
-        }
 
+        $startDate = null;
+        $endDate = null;
         $now = new \DateTime('now');
         $now = $now->getTimestamp();
+
+        if($row['start_date']) {
+            $startDate = $row['start_date'];
+
+            $now = new \DateTime();
+            $now->setTimestamp($startDate);
+            $now->modify('first day of this month');
+            $now = $now->getTimestamp();
+        }
+        if ($row['end_date']) {
+            $endDate = $row['end_date'];
+        }
 
         $savedData = [
             'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
