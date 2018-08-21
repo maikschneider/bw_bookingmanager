@@ -18,6 +18,9 @@
             <trans-unit id="flexforms_general.mode.entry_new">
                 <source>New entry</source>
             </trans-unit>
+            <trans-unit id="flexforms_general.mode.blockslot_new">
+				<source>New entry</source>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
             </trans-unit>

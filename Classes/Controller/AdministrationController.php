@@ -158,6 +158,12 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
                 'label' => 'flexforms_general.mode.entry_new',
                 'action' => 'newEntry',
                 'icon' => 'ext-bwbookingmanager-type-entry'
+            ],
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_blockslot',
+                'label' => 'flexforms_general.mode.blockslot_new',
+                'action' => 'newBlockslot',
+                'icon' => 'ext-bwbookingmanager-type-blockslot'
             ]
         ];
         foreach ($buttons as $key => $tableConfiguration) {
@@ -313,10 +319,19 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     }
 
     /**
-     * Redirect to form to create a category record
+     * Redirect to form to create a new Entry record
      */
     public function newEntryAction()
     {
         $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_entry');
     }
+
+    /**
+     * Redirect to form to create a new Blockslot record
+     */
+    public function newBlockslotAction()
+    {
+       $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_blockslot');
+    }
+
 }
