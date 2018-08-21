@@ -109,13 +109,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         $actions = [
             ['action' => 'index', 'label' => 'entryListing'],
-            // ['action' => 'timeslot', 'label' => 'timeslotListing'],
+            ['action' => 'blockslot', 'label' => 'blockslotListing'],
         ];
 
         foreach ($actions as $action) {
             $item = $menu->makeMenuItem()
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:module.' . $action['label']))
-                ->setHref($this->getHref('Administration', $action))
+                ->setHref($this->getHref('Administration', $action['action']))
                 ->setActive($this->request->getControllerActionName() === $action['action']);
             $menu->addMenuItem($item);
         }
@@ -232,6 +232,18 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->view->assign('demand', $demand);
         $this->view->assign('moduleToken', $this->getToken(true));
         $this->view->assign('calendar', $calendar);
+        $this->view->assign('calendars', $calendars);
+    }
+
+    public function blockslotAction()
+    {
+        $hideForm = true;
+
+        $calendars = $this->calendarRepository->findAll();
+
+        $this->view->assign('hideForm', $hideForm);
+        $this->view->assign('page', $this->pageUid);
+        $this->view->assign('moduleToken', $this->getToken(true));
         $this->view->assign('calendars', $calendars);
     }
 

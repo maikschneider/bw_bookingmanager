@@ -90,6 +90,9 @@
             <trans-unit id="module.entryListing">
                 <source>Entry listing</source>
             </trans-unit>
+            <trans-unit id="module.blockslotListing">
+				<source>Blockslot listing</source>
+			</trans-unit>
             <trans-unit id="module.timeslotListing">
                 <source>Timeslot listing</source>
             </trans-unit>

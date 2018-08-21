@@ -119,6 +119,10 @@
                 <source>Entry listing</source>
                 <target>Listenansicht Einträge</target>
             </trans-unit>
+            <trans-unit id="module.blockslotListing">
+				<source>Blockslot listing</source>
+				<target>Listenansicht Blockslots</target>
+			</trans-unit>
             <trans-unit id="module.timeslotListing">
                 <source>Timeslot listing</source>
                 <target>Listenansicht Timeslots</target>
