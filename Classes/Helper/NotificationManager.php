@@ -63,8 +63,9 @@ class NotificationManager
         $subject = $this->extbaseFrameworkConfiguration['settings']['mail']['subject'];
         $template = $this->extbaseFrameworkConfiguration['settings']['mail']['template'];
         $body = $this->getMailBody($template);
+        $replyTo = $from;
 
-        $this->sendMail($from, $to, $subject, $body);
+        $this->sendMail($from, $to, $subject, $body, $replyTo);
     }
 
     private function sendNotifications()
@@ -93,14 +94,16 @@ class NotificationManager
         $subject = $notification->getEmailSubject();
         $template = $notification->getTemplate();
         $body = $this->getMailBody($template);
+        $replyTo = $this->entry->getEmail();
 
-        $this->sendMail($from, $to, $subject, $body);
+        $this->sendMail($from, $to, $subject, $body, $replyTo);
     }
 
-    private function sendMail($from, $to, $subject, $body)
+    private function sendMail($from, $to, $subject, $body, $replyTo)
     {
         $message = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
         $message->setTo($to)
+            ->setReplyTo($replyTo)
             ->setFrom($from)
             ->setSubject($subject)
             ->setBody($body, 'text/html');
