@@ -185,6 +185,8 @@ class TimeslotManager
 
         $timezone = new \DateTimeZone("Europe/Berlin");
 
+        $needsDSTFix = $timeslot->startsInDST();
+
         // create new timeslots and modify start and end date
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
@@ -192,7 +194,7 @@ class TimeslotManager
 
             $transitions = $timezone->getTransitions($newStartDate->getTimestamp(), $newStartDate->getTimestamp());
             $isDST = $transitions[0]['isdst'];
-            if (!$isDST) {
+            if ($needsDSTFix && !$isDST) {
                 $newStartDate->modify('+1 hour');
             }
 
@@ -258,13 +260,15 @@ class TimeslotManager
 
         $timezone = new \DateTimeZone('Europe/Berlin');
 
+        $needsDSTFix = $timeslot->startsInDST();
+
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' weeks');
 
             $transitions = $timezone->getTransitions($newStartDate->getTimestamp(), $newStartDate->getTimestamp());
             $isDST = $transitions[0]['isdst'];
-            if (!$isDST) {
+            if ($needsDSTFix && !$isDST) {
                 $newStartDate->modify('+1 hour');
             }
 

@@ -56,10 +56,11 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('UTC'));
 
         // DST fix
+        $needsDSTFix = $entry->getTimeslot()->startsInDST();
         $timezone = new \DateTimeZone('Europe/Berlin');
         $transitions = $timezone->getTransitions($this->entry_startDate->getTimestamp(), $this->entry_startDate->getTimestamp());
         $isDST = $transitions[0]['isdst'];
-        if (!$isDST) {
+        if ($needsDSTFix && !$isDST) {
             $this->timeslot_startDate->modify('+1 hour');
             $this->timeslot_endDate->modify('+1 hour');
         }

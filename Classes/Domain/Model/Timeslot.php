@@ -421,4 +421,13 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $date;
     }
 
+    public function startsInDST()
+    {
+        $timezone = new \DateTimeZone("Europe/Berlin");
+        $transitions = $timezone->getTransitions($this->startDate->getTimestamp(), $this->startDate->getTimestamp());
+        $isDST = $transitions[0]['isdst'];
+
+        return $isDST;
+    }
+
 }
