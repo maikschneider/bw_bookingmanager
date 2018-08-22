@@ -71,7 +71,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         // @Todo: strange bug: If i do not decrease the date by one hour after
         // validation, the skater timeslot of 12 o'clock (not the 10 o'clock!?) gets updated to the +1 hour format
         // -> so i decrease the hour again...
-        if (!$isDST) {
+        if ($needsDSTFix && !$isDST) {
             $this->timeslot_startDate->modify('-1 hour');
             $this->timeslot_endDate->modify('-1 hour');
         }
