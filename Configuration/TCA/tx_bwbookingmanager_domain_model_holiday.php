@@ -106,7 +106,7 @@ return [
                 'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_calendar',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
-                'MM' => 'tx_bwbookingmanager_calendar_blockslot_mm',
+                'MM' => 'tx_bwbookingmanager_calendar_holiday_mm',
                 'size' => 10,
                 'maxitems' => 9999,
             ],

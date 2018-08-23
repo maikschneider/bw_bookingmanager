@@ -12,6 +12,9 @@
 			<trans-unit id="repeat_type.description">
 				<source>repeatType</source>
 			</trans-unit>
+			<trans-unit id="holiday_setting.description">
+				<source>holidaySetting</source>
+			</trans-unit>
 			<trans-unit id="max_weight.description">
 				<source>maxWeight</source>
 			</trans-unit>

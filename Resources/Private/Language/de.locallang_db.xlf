@@ -67,6 +67,18 @@
 				<source>Monthly repeat</source>
 				<target>monatliche Wiederholung</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting">
+				<target>Ferien Verhalten</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.no_effect">
+				<target>Kein Einfluss</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.only_during">
+				<target>Nur während Ferien aktiv</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.not_during">
+				<target>Nicht während Ferien aktiv</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
 				<target>Maximales Gewicht</target>

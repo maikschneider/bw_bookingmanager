@@ -43,6 +43,14 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $blockslots = null;
 
     /**
+     * holidays
+     *
+     * @lazy
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Holiday>
+     */
+    protected $holidays = null;
+
+    /**
      * notifications
      *
      * @lazy
@@ -124,6 +132,22 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getBlockslots()
     {
         return $this->blockslots;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getHolidays(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->holidays;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays
+     */
+    public function setHolidays(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays): void
+    {
+        $this->holidays = $holidays;
     }
 
     /**

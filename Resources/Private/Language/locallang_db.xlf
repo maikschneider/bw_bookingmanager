@@ -51,6 +51,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
 				<source>Monthly repeat</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting">
+				<source>Holiday setting</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.no_effect">
+				<source>No effect</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.only_during">
+				<source>Only during calendar holidays</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.not_during">
+				<source>Not during calendar holidays</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
 			</trans-unit>

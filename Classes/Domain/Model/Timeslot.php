@@ -22,6 +22,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     const REPEAT_WEEKLY = 2;
     const REPEAT_MONTHLY = 3;
 
+    const HOLIDAY_NO_EFFECT = 0;
+    const HOLIDAY_NOT_DURING = 1;
+    const HOLIDAY_ONLY_DURING = 2;
+
     /**
      * startDate
      *
@@ -42,6 +46,29 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $repeatType = Timeslot::REPEAT_NO;
+
+    /**
+     * holidaySetting
+     *
+     * @var int
+     */
+    protected $holidaySetting = Timeslot::HOLIDAY_NO_EFFECT;
+
+    /**
+     * @return int
+     */
+    public function getHolidaySetting(): int
+    {
+        return $this->holidaySetting;
+    }
+
+    /**
+     * @param int $holidaySetting
+     */
+    public function setHolidaySetting(int $holidaySetting): void
+    {
+        $this->holidaySetting = $holidaySetting;
+    }
 
     /**
      * maxWeight

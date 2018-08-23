@@ -1,6 +1,8 @@
 <?php
 namespace Blueways\BwBookingmanager\Helper;
 
+use \Blueways\BwBookingmanager\Domain\Model\Timeslot;
+
 /**
  * This class oganizes the correct arrangement of timeslots
  */
@@ -96,28 +98,48 @@ class TimeslotManager
             'in' => [
                 [$this->startDate, $this->endDate]
             ],
+            'inAny' => [
+
+            ],
             'notIn' => [
+
+            ],
+            'holidays' => [
 
             ]
         ];
 
+        // creteria for Blockslots
         $blockslots = $this->calendar->getBlockslots();
-        // @TODO: blockslots erneut testen: musste diesesn test einbauen,
-        // weil NULL zurück kam
-        if (!$blockslots) {
-            return;
-        }
+        if ($blockslots) {
 
-        foreach ($this->calendar->getBlockslots() as $blockslot) {
-            $blockStartDate = $blockslot->getStartDate();
-            $blockEndDate = $blockslot->getEndDate();
+            foreach ($blockslots as $blockslot) {
+                $blockStartDate = $blockslot->getStartDate();
+                $blockEndDate = $blockslot->getEndDate();
 
-            // check if block is inside date range
-            // so add its dates to filterCritera
-            if (!($blockEndDate < $this->startDate || $blockStartDate > $this->endDate)) {
-                $this->filterCritera['notIn'][] = [$blockStartDate, $blockEndDate];
+                // check if block is inside date range
+                // so add its dates to filterCritera
+                if (!($blockEndDate < $this->startDate || $blockStartDate > $this->endDate)) {
+                    $this->filterCritera['notIn'][] = [$blockStartDate, $blockEndDate];
+                }
             }
         }
+
+        // start+end dates for Holidays
+        $holidays = $this->calendar->getHolidays();
+        if ($holidays) {
+            foreach ($holidays as $holiday) {
+                $holiStartDate = $holiday->getStartDate()->setTime(0,0,0);
+                $holiEndDate = $holiday->getEndDate()->setTime(23,59,59);
+
+                // check if block is inside date range
+                // so add its dates to filterCritera
+                if (!($holiEndDate < $this->startDate || $holiStartDate > $this->endDate)) {
+                    $this->filterCritera['holidays'][] = [$holiStartDate, $holiEndDate];
+                }
+            }
+        }
+
     }
 
     /**
@@ -128,6 +150,33 @@ class TimeslotManager
         $this->timeslots = array_filter(
             $this->timeslots,
             function ($timeslot) {
+
+                // check timeslot if holidays should move to 'in' or 'out' critera array
+                if($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING){
+                    $this->filterCritera['notIn'] = array_merge(
+                        $this->filterCritera['notIn'],
+                        $this->filterCritera['holidays']
+                    );
+
+                    // @Todo: check that timeslot is outside
+                }
+
+                // filter timeslots for holiday setting to be within
+                if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_ONLY_DURING) {
+                    $this->filterCritera['inAny'] = array_merge(
+                        $this->filterCritera['inAny'],
+                        $this->filterCritera['holidays']
+                    );
+
+                    $isInAny = true;
+                    foreach ($this->filterCritera['inAny'] as $range) {
+                        if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
+                            $isInAny = false;
+                        }
+                    }
+                    if(!$isInAny) return false;
+                }
+
                 // check for date range to be within
                 // it is allowed that events start in the past, as long as they end in the given range or even alter
                 foreach ($this->filterCritera['in'] as $range) {
