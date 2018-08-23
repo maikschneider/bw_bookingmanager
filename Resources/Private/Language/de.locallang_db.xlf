@@ -27,6 +27,10 @@
 				<source>Blockslots</source>
 				<target>Blockslots</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.holidays">
+				<source>Holidays</source>
+				<target>Ferien</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
 				<source>Notifications</source>
 				<target>Benachrichtigungen</target>
@@ -202,6 +206,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
 				<source>Reason</source>
 				<target>Grund</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday">
+				<target>Ferientag</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday.start_date">
+				<target>Start Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday.end_date">
+				<target>End Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday.name">
+				<target>Name</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification">
 				<source>Notification</source>

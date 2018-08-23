@@ -52,6 +52,19 @@ class Tca
         return $params;
     }
 
+    public function getHolidayLabel(&$params, $parentObject)
+    {
+        $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
+
+        $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
+        $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
+
+        $newTitle = $record['name'] . ' (' . $startDate->format('d.m.y') . ' - ' . $endDate->format('d.m.y') . ')';
+
+        $params['title'] = $newTitle;
+        return $params;
+    }
+
     public function getEntryLabel(&$params, $parentObject)
     {
         $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);

@@ -14,14 +14,14 @@ return [
             'disabled' => 'hidden',
         ],
         'type' => 'record_type',
-        'searchFields' => 'name,timeslots,blockslots,notifications',
+        'searchFields' => 'name,timeslots,blockslots,holidays,notifications',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, holidays, notifications',
     ],
     'types' => [
-        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, notifications'],
+        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, holidays, notifications'],
     ],
     'columns' => [
         'record_type' => [
@@ -115,6 +115,20 @@ return [
                 'allowed' => 'tx_bwbookingmanager_domain_model_blockslot',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_blockslot',
                 'MM' => 'tx_bwbookingmanager_calendar_blockslot_mm',
+                'MM_opposite_field' => 'calendars',
+                'size' => 10,
+                'maxitems' => 9999,
+            ],
+        ],
+        'holidays' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.holidays',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_bwbookingmanager_domain_model_holiday',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_holiday',
+                'MM' => 'tx_bwbookingmanager_calendar_holiday_mm',
                 'MM_opposite_field' => 'calendars',
                 'size' => 10,
                 'maxitems' => 9999,
