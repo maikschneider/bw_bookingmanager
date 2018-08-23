@@ -36,6 +36,7 @@ class TimeslotDatesSelect {
   private dayDetailDivs: JQuery;
   private multipleTimeslotsLinks: JQuery;
   private modalReloadLinks: JQuery;
+  private currentCalendarViewUid: any;
 
   private calendarDataLinks: JQuery;
   private savedLink: JQuery;
@@ -51,6 +52,7 @@ class TimeslotDatesSelect {
   {
     this.cacheDom();
     this.bindEvents();
+    this.openFirstView();
   }
 
   private bindEvents()
@@ -62,6 +64,19 @@ class TimeslotDatesSelect {
     this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
     this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
     if(this.savedLink) this.savedLink.on('click', this.onSavedLinkClick.bind(this));
+  }
+
+  private openFirstView()
+  {
+  	  // check for any active sidebar link.
+	  // if there is none, no calendaruid is set in the current entry -> means, new entry. so guess the calendar
+	  if(this.sidebarLinks.find('.active').length) return;
+
+	  const calendarToOpen = this.currentCalendarViewUid ? this.currentCalendarViewUid : this.calendarSelectField.find('option:selected').val();
+
+	  if(!calendarToOpen) return;
+
+	  this.sidebarLinks.filter('[data-calendar-uid="' + calendarToOpen + '"]').trigger('click');
   }
 
   /**
@@ -169,12 +184,17 @@ class TimeslotDatesSelect {
   {
     e.preventDefault();
 
+    // switch sidebarlinks
     this.sidebarLinks.removeClass('active');
     e.currentTarget.classList.add('active');
 
+    // switch tabs
     this.calendarTabs.removeClass('active');
     const tabId = e.currentTarget.getAttribute('href');
     this.calendarTabs.filter(tabId).addClass('active');
+
+    // save uid for next reopen
+    this.currentCalendarViewUid = $(e.currentTarget).data('calendar-uid');
   }
 
   private cacheDom()

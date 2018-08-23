@@ -16,6 +16,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
         TimeslotDatesSelect.prototype.init = function () {
             this.cacheDom();
             this.bindEvents();
+            this.openFirstView();
         };
         TimeslotDatesSelect.prototype.bindEvents = function () {
             this.sidebarLinks.on('click', this.onSidebarLinkClick.bind(this));
@@ -26,6 +27,16 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
             if (this.savedLink)
                 this.savedLink.on('click', this.onSavedLinkClick.bind(this));
+        };
+        TimeslotDatesSelect.prototype.openFirstView = function () {
+            // check for any active sidebar link.
+            // if there is none, no calendaruid is set in the current entry -> means, new entry. so guess the calendar
+            if (this.sidebarLinks.find('.active').length)
+                return;
+            var calendarToOpen = this.currentCalendarViewUid ? this.currentCalendarViewUid : this.calendarSelectField.find('option:selected').val();
+            if (!calendarToOpen)
+                return;
+            this.sidebarLinks.filter('[data-calendar-uid="' + calendarToOpen + '"]').trigger('click');
         };
         /**
          * Click on the blue button (preselected date)
@@ -106,11 +117,15 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
         };
         TimeslotDatesSelect.prototype.onSidebarLinkClick = function (e) {
             e.preventDefault();
+            // switch sidebarlinks
             this.sidebarLinks.removeClass('active');
             e.currentTarget.classList.add('active');
+            // switch tabs
             this.calendarTabs.removeClass('active');
             var tabId = e.currentTarget.getAttribute('href');
             this.calendarTabs.filter(tabId).addClass('active');
+            // save uid for next reopen
+            this.currentCalendarViewUid = $(e.currentTarget).data('calendar-uid');
         };
         TimeslotDatesSelect.prototype.cacheDom = function () {
             this.newDataLink = null;

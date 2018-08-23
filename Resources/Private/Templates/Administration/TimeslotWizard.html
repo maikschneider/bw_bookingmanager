@@ -10,7 +10,7 @@
 				<h2>Calendars</h2>
 				<ul class="list-group">
 					<f:for each="{calendars}" as="c" iteration="i">
-						<a class="list-group-item {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}" href="#calendar-tab-{c.calendar.uid}">{c.calendar.name}</a>
+						<a data-calendar-uid="{c.calendar.uid}" class="list-group-item {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}" href="#calendar-tab-{c.calendar.uid}">{c.calendar.name}</a>
 					</f:for>
 				</ul>
 			</div>
