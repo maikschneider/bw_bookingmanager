@@ -310,7 +310,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pid = (int)$this->tsConfiguration['defaultPid.'][$table];
         }
 
-        $returnUrl = 'index.php?M=web_NewsTxNewsM2&id=' . $this->pageUid . $this->getToken();
+        $returnUrl = 'index.php?M=web_BwBookingmanagerTxBookingmanagerM1&id=' . $this->pageUid . $this->getToken();
         $url = BackendUtilityCore::getModuleUrl('record_edit', [
             'edit[' . $table . '][' . $pid . ']' => 'new',
             'returnUrl' => $returnUrl
