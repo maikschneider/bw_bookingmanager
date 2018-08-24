@@ -157,12 +157,6 @@ class TimeslotManager
                         $this->filterCritera['notIn'],
                         $this->filterCritera['holidays']
                     );
-
-                    foreach ($this->filterCritera['inAny'] as $range) {
-                        if ($timeslot->getStartDate() > $range[0] && $timeslot->getEndDate() < $range[1]) {
-                            return false;
-                        }
-                    }
                 }
 
                 // filter timeslots for holiday setting to be within
