@@ -158,7 +158,11 @@ class TimeslotManager
                         $this->filterCritera['holidays']
                     );
 
-                    // @Todo: check that timeslot is outside
+                    foreach ($this->filterCritera['inAny'] as $range) {
+                        if ($timeslot->getStartDate() > $range[0] && $timeslot->getEndDate() < $range[1]) {
+                            return false;
+                        }
+                    }
                 }
 
                 // filter timeslots for holiday setting to be within
@@ -168,13 +172,13 @@ class TimeslotManager
                         $this->filterCritera['holidays']
                     );
 
-                    $isInAny = true;
+                    $notInAny = true;
                     foreach ($this->filterCritera['inAny'] as $range) {
-                        if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
-                            $isInAny = false;
+                        if ($timeslot->getStartDate() > $range[0] && $timeslot->getEndDate() < $range[1]) {
+                            $notInAny = false;
                         }
                     }
-                    if(!$isInAny) return false;
+                    if($notInAny) return false;
                 }
 
                 // check for date range to be within
