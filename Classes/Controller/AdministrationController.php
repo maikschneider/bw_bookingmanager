@@ -91,7 +91,9 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/News/AdministrationModule');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Chart');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Dashboard');
         }
 
         $this->createMenu();
@@ -250,6 +252,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->view->assign('hideForm', $hideForm);
         $this->view->assign('page', $this->pageUid);
         $this->view->assign('moduleToken', $this->getToken(true));
+        $this->view->assign('calendars', $calendars);
+    }
+
+    public function dashboardAction()
+    {
+        $calendars = $this->calendarRepository->findAllIgnorePid();
+
         $this->view->assign('calendars', $calendars);
     }
 
