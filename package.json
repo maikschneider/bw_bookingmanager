@@ -1,18 +1,19 @@
 {
   "name": "bw_bookingmanager",
   "version": "1.0.0",
-  "description": "",
+  "description": "Generic booking manager for TYPO3 CMS",
+  "repository": "https://bitbucket.org/blueways/bw_bookingmanager",
   "main": "Gruntfile.js",
   "dependencies": {
-    "@types/jqueryui": "^1.12.1",
-    "grunt": "^1.0.1",
-    "grunt-ts": "^6.0.0-beta.17",
+    "@types/jqueryui": "^1.12.3",
+    "grunt": "^1.0.3",
+    "grunt-ts": "^6.0.0-beta.21",
     "jquery": "^3.3.1",
     "jquery-ui-dist": "^1.12.1",
-    "typescript": "^2.2.2"
+    "typescript": "^3.0.1"
   },
   "devDependencies": {
-    "@types/jquery": "^3.3.0"
+    "@types/jquery": "^3.3.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

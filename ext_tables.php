@@ -27,7 +27,7 @@ call_user_func(
                 'tx_bookingmanager_m1',
                 '',
                 array(
-                    'Administration' => 'index, timeslot, newEntry, blockslot, newBlockslot',
+                    'Administration' => 'index, timeslot, newEntry, blockslot, newBlockslot, dashboard',
                 ),
                 array(
                     'access' => 'user,group',

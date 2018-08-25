@@ -92,8 +92,8 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Chart');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Dashboard');
+            //$pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Chart');
+            //$pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Dashboard');
         }
 
         $this->createMenu();
@@ -112,6 +112,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $actions = [
             ['action' => 'index', 'label' => 'entryListing'],
             ['action' => 'blockslot', 'label' => 'blockslotListing'],
+            ['action' => 'dashboard', 'label' => 'dashboard'],
         ];
 
         foreach ($actions as $action) {

@@ -31,4 +31,4 @@ class Dashboard {
 
 }
 
-//export = new Dashboard().init();
+export = new Dashboard().functionTest();

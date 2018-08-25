@@ -99,6 +99,9 @@
             <trans-unit id="module.timeslotListing">
                 <source>Timeslot listing</source>
             </trans-unit>
+            <trans-unit id="module.dashboard">
+                <source>Dashboard</source>
+            </trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
             </trans-unit>
