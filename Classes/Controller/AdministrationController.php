@@ -92,8 +92,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
-            //$pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Chart');
-            //$pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/Dashboard');
         }
 
         $this->createMenu();
@@ -260,8 +258,12 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         $calendars = $this->calendarRepository->findAllIgnorePid();
 
+        $chartsUri = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri([]);
+
         $this->view->assign('calendars', $calendars);
+        $this->view->assign('chartsUri', $chartsUri);
     }
+
 
     /**
      * Get a CSRF token

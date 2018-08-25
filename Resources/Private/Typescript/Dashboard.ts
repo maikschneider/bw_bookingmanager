@@ -2,33 +2,53 @@ import Icons = require('TYPO3/CMS/Backend/Icons');
 
 class Dashboard {
 
+	chartsUri: string = null
+	chart1Button: JQuery<Element>
+
 	public init()
 	{
-		const $loaderTarget = $('body');
-		const reloadLink = 'http://www.google.de';
+		this.cacheDOM();
+		this.bindEvents();
+	}
+
+	private cacheDOM()
+	{
+		this.chart1Button = $('#chart1-tab-0-button');
+	}
+
+	private bindEvents()
+	{
+		this.chart1Button.on('click', this.onloadCharts.bind(this));
+	}
+
+	private onloadCharts(e: JQueryEventObject)
+	{
+		const chartUri = $(e.currentTarget).data('charts-uri');
+		this.loadUrl(chartUri);
+	}
+
+	private loadUrl($url: string)
+	{
+		const $loaderTarget = $('.chart1-canvas');
 		const contentcontentTarget = $loaderTarget;
 
 		Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
 			$loaderTarget.html('<div class="modal-loading">' + icon + '</div>');
 			$.get(
-				reloadLink,
+				$url,
 				(response: string): void => {
-					contentcontentTarget
-						.empty()
-						.append(response);
-					this.init();
+					this.initCharts(response)
 				},
 				'html'
 			);
 		});
 	}
 
-
-	public functionTest()
+	private initCharts(data)
 	{
-		alert('test');
+		console.log(data);
 	}
 
 }
 
-export = new Dashboard().functionTest();
+export = new Dashboard().init();
