@@ -1,9 +1,9 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Controller;
 
 /**
  * Administration controller for TYPO3 Backend module
- *
  * PHP version 7.2
  *
  * @package  BwBookingManager
@@ -32,6 +32,7 @@ use TYPO3\CMS\Lang\LanguageService;
  */
 class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
+
     /**
      * entryRepository
      *
@@ -76,7 +77,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
-        $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
+        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
 
         parent::initializeAction();
     }
@@ -100,7 +101,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
     /**
      * Create menu
-     *
      */
     protected function createMenu()
     {
@@ -129,7 +129,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
     /**
      * Create the panel of buttons
-     *
      */
     protected function createButtons()
     {
@@ -258,12 +257,18 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         $calendars = $this->calendarRepository->findAllIgnorePid();
 
-        $chart1Uri = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1', []);
+        $chart1UriYear = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1',
+            ['view' => 'year']);
+        $chart1UriMonth = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1',
+            ['view' => 'month']);
+        $chart1UriWeek = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1',
+            ['view' => 'week']);
 
         $this->view->assign('calendars', $calendars);
-        $this->view->assign('chart1Uri', $chart1Uri);
+        $this->view->assign('chart1UriYear', $chart1UriYear);
+        $this->view->assign('chart1UriMonth', $chart1UriMonth);
+        $this->view->assign('chart1UriWeek', $chart1UriWeek);
     }
-
 
     /**
      * Get a CSRF token
@@ -343,7 +348,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      */
     public function newBlockslotAction()
     {
-       $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_blockslot');
+        $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_blockslot');
     }
 
 }
