@@ -18,7 +18,7 @@
 			<div class="panel panel-tab">
 				<div class="panel-body">
 
-					<div class="chart1-canvas" style="height:200px; display:flex; justify-content: center; align-items: center;"></div>
+					<div class="chart1-canvas" id="calendar-uid-0" style="height:200px; display:flex; justify-content: center; align-items: center;"></div>
 
 					<div class="btn-group">
 						<a href="#" class="btn btn-default">
@@ -31,7 +31,7 @@
 								</span>
 							</span>
 						</a>
-						<a href="#" id="chart1-tab-0-button" data-charts-uri="{chartsUri}" class="btn btn-default">
+						<a href="#" id="chart1-tab-0-button" data-chart-uri="{chart1Uri}" class="btn btn-default">
 						<span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-pick-date"
 								data-identifier="actions-edit-pick-date">
 							<span class="icon-markup">
@@ -60,7 +60,8 @@
 			<div role="tabpanel" class="tab-pane" id="chart1-tab-{i.cycle}">
 				<div class="panel panel-tab">
 					<div class="panel-body">
-						{i.cycle} content
+						<div id="calendar-uid-{calendar.uid}" class="chart1-canvas"
+								style="height:200px; display:flex; justify-content: center; align-items: center;"></div>
 					</div>
 				</div>
 			</div>
