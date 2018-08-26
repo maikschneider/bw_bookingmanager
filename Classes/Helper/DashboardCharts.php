@@ -109,7 +109,9 @@ class DashboardCharts
             return $this->startDate->format('F Y');
         }
         if($this->view === 'week'){
-            return 'Kalenderwochen '.$this->startDate->format('Y');
+            $endDate = clone $this->startDate;
+            $endDate->modify('+6 days');
+            return 'Kalenderwoche '.$this->startDate->format('W').' ('.$this->startDate->format('d.m').'-'. $endDate->format('d.m').')';
         }
     }
 
@@ -164,6 +166,21 @@ class DashboardCharts
             }
         }
 
+        if ($this->view === 'week') {
+
+            $data = array_fill(0, 7, 0);
+
+            foreach ($this->entries as $entry) {
+
+                if ($entry->getCalendar()->getUid() !== $calendar->getUid()) {
+                    continue;
+                }
+
+                $dayOffset = ($entry->getStartDate()->format('w') + 6) % 7;
+                $data[$dayOffset]++;
+            }
+        }
+
         return $data;
     }
 
@@ -180,6 +197,12 @@ class DashboardCharts
         if ($this->view === 'month') {
             $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->startDate->format('n'), $this->startDate->format('Y'));
             $labels = range(1, $daysInMonth);
+        }
+
+        if ($this->view === 'week') {
+            for ($i = 1; $i < 8; $i++) {
+                $labels[] = $this->languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.' . $i);
+            }
         }
 
         return $labels;

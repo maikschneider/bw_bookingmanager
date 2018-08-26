@@ -77,6 +77,8 @@ class Dashboard {
 		const chart = this.chart1s[calendarId];
 		const chartElement = chart.getElementAtEvent(e);
 
+		console.log(chartElement);
+
 		// @TODO: do voodoo
 	}
 

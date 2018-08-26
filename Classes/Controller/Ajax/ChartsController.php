@@ -45,7 +45,7 @@ class ChartsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
             // default settings
             $startDate = $queryParams['startDate'] ? date_create_from_format('d-m-Y', $queryParams['startDate']) : new \DateTime('now');
-            $view = $queryParams['view'] ? $queryParams['view'] : 'month';
+            $view = $queryParams['view'] ? $queryParams['view'] : 'week';
 
 
             if ($view === 'year') {
@@ -64,6 +64,17 @@ class ChartsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $endDate->modify('last day of this month');
                 $prevDate = clone $startDate;
                 $prevDate->modify('-1 month');
+                $nextDate = clone $endDate;
+                $nextDate->modify('+1 days');
+            }
+
+            if ($view === 'week') {
+                $startDate->modify('+1 days');
+                $startDate->modify('last monday');
+                $endDate = clone $startDate;
+                $endDate->modify('+6 days');
+                $prevDate = clone $startDate;
+                $prevDate->modify('-1 days');
                 $nextDate = clone $endDate;
                 $nextDate->modify('+1 days');
             }
