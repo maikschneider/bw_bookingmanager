@@ -25,6 +25,11 @@ class DashboardCharts
      */
     protected $view = null;
 
+    /**
+     * @var array $calendarColors
+     */
+    protected $calendarColors = null;
+
 
     public function __construct($calendars, $entries, $startDate, $view)
     {
@@ -32,35 +37,29 @@ class DashboardCharts
         $this->startDate = $startDate;
         $this->entries = $entries;
         $this->view = $view;
+
+        $this->generateCalendarColors();
     }
 
     public function getChart1()
     {
         $charts = [];
         if (sizeof($this->calendars)>1) {
-            $charts['calendar-uid-0'] = $this->getChart1Info(false);
+            $charts['calendar-uid-0'] = $this->getChart1Ctx($this->calendars);
         }
         foreach($this->calendars as $key => $calendar){
-            $charts['calendar-uid-'.$calendar->getUid()] = $this->getChart1Info($calendar);
+            $charts['calendar-uid-'.$calendar->getUid()] = $this->getChart1Ctx([$calendar]);
         }
         return $charts;
     }
 
-    private function getChart1Info($calendar)
+    private function getChart1Ctx($calendars)
     {
         $ctx = [
             'type' => 'bar',
             'data' => [
-                'labels' => ['Jan', 'Feb', 'Marz', 'April'],
-                'datasets' => [
-                    [
-                        'backgroundColor' => 'rgba(255, 99, 132, 0.5)',
-                        'borderColor' => 'rgb(255, 99, 132)',
-                        'borderWidth' => 1,
-                        'data' => [2, -4, 12, 4],
-                        'label' => 'Dataset 1',
-                    ]
-                ]
+                'labels' => $this->getChart1Labels(),
+                'datasets' => $this->getChart1Datasets($calendars),
             ],
             'options' => [
                 'responsive' => false,
@@ -77,6 +76,66 @@ class DashboardCharts
         return $ctx;
     }
 
+    private function getChart1Datasets($calendars)
+    {
+        $datasets = [];
+        foreach ($calendars as $key => $calendar) {
+
+            $colorKey = 0;
+
+            $datasets[] = [
+                'backgroundColor' => 'rgba(' . $this->calendarColors[$calendar->getUid()] . ', 0.5)',
+                'borderColor' => 'rgb(' . $this->calendarColors[$calendar->getUid()] . ')',
+                'borderWidth' => 1,
+                'data' => $this->getChart1Data($calendar),
+                'label' => $calendar->getName(),
+            ];
+
+        }
+        return $datasets;
+    }
+
+    private function getChart1Data($calendar)
+    {
+        $data = [];
+
+        if ($this->view === 'year') {
+
+            $data = array_fill(0, 11, 0);
+
+            foreach($this->entries as $entry) {
+
+                if($entry->getCalendar()->getUid() !== $calendar->getUid()){
+                    continue;
+                }
+
+                $yearOffset = $entry->getStartDate()->format('n') - 1;
+                $data[$yearOffset]++;
+            }
+
+        }
+
+        return $data;
+    }
+
+    private function getChart1Labels()
+    {
+        $labels = [];
+        $languageService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
+
+        if ($this->view === 'year') {
+            for ($i = 1; $i < 13; $i++) {
+                $labels[] = $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.short.' . $i);
+            }
+        }
+
+        if($this->view === 'month') {
+            $labels = [];
+        }
+
+        return $labels;
+    }
+
     public static function getDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
@@ -84,5 +143,22 @@ class DashboardCharts
 
         $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
+    }
+
+    public function generateCalendarColors()
+    {
+        $colors = [
+            '255, 99, 132',
+            '255, 159, 64',
+            '255, 205, 86',
+            '75, 192, 192',
+            '54, 162, 235',
+            '153, 102, 255',
+            '201, 203, 207'
+        ];
+
+        foreach ($this->calendars as $key => $calendar){
+            $this->calendarColors[$calendar->getUid()] = $colors[$key];
+        }
     }
 }
