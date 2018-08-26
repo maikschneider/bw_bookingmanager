@@ -13,8 +13,6 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/BwBookingman
         Dashboard.prototype.cacheDOM = function () {
             this.chart1ViewButtons = $('.chart1-view-button');
             this.chart1wrappers = $('.chart1-canvas');
-            this.dropdownCheckIcon = $('span[data-identifier="actions-unmarkstate"]').first().clone();
-            this.dropdownUnCheckIcon = $('span[data-identifier="actions-markstate"]').first().clone();
             this.chart1NavButtons = $('.chart1-nav-button');
         };
         Dashboard.prototype.bindEvents = function () {
@@ -25,8 +23,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/BwBookingman
             var uri = $(e.currentTarget).attr('data-chart-uri');
             var loaderTarget = this.chart1wrappers;
             var callback = this.initChart1;
-            this.chart1ViewButtons.find('span.icon').replaceWith(this.dropdownUnCheckIcon);
-            $(e.currentTarget).find('span.icon').replaceWith(this.dropdownCheckIcon);
+            this.chart1ViewButtons.removeClass('active');
+            $(e.currentTarget).addClass('active');
             this.loadChart(uri, loaderTarget, callback);
         };
         Dashboard.prototype.onChart1NavChange = function (e) {
