@@ -30,7 +30,6 @@ class DashboardCharts
      */
     protected $calendarColors = null;
 
-
     public function __construct($calendars, $entries, $startDate, $view)
     {
         $this->calendars = $calendars;
@@ -44,11 +43,11 @@ class DashboardCharts
     public function getChart1()
     {
         $charts = [];
-        if (sizeof($this->calendars)>1) {
+        if (sizeof($this->calendars) > 1) {
             $charts['calendar-uid-0'] = $this->getChart1Ctx($this->calendars);
         }
-        foreach($this->calendars as $key => $calendar){
-            $charts['calendar-uid-'.$calendar->getUid()] = $this->getChart1Ctx([$calendar]);
+        foreach ($this->calendars as $key => $calendar) {
+            $charts['calendar-uid-' . $calendar->getUid()] = $this->getChart1Ctx([$calendar]);
         }
         return $charts;
     }
@@ -69,7 +68,9 @@ class DashboardCharts
                             'beginAtZero' => true
                         ]
                     ]
-                ]
+                ],
+                'events' => ['click'],
+                'onClick' => ''
             ]
         ];
 
@@ -90,7 +91,6 @@ class DashboardCharts
                 'data' => $this->getChart1Data($calendar),
                 'label' => $calendar->getName(),
             ];
-
         }
         return $datasets;
     }
@@ -103,16 +103,15 @@ class DashboardCharts
 
             $data = array_fill(0, 11, 0);
 
-            foreach($this->entries as $entry) {
+            foreach ($this->entries as $entry) {
 
-                if($entry->getCalendar()->getUid() !== $calendar->getUid()){
+                if ($entry->getCalendar()->getUid() !== $calendar->getUid()) {
                     continue;
                 }
 
                 $yearOffset = $entry->getStartDate()->format('n') - 1;
                 $data[$yearOffset]++;
             }
-
         }
 
         return $data;
@@ -129,7 +128,7 @@ class DashboardCharts
             }
         }
 
-        if($this->view === 'month') {
+        if ($this->view === 'month') {
             $labels = [];
         }
 
@@ -139,7 +138,8 @@ class DashboardCharts
     public static function getDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'], $routeName);
+        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
+            $routeName);
 
         $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
@@ -157,7 +157,7 @@ class DashboardCharts
             '201, 203, 207'
         ];
 
-        foreach ($this->calendars as $key => $calendar){
+        foreach ($this->calendars as $key => $calendar) {
             $this->calendarColors[$calendar->getUid()] = $colors[$key];
         }
     }
