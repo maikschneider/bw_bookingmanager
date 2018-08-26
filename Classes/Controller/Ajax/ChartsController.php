@@ -45,7 +45,7 @@ class ChartsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
             // default settings
             $startDate = $queryParams['startDate'] ? date_create_from_format('d-m-Y', $queryParams['startDate']) : new \DateTime('now');
-            $view = $queryParams['view'] ? $queryParams['view'] : 'year';
+            $view = $queryParams['view'] ? $queryParams['view'] : 'month';
 
 
             if ($view === 'year') {
@@ -58,6 +58,16 @@ class ChartsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $nextDate->modify('+1 day');
             }
 
+            if ($view === 'month') {
+                $startDate->modify('first day of this month');
+                $endDate = clone $startDate;
+                $endDate->modify('last day of this month');
+                $prevDate = clone $startDate;
+                $prevDate->modify('-1 month');
+                $nextDate = clone $endDate;
+                $nextDate->modify('+1 days');
+            }
+
             // get data from repos
             $calendars = $this->calendarRepository->findAllIgnorePid();
             $entries = $this->entryRepository->findAllInRange($startDate, $endDate);
@@ -68,8 +78,8 @@ class ChartsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
             $ajax = [
                 'charts' => $charts,
-                'prevLink' => \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1', ['view' => $view, 'startDate' => $prevDate->format('d-m-Y')]),
-                'nextLink' => \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1', ['view' => $view, 'startDate' => $nextDate->format('d-m-Y')]),
+                'prevLink' => $chartHelper->getDashboardChartUri('ajax_dashboard_chart1', ['view' => $view, 'startDate' => $prevDate->format('d-m-Y')]),
+                'nextLink' => $chartHelper->getDashboardChartUri('ajax_dashboard_chart1', ['view' => $view, 'startDate' => $nextDate->format('d-m-Y')]),
             ];
 
             //

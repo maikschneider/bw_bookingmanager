@@ -30,6 +30,12 @@ class DashboardCharts
      */
     protected $calendarColors = null;
 
+    /**
+     * @var \TYPO3\CMS\Lang\LanguageService $languageService
+     */
+    protected $languageService = null;
+
+
     public function __construct($calendars, $entries, $startDate, $view)
     {
         $this->calendars = $calendars;
@@ -38,6 +44,7 @@ class DashboardCharts
         $this->view = $view;
 
         $this->generateCalendarColors();
+        $this->languageService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
     }
 
     public function getChart1()
@@ -63,13 +70,28 @@ class DashboardCharts
             'options' => [
                 'responsive' => false,
                 'scales' => [
-                    'yAxes' => [
+                    'yAxes' => [[
+                        'scaleLabel' => [
+                            'display' => true,
+                            'labelString' => 'Bookings',
+                            'fontStyle' => 'bold'
+                        ],
                         'ticks' => [
                             'beginAtZero' => true
-                        ]
-                    ]
+                        ]]
+                    ],
+                    'xAxes' => [[
+                        'scaleLabel' => [
+                            'display' => true,
+                            'labelString' => $this->getXLabel(),
+                            'fontStyle' => 'bold'
+                        ],
+                        'ticks' => [
+                            'beginAtZero' => true
+                        ]]
+                    ],
                 ],
-                'events' => ['click'],
+                //'events' => ['click'],
                 'onClick' => ''
             ]
         ];
@@ -77,12 +99,24 @@ class DashboardCharts
         return $ctx;
     }
 
+    // @TODO: label via languageservice
+    private function getXLabel()
+    {
+        if($this->view === 'year'){
+            return $this->startDate->format('Y');
+        }
+        if($this->view === 'month'){
+            return $this->startDate->format('F Y');
+        }
+        if($this->view === 'week'){
+            return 'Kalenderwochen '.$this->startDate->format('Y');
+        }
+    }
+
     private function getChart1Datasets($calendars)
     {
         $datasets = [];
         foreach ($calendars as $key => $calendar) {
-
-            $colorKey = 0;
 
             $datasets[] = [
                 'backgroundColor' => 'rgba(' . $this->calendarColors[$calendar->getUid()] . ', 0.5)',
@@ -114,28 +148,54 @@ class DashboardCharts
             }
         }
 
+        if ($this->view === 'month') {
+
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->startDate->format('n'), $this->startDate->format('Y'));
+            $data = array_fill(0, $daysInMonth, 0);
+
+            foreach ($this->entries as $entry) {
+
+                if ($entry->getCalendar()->getUid() !== $calendar->getUid()) {
+                    continue;
+                }
+
+                $monthOffset = $entry->getStartDate()->format('j') - 1;
+                $data[$monthOffset]++;
+            }
+        }
+
         return $data;
     }
 
     private function getChart1Labels()
     {
         $labels = [];
-        $languageService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
 
         if ($this->view === 'year') {
             for ($i = 1; $i < 13; $i++) {
-                $labels[] = $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.short.' . $i);
+                $labels[] = $this->languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.short.' . $i);
             }
         }
 
         if ($this->view === 'month') {
-            $labels = [];
+            $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->startDate->format('n'), $this->startDate->format('Y'));
+            $labels = range(1, $daysInMonth);
         }
 
         return $labels;
     }
 
-    public static function getDashboardChartUri(string $routeName, array $data): string
+    public function getDashboardChartUri(string $routeName, array $data): string
+    {
+        $uriArguments['arguments'] = json_encode($data);
+        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
+            $routeName);
+
+        $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
+        return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
+    }
+
+    public static function getStaticDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
         $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],

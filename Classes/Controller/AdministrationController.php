@@ -257,11 +257,11 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     {
         $calendars = $this->calendarRepository->findAllIgnorePid();
 
-        $chart1UriYear = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1',
+        $chart1UriYear = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri('ajax_dashboard_chart1',
             ['view' => 'year']);
-        $chart1UriMonth = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1',
+        $chart1UriMonth = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri('ajax_dashboard_chart1',
             ['view' => 'month']);
-        $chart1UriWeek = \Blueways\BwBookingmanager\Helper\DashboardCharts::getDashboardChartUri('ajax_dashboard_chart1',
+        $chart1UriWeek = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri('ajax_dashboard_chart1',
             ['view' => 'week']);
 
         $this->view->assign('calendars', $calendars);
