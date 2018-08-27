@@ -153,21 +153,20 @@ class TimeslotManager
 
                 // check timeslot if holidays should move to 'in' or 'out' critera array
                 if($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING){
-                    $this->filterCritera['notIn'] = array_merge(
-                        $this->filterCritera['notIn'],
-                        $this->filterCritera['holidays']
-                    );
+
+                    foreach ($this->filterCritera['holidays'] as $range) {
+                        if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
+                            continue;
+                        }
+                        return false;
+                    }
                 }
 
                 // filter timeslots for holiday setting to be within
                 if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_ONLY_DURING) {
-                    $this->filterCritera['inAny'] = array_merge(
-                        $this->filterCritera['inAny'],
-                        $this->filterCritera['holidays']
-                    );
-
+                   
                     $notInAny = true;
-                    foreach ($this->filterCritera['inAny'] as $range) {
+                    foreach ($this->filterCritera['holidays'] as $range) {
                         if ($timeslot->getStartDate() > $range[0] && $timeslot->getEndDate() < $range[1]) {
                             $notInAny = false;
                         }
