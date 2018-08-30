@@ -38,7 +38,7 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
             $cells['primary'] = [];
 
             $iconFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-            $languageService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
+            $languageService = $GLOBALS['LANG'];
 
             if ($row['confirmed']) {
                 $params = 'data[' . $table . '][' . $row['uid'] . '][confirmed]=0';
