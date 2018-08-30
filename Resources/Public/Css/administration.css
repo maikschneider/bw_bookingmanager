@@ -12,6 +12,10 @@ tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"] {
 	transition: background-color 0.3s ease;
 }
 
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:hover{
+	background-color: #f1cccc !important;
+}
+
 
 .media, .media-body {
 	overflow: visible;
