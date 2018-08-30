@@ -7,6 +7,11 @@
 	display: none;
 }
 
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"] {
+	background-color: #ffdcdc !important;
+	transition: background-color 0.3s ease;
+}
+
 
 .media, .media-body {
 	overflow: visible;

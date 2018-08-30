@@ -22,6 +22,8 @@ class BetterRecordList{
 
 	public initialize()
 	{
+		this.styleRows();
+
 		$(document).on('click', Identifiers.confirm, (e: JQueryEventObject): void => {
 			e.preventDefault();
 			const $anchorElement = $(e.currentTarget);
@@ -46,6 +48,14 @@ class BetterRecordList{
 		})
 	}
 
+	private styleRows()
+	{
+		$('tr.t3js-entity[data-table="tx_bwbookingmanager_domain_model_entry"]').each(function(i, e){
+			const isConfirmed = $(e).find('.t3js-record-confirm').attr('data-confirmed');
+			if(isConfirmed=='no') $(e).addClass('not-confirmed');
+		});
+	}
+
 	/**
 	 * Toggle row visibility after record has been changed
 	 *
@@ -65,20 +75,23 @@ class BetterRecordList{
 			nextState = 'yes';
 			nextParams = params.replace('=1', '=0');
 			iconName = 'actions-edit-unhide';
+			$rowElement.removeClass('not-confirmed');
 		} else {
 			nextState = 'no';
 			nextParams = params.replace('=0', '=1');
 			iconName = 'actions-edit-hide';
+			$rowElement.addClass('not-confirmed');
 		}
 		$anchorElement.data('confirmed', nextState).data('params', nextParams);
+
+		const newTitle = $anchorElement.attr('data-toggle-title');
+		$anchorElement.attr('data-toggle-title', $anchorElement.attr('data-original-title'));
+		$anchorElement.attr('data-original-title', newTitle);
+		$anchorElement.tooltip('hide')
 
 		const $iconElement = $anchorElement.find(Identifiers.icon);
 		Icons.getIcon(iconName, Icons.sizes.small).done((icon: string): void => {
 			$iconElement.replaceWith(icon);
-		});
-
-		$rowElement.fadeTo('fast', 0.4, (): void => {
-			$rowElement.fadeTo('fast', 1);
 		});
 
 	}

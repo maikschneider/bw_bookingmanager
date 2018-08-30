@@ -14,6 +14,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/Backend/Noti
         }
         BetterRecordList.prototype.initialize = function () {
             var _this = this;
+            this.styleRows();
             $(document).on('click', Identifiers.confirm, function (e) {
                 e.preventDefault();
                 var $anchorElement = $(e.currentTarget);
@@ -36,6 +37,13 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/Backend/Noti
                 });
             });
         };
+        BetterRecordList.prototype.styleRows = function () {
+            $('tr.t3js-entity[data-table="tx_bwbookingmanager_domain_model_entry"]').each(function (i, e) {
+                var isConfirmed = $(e).find('.t3js-record-confirm').attr('data-confirmed');
+                if (isConfirmed == 'no')
+                    $(e).addClass('not-confirmed');
+            });
+        };
         /**
          * Toggle row visibility after record has been changed
          *
@@ -53,19 +61,22 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/Backend/Noti
                 nextState = 'yes';
                 nextParams = params.replace('=1', '=0');
                 iconName = 'actions-edit-unhide';
+                $rowElement.removeClass('not-confirmed');
             }
             else {
                 nextState = 'no';
                 nextParams = params.replace('=0', '=1');
                 iconName = 'actions-edit-hide';
+                $rowElement.addClass('not-confirmed');
             }
             $anchorElement.data('confirmed', nextState).data('params', nextParams);
+            var newTitle = $anchorElement.attr('data-toggle-title');
+            $anchorElement.attr('data-toggle-title', $anchorElement.attr('data-original-title'));
+            $anchorElement.attr('data-original-title', newTitle);
+            $anchorElement.tooltip('hide');
             var $iconElement = $anchorElement.find(Identifiers.icon);
             Icons.getIcon(iconName, Icons.sizes.small).done(function (icon) {
                 $iconElement.replaceWith(icon);
-            });
-            $rowElement.fadeTo('fast', 0.4, function () {
-                $rowElement.fadeTo('fast', 1);
             });
         };
         /**
