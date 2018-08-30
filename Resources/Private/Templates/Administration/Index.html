@@ -6,6 +6,8 @@
 
 <f:section name="content">
 
+    <f:be.pageRenderer includeRequireJsModules="{0: 'TYPO3/CMS/Backend/Tooltip', 1: 'TYPO3/CMS/BwBookingmanager/BetterRecordlist'}" />
+
     <h1>
 				<f:for each="{calendars}" as="calendar">
 						<f:if condition="{calendars-f:count()}>1">, </f:if> {calendar.name}
@@ -183,7 +185,7 @@
 
             {namespace bw=Blueways\BwBookingmanager\ViewHelpers}
             <bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry" fieldList="{0: 'confirmed', 1: 'name', 2: 'prename', 3: 'email', 4: 'phone', 5: 'weight'}"
-                recordsPerPage="100" sortField="start_date" enableClickMenu="false" noControlPanels="true" clickTitleMode="edit"
+                recordsPerPage="100" sortField="start_date" enableClickMenu="false" noControlPanels="false" clickTitleMode="edit"
             />
         </f:else>
     </f:if>

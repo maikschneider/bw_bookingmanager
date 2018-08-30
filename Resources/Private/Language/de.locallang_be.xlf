@@ -234,6 +234,12 @@
 				<source>Show not confirmed entries</source>
 				<target>Zeige nicht bestätigte Buchungen an</target>
 			</trans-unit>
+            <trans-unit id="administration.recordlist.button.confirm">
+                <target>Buchung bestätigen</target>
+            </trans-unit>
+            <trans-unit id="administration.recordlist.button.unconfirm">
+                <target>Bestätigung aufheben</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

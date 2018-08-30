@@ -177,6 +177,12 @@
             <trans-unit id="administration.filter.submit">
                 <source>Refresh</source>
             </trans-unit>
+            <trans-unit id="administration.recordlist.button.confirm">
+                <source>Confirm booking</source>
+            </trans-unit>
+            <trans-unit id="administration.recordlist.button.unconfirm">
+                <source>Unconfirm booking</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
