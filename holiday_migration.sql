@@ -10,19 +10,19 @@ UPDATE tx_bwbookingmanager_domain_model_timeslot SET repeat_type=1 WHERE uid IN 
 
 # 2. Entries neu zuordnen
 ## alle tage ausserhalb ferien (Di-So)
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=9 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=1;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=16 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=2;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=18 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=3;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=19 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=4;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=11 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=5 AND HOUR(FROM_UNIXTIME(start_date))=10;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=12 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=5 AND HOUR(FROM_UNIXTIME(start_date))=15;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=13 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=6 AND HOUR(FROM_UNIXTIME(start_date))=10;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=14 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=6 AND HOUR(FROM_UNIXTIME(start_date))=15;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=9 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=1 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=16 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=2 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=18 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=3 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=19 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=4 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=11 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=5 AND HOUR(FROM_UNIXTIME(start_date))=10 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=12 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=5 AND HOUR(FROM_UNIXTIME(start_date))=15 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=13 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=6 AND HOUR(FROM_UNIXTIME(start_date))=10 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=14 WHERE WEEKDAY(FROM_UNIXTIME(start_date))=6 AND HOUR(FROM_UNIXTIME(start_date))=15 AND pid=191;
 
 ## herbstferien
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=40 WHERE FROM_UNIXTIME(start_date)>DATE('2018-10-01') AND FROM_UNIXTIME(start_date)<DATE('2018-10-12 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=10;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=41 WHERE FROM_UNIXTIME(start_date)>DATE('2018-10-01') AND FROM_UNIXTIME(start_date)<DATE('2018-10-12 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=15;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=40 WHERE FROM_UNIXTIME(start_date)>DATE('2018-10-01 00:00:00') AND FROM_UNIXTIME(start_date)<DATE('2018-10-12 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=10 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=41 WHERE FROM_UNIXTIME(start_date)>DATE('2018-10-01 00:00:00') AND FROM_UNIXTIME(start_date)<DATE('2018-10-12 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=15;
 
 ## winterferien
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=40 WHERE FROM_UNIXTIME(start_date)>DATE('2018-12-19') AND FROM_UNIXTIME(start_date)<DATE('2019-01-04 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=10;
-UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=41 WHERE FROM_UNIXTIME(start_date)>DATE('2018-02-19') AND FROM_UNIXTIME(start_date)<DATE('2018-01-04 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=15;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=40 WHERE FROM_UNIXTIME(start_date)>DATE('2018-12-19 00:00:00') AND FROM_UNIXTIME(start_date)<DATE('2019-01-04 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=10 AND pid=191;
+UPDATE tx_bwbookingmanager_domain_model_entry SET timeslot=41 WHERE FROM_UNIXTIME(start_date)>DATE('2018-02-19 00:00:00') AND FROM_UNIXTIME(start_date)<DATE('2018-01-04 23:59:59') AND HOUR(FROM_UNIXTIME(start_date))=15 AND pid=191;
