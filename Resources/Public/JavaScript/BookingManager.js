@@ -1,5 +1,8 @@
 var BOOKINGMANAGER = BOOKINGMANAGER || {};
 
+// register hooks
+BOOKINGMANAGER.afterAjaxCallHooks = BOOKINGMANAGER.afterAjaxCallHooks || [];
+
 BOOKINGMANAGER.TIMESELECT = {
 
   timeslotLinks: null,
@@ -116,6 +119,11 @@ BOOKINGMANAGER.AJAX = {
     if (BOOKINGMANAGER.LOAD_FIRST_LINK) this.init();
     if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) {
       BOOKINGMANAGER.TIMESELECT.init();
+    }
+    if(BOOKINGMANAGER.afterAjaxCallHooks.length){
+      for(var i=0; i< BOOKINGMANAGER.afterAjaxCallHooks.length; i++){
+        BOOKINGMANAGER.afterAjaxCallHooks[i]();
+      }
     }
   },
 
