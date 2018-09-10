@@ -1,11 +1,20 @@
 <?php
 namespace Blueways\BwBookingmanager\Helper;
 
+/**
+ * This is fwefewfew
+ *
+ * PHP version 7.2
+ *
+ * @package  BwBookingManager
+ * @author   Maik Schneider <m.schneider@blueways.de>
+ * @license  MIT https: //opensource.org/licenses/MIT
+ * @version  GIT: <git_id />
+ * @link     http://www.blueways.de
+ */
+
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * This class oganizes the correct arrangement of timeslots
- */
 class NotificationManager
 {
     /**
@@ -53,15 +62,15 @@ class NotificationManager
         $to = $this->entry->getEmail();
         $subject = $this->extbaseFrameworkConfiguration['settings']['mail']['subject'];
         $template = $this->extbaseFrameworkConfiguration['settings']['mail']['template'];
-        $body = $this->getMailBody('Email/' . $template);
+        $body = $this->getMailBody($template);
+        $replyTo = $from;
 
-        $this->sendMail($from, $to, $subject, $body);
+        $this->sendMail($from, $to, $subject, $body, $replyTo);
     }
 
     private function sendNotifications()
     {
         foreach ($this->notifications as $notification) {
-
             if ($notification->hasHook()) {
                 $this->triggerHook($notification);
             } else {
@@ -84,26 +93,26 @@ class NotificationManager
         $to = $notification->getEmail();
         $subject = $notification->getEmailSubject();
         $template = $notification->getTemplate();
-        $body = $this->getMailBody('Email/' . $template);
+        $body = $this->getMailBody($template);
+        $replyTo = $this->entry->getEmail();
 
-        $this->sendMail($from, $to, $subject, $body);
+        $this->sendMail($from, $to, $subject, $body, $replyTo);
     }
 
-    private function sendMail($from, $to, $subject, $body)
+    private function sendMail($from, $to, $subject, $body, $replyTo)
     {
         $message = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
         $message->setTo($to)
+            ->setReplyTo($replyTo)
             ->setFrom($from)
             ->setSubject($subject)
             ->setBody($body, 'text/html');
 
         $message->send();
-        var_dump($message->isSent());
     }
 
     private function getMailBody($templateName)
     {
-
         $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 
         $emailView = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');

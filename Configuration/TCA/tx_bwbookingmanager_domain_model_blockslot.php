@@ -77,22 +77,16 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.start_date',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
-                'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00'
+                'eval' => 'datetime,required',
             ],
         ],
         'end_date' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot.end_date',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
                 'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00'
             ],
         ],
         'reason' => [
@@ -117,6 +111,6 @@ return [
                 'maxitems' => 9999,
             ],
         ],
-    
+
     ],
 ];

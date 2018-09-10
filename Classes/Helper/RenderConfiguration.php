@@ -1,6 +1,18 @@
 <?php
 namespace Blueways\BwBookingmanager\Helper;
 
+/**
+ * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
+ *
+ * PHP version 7.2
+ *
+ * @package  BwBookingManager
+ * @author   Maik Schneider <m.schneider@blueways.de>
+ * @license  MIT https://opensource.org/licenses/MIT
+ * @version  GIT: <git_id />
+ * @link     http://www.blueways.de
+ */
+
 class RenderConfiguration
 {
     protected $timeslots;
@@ -25,7 +37,6 @@ class RenderConfiguration
         return array(
             'days' => $days,
         );
-
     }
 
     public function getConfigurationForWeek()
@@ -57,7 +68,6 @@ class RenderConfiguration
                 'year' => $prevWeek->format('Y'),
             ],
         );
-
     }
 
     private function getDaysArrayForRange($startDate, $daysCount)
@@ -65,18 +75,30 @@ class RenderConfiguration
         $days = [];
 
         for ($i = 0; $i < $daysCount; $i++) {
-
             $days[$i] = [
                 'date' => clone $startDate,
                 'timeslots' => $this->getTimeslotsForDay($startDate),
                 'isCurrentDay' => $this->isCurrentDay($startDate),
                 'isNotInMonth' => !($startDate->format('m') == $this->startDate->format('m')),
+                'isInPast' => $this->isInPast($startDate)
             ];
+            $days[$i]['isBookable'] = $this->getDayIsBookable($days[$i]['timeslots']);
 
             $startDate->modify('+1 day');
         }
         return $days;
+    }
 
+    private function getDayIsBookable($timeslots)
+    {
+        $isBookable = false;
+        foreach ($timeslots as $timeslot) {
+            $slotIsBookable = $timeslot->getIsBookable();
+            if ($slotIsBookable) {
+                $isBookable = true;
+            }
+        }
+        return $isBookable;
     }
 
     private function getDaysArrayForWeek($weekStart)
@@ -106,13 +128,11 @@ class RenderConfiguration
         $weeks = [];
 
         for ($i = 0; $i < $numberOfWeeks; $i++) {
-
             $weekStart = clone $monthStart;
 
             $weeks[] = $this->getDaysArrayForWeek($weekStart);
 
             $monthStart->modify('next monday');
-
         }
 
         return array(
@@ -130,7 +150,39 @@ class RenderConfiguration
                 'year' => $prevMonth->format('Y'),
             ],
         );
+    }
 
+    public function getConfigurationForDays($daysCount)
+    {
+        $daysStart = clone $this->startDate;
+        $daysStart->setTime(0, 0, 0);
+
+        $daysEnd = clone $this->startDate;
+        $daysEnd->modify('+' . $daysCount . ' days');
+        $daysEnd->setTime(23, 59, 59);
+
+        $nextdays = clone $this->startDate;
+        $nextdays->modify('+' . ($daysCount + 1) . ' days');
+        $prevdays = clone $this->startDate;
+        $prevdays->modify('-' . ($daysCount + 1) . ' days');
+
+        $days = $this->getDaysArrayForRange($daysStart, $daysCount);
+
+        return array(
+            'days' => $days,
+            'nextDays' => [
+                'date' => $nextdays,
+                'day' => $nextdays->format('j'),
+                'month' => $nextdays->format('m'),
+                'year' => $nextdays->format('Y'),
+            ],
+            'prevdays' => [
+                'date' => $prevdays,
+                'day' => $prevdays->format('j'),
+                'month' => $prevdays->format('m'),
+                'year' => $prevdays->format('Y'),
+            ],
+        );
     }
 
     private function getTimeslotsForDay($day)
@@ -168,11 +220,18 @@ class RenderConfiguration
 
     private function isCurrentDay($day)
     {
-        return $this->isSameDay($day, $this->startDate);
+        $now = new \DateTime('now');
+        return $now->format('d.m.Y') === $day->format('d.m.Y');
     }
 
     public function setTimeslots($timeslots)
     {
         $this->timeslots = $timeslots;
+    }
+
+    private function isInPast($day)
+    {
+        $now = new \DateTime('now');
+        return $day < $now;
     }
 }

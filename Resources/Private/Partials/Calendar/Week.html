@@ -18,14 +18,15 @@
             <h3>{f:format.date(date:day.date, format:'l')}</h3>
             <hr />
             <ul>
-            <f:for each="{day.timeslots}" as="timeslot">
-                <li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate, format:'H:i')}
-                    <p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
-                    <f:if condition="{timeslot.isBookable}">
-                        <f:link.action controller="Entry" pageUid="{settings.entryPid}" action="new" arguments="{calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">book</f:link.action>
-                    </f:if>
-                </li>
-            </f:for>
+                <f:for each="{day.timeslots}" as="timeslot">
+                    <li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate, format:'H:i')}
+                        <p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
+                        <f:if condition="{timeslot.isBookable}">
+                            <f:link.action controller="Entry" pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid, else:page)}" action="new"
+                                arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">book</f:link.action>
+                        </f:if>
+                    </li>
+                </f:for>
             </ul>
         </div>
     </f:for>

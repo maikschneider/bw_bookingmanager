@@ -17,6 +17,8 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    const ENTRY_TYPE_CLASSNAME = 'Blueways\\BwBookingmanager\\Domain\\Model\\Entry';
+
     /**
      * name
      *
@@ -35,13 +37,23 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * blockslots
      *
+     * @lazy
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot>
      */
     protected $blockslots = null;
 
     /**
+     * holidays
+     *
+     * @lazy
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Holiday>
+     */
+    protected $holidays = null;
+
+    /**
      * notifications
      *
+     * @lazy
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification>
      */
     protected $notifications = null;
@@ -120,6 +132,22 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getBlockslots()
     {
         return $this->blockslots;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getHolidays(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    {
+        return $this->holidays;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays
+     */
+    public function setHolidays(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays): void
+    {
+        $this->holidays = $holidays;
     }
 
     /**
@@ -217,5 +245,15 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getNotifications()
     {
         return $this->notifications;
+    }
+
+    /**
+     * Return the class name of entries that get associated with this type of calendar
+     *
+     * @return string
+     */
+    public function getEntryTypeClassname()
+    {
+        return static::ENTRY_TYPE_CLASSNAME;
     }
 }

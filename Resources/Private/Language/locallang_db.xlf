@@ -6,6 +6,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
 				<source>Calendar</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.record_type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.record_type.1">
+				<source>Default calendar</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.name">
 				<source>Name</source>
 			</trans-unit>
@@ -14,6 +20,9 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots">
 				<source>Blockslots</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.holidays">
+				<source>Holidays</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
 				<source>Notifications</source>
@@ -42,6 +51,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
 				<source>Monthly repeat</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting">
+				<source>Holiday setting</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.no_effect">
+				<source>No effect</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.only_during">
+				<source>Only during calendar holidays</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting.not_during">
+				<source>Not during calendar holidays</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
 				<source>Max Weight</source>
 			</trans-unit>
@@ -62,6 +83,24 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry">
 				<source>Entry</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.record_type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.date">
+				<source>Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.date.select">
+				<source>Select date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.date.none">
+				<source>No date selected</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.record_type.1">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.hidden">
+				<source>Deactivated</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date">
 				<source>Start Date</source>
@@ -93,6 +132,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter">
 				<source>Newsletter</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.confirmed">
+				<source>Confirmed</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.confirmed.yes">
+				<source>yes</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1">
 				<source>Special 1</source>
 			</trans-unit>
@@ -108,6 +153,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.calendar">
 				<source>Calendar</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.form.headline.general">
+				<source>Personal details</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
 			</trans-unit>
@@ -119,6 +167,18 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
 				<source>Reason</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday">
+				<source>Holiday</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday.start_date">
+				<source>Start Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday.end_date">
+				<source>End Date</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_holiday.name">
+				<source>Name</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification">
 				<source>Notification</source>
@@ -155,6 +215,111 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
 				<source>New Booking</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.0">
+				<source>Su</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.7">
+				<source>Su</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.1">
+				<source>Mo</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.2">
+				<source>Tu</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.3">
+				<source>We</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.4">
+				<source>Th</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.5">
+				<source>Fr</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.short.6">
+				<source>Sa</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.1">
+				<source>January</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.2">
+				<source>February</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.3">
+				<source>March</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.4">
+				<source>April</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.5">
+				<source>May</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.6">
+				<source>June</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.7">
+				<source>July</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.8">
+				<source>August</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.9">
+				<source>September</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.10">
+				<source>October</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.11">
+				<source>November</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.12">
+				<source>December</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.1">
+				<source>Jan</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.2">
+				<source>Feb</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.3">
+				<source>Mar</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.4">
+				<source>Apr</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.5">
+				<source>May</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.6">
+				<source>Jun</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.7">
+				<source>Jul</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.8">
+				<source>Aug</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.9">
+				<source>Sep</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.10">
+				<source>Oct</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.11">
+				<source>Nov</source>
+			</trans-unit>
+			<trans-unit id="date.monthNames.short.12">
+				<source>Dec</source>
+			</trans-unit>
+			<trans-unit id="date.nextMonth">
+				<source>Next month</source>
+			</trans-unit>
+			<trans-unit id="date.prevMonth">
+				<source>Previous month</source>
+			</trans-unit>
+			<trans-unit id="date.oclock">
+				<source>o'clock</source>
 			</trans-unit>
 		</body>
 	</file>

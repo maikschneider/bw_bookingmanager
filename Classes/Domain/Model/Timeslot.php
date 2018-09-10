@@ -22,19 +22,23 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     const REPEAT_WEEKLY = 2;
     const REPEAT_MONTHLY = 3;
 
+    const HOLIDAY_NO_EFFECT = 0;
+    const HOLIDAY_NOT_DURING = 1;
+    const HOLIDAY_ONLY_DURING = 2;
+
     /**
      * startDate
      *
      * @var \DateTime
      */
-    protected $startDate = null;
+    protected $startDate;
 
     /**
      * endDate
      *
      * @var \DateTime
      */
-    protected $endDate = null;
+    protected $endDate;
 
     /**
      * repeatType
@@ -42,6 +46,29 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $repeatType = Timeslot::REPEAT_NO;
+
+    /**
+     * holidaySetting
+     *
+     * @var int
+     */
+    protected $holidaySetting = Timeslot::HOLIDAY_NO_EFFECT;
+
+    /**
+     * @return int
+     */
+    public function getHolidaySetting(): int
+    {
+        return $this->holidaySetting;
+    }
+
+    /**
+     * @param int $holidaySetting
+     */
+    public function setHolidaySetting(int $holidaySetting): void
+    {
+        $this->holidaySetting = $holidaySetting;
+    }
 
     /**
      * maxWeight
@@ -54,7 +81,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * entries
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
-     * @cascade remove
+     * @lazy
      */
     protected $entries = null;
 
@@ -71,7 +98,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \DateTime
      */
-    protected $repeatEnd = null;
+    protected $repeatEnd;
 
     /**
      * isBookableHooks
@@ -329,6 +356,15 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * It's important to call this function only on timeslot objects, that
+     * have been processed by the TimeslotManager
+     */
+    public function getFreeWeight()
+    {
+        return $this->maxWeight - $this->getBookedWeight();
+    }
+
+    /**
      * converts number of $isBookableHooks to array of activated hooks
      * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
      * @return Array
@@ -359,11 +395,9 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             if (!$_procObj->isBookable($this)) {
                 return false;
             }
-
         }
 
         return true;
-
     }
 
     /**
@@ -374,7 +408,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         // check date (only if in future)
         $now = new \DateTime('now');
-        if($this->getStartDate() < $now){
+        if ($this->getStartDate() < $now) {
             return false;
         }
 
@@ -384,10 +418,43 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         }
 
         // check activated hooks hooks
-        if(!$this->getIsBookableByHooks()) {
+        if (!$this->getIsBookableByHooks()) {
             return false;
         }
 
         return true;
     }
+
+    public function getStartEndTimestamp()
+    {
+        return $this->getStartDate()->getTimestamp() . '' . $this->getEndDate()->getTimestamp();
+    }
+
+    public function getDisplayStartDate()
+    {
+        $date = $this->startDate;
+        if ($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
+    }
+
+    public function getDisplayEndDate()
+    {
+        $date = $this->endDate;
+        if($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
+    }
+
+    public function startsInDST()
+    {
+        $timezone = new \DateTimeZone("Europe/Berlin");
+        $transitions = $timezone->getTransitions($this->startDate->getTimestamp(), $this->startDate->getTimestamp());
+        $isDST = $transitions[0]['isdst'];
+
+        return $isDST;
+    }
+
 }

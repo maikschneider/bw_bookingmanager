@@ -18,6 +18,9 @@
             <trans-unit id="flexforms_general.mode.entry_new">
                 <source>New entry</source>
             </trans-unit>
+            <trans-unit id="flexforms_general.mode.blockslot_new">
+				<source>New entry</source>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
             </trans-unit>
@@ -47,6 +50,9 @@
             </trans-unit>
             <trans-unit id="flexforms_general.dateRange.week">
                 <source>Week</source>
+            </trans-unit>
+            <trans-unit id="flexforms_general.dateRange.days">
+                <source>Days</source>
             </trans-unit>
             <trans-unit id="flexforms_email">
                 <source>Email</source>
@@ -87,8 +93,14 @@
             <trans-unit id="module.entryListing">
                 <source>Entry listing</source>
             </trans-unit>
+            <trans-unit id="module.blockslotListing">
+				<source>Blockslot listing</source>
+			</trans-unit>
             <trans-unit id="module.timeslotListing">
                 <source>Timeslot listing</source>
+            </trans-unit>
+            <trans-unit id="module.dashboard">
+                <source>Dashboard</source>
             </trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
@@ -108,6 +120,9 @@
             <trans-unit id="administration.entryListing.table.weight">
                 <source>Weight</source>
             </trans-unit>
+            <trans-unit id="administration.filter.buttonTitle">
+				<source>Show/hide filter</source>
+			</trans-unit>
             <trans-unit id="administration.filter.calendar">
                 <source>Calendar</source>
             </trans-unit>
@@ -150,8 +165,23 @@
             <trans-unit id="administration.filter.sortField.weight">
                 <source>Weight</source>
             </trans-unit>
+            <trans-unit id="administration.filter.confirmation">
+				<source>Confirmation</source>
+			</trans-unit>
+			<trans-unit id="administration.filter.showConfirmed">
+				<source>Show confirmed entries</source>
+			</trans-unit>
+			<trans-unit id="administration.filter.showUnconfirmed">
+				<source>Show not confirmed entries</source>
+			</trans-unit>
             <trans-unit id="administration.filter.submit">
                 <source>Refresh</source>
+            </trans-unit>
+            <trans-unit id="administration.recordlist.button.confirm">
+                <source>Confirm booking</source>
+            </trans-unit>
+            <trans-unit id="administration.recordlist.button.unconfirm">
+                <source>Unconfirm booking</source>
             </trans-unit>
         </body>
     </file>

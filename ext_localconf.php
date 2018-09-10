@@ -3,7 +3,6 @@ defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
     function () {
-
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Blueways.BwBookingmanager',
             'Pi1',
@@ -14,7 +13,7 @@ call_user_func(
             ],
             // non-cacheable actions
             [
-                'Calendar' => '',
+                'Calendar' => 'show',
                 'Timeslot' => '',
                 'Entry' => 'create',
             ]
@@ -26,9 +25,9 @@ call_user_func(
         // entry validation hook
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][] = 'Blueways\BwBookingmanager\Hooks\TimeslotIsBookableHook';
         // table list hook
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/class.db_list_extra.inc']['actions'][] = 'Blueways\BwBookingmanager\Hooks\EntryRecordListHook';
         // entry validation hook
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList']['buildQueryParameters'][] = 'Blueways\BwBookingmanager\Hooks\TableListHook';
-
 
         // wizards
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
@@ -52,7 +51,15 @@ call_user_func(
        <INCLUDE_TYPOSCRIPT: source="FILE:EXT:bw_bookingmanager/Configuration/TSconfig/mod.txt">'
         );
 
-        
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = array(
+            'className' => 'Blueways\\BwBookingmanager\\Xclass\\Extbase\\Mvc\\Controller\\Argument',
+        );
 
+        // register custom TCA node field
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1533721566] = [
+            'nodeName' => 'selectTimeslotDates',
+            'priority' => '70',
+            'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslotDatesElement::class,
+        ];
     }
 );

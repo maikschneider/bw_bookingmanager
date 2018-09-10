@@ -25,11 +25,12 @@ class TimeslotIsBookableHook
         $now = new \DateTime('now');
 
         $startDate = clone $this->timeslot->getStartDate();
-        $startDate->setTime(0,0,0);
+        $startDate->setTime(0, 0, 0);
 
-        if($startDate < $now) return false;
+        if ($startDate < $now) {
+            return false;
+        }
         
         return true;
     }
-
 }

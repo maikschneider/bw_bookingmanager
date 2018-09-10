@@ -21,20 +21,23 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * startDate
      *
      * @var \DateTime
+     * @validate NotEmpty, DateTime
      */
-    protected $startDate = null;
+    protected $startDate;
 
     /**
      * endDate
      *
      * @var \DateTime
+     * @validate NotEmpty, DateTime
      */
-    protected $endDate = null;
+    protected $endDate;
 
     /**
      * name
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $name = '';
 
@@ -42,6 +45,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * prename
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=2, maximum=50)
      */
     protected $prename = '';
 
@@ -49,6 +53,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * street
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $street = '';
 
@@ -56,6 +61,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * zip
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $zip = '';
 
@@ -63,6 +69,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * city
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $city = '';
 
@@ -70,6 +77,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * phone
      *
      * @var string
+     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $phone = '';
 
@@ -77,6 +85,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * email
      *
      * @var string
+     * @validate NotEmpty, EmailAddress
      */
     protected $email = '';
 
@@ -86,6 +95,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var bool
      */
     protected $newsletter = false;
+
+    /**
+     * confirmed
+     *
+     * @var bool
+     */
+    protected $confirmed = false;
 
     /**
      * special1
@@ -105,20 +121,25 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * weight
      *
      * @var int
+     * @validate Integer
      */
-    protected $weight = 0;
+    protected $weight = 1;
 
     /**
      * calendar
      *
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @lazy
+     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @validate NotEmpty
      */
     protected $calendar = null;
 
     /**
      * timeslot
      *
+     * @lazy
      * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     * @validate NotEmpty
      */
     protected $timeslot = null;
 
@@ -131,7 +152,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     /**
      * __construct
-     * 
+     *
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
      * @param \DateTime $startDate
@@ -139,15 +160,23 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return void
      */
     public function __construct(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = NULL, 
-        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = NULL,
-        \DateTime $startDate = NULL,
-        \DateTime $endDate = NULL)
-    {
-        if($calendar) $this->setCalendar($calendar);
-        if($timeslot) $this->setTimeslot($timeslot);
-        if($startDate) $this->setStartDate($startDate);
-        if($endDate) $this->setEndDate($endDate);
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null,
+        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null,
+        \DateTime $startDate = null,
+        \DateTime $endDate = null
+    ) {
+        if ($calendar) {
+            $this->setCalendar($calendar);
+        }
+        if ($timeslot) {
+            $this->setTimeslot($timeslot);
+        }
+        if ($startDate) {
+            $this->setStartDate($startDate);
+        }
+        if ($endDate) {
+            $this->setEndDate($endDate);
+        }
     }
 
     /**
@@ -392,6 +421,37 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Returns the confirmed
+     *
+     * @return bool $confirmed
+     */
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * Sets the confirmed
+     *
+     * @param bool $confirmed
+     * @return void
+     */
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+    }
+
+    /**
+     * Returns the boolean state of confirmed
+     *
+     * @return bool
+     */
+    public function isConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
      * Returns the special1
      *
      * @return bool $special1
@@ -524,5 +584,23 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function isValidToken($token)
     {
         return $token && $this->token === $token ? true : false;
+    }
+
+    public function getDisplayStartDate()
+    {
+        $date = $this->startDate;
+        if ($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
+    }
+
+    public function getDisplayEndDate()
+    {
+        $date = $this->endDate;
+        if ($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
     }
 }

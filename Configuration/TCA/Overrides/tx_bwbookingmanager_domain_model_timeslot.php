@@ -9,6 +9,6 @@ foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timesl
 
 
 $validationHookItems = $GLOBALS['TCA']['tx_bwbookingmanager_domain_model_timeslot']['columns']['is_bookable_hooks']['config']['items'];
-if(!count($validationHookItems)){
+if (!count($validationHookItems)) {
     $validationHookItems = $GLOBALS['TCA']['tx_bwbookingmanager_domain_model_timeslot']['columns']['is_bookable_hooks']['config']['type'] = 'passthrough';
 }

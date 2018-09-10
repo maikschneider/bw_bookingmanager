@@ -15,7 +15,7 @@ your changes will be overwritten the next time you save the extension in the ext
         </f:form>
     </f:if>
 
-    <f:link.action controller="Calendar" action="show" pageUid="{settings.showPid}" arguments="{calendar : entry.calendar}">back to {entry.calendar.name}</f:link.action>
+    <f:link.action controller="Calendar" action="show" pageUid="{f:if(condition:settings.backPid, then:settings.backPid, else:page)}" arguments="{calendar : entry.calendar}">back to {entry.calendar.name}</f:link.action>
 </f:section>
 
 </html>

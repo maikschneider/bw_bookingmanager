@@ -23,9 +23,38 @@ plugin.tx_bwbookingmanager_pi1 {
         #callDefaultActionIfActionCantBeResolved = 1
     }
     settings{
-        #showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
+        showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
         calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
         entryPid = {$plugin.tx_bwbookingmanager_pi1.settings.entryPid}
         backPid = {$plugin.tx_bwbookingmanager_pi1.settings.backPid}
+        javascript{
+            jquery = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.jquery}
+            customValidators = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.customValidators}
+            bookingmanager = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.bookingmanager}
+        }
+        ajax{
+            enable = {$plugin.tx_bwbookingmanager_pi1.settings.ajax.enable}
+            typeNum = {$plugin.tx_bwbookingmanager_pi1.settings.ajax.typeNum}
+        }
+    }
+}
+
+BOOKINGMANAGER = PAGE
+BOOKINGMANAGER {
+    typeNum < plugin.tx_bwbookingmanager_pi1.settings.ajax.typeNum
+    config{
+        disableAllHeaderCode = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        no_cache = 1
+        contentObjectExceptionHandler = 0
+        disableCharsetHeader = 0
+    }
+    10 = USER
+    10 {
+      userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+      extensionName = BwBookingmanager
+      pluginName = Pi1
+      vendorName = Blueways
     }
 }

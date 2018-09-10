@@ -15,5 +15,8 @@
         "psr-4": {
             "Blueways\\BwBookingmanager\\": "Classes"
         }
+    },
+    "require-dev": {
+        "typo3-ci/typo3cms": "^6.2"
     }
 }

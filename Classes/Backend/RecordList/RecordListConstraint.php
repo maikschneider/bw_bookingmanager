@@ -28,14 +28,14 @@ class RecordListConstraint
             $startDate = $startDate->createFromFormat('d.m.Y', $arguments['startDate']);
         }
         $startDate->setTime(0, 0, 0);
-        $parameters['where'][] = "start_date >= '" . $startDate->format('Y-m-d H:i:s') . "'";
+        $parameters['where'][] = "start_date >= '" . $startDate->getTimestamp() . "'";
 
         // end date
         if (isset($arguments['endDate']) && !empty($arguments['endDate'])) {
             $endDate = new \DateTime('now');
             $endDate = $endDate->createFromFormat('d.m.Y', $arguments['endDate']);
             $endDate->setTime(23, 59, 59);
-            $parameters['where'][] = "end_date <= '" . $endDate->format('Y-m-d H:i:s') . "'";
+            $parameters['where'][] = "end_date <= '" . $endDate->getTimestamp() . "'";
         }
 
         // search word
@@ -61,11 +61,22 @@ class RecordListConstraint
             }
         }
 
-        // calendar
-        if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !==0 ) {
-            $parameters['where'][] = "calendar=" .$arguments['calendarUid']; 
+        // confirmation
+        $showConfirmed = (int)$arguments['showConfirmed'];
+        if (isset($arguments['showConfirmed']) && $showConfirmed === 0) {
+            $parameters['where'][] = 'confirmed=0';
+        }
+        $showUnconfirmed = (int)$arguments['showUnconfirmed'];
+        if (isset($arguments['showUnconfirmed']) && $showUnconfirmed === 0) {
+            $parameters['where'][] = 'confirmed=1';
         }
 
+
+
+        // calendar
+        if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !==0) {
+            $parameters['where'][] = "calendar=" .$arguments['calendarUid'];
+        }
     }
 
     /**

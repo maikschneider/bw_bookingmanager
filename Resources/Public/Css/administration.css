@@ -1,9 +1,33 @@
-#recordlist-tx_bwbookingmanager_domain_model_entry th{
-    padding-left: 0;
+#recordlist-tx_bwbookingmanager_domain_model_entry th {
+	padding-left: 0;
 }
-#recordlist-tx_bwbookingmanager_domain_model_entry .t3js-record-edit-multiple{
-    display: none;
+
+
+#recordlist-tx_bwbookingmanager_domain_model_entry .t3js-record-edit-multiple {
+	display: none;
 }
-.media, .media-body{
-    overflow: visible;
+
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"] {
+	background-color: #ffdcdc !important;
+	transition: background-color 0.3s ease;
+}
+
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:hover{
+	background-color: #f1cccc !important;
+}
+
+
+.media, .media-body {
+	overflow: visible;
+}
+
+/*
+Dashboard
+ */
+.chart1-view-button .icon-actions-unmarkstate, .chart1-view-button.active .icon-actions-markstate {
+	display: none;
+}
+
+.chart1-view-button.active .icon-actions-unmarkstate {
+	display: inline-block;
 }

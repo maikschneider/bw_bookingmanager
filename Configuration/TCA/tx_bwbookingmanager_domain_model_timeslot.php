@@ -14,11 +14,11 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,repeat_type,repeat_end,max_weight,entries,is_bookable_hooks,calendars',
+        'searchFields' => 'start_date,end_date,repeat_type,holiday_setting,repeat_end,max_weight,entries,is_bookable_hooks,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.svg'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, repeat_end, max_weight, entries, is_bookable_hooks, calendars',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, start_date, end_date, repeat_type, holiday_setting, repeat_end, max_weight, entries, is_bookable_hooks, calendars',
     ],
     'types' => [
         '1' => [
@@ -28,7 +28,7 @@ return [
     'palettes' => [
         'datesPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates',
-            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end'
+            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end, --linebreak--, holiday_setting'
         ]
     ],
     'columns' => [
@@ -85,22 +85,16 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.start_date',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
-                'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00'
+                'eval' => 'datetime,required',
             ],
         ],
         'end_date' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.end_date',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
-                'eval' => 'datetime',
-                'default' => '0000-00-00 00:00:00'
+                'eval' => 'datetime,required',
             ],
         ],
         'repeat_type' => [
@@ -114,6 +108,28 @@ return [
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.daily', 1],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.weekly', 2],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly', 3],
+                ],
+            ]
+        ],
+        'holiday_setting' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting.no_effect',
+                        0
+                    ],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting.not_during',
+                        1
+                    ],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting.only_during',
+                        2
+                    ],
                 ],
             ]
         ],
@@ -172,13 +188,10 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_end',
             'config' => [
-                'dbType' => 'datetime',
                 'type' => 'input',
-                'size' => 12,
                 'eval' => 'datetime',
-                'default' => ''
             ],
         ],
-    
+
     ],
 ];

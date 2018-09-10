@@ -24,7 +24,7 @@
                                     </numIndex>
                                     <numIndex index="1">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show</numIndex>
-                                        <numIndex index="1">Calendar->show</numIndex>
+                                        <numIndex index="1">Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</numIndex>
                                     </numIndex>
                                     <numIndex index="2">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new</numIndex>
@@ -37,7 +37,7 @@
                     <settings.showPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.showPid</label>
-                            <displayCond>FIELD:switchableControllerActions:!=:Calendar->show</displayCond>
+                            <displayCond>FIELD:switchableControllerActions:=:Calendar->list</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -51,7 +51,7 @@
                     <settings.calendarPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.calendarUid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show</displayCond>
+                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -65,7 +65,7 @@
                     <settings.entryPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.entryPid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show</displayCond>
+                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -93,7 +93,7 @@
                     <settings.dateRange>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show</displayCond>
+                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
@@ -105,6 +105,10 @@
                                     <numIndex index="1" type="array">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.week</numIndex>
                                         <numIndex index="1">1</numIndex>
+                                    </numIndex>
+                                    <numIndex index="2" type="array">
+                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.days</numIndex>
+                                        <numIndex index="1">2</numIndex>
                                     </numIndex>
                                 </items>
                             </config>

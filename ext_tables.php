@@ -17,7 +17,7 @@ call_user_func(
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_bwbookingmanager_domain_model_blockslot', 'EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_blockslot.xlf');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_bwbookingmanager_domain_model_blockslot');
 
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_bwbookingmanager_domain_model_blockslot', 'EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_notification.xlf');
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_bwbookingmanager_domain_model_notification', 'EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_notification.xlf');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_bwbookingmanager_domain_model_notification');
 
         if (TYPO3_MODE === 'BE') {
@@ -27,7 +27,7 @@ call_user_func(
                 'tx_bookingmanager_m1',
                 '',
                 array(
-                    'Administration' => 'timeslot, index',
+                    'Administration' => 'index, timeslot, newEntry, blockslot, newBlockslot, dashboard',
                 ),
                 array(
                     'access' => 'user,group',
@@ -39,6 +39,8 @@ call_user_func(
             // icons
             $icons = [
                 'apps-pagetree-folder-contains-bm' => 'ext-bwbookingmanager-folder-tree.svg',
+                'ext-bwbookingmanager-type-entry' => 'tx_bwbookingmanager_domain_model_entry.svg',
+                'ext-bwbookingmanager-type-blockslot' => 'tx_bwbookingmanager_domain_model_blockslot.svg',
             ];
             $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
             foreach ($icons as $identifier => $path) {
@@ -48,8 +50,6 @@ call_user_func(
                     ['source' => 'EXT:bw_bookingmanager/Resources/Public/Icons/' . $path]
                 );
             }
-
         }
-
     }
 );

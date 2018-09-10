@@ -1,0 +1,42 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers">
+<f:layout name="Administration/Default"/>
+
+<f:section name="Main">
+
+	<span class="savedDate" style="float: left; margin-right: 10px;">
+		<span id="savedStartDate">
+			<f:if condition="{savedData.startDate}">
+				<f:then>
+					<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:savedData.endDate,
+				format:'N')}"/>, {f:format.date(date:savedData.startDate, format:'d.m.Y H:i')}
+				</f:then>
+				<f:else>
+					<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.date.none"/>
+				</f:else>
+			</f:if>
+		</span> - <br />
+		<span id="savedEndDate">
+			<f:if condition="{savedData.endDate}">
+				<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{f:format.date(date:savedData.endDate,
+				format:'N')}"/>, {f:format.date(date:savedData.endDate, format:'d.m.Y H:i')}
+			</f:if>
+		</span>
+	</span>
+
+	<button class="btn btn-default t3js-timeslotdatesselect-trigger"
+					data-wizard-uri="{wizardUri}"
+					data-severity="notice"
+					data-modal-title="{f:if(condition:savedData.startDate, else:'Select time', then:'Selected time: {f:format.date(date:savedData.startDate, format:\'d.m.Y H:i\')} - {f:format.date(date:savedData.endDate,
+		format:\'d.m.Y H:i\')}')}"
+					data-modal-save-button-text="Save"
+					data-modal-view-button-text="List view"
+					data-modal-cancel-button-text="Cancel">
+			<span class="t3-icon fa fa-calendar"></span>
+		<f:translate
+			key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.date.select"/>
+	</button>
+
+</f:section>
+
+</html>

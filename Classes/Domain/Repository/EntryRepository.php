@@ -21,9 +21,9 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         \DateTime $startDate,
         \DateTime $endDate
-        ){
-            $query = $this->createQuery();
-            $query->matching(
+        ) {
+        $query = $this->createQuery();
+        $query->matching(
                 $query->logicalAnd([
                     $query->equals('calendar', $calendar),
                     $query->greaterThanOrEqual('startDate', $startDate->format('Y-m-d 00:00:00')),
@@ -36,7 +36,27 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 )
             );
 
-            return $query->execute();
-        }
-
+        return $query->execute();
     }
+
+    public function findAllInRange(
+        \DateTime $startDate,
+        \DateTime $endDate
+    ) {
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd([
+                $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
+                $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
+            ]),
+            $query->setOrderings(
+                [
+                    'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                ]
+            )
+        );
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        return $query->execute();
+    }
+}

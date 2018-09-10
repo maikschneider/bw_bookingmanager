@@ -13,16 +13,27 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'name,timeslots,blockslots,notifications',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg'
+        'type' => 'record_type',
+        'searchFields' => 'name,timeslots,blockslots,holidays,notifications',
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, holidays, notifications',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, timeslots, blockslots, notifications'],
+        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, holidays, notifications'],
     ],
     'columns' => [
+        'record_type' => [
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type',
+            'config' => [
+                'type' => 'select',
+                'items' => [
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1', 'Blueways\BwBookingmanager\Domain\Model\Calendar'],
+                ],
+                'default' => 'Blueways\BwBookingmanager\Domain\Model\Calendar',
+            ],
+        ],
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
@@ -34,8 +45,8 @@ return [
                     [
                         'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
                         -1,
-                        'flags-multiple'
-                    ]
+                        'flags-multiple',
+                    ],
                 ],
                 'default' => 0,
             ],
@@ -66,8 +77,8 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
             ],
         ],
@@ -78,7 +89,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'timeslots' => [
@@ -109,6 +120,20 @@ return [
                 'maxitems' => 9999,
             ],
         ],
+        'holidays' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.holidays',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_bwbookingmanager_domain_model_holiday',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_holiday',
+                'MM' => 'tx_bwbookingmanager_calendar_holiday_mm',
+                'MM_opposite_field' => 'calendars',
+                'size' => 10,
+                'maxitems' => 9999,
+            ],
+        ],
         'notifications' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.notifications',
@@ -123,6 +148,6 @@ return [
                 'maxitems' => 9999,
             ],
         ],
-    
+
     ],
 ];

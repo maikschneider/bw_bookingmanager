@@ -22,7 +22,5 @@ class NotificationSpecial2IsCheckedHook
         if ($this->notification->getHook() === NotificationSpecial2IsCheckedHook::HOOK_ID && $this->notificationManager->getEntry()->isSpecial2()) {
             $this->notificationManager->sendNotification($this->notification);
         }
-
     }
-
 }

@@ -1,0 +1,37 @@
+<div role="tabpanel">
+	<ul class="nav nav-tabs t3js-tabs" role="tablist" id="tabs-tab" data-store-last-tab="1">
+		<li role="presentation" class="t3js-tabmenu-item  active">
+			<a href="#chart1-tab-0" title="" aria-controls="tab-0" role="tab" data-toggle="tab">
+				All
+			</a>
+		</li>
+		<f:for each="{calendars}" as="calendar" iteration="i">
+			<li role="presentation" class="t3js-tabmenu-item">
+				<a href="#chart1-tab-{i.cycle}" title="{calendar.name}" aria-controls="tab-{i.cycle}" role="tab" data-toggle="tab">
+					{calendar.name}
+				</a>
+			</li>
+		</f:for>
+	</ul>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="chart1-tab-0">
+			<div class="panel panel-tab">
+				<div class="panel-body">
+
+					<div class="chart1-canvas" id="calendar-uid-0" style="height:300px; display:flex; justify-content: center; align-items: center;"></div>
+
+				</div>
+			</div>
+		</div>
+		<f:for each="{calendars}" as="calendar" iteration="i">
+			<div role="tabpanel" class="tab-pane" id="chart1-tab-{i.cycle}">
+				<div class="panel panel-tab">
+					<div class="panel-body">
+						<div id="calendar-uid-{calendar.uid}" class="chart1-canvas"
+								style="height:300px; display:flex; justify-content: center; align-items: center;"></div>
+					</div>
+				</div>
+			</div>
+		</f:for>
+	</div>
+</div>
