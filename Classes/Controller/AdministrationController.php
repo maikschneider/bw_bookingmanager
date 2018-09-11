@@ -137,7 +137,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $uriBuilder = $this->objectManager->get(UriBuilder::class);
         $uriBuilder->setRequest($this->request);
 
-        // Filter Button
+        // Filter and print Buttons
         if ($this->request->getControllerActionName() === 'index') {
             $toggleButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
@@ -148,7 +148,18 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
                 ])
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.buttonTitle'))
                 ->setIcon($this->iconFactory->getIcon('actions-filter', Icon::SIZE_SMALL));
+
+            $printButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setDataAttributes([
+                    'placement' => 'bottom',
+                ])
+                ->setOnClick('window.print()')
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.print.buttonTitle'))
+                ->setIcon($this->iconFactory->getIcon('actions-file-csv', Icon::SIZE_SMALL));
+
             $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+            $buttonBar->addButton($printButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
         }
 
         // New Entry Button
