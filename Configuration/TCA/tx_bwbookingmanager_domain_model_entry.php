@@ -284,6 +284,11 @@ return [
                 'type' => 'input',
                 'renderType' => 'selectTimeslotDates'
             ]
-        ]
+        ],
+        'crdate' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
     ],
 ];

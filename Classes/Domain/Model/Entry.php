@@ -151,6 +151,11 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $token = '';
 
     /**
+     * @var int
+     */
+    protected $crdate;
+
+    /**
      * __construct
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
@@ -602,5 +607,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
         }
         return $date;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
     }
 }

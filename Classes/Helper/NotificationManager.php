@@ -81,7 +81,7 @@ class NotificationManager
 
     private function triggerHook($notification)
     {
-        foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification'][$notification->getHook()] ?? [] as $className) {
+        foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['sendNotification'] ?? [] as $className) {
             $_procObj = GeneralUtility::makeInstance($className);
             $_procObj->executeHook($this, $notification);
         }
