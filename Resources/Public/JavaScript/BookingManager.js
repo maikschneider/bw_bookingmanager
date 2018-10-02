@@ -184,4 +184,10 @@ BOOKINGMANAGER.AJAX = {
 $(function () {
   BOOKINGMANAGER.AJAX.init();
   BOOKINGMANAGER.TIMESELECT.init();
+
+  // disable submit button after submit to prevent double bookings
+  $(document).on('formvalid.zf.abide', function(){
+    $('#bw_bookingmanager__newEntry button[type="submit"]').attr('disabled', 'disabled');
+  });
+
 });
