@@ -190,6 +190,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'eval' => 'datetime',
+                'default' => '0'
             ],
         ],
 
