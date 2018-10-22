@@ -79,7 +79,10 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $endDate->modify('next sunday');
         $endDate->setTime(23, 59, 59);
 
-        $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
+        // @TODO: This function does not return any Timeslots when called by ajax request
+        // use all timeslots as a fix
+        //$timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
+        $timeslots = $calendar->getTimeslots();
         $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
 
         return $timeslotManager->getTimeslots();
