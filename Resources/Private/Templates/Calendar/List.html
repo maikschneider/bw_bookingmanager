@@ -13,22 +13,15 @@ in /Configuration/ExtensionBuilder/settings.yaml:
 Otherwise your changes will be overwritten the next time you save the extension in the extension builder
 
 <f:section name="main">
-<h1>Listing for Calendar</h1>
 <f:flashMessages />
 
-<table  class="tx_bwbookingmanager" >
-	<tr>
-		<th><f:translate key="tx_bwbookingmanager_domain_model_calendar.name" /></th>
-		<th> </th>
-		<th> </th>
-	</tr>
+<ul class="tx-bw-bookingmanager-calendar-list">
 	<f:for each="{calendars}" as="calendar">
-		<tr>
-			<td><f:link.action action="show" pageUid="{settings.showPid}" arguments="{calendar : calendar}"> {calendar.name}</f:link.action></td>
-		</tr>
+			<li>
+				<f:link.action action="show" pageUid="{settings.showPid}" arguments="{calendar : calendar}"> {calendar.name}</f:link.action>
+			</li>
 	</f:for>
-</table>
+</ul>
 
-<f:link.action action="new">New Calendar</f:link.action>
 </f:section>
 </html>
