@@ -43,10 +43,16 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if ($this->arguments->hasArgument('newEntry')) {
             // convert dateTime from new action
 
-            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
-                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'U');
-            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption('TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
-                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT, 'U');
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption(
+                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'U'
+            );
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption(
+                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'U'
+            );
 
 
             $arguments = $this->request->getArguments();
@@ -70,6 +76,21 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $newEntry->setDataType($entityClass);
             }
         }
+
+        // include javascript
+        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Page\\PageRenderer');
+        if ($this->settings['javascript']['jquery']) {
+            $jqueryJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['jquery']);
+            $pageRenderer->addJsFooterFile($jqueryJs, null, false, false, '', true);
+        }
+        if ($this->settings['javascript']['customValidators']) {
+            $customValidators = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['customValidators']);
+            $pageRenderer->addJsFooterFile($customValidators, null, true, false, '', true);
+        }
+        if ($this->settings['javascript']['bookingmanager']) {
+            $bookingmanagerJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['bookingmanager']);
+            $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
+        }
     }
 
     /**
@@ -91,7 +112,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $start = null;
         $end = null;
 
-        if($this->request->hasArgument('start') && $this->request->hasArgument('end')) {
+        if ($this->request->hasArgument('start') && $this->request->hasArgument('end')) {
             $end = new \DateTime();
             $end->setTimestamp($this->request->getArgument('end'));
             $start = new \DateTime();
