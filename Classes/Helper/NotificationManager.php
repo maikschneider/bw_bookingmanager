@@ -119,8 +119,7 @@ class NotificationManager
         $emailView->setLayoutRootPaths($extbaseFrameworkConfiguration['view']['layoutRootPaths']);
         $emailView->setPartialRootPaths($extbaseFrameworkConfiguration['view']['partialRootPaths']);
         $emailView->setTemplateRootPaths($extbaseFrameworkConfiguration['view']['templateRootPaths']);
-
-        $emailView->setTemplate($templateName);
+        $emailView->setTemplateSource('Email', $templateName);
         $emailView->assign('entry', $this->entry);
 
         $emailBody = $emailView->render();
