@@ -23,7 +23,7 @@ class NotificationManager
     protected $entry = null;
 
     /**
-     * @var Array<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
+     * @var array<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
      */
     protected $notifications = null;
 
@@ -37,6 +37,12 @@ class NotificationManager
      */
     protected $extbaseFrameworkConfiguration;
 
+    /**
+     * NotificationManager constructor.
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     */
     public function __construct($entry)
     {
         $this->entry = $entry;
@@ -87,6 +93,9 @@ class NotificationManager
         }
     }
 
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Notification $notification
+     */
     public function sendNotification($notification)
     {
         $from = $this->extbaseFrameworkConfiguration['settings']['mail']['sender'];
@@ -119,7 +128,8 @@ class NotificationManager
         $emailView->setLayoutRootPaths($extbaseFrameworkConfiguration['view']['layoutRootPaths']);
         $emailView->setPartialRootPaths($extbaseFrameworkConfiguration['view']['partialRootPaths']);
         $emailView->setTemplateRootPaths($extbaseFrameworkConfiguration['view']['templateRootPaths']);
-        $emailView->setTemplateSource('Email', $templateName);
+        $emailView->getRenderingContext()->setControllerName('Email');
+        $emailView->setTemplate($templateName);
         $emailView->assign('entry', $this->entry);
 
         $emailBody = $emailView->render();
