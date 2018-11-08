@@ -6,7 +6,9 @@
 
 <f:section name="content">
 
+	<f:if condition="{settings.showConfirmButton}">
     <f:be.pageRenderer includeRequireJsModules="{0: 'TYPO3/CMS/Backend/Tooltip', 1: 'TYPO3/CMS/BwBookingmanager/BetterRecordlist'}" />
+	</f:if>
 
     <h1>
 				<f:for each="{calendars}" as="calendar">

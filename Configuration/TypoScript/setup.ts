@@ -68,5 +68,12 @@ module.tx_bwbookingmanager {
       4 = phone
       5 = weight
     }
+    showConfirmButton = 1
+    showEditButton = 1
+    showDeleteButton = 0
+    showHideButton = 0
+    showSecondaryButton = 0
+    showHistoryButton = 0
+    showViewBigButton = 0
   }
 }

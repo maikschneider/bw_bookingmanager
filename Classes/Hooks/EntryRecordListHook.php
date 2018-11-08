@@ -8,6 +8,17 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
 {
 
     /**
+     * @return array
+     */
+    private function loadAllTypoScriptSettings()
+    {
+        $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+        $typoscript = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+        return $typoscript['module.']['tx_bwbookingmanager.']['settings.'];
+    }
+
+    /**
      * @param string $table
      * @param array $row
      * @param array $cells
@@ -29,33 +40,58 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
     public function makeControl($table, $row, $cells, &$parentObject)
     {
         if ($table === 'tx_bwbookingmanager_domain_model_entry') {
-            unset($cells['hide']);
-            unset($cells['delete']);
-            unset($cells['secondary']);
-            unset($cells['history']);
-            unset($cells['viewBig']);
 
+            // remove edit, hide, delete button (no idea why there added twice)
             $cells['primary'] = [];
 
-            $iconFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-            $languageService = $GLOBALS['LANG'];
+            $settings = $this->loadAllTypoScriptSettings();
 
-            if ($row['confirmed']) {
-                $params = 'data[' . $table . '][' . $row['uid'] . '][confirmed]=0';
-                $cells['primary']['confirmed'] = '<a class="btn btn-default t3js-record-confirm" data-confirmed="yes" href="#"'
-                    . ' data-params="' . htmlspecialchars($params) . '"'
-                    . ' data-toggle="tooltip"'
-                    . ' data-toggle-title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.confirm') . '"'
-                    . ' title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.unconfirm') . '">'
-                    . $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() . '</a>';
-            } else {
-                $params = 'data[' . $table . '][' . $row['uid'] . '][confirmed]=1';
-                $cells['primary']['confirmed'] = '<a class="btn btn-default t3js-record-confirm" data-confirmed="no" href="#"'
-                    . ' data-params="' . htmlspecialchars($params) . '"'
-                    . ' data-toggle="tooltip"'
-                    . ' data-toggle-title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.unconfirm') . '"'
-                    . ' title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.confirm') . '">'
-                    . $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render() . '</a>';
+            if($settings['showDeleteButton'] === '0'){
+                unset($cells['delete']);
+            }
+
+            if ($settings['showHideButton'] === '0') {
+                unset($cells['hide']);
+            }
+
+            if ($settings['showSecondaryButton'] == '0') {
+                unset($cells['secondary']);
+            }
+
+            if ($settings['showHistoryButton'] === '0') {
+                unset($cells['history']);
+            }
+
+            if ($settings['showViewBigButton'] === '0') {
+                unset($cells['viewBig']);
+            }
+
+            if ($settings['showEditButton'] === '0') {
+                unset($cells['edit']);
+            }
+
+            if($settings['showConfirmButton']=='1') {
+
+                $iconFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+                $languageService = $GLOBALS['LANG'];
+
+                if ($row['confirmed']) {
+                    $params = 'data[' . $table . '][' . $row['uid'] . '][confirmed]=0';
+                    $cells['primary']['confirmed'] = '<a class="btn btn-default t3js-record-confirm" data-confirmed="yes" href="#"'
+                        . ' data-params="' . htmlspecialchars($params) . '"'
+                        . ' data-toggle="tooltip"'
+                        . ' data-toggle-title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.confirm') . '"'
+                        . ' title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.unconfirm') . '">'
+                        . $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() . '</a>';
+                } else {
+                    $params = 'data[' . $table . '][' . $row['uid'] . '][confirmed]=1';
+                    $cells['primary']['confirmed'] = '<a class="btn btn-default t3js-record-confirm" data-confirmed="no" href="#"'
+                        . ' data-params="' . htmlspecialchars($params) . '"'
+                        . ' data-toggle="tooltip"'
+                        . ' data-toggle-title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.unconfirm') . '"'
+                        . ' title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.confirm') . '">'
+                        . $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render() . '</a>';
+                }
             }
         }
         return $cells;
