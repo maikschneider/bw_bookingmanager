@@ -58,3 +58,15 @@ BOOKINGMANAGER {
       vendorName = Blueways
     }
 }
+
+module.tx_bwbookingmanager {
+  settings {
+    tableFields {
+      1 = name
+      2 = prename
+      3 = email
+      4 = phone
+      5 = weight
+    }
+  }
+}
