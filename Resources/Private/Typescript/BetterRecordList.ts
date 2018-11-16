@@ -37,7 +37,6 @@ class BetterRecordList{
 			// make the AJAX call to toggle the visibility
 			this._call(params).always((result): void => {
 				// print messages on errors
-				console.log(result);
 				if (result.hasErrors) {
 					this.handleErrors(result);
 				} else {
