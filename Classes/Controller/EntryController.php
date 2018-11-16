@@ -146,6 +146,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->initializeAction();
         $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $newEntry->generateToken();
+        // override PID (just in case the storage PID differs from current calendar)
+        $newEntry->setPid($newEntry->getCalendar()->getPid());
         $this->entryRepository->add($newEntry);
 
         // persist by hand to get uid field and make redirect possible
