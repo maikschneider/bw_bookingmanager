@@ -11,8 +11,8 @@
 	</f:if>
 
     <h1>
-				<f:for each="{calendars}" as="calendar">
-						<f:if condition="{calendars-f:count()}>1">, </f:if> {calendar.name}
+				<f:for each="{calendars}" as="calendar" iteration="i">
+						<f:if condition="{i.index}">,</f:if> {calendar.name}
 				</f:for>
     </h1>
 
