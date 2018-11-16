@@ -105,6 +105,18 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
 				<source>Reason</source>
 			</trans-unit>
+			<trans-unit id="recyclertask.name">
+				<source>Entry Recycler</source>
+			</trans-unit>
+			<trans-unit id="recyclertask.description">
+				<source>Deletes old entries that are in the past</source>
+			</trans-unit>
+			<trans-unit id="recyclertask.numberOfDays">
+				<source>Number of days before deleting entries</source>
+			</trans-unit>
+			<trans-unit id="recyclertask.additionalInformation">
+				<source>Deletes entries older than %s days.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
