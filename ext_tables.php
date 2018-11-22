@@ -50,6 +50,14 @@ call_user_func(
                     ['source' => 'EXT:bw_bookingmanager/Resources/Public/Icons/' . $path]
                 );
             }
+
+            // register create Entries Wizard
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
+                'web_func',
+                \Blueways\BwBookingmanager\Controller\CreateTimeslotsWizardModuleFunctionController::class,
+                null,
+                'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:wiz_crMany'
+            );
         }
     }
 );

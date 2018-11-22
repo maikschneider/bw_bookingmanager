@@ -1,0 +1,142 @@
+<h1>Create multiple timeslots</h1>
+
+<f:if condition="{timeslots}">
+	<f:then>
+		<div class="callout callout-success">
+			<div class="media">
+				{timeslots->f:count()} Timeslots have been created.
+			</div>
+		</div>
+		<ul>
+			<f:for each="{timeslots}" as="timeslot">
+				<li>{f:format.date(date:timeslot.startDate, format:'l, d.m.Y H:i')} - {f:format.date(date:timeslot.endDate, format:'H:i')}</li>
+			</f:for>
+		</ul>
+	</f:then>
+	<f:else>
+		<f:if condition="{calendars}">
+			<f:then>
+				<h4>Create new timeslots:</h4>
+				<div class="form-group t3js-wizardcrpages-container">
+					<div class="form-section">
+						<div class="row">
+							<div class="form-group col-xs-3">
+								<label>Calendar:</label>
+								<div class="form-control-wrap">
+									<select name="data[timeslot][calendar]" class="form-control form-control-adapt">
+										<f:for each="{calendars}" as="calendar">
+											<option value="{calendar.uid}">{calendar.name}</option>
+										</f:for>
+									</select>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label>Start date:</label>
+								<div class="form-control-wrap">
+									<input class="form-control" type="text" placeholder="{f:format.date(date:'now', format:'Y-m-d')}" name="data[timeslot][startDate]"/>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label>Repeat type:</label>
+								<div class="form-control-wrap">
+									<select name="data[timeslot][repeatType]" class="form-control form-control-adapt">
+											<option value="0">No repeat</option>
+											<option value="1">Daily repeat</option>
+											<option value="2" selected="selected">Weekly repeat</option>
+											<option value="3">Monthly repeat</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label>Repeat end:</label>
+								<div class="form-control-wrap">
+									<input class="form-control" type="text" placeholder="2018-12-31 00:00:00" name="data[timeslot][repeatEnd]"/>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label>Max weight:</label>
+								<div class="form-control-wrap">
+									<input class="form-control" type="text" placeholder="1" name="data[timeslot][maxWeight]"/>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label>Holiday setting:</label>
+								<div class="form-control-wrap">
+									<select name="data[timeslot][repeatType]" class="form-control form-control-adapt">
+										<option value="0">No effect</option>
+										<option value="1">Not during calendar holidays</option>
+										<option value="2">Only during calendar holidays</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group col-md-6">
+								<label>Options</label>
+								<div class="form-control-wrap">
+									<input type="checkbox" name="data[timeslot][is_bookable_hooks]" /> Needs to be booked one day in
+								advance
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-section">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label>Start times</label>
+								<div class="row">
+									<div class="form-group col-xs-12">
+										<textarea cols="20" rows="15" name="data[timeslot][times]" placeholder="10:10&#10;11:20&#10;18:30"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="row">
+									<div class="form-group col-md-12">
+										<label>Length in mins:</label>
+										<div class="form-control-wrap">
+											<input class="form-control" type="text" placeholder="10" name="data[timeslot][length]"/>
+										</div>
+									</div>
+								</div>
+								<label>Create for following days</label>
+								<div class="row">
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][1]"/>
+										Monday
+									</div>
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][2]"/> Tuesday
+									</div>
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][3]"/> Wednesday
+									</div>
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][4]"/> Thursday
+									</div>
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][5]"/> Friday
+									</div>
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][6]"/> Saturday
+									</div>
+									<div class="col-xs-6 form-group">
+										<input type="checkbox" name="data[timeslot][days][0]"/> Sunday
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<input class="btn btn-default" type="submit" name="create" value="Create timeslots"/>
+					<input class="btn btn-default" type="reset" value="Reset"/>
+				</div>
+			</f:then>
+			<f:else>
+				<div class="callout callout-info">
+					<div class="media">
+						No calendars found on current page.
+				</div>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>

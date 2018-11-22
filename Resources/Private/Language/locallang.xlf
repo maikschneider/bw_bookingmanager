@@ -117,6 +117,12 @@
 			<trans-unit id="recyclertask.additionalInformation">
 				<source>Deletes entries older than %s days.</source>
 			</trans-unit>
+			<trans-unit id="wiz_crMany">
+				<source>Create multiple timeslots</source>
+			</trans-unit>
+			<trans-unit id="wiz_crMany_errorMsg1">
+				<source>You are not allowed to create new subpages to this page!</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
