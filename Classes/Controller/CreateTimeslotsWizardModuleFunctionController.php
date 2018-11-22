@@ -88,16 +88,16 @@ class CreateTimeslotsWizardModuleFunctionController extends \TYPO3\CMS\Backend\M
 
     protected function createTimeslots($data)
     {
-        if(!is_array($data['timeslot']['days']) || !sizeof($data['timeslot']['days'])) return;
+        if(!is_array($data['timeslot']['days']) || !sizeof($data['timeslot']['days'])) return [];
 
         $weekDays = array_keys($data['timeslot']['days']);
         $startDay = $data['timeslot']['startDate'] ? new \DateTime($data['timeslot']['startDate']) : new \DateTime('now');
         $dayOfWeek = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
         $times = $data['timeslot']['times'];
 
-        if(!$times) return;
+        if(!$times) return [];
         $times = preg_split('/\r\n|[\r\n]/', $times);
-        if (!is_array($times) || !sizeof($times)) return;
+        if (!is_array($times) || !sizeof($times)) return [];
 
         $timeslots = [];
 
@@ -108,8 +108,9 @@ class CreateTimeslotsWizardModuleFunctionController extends \TYPO3\CMS\Backend\M
         $maxWeight = $data['timeslot']['maxWeight'] ? (int)$data['timeslot']['maxWeight'] : 1;
         $hollidaySetting = $data['timeslot']['hollidaySetting'] ? (int)$data['timeslot']['hollidaySetting'] : 0;
         $isBookableHook = $data['timeslot']['is_bookable_hooks'] ? 1 : 0;
+        /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
         $calendar = $this->calendarRepository->findByUid((int)$data['timeslot']['calendar']);
-        if(!$calendar) return;
+        if(!$calendar) return [];
         $pid = $calendar->getPid();
 
         for($i=0; $i<7; $i++){
