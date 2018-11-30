@@ -236,6 +236,7 @@ class TimeslotManager
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
 
+            // DST fix
             $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(), $newStartDate->getTimestamp());
             $lastTransitionIndex = sizeof($transitions) - 1;
             if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
@@ -307,12 +308,11 @@ class TimeslotManager
 
         $timezone = new \DateTimeZone('Europe/Berlin');
 
-        $needsDSTFix = $timeslot->startsInDST();
-
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' weeks');
 
+            // DST fix
             $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(),
                 $newStartDate->getTimestamp());
             $lastTransitionIndex = sizeof($transitions) - 1;
