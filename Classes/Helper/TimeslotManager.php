@@ -164,7 +164,7 @@ class TimeslotManager
 
                 // filter timeslots for holiday setting to be within
                 if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_ONLY_DURING) {
-                   
+
                     $notInAny = true;
                     foreach ($this->filterCritera['holidays'] as $range) {
                         if ($timeslot->getStartDate() > $range[0] && $timeslot->getEndDate() < $range[1]) {
@@ -231,17 +231,18 @@ class TimeslotManager
 
         $timezone = new \DateTimeZone("Europe/Berlin");
 
-        $needsDSTFix = $timeslot->startsInDST();
-
         // create new timeslots and modify start and end date
         for ($i=0; $i<$daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' days');
 
-            $transitions = $timezone->getTransitions($newStartDate->getTimestamp(), $newStartDate->getTimestamp());
-            $isDST = $transitions[0]['isdst'];
-            if ($needsDSTFix && !$isDST) {
+            $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(), $newStartDate->getTimestamp());
+            $lastTransitionIndex = sizeof($transitions) - 1;
+            if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
                 $newStartDate->modify('+1 hour');
+            }
+            if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
+                $newStartDate->modify('-1 hour');
             }
 
             $newEndDate = clone $newStartDate;
@@ -312,10 +313,14 @@ class TimeslotManager
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+'.$i.' weeks');
 
-            $transitions = $timezone->getTransitions($newStartDate->getTimestamp(), $newStartDate->getTimestamp());
-            $isDST = $transitions[0]['isdst'];
-            if ($needsDSTFix && !$isDST) {
+            $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(),
+                $newStartDate->getTimestamp());
+            $lastTransitionIndex = sizeof($transitions) - 1;
+            if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
                 $newStartDate->modify('+1 hour');
+            }
+            if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
+                $newStartDate->modify('-1 hour');
             }
 
             $newEndDate = clone $newStartDate;
