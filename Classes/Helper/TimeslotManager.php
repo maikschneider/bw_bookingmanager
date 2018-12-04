@@ -1,4 +1,5 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Helper;
 
 use \Blueways\BwBookingmanager\Domain\Model\Timeslot;
@@ -8,8 +9,9 @@ use \Blueways\BwBookingmanager\Domain\Model\Timeslot;
  */
 class TimeslotManager
 {
+
     /**
-     * @var Array<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
+     * @var array<\Blueways\BwBookingmanager\Domain\Model\Timeslot>|\TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
      */
     protected $timeslots = null;
 
@@ -29,12 +31,17 @@ class TimeslotManager
     protected $endDate = null;
 
     /**
-     * @var Array $filterCritera
+     * @var array $filterCritera
      */
     protected $filterCritera;
 
     /**
      * __construct
+     *
+     * @param $timeslots
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
      */
     public function __construct(
         $timeslots,
@@ -64,9 +71,6 @@ class TimeslotManager
     /**
      * checks every slot for type of repeat and merges duplicated slots back
      *
-     * @param  \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $timeslots
-     * @param  \DateTime                                          $startDate
-     * @param  \DateTime                                          $endDate
      * @return void
      */
     public function repeatTimeslots()
@@ -75,13 +79,13 @@ class TimeslotManager
         $newTimeslots = [];
         foreach ($timeslots as $timeslot) {
             $repeatType = $timeslot->getRepeatType();
-            if ($repeatType == \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY) {
+            if ($repeatType === Timeslot::REPEAT_DAILY) {
                 $newTimeslots = array_merge($newTimeslots, $this->repeatDailyTimeslot($timeslot));
             }
-            if ($repeatType == \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY) {
+            if ($repeatType === Timeslot::REPEAT_WEEKLY) {
                 $newTimeslots = array_merge($newTimeslots, $this->repeatWeeklyTimeslot($timeslot));
             }
-            if ($repeatType == \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_MONTHLY) {
+            if ($repeatType === Timeslot::REPEAT_MONTHLY) {
                 $newTimeslots = array_merge($newTimeslots, $this->repeatMonthlyTimeslot($timeslot));
             }
         }
@@ -129,8 +133,8 @@ class TimeslotManager
         $holidays = $this->calendar->getHolidays();
         if ($holidays) {
             foreach ($holidays as $holiday) {
-                $holiStartDate = $holiday->getStartDate()->setTime(0,0,0);
-                $holiEndDate = $holiday->getEndDate()->setTime(23,59,59);
+                $holiStartDate = $holiday->getStartDate()->setTime(0, 0, 0);
+                $holiEndDate = $holiday->getEndDate()->setTime(23, 59, 59);
 
                 // check if block is inside date range
                 // so add its dates to filterCritera
@@ -139,7 +143,6 @@ class TimeslotManager
                 }
             }
         }
-
     }
 
     /**
@@ -152,7 +155,7 @@ class TimeslotManager
             function ($timeslot) {
 
                 // check timeslot if holidays should move to 'in' or 'out' critera array
-                if($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING){
+                if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING) {
 
                     foreach ($this->filterCritera['holidays'] as $range) {
                         if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
@@ -167,11 +170,13 @@ class TimeslotManager
 
                     $notInAny = true;
                     foreach ($this->filterCritera['holidays'] as $range) {
-                        if ($timeslot->getStartDate() > $range[0] && $timeslot->getEndDate() < $range[1]) {
+                        if ($timeslot->getStartDate() >= $range[0] && $timeslot->getEndDate() <= $range[1]) {
                             $notInAny = false;
                         }
                     }
-                    if($notInAny) return false;
+                    if ($notInAny) {
+                        return false;
+                    }
                 }
 
                 // check for date range to be within
@@ -226,18 +231,20 @@ class TimeslotManager
         // default fill the whole date range with that timeslot
         $daysToFillTimeslots = $this->endDate->diff($this->startDate)->days + 1;
         $dateToStartFilling = clone $timeslot->getStartDate();
-        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'), $this->startDate->format('d'));
+        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'),
+            $this->startDate->format('d'));
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         $timezone = new \DateTimeZone("Europe/Berlin");
 
         // create new timeslots and modify start and end date
-        for ($i=0; $i<$daysToFillTimeslots; $i++) {
+        for ($i = 0; $i < $daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
-            $newStartDate->modify('+'.$i.' days');
+            $newStartDate->modify('+' . $i . ' days');
 
             // DST fix
-            $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(), $newStartDate->getTimestamp());
+            $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(),
+                $newStartDate->getTimestamp());
             $lastTransitionIndex = sizeof($transitions) - 1;
             if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
                 $newStartDate->modify('+1 hour');
@@ -273,7 +280,8 @@ class TimeslotManager
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param int       $dayOfWeek
+     * @param int $dayOfWeek
+     * @return bool|float
      */
     public static function dayCount($from, $to, $day)
     {
@@ -298,19 +306,21 @@ class TimeslotManager
         $newTimeslots = [];
 
         // default fill the all mondays (or tuesdays..) of date range
-        $daysToFillTimeslots = $this->dayCount($this->startDate, $this->endDate, $timeslot->getStartDate()->format('w'));
+        $daysToFillTimeslots = $this->dayCount($this->startDate, $this->endDate,
+            $timeslot->getStartDate()->format('w'));
 
         $dateToStartFilling = clone $timeslot->getStartDate();
-        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'), $this->startDate->format('d'));
+        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'),
+            $this->startDate->format('d'));
         $dateToStartFilling->modify('-1 days');
-        $dateToStartFilling->modify('next '.$timeslot->getStartDate()->format('l H:i:s'));
+        $dateToStartFilling->modify('next ' . $timeslot->getStartDate()->format('l H:i:s'));
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         $timezone = new \DateTimeZone('Europe/Berlin');
 
-        for ($i=0; $i<$daysToFillTimeslots; $i++) {
+        for ($i = 0; $i < $daysToFillTimeslots; $i++) {
             $newStartDate = clone $dateToStartFilling;
-            $newStartDate->modify('+'.$i.' weeks');
+            $newStartDate->modify('+' . $i . ' weeks');
 
             // DST fix
             $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(),
