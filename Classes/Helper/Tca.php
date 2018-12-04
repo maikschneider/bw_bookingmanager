@@ -1,4 +1,5 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Helper;
 
 class Tca
@@ -14,25 +15,25 @@ class Tca
 
         $repeatType = $record['repeat_type'];
         switch ($repeatType) {
-        case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
-            $newTitle .= $startDate->format('l') . ', ';
-            $newTitle .= $startDate->format('H:i') . ' - ';
-            $newTitle .= $endDate->format('H:i');
-            $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
-            $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
-            break;
+            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
+                $newTitle .= $startDate->format('l') . ', ';
+                $newTitle .= $startDate->format('H:i') . ' - ';
+                $newTitle .= $endDate->format('H:i');
+                $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
+                $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
+                break;
 
-        case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY:
-            $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
-            $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
-            $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
-            break;
+            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY:
+                $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
+                $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
+                $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
+                break;
 
-        default:
-            $newTitle .= $startDate->format('d.m.y, H:i') . ' - ';
-            $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
-            $newTitle .= $endDate->format($endDateFormat);
-            break;
+            default:
+                $newTitle .= $startDate->format('d.m.y, H:i') . ' - ';
+                $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
+                $newTitle .= $endDate->format($endDateFormat);
+                break;
         }
 
         $params['title'] = $newTitle;
@@ -73,7 +74,6 @@ class Tca
         $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
         $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
 
-
         $newTitle .= $startDate->format('d.m.y, H:i') . '-';
         $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
         $newTitle .= $endDate->format($endDateFormat);
@@ -81,5 +81,4 @@ class Tca
         $params['title'] = $newTitle;
         return $params;
     }
-
 }
