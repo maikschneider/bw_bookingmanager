@@ -116,7 +116,6 @@ class TimeslotManager
         // creteria for Blockslots
         $blockslots = $this->calendar->getBlockslots();
         if ($blockslots) {
-
             foreach ($blockslots as $blockslot) {
                 $blockStartDate = $blockslot->getStartDate();
                 $blockEndDate = $blockslot->getEndDate();
@@ -156,7 +155,6 @@ class TimeslotManager
 
                 // check timeslot if holidays should move to 'in' or 'out' critera array
                 if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING) {
-
                     foreach ($this->filterCritera['holidays'] as $range) {
                         if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
                             continue;
@@ -167,7 +165,6 @@ class TimeslotManager
 
                 // filter timeslots for holiday setting to be within
                 if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_ONLY_DURING) {
-
                     $notInAny = true;
                     foreach ($this->filterCritera['holidays'] as $range) {
                         if ($timeslot->getStartDate() >= $range[0] && $timeslot->getEndDate() <= $range[1]) {
@@ -231,8 +228,11 @@ class TimeslotManager
         // default fill the whole date range with that timeslot
         $daysToFillTimeslots = $this->endDate->diff($this->startDate)->days + 1;
         $dateToStartFilling = clone $timeslot->getStartDate();
-        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'),
-            $this->startDate->format('d'));
+        $dateToStartFilling->setDate(
+            $this->startDate->format('Y'),
+            $this->startDate->format('m'),
+            $this->startDate->format('d')
+        );
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         $timezone = new \DateTimeZone("Europe/Berlin");
@@ -243,8 +243,10 @@ class TimeslotManager
             $newStartDate->modify('+' . $i . ' days');
 
             // DST fix
-            $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(),
-                $newStartDate->getTimestamp());
+            $transitions = $timezone->getTransitions(
+                $timeslot->getStartDate()->getTimestamp(),
+                $newStartDate->getTimestamp()
+            );
             $lastTransitionIndex = sizeof($transitions) - 1;
             if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
                 $newStartDate->modify('+1 hour');
@@ -300,18 +302,27 @@ class TimeslotManager
 
     /**
      * duplicates weekly timeslots in date range
+     *
+     * @param Timeslot $timeslot
+     * @return array
      */
     private function repeatWeeklyTimeslot($timeslot)
     {
         $newTimeslots = [];
 
         // default fill the all mondays (or tuesdays..) of date range
-        $daysToFillTimeslots = $this->dayCount($this->startDate, $this->endDate,
-            $timeslot->getStartDate()->format('w'));
+        $daysToFillTimeslots = $this->dayCount(
+            $this->startDate,
+            $this->endDate,
+            $timeslot->getStartDate()->format('w')
+        );
 
         $dateToStartFilling = clone $timeslot->getStartDate();
-        $dateToStartFilling->setDate($this->startDate->format('Y'), $this->startDate->format('m'),
-            $this->startDate->format('d'));
+        $dateToStartFilling->setDate(
+            $this->startDate->format('Y'),
+            $this->startDate->format('m'),
+            $this->startDate->format('d')
+        );
         $dateToStartFilling->modify('-1 days');
         $dateToStartFilling->modify('next ' . $timeslot->getStartDate()->format('l H:i:s'));
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
@@ -323,8 +334,10 @@ class TimeslotManager
             $newStartDate->modify('+' . $i . ' weeks');
 
             // DST fix
-            $transitions = $timezone->getTransitions($timeslot->getStartDate()->getTimestamp(),
-                $newStartDate->getTimestamp());
+            $transitions = $timezone->getTransitions(
+                $timeslot->getStartDate()->getTimestamp(),
+                $newStartDate->getTimestamp()
+            );
             $lastTransitionIndex = sizeof($transitions) - 1;
             if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
                 $newStartDate->modify('+1 hour');
