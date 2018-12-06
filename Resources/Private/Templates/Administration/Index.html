@@ -41,7 +41,8 @@
                                     </label>
                                     <div class="col-xs-8">
                                         <div class="input">
-                                            <f:form.select class="form-control" property="calendarUid" options="{calendars}" optionLabelField="name">
+                                            <f:form.select prependOptionLabel="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.allCalendars')}"
+																													 prependOptionValue="0" class="form-control" property="calendarUid" options="{calendars}" optionLabelField="name">
                                             </f:form.select>
                                         </div>
                                     </div>

@@ -168,6 +168,10 @@
                 <source>Calendar</source>
                 <target>Kalender</target>
             </trans-unit>
+			<trans-unit id="administration.filter.allCalendars">
+				<source>All calendars</source>
+				<target>Alle Kalender</target>
+			</trans-unit>
             <trans-unit id="administration.filter.timerange">
                 <source>Time range</source>
                 <target>Zeitspanne</target>

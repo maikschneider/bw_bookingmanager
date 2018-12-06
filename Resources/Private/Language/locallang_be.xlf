@@ -129,6 +129,9 @@
             <trans-unit id="administration.filter.calendar">
                 <source>Calendar</source>
             </trans-unit>
+			<trans-unit id="administration.filter.allCalendars">
+                <source>All calendars</source>
+            </trans-unit>
             <trans-unit id="administration.filter.timerange">
                 <source>Time range</source>
             </trans-unit>
