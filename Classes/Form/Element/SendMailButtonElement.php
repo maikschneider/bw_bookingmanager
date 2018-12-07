@@ -14,17 +14,29 @@ class SendMailButtonElement extends \TYPO3\CMS\Backend\Form\Element\AbstractForm
     {
         $resultArray = $this->initializeResultArray();
 
+        $resultArray['requireJsModules'][] = [
+            'TYPO3/CMS/BwBookingmanager/SendMailWizard' => 'function(SendMailWizard){top.require(["jquery-ui/draggable", "jquery-ui/resizable"], function() {}); }',
+        ];
+
         $wizardUri = $this->getWizardUri();
+
+        $modalTitle = 'Email Preview';
+        $modalCancelButtonText = 'Cancel';
+        $modalSendButtonText = 'Send';
 
         $html = '';
         $html .= '<div class="formengine-field-item t3js-formengine-field-item">';
         $html .= '<div class="form-wizards-wrap">';
         $html .= '<div class="form-wizards-element">';
         $html .= '<div class="form-control-wrap">';
-        $html .= '<button class="btn btn-default t3js-sendmail-trigger" data-wizard-uri="' . $wizardUri . '" data-modal-title="Open email preview" data-modal-save-button-text="Save" data-modal-view-button-text="List view" data-modal-cancel-button-text="Cancel">
-			<span class="t3-icon fa fa-envelope-o"></span>
-		Send mail
-	</button>';
+        $html .= '<button 
+            id="sendMailButton"
+            class="btn btn-default t3js-sendmail-trigger"
+            data-wizard-uri="' . $wizardUri . '" 
+            data-modal-title="' . $modalTitle . '" 
+            data-modal-send-button-text="' . $modalSendButtonText . '" 
+            data-modal-cancel-button-text="' . $modalCancelButtonText . '">
+			  <span class="t3-icon fa fa-envelope-o"></span> Send mail</button>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';

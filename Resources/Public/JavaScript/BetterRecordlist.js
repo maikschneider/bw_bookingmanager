@@ -26,7 +26,6 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/Backend/Noti
                 // make the AJAX call to toggle the visibility
                 _this._call(params).always(function (result) {
                     // print messages on errors
-                    console.log(result);
                     if (result.hasErrors) {
                         _this.handleErrors(result);
                     }
