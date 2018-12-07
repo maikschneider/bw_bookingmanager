@@ -1,5 +1,13 @@
+# Register plugin template styles
 TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.sDEF{
     settings\.templateLayout.addItems{
         # style2 = Stylename 2
     }
+}
+
+# Register Email Templates
+TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.email{
+	settings\.mail\.template.addItems{
+   		default = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_email.template.default
+   	}
 }

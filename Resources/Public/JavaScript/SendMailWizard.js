@@ -1,4 +1,4 @@
-define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery"], function (require, exports, Modal, $) {
+define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Backend/Icons"], function (require, exports, Modal, $, Icons) {
     "use strict";
     /**
      * Module: TYPO3/CMS/BwBookingmanager/SendMailWizard
@@ -16,9 +16,10 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery"], function (re
             this.$sendMailButton = $('#sendMailButton');
         };
         SendMailWizard.prototype.initEvents = function () {
-            this.$sendMailButton.on('click', this.openModal.bind(this));
+            this.$sendMailButton.on('click', this.onButtonClick.bind(this));
         };
-        SendMailWizard.prototype.openModal = function () {
+        SendMailWizard.prototype.onButtonClick = function (e) {
+            e.preventDefault();
             // collect modal infos
             var wizardUri = this.$sendMailButton.data('wizard-uri');
             var modalTitle = this.$sendMailButton.data('modal-title');
@@ -30,7 +31,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery"], function (re
                 size: Modal.sizes.large,
                 title: modalTitle,
                 style: Modal.styles.light,
-                ajaxCallback: this.onButtonClick.bind(this),
+                ajaxCallback: this.onModalOpened.bind(this),
                 buttons: [
                     {
                         text: modalCancelButtonText,
@@ -58,7 +59,13 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery"], function (re
                 ]
             });
         };
-        SendMailWizard.prototype.onButtonClick = function (e) {
+        SendMailWizard.prototype.onModalOpened = function () {
+            var previewUri = this.currentModal.find('select#emailTemplate option:selected').data('preview-uri');
+            var $loaderTarget = this.currentModal.find('#emailPreview');
+            Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
+                $loaderTarget.html(icon);
+                $.get(previewUri, function (data) { console.log(data); }, 'text/html');
+            });
         };
         SendMailWizard.prototype.send = function (e) {
         };

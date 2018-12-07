@@ -185,10 +185,6 @@
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>
                                 <items>
-                                    <numIndex index="0" type="array">
-                                        <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_email.template.default</numIndex>
-                                        <numIndex index="1">default</numIndex>
-                                    </numIndex>
                                 </items>
                             </config>
                         </TCEforms>

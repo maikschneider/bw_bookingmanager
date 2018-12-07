@@ -50,8 +50,11 @@ class SendMailButtonElement extends \TYPO3\CMS\Backend\Form\Element\AbstractForm
     protected function getWizardUri()
     {
         $routeName = 'ajax_wizard_sendbookingmail';
-        // @TODO inject needed parameters
-        $uriArguments['arguments'] = json_encode([]);
+
+        $uriArguments['arguments'] = json_encode([
+            'entry' => $this->data['databaseRow']['uid'],
+            'emailTemplate' => ''
+        ]);
         $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
             $routeName);
 

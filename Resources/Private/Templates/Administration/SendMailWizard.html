@@ -1,0 +1,23 @@
+<div class="row">
+	<div class="col-md-4">
+		<form action="{sendMailActionUri}" method="POST">
+			<div class="form-group">
+				<label for="emailTemplate"> Email-Template </label>
+				<div class="form-control-wrap">
+					<select class="form-control" id="emailTemplate" name="emailTemplate">
+						<f:for each="{emailTemplates}" as="template">
+							<option value="{template.file}" data-preview-uri="{template.previewUri}">{template.name}</option>
+						</f:for>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="col-md-8">
+		<div id="emailPreview" style="min-height:500px; text-align:center;">
+			<iframe id="emailPreviewFrame"></iframe>
+		</div>
+	</div>
+
+</div>

@@ -32,10 +32,11 @@ class SendMailWizard {
   }
 
   private initEvents() {
-    this.$sendMailButton.on('click', this.openModal.bind(this));
+    this.$sendMailButton.on('click', this.onButtonClick.bind(this));
   }
 
-  private openModal() {
+  private onButtonClick(e: JQueryEventObject) {
+    e.preventDefault();
     // collect modal infos
     const wizardUri = this.$sendMailButton.data('wizard-uri');
     const modalTitle = this.$sendMailButton.data('modal-title');
@@ -48,7 +49,7 @@ class SendMailWizard {
       size: Modal.sizes.large,
       title: modalTitle,
       style: Modal.styles.light,
-      ajaxCallback: this.onButtonClick.bind(this),
+      ajaxCallback: this.onModalOpened.bind(this),
       buttons: [
         {
           text: modalCancelButtonText,
@@ -78,7 +79,18 @@ class SendMailWizard {
     })
   }
 
-  private onButtonClick(e: JQueryEventObject) {
+  private onModalOpened() {
+    const previewUri = this.currentModal.find('select#emailTemplate option:selected').data('preview-uri');
+    const $loaderTarget = this.currentModal.find('#emailPreview');
+
+    Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
+      $loaderTarget.html(icon);
+      $.get(
+        previewUri,
+        function(data){ console.log(data); },
+        'text/html'
+      );
+    });
 
   }
 

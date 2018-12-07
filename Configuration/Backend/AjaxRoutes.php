@@ -14,6 +14,14 @@ return [
     ],
     'wizard_sendbookingmail' => [
         'path' => '/sendmail/get-render-configuration',
-        'target' => \Blueways\BwBookingmanager\Controller\Ajax\SendmailWizard::class . '::getConfiguration'
+        'target' => \Blueways\BwBookingmanager\Controller\Ajax\SendmailWizard::class . '::modalContentAction'
+    ],
+    'sendbookingmail' => [
+        'path' => '/sendmail/send',
+        'target' => \Blueways\BwBookingmanager\Controller\Ajax\SendmailWizard::class . '::sendMailAction'
+    ],
+    'emailpreview' => [
+        'path' => '/sendmail/get-email-preview',
+        'target' => \Blueways\BwBookingmanager\Controller\Ajax\SendmailWizard::class . '::emailPreviewAction'
     ]
 ];
