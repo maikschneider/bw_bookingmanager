@@ -203,6 +203,9 @@
 				<source>Personal details</source>
 				<target>Personenangaben</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.sendMail.button">
+				<source>Send E-Mail</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
 				<target>Blockslot</target>

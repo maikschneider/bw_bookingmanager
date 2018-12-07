@@ -11,5 +11,9 @@ return [
     'dashboard_chart2' => [
         'path' => '/dashboard/chart2',
         'target' => \Blueways\BwBookingmanager\Controller\Ajax\ChartsController::class . '::getChart2'
+    ],
+    'wizard_sendbookingmail' => [
+        'path' => '/sendmail/get-render-configuration',
+        'target' => \Blueways\BwBookingmanager\Controller\Ajax\SendmailWizard::class . '::getConfiguration'
     ]
 ];

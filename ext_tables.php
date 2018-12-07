@@ -51,7 +51,7 @@ call_user_func(
                 );
             }
 
-            // register create Entries Wizard
+            // register create Entries Function Wizard
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::insertModuleFunction(
                 'web_func',
                 \Blueways\BwBookingmanager\Controller\CreateTimeslotsWizardModuleFunctionController::class,
