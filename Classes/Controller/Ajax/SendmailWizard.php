@@ -62,7 +62,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         if (!$templateView) {
             $templateView = GeneralUtility::makeInstance(StandaloneView::class);
-            $templateView->setLayoutRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['templateRootPaths.']);
+            $templateView->setLayoutRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['layoutRootPaths.']);
             $templateView->setPartialRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['partialRootPaths.']);
             $templateView->setTemplateRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['templateRootPaths.']);
         }
@@ -98,6 +98,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      */
     public function emailpreviewAction(ServerRequestInterface $request, ResponseInterface $response)
     {
@@ -105,10 +106,19 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $entry = $this->entryRepository->findByUid($queryParams['entry']);
 
-        $this->templateView->getRenderingContext()->setControllerName('Email');
-        $this->templateView->setTemplate($queryParams['emailTemplate']);
+        $this->templateView->setTemplate('Email/' . $queryParams['emailTemplate']);
         $this->templateView->assign('entry', $entry);
-        $content = $this->templateView->render();
+        $html = $this->templateView->render();
+        function encodeURIComponent($str)
+        {
+            $revert = array('%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')');
+            return strtr(rawurlencode($str), $revert);
+        }
+
+        $src = 'data:text/html;charset=utf-8,' . encodeURIComponent($html);
+        $content = json_encode(array(
+            'src' => $src
+        ));
         $response->getBody()->write($content);
 
         return $response;

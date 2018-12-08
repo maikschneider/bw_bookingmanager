@@ -87,11 +87,16 @@ class SendMailWizard {
       $loaderTarget.html(icon);
       $.get(
         previewUri,
-        function(data){ console.log(data); },
-        'text/html'
+        this.showEmailPreview.bind(this),
+        'json'
       );
     });
 
+  }
+
+  private showEmailPreview(data) {
+    const $loaderTarget = this.currentModal.find('#emailPreview');
+    $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 220px);" src="'+ data.src + '"></iframe>');
   }
 
   private send(e: JQueryEventObject) {

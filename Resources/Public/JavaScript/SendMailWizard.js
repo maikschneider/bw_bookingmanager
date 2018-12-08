@@ -60,12 +60,17 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             });
         };
         SendMailWizard.prototype.onModalOpened = function () {
+            var _this = this;
             var previewUri = this.currentModal.find('select#emailTemplate option:selected').data('preview-uri');
             var $loaderTarget = this.currentModal.find('#emailPreview');
             Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
                 $loaderTarget.html(icon);
-                $.get(previewUri, function (data) { console.log(data); }, 'text/html');
+                $.get(previewUri, _this.showEmailPreview.bind(_this), 'json');
             });
+        };
+        SendMailWizard.prototype.showEmailPreview = function (data) {
+            var $loaderTarget = this.currentModal.find('#emailPreview');
+            $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 220px);" src="' + data.src + '"></iframe>');
         };
         SendMailWizard.prototype.send = function (e) {
         };
