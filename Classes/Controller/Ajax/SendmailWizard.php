@@ -163,7 +163,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             if (!$overrides[$overrideName]) continue;
 
             // replace everything from marker start to marker end with override content
-            $regex = '/<!--\s+###' . $overrideName . '###\s+-->.*<!--\s+###' . $overrideName . '###\s+-->/';
+            $regex = '/<!--\s+###' . $overrideName . '###\s+-->[\s\S]*<!--\s+###' . $overrideName . '###\s+-->/';
             $html = preg_replace($regex, $overrides[$overrideName], $html);
         }
 
@@ -179,7 +179,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $content = [];
         foreach ($marker as $m) {
-            preg_match('/(<!--\s+###' . $m . '###\s+-->)(.*)(<!--\s+###' . $m . '###\s+-->)/', $html, $result);
+            preg_match('/(<!--\s+###' . $m . '###\s+-->)([\s\S]*)(<!--\s+###' . $m . '###\s+-->)/', $html, $result);
             $content[] = array(
                 'name' => $m,
                 'content' => $result[2]
