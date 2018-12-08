@@ -1,23 +1,146 @@
 <div class="row">
 	<div class="col-md-4">
 		<form action="{sendMailActionUri}" method="POST">
-			<div class="form-group">
-				<label for="emailTemplate"> Email-Template </label>
-				<div class="form-control-wrap">
-					<select class="form-control" id="emailTemplate" name="emailTemplate">
-						<f:for each="{emailTemplates}" as="template">
-							<option value="{template.file}" data-preview-uri="{template.previewUri}">{template.name}</option>
-						</f:for>
-					</select>
+			<fieldset class="form-section">
+				<div class="form-group">
+					<label for="emailTemplate"> Email-Template </label>
+					<div class="form-control-wrap">
+						<select class="form-control" id="emailTemplate" name="emailTemplate">
+							<f:for each="{emailTemplates}" as="template">
+								<option value="{template.file}" data-preview-uri="{template.previewUri}">{template.name}</option>
+							</f:for>
+						</select>
+					</div>
 				</div>
-			</div>
+			</fieldset>
+			<fieldset class="form-section">
+				<div class="form-group">
+					<label for="senderAddress"> Recipient address</label>
+					<div class="form-control-wrap">
+						<input name="emailRecipient" id="emailRecipient" class="form-control" value="{entry.email}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="senderAddress"> Email subject </label>
+					<div class="form-control-wrap">
+						<input name="emailSubject" id="emailSubject" class="form-control"/>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-section">
+				<div class="form-group">
+					<label for="senderAddress"> Sender name </label>
+					<div class="form-control-wrap">
+						<input name="senderName" id="senderName" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="senderAddress"> Sender address </label>
+					<div class="form-control-wrap">
+						<input name="senderAddress" id="senderAddress" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="senderAddress"> Reply-To address </label>
+					<div class="form-control-wrap">
+						<input name="emailReplyto" id="emailReplyto" class="form-control"/>
+					</div>
+				</div>
+			</fieldset>
 		</form>
 	</div>
 
-	<div class="col-md-8">
-		<div id="emailPreview" style="min-height:500px; text-align:center;">
-			<iframe id="emailPreviewFrame"></iframe>
+	<div class="col-md-6 col-md-push-1">
+
+		<div class="phone">
+			<div class="phone-outer">
+				<div class="phone-top">
+					<div class="phone-camera"></div>
+				</div>
+				<div class="phone-display" id="emailPreview">
+
+				</div>
+				<div class="phone-bottom">
+					<div class="phone-button">
+						<div class="phone-button-inside"></div>
+					</div>
+				</div>
+			</div>
 		</div>
+
 	</div>
+
+	<style type="text/css">
+		.phone-outer {
+			border: 2px solid #d0d2d3;
+			border-top: 0;
+			border-bottom: 0;
+			top: 80px;
+			bottom: 80px;
+			position: relative;
+		}
+
+		.phone-top, .phone-bottom {
+			border: 2px solid #d0d2d3;
+			border-radius: 40px 40px 0 0;
+			border-bottom-width: 0;
+			height: 80px;
+			text-align: center;
+			top: -80px;
+			left: -2px;
+			position: absolute;
+			width: calc(100% + 4px);
+		}
+
+		.phone-bottom {
+			border-radius: 0 0 40px 40px;
+			border-top-width: 0;
+			border-bottom-width: 2px;
+			top: auto;
+			bottom: -80px;
+		}
+
+		.phone-camera, .phone-button, .phone-button-inside {
+			display: inline-block;
+			border: 1px solid #d0d2d3;
+			border-radius: 100%;
+			height: 10px;
+			width: 10px;
+			background: #e8e8e8;
+			margin-top: 34px;
+		}
+
+		.phone-button {
+			height: 50px;
+			width: 50px;
+			margin-top: 15px;
+			position: relative;
+		}
+
+		.phone-button-inside {
+			background: none;
+			border-width: 3px;
+			width: 24px;
+			height: 24px;
+			border-radius: 5px;
+			position: absolute;
+			left: 12px;
+			top: 12px;
+			margin: 0;
+		}
+
+		.phone-display {
+			min-height: calc(100vh - 400px);
+			border: 2px solid #d0d2d3;
+			margin: 0 20px;
+			text-align: center;
+		}
+
+		.phone-display .t3js-icon {
+			top: 25vh;
+		}
+
+
+	</style>
 
 </div>

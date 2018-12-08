@@ -60,17 +60,27 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             });
         };
         SendMailWizard.prototype.onModalOpened = function () {
+            var templateSelector = this.currentModal.find('select#emailTemplate');
+            var previewUri = templateSelector.find('option:selected').data('preview-uri');
+            // onload first template
+            this.loadEmailPreview(previewUri);
+            // bind events
+            templateSelector.on('change', function (el) {
+                var previewUri = $(el.currentTarget).find('option:selected').data('preview-uri');
+                this.loadEmailPreview(previewUri);
+            }.bind(this));
+        };
+        SendMailWizard.prototype.loadEmailPreview = function (uri) {
             var _this = this;
-            var previewUri = this.currentModal.find('select#emailTemplate option:selected').data('preview-uri');
             var $loaderTarget = this.currentModal.find('#emailPreview');
             Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
                 $loaderTarget.html(icon);
-                $.get(previewUri, _this.showEmailPreview.bind(_this), 'json');
+                $.get(uri, _this.showEmailPreview.bind(_this), 'json');
             });
         };
         SendMailWizard.prototype.showEmailPreview = function (data) {
             var $loaderTarget = this.currentModal.find('#emailPreview');
-            $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 220px);" src="' + data.src + '"></iframe>');
+            $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
         };
         SendMailWizard.prototype.send = function (e) {
         };

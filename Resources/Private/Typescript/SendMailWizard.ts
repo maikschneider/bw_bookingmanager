@@ -80,23 +80,36 @@ class SendMailWizard {
   }
 
   private onModalOpened() {
-    const previewUri = this.currentModal.find('select#emailTemplate option:selected').data('preview-uri');
+    const templateSelector = this.currentModal.find('select#emailTemplate');
+    const previewUri = templateSelector.find('option:selected').data('preview-uri');
+
+    // onload first template
+    this.loadEmailPreview(previewUri);
+
+    // bind events
+    templateSelector.on('change', function (el) {
+      const previewUri = $(el.currentTarget).find('option:selected').data('preview-uri');
+      this.loadEmailPreview(previewUri);
+    }.bind(this));
+
+  }
+
+  private loadEmailPreview(uri) {
     const $loaderTarget = this.currentModal.find('#emailPreview');
 
     Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
       $loaderTarget.html(icon);
       $.get(
-        previewUri,
+        uri,
         this.showEmailPreview.bind(this),
         'json'
       );
     });
-
   }
 
   private showEmailPreview(data) {
     const $loaderTarget = this.currentModal.find('#emailPreview');
-    $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 220px);" src="'+ data.src + '"></iframe>');
+    $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
   }
 
   private send(e: JQueryEventObject) {

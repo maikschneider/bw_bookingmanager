@@ -105,10 +105,16 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $queryParams = json_decode($request->getQueryParams()['arguments'], true);
 
         $entry = $this->entryRepository->findByUid($queryParams['entry']);
-
         $this->templateView->setTemplate('Email/' . $queryParams['emailTemplate']);
         $this->templateView->assign('entry', $entry);
         $html = $this->templateView->render();
+
+        // extract marker and replace html with overrides from params
+        $marker = $this->getMarkerInHtml($html);
+        $markerContent = $this->getMarkerContentInHtml($html, $marker);
+        //$html = $this->overrideMarkerContentInHtml($html, $marker, $queryParams['markerOverrides']);
+
+        // encode for display inside <iframe src="...">
         function encodeURIComponent($str)
         {
             $revert = array('%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')');
@@ -116,12 +122,60 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
 
         $src = 'data:text/html;charset=utf-8,' . encodeURIComponent($html);
+
+        // build and encode response
         $content = json_encode(array(
-            'src' => $src
+            'src' => $src,
+            'marker' => $marker,
+            'markerContent' => $markerContent
         ));
+
         $response->getBody()->write($content);
 
         return $response;
+    }
+
+    private function overrideMarkerContentInHtml($html, $marker, $overrides)
+    {
+        // abbort if no overrides
+        if (!$overrides || !sizeof($overrides)) {
+            return $html;
+        }
+
+        foreach ($overrides as $override) {
+
+        }
+    }
+
+    protected function getMarkerContentInHtml($html, $marker)
+    {
+        $content = [];
+        foreach ($marker as $m) {
+            preg_match('/(<!--\s+###' . $m . '###\s+-->)(.*)(<!--\s+###' . $m . '###\s+-->)/', $html, $result);
+            $content[] = array(
+                'name' => $m,
+                'content' => $result[2]
+            );
+        }
+        return $content;
+    }
+
+    protected function getMarkerInHtml($html)
+    {
+        preg_match_all('/(<!--\s+###)([\w\d]\w+)(###\s+-->)/', $html, $foundMarker);
+
+        // abort if no marker were found
+        if (!sizeof($foundMarker[2])) {
+            return [];
+        }
+
+        // ensure that two markers were found
+        $markerOccurrences = array_count_values($foundMarker[2]);
+        $markerOccurrences = array_filter($markerOccurrences, function ($occurrences) {
+            return $occurrences === 2 ? true : false;
+        });
+
+        return array_keys($markerOccurrences);
     }
 
     /**
