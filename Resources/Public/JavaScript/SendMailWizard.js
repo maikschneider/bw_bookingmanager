@@ -79,8 +79,34 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             });
         };
         SendMailWizard.prototype.showEmailPreview = function (data) {
+            console.log(data);
             var $loaderTarget = this.currentModal.find('#emailPreview');
             $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
+            this.updateMarkerFieldset(data);
+        };
+        SendMailWizard.prototype.updateMarkerFieldset = function (data) {
+            var $markerFieldset = this.currentModal.find('#markerOverrideFieldset');
+            // template contains no markers
+            if (!data.hasOwnProperty('markerContent') || !data.markerContent.length) {
+                $markerFieldset.html('');
+                $markerFieldset.hide();
+                return;
+            }
+            for (var i = 0; i < data.markerContent.length; i++) {
+                var m = data.markerContent[i];
+                var $input = (m.content && m.content.length) > 25 ? $('<textarea />') : $('<input />');
+                $input.attr('name', 'markerOverrides[' + m.name + ']');
+                $input.attr('id', 'markerOverrides[' + m.name + ']');
+                $input.attr('placeholder', m.content);
+                $input.attr('class', 'form-control');
+                $input = $input.wrap('<div class="form-control-wrap"></div>').parent();
+                $input = $input.wrap('<div class="form-group"></div>').parent();
+                $input.prepend('<label for="markerOverrides[' + m.name + ']">' + m.name + ' override</label>');
+                $markerFieldset.append($input);
+                console.log($input);
+            }
+            $markerFieldset.show();
+            console.log(this.currentModal.find('form').serialize());
         };
         SendMailWizard.prototype.send = function (e) {
         };
