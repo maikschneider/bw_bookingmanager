@@ -19,16 +19,16 @@ class SendMailWizard {
 
   private $sendMailButton: JQuery;
   private currentModal: JQuery;
+  private $loaderTarget: JQuery;
 
   public init() {
-    this.cacheElements()
-    this.initEvents()
+    this.cacheElements();
+    this.initEvents();
 
   }
 
   private cacheElements() {
-    this.$sendMailButton = $('#sendMailButton')
-
+    this.$sendMailButton = $('#sendMailButton');
   }
 
   private initEvents() {
@@ -66,7 +66,7 @@ class SendMailWizard {
         {
           text: modalSendButtonText,
           name: 'save',
-          icon: 'actions-document-save',
+          icon: 'actions-check',
           active: true,
           btnClass: 'btn-primary',
           dataAttributes: {
@@ -80,6 +80,8 @@ class SendMailWizard {
   }
 
   private onModalOpened() {
+    this.$loaderTarget = this.currentModal.find('#emailPreview');
+
     const templateSelector = this.currentModal.find('select#emailTemplate');
     const previewUri = templateSelector.find('option:selected').data('preview-uri');
     const $closeButton = this.currentModal.find('#phoneCloseButton');
@@ -87,43 +89,48 @@ class SendMailWizard {
     // onload first template
     this.loadEmailPreview(previewUri);
 
-    // bind events
+    // bind template change event
     templateSelector.on('change', function (el) {
       const previewUri = $(el.currentTarget).find('option:selected').data('preview-uri');
-      this.loadEmailPreview(previewUri);
+      const $markerFieldset = this.currentModal.find('#markerOverrideFieldset');
+
+      // reset override fields
+      $markerFieldset.html('');
+      // load first preview
+      this.loadEmailPreview(previewUri, true);
     }.bind(this));
 
+    // bind home button event
     $closeButton.on('click', this.phoneClosingAnimation.bind(this));
 
   }
 
   private phoneClosingAnimation(e: JQueryEventObject) {
     e.preventDefault();
-    this.currentModal.find('#emailPreview').toggleClass('closeing');
+    this.$loaderTarget.toggleClass('closeing');
   }
 
   private loadEmailPreview(uri) {
-    const $loaderTarget = this.currentModal.find('#emailPreview');
-
     Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
-      $loaderTarget.html(icon);
+      this.$loaderTarget.html(icon);
       $.get(
         uri,
-        this.showEmailPreview.bind(this),
+        this.showEmailPreview.bind(this, true),
         'json'
       );
     });
   }
 
-  private showEmailPreview(data) {
-    console.log(data);
-    const $loaderTarget = this.currentModal.find('#emailPreview');
-    $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
+  private showEmailPreview(createMarkerFieldset, data) {
 
-    this.updateMarkerFieldset(data);
+    this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
+
+    if (createMarkerFieldset) {
+      this.createMarkerFieldset(data);
+    }
   }
 
-  private updateMarkerFieldset(data) {
+  private createMarkerFieldset(data) {
     const $markerFieldset = this.currentModal.find('#markerOverrideFieldset');
 
     // template contains no markers
@@ -133,26 +140,40 @@ class SendMailWizard {
       return;
     }
 
+    // create input fields und bind event to update preview
     for (let i = 0; i < data.markerContent.length; i++) {
       const m = data.markerContent[i];
       let $input = (m.content && m.content.length) > 25 ? $('<textarea />') : $('<input />');
-      $input.attr('name', 'markerOverrides[' + m.name + ']');
-      $input.attr('id', 'markerOverrides[' + m.name + ']');
-      $input.attr('placeholder', m.content);
-      $input.attr('class', 'form-control');
+      $input
+        .attr('name', 'markerOverrides[' + m.name + ']')
+        .attr('id', 'markerOverrides[' + m.name + ']')
+        .attr('placeholder', m.content)
+        .attr('class', 'form-control')
+        .bind('blur', this.onOverrideMarkerBlur.bind(this));
 
       $input = $input.wrap('<div class="form-control-wrap"></div>').parent();
       $input = $input.wrap('<div class="form-group"></div>').parent();
       $input.prepend('<label for="markerOverrides[' + m.name + ']">' + m.name + ' override</label>');
 
       $markerFieldset.append($input);
-
-      console.log($input);
     }
 
     $markerFieldset.show();
-    console.log(this.currentModal.find('form').serialize());
+  }
 
+  private onOverrideMarkerBlur() {
+    const templateSelector = this.currentModal.find('select#emailTemplate');
+    const previewUri = templateSelector.find('option:selected').data('preview-uri');
+
+    Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
+      this.$loaderTarget.html(icon);
+      $.post(
+        previewUri,
+        this.currentModal.find('#markerOverrideFieldset input, #markerOverrideFieldset textarea').serializeArray(),
+        this.showEmailPreview.bind(this, false),
+        'json'
+      );
+    });
   }
 
   private send(e: JQueryEventObject) {

@@ -48,7 +48,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                     {
                         text: modalSendButtonText,
                         name: 'save',
-                        icon: 'actions-document-save',
+                        icon: 'actions-check',
                         active: true,
                         btnClass: 'btn-primary',
                         dataAttributes: {
@@ -60,37 +60,42 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             });
         };
         SendMailWizard.prototype.onModalOpened = function () {
+            this.$loaderTarget = this.currentModal.find('#emailPreview');
             var templateSelector = this.currentModal.find('select#emailTemplate');
             var previewUri = templateSelector.find('option:selected').data('preview-uri');
             var $closeButton = this.currentModal.find('#phoneCloseButton');
             // onload first template
             this.loadEmailPreview(previewUri);
-            // bind events
+            // bind template change event
             templateSelector.on('change', function (el) {
                 var previewUri = $(el.currentTarget).find('option:selected').data('preview-uri');
-                this.loadEmailPreview(previewUri);
+                var $markerFieldset = this.currentModal.find('#markerOverrideFieldset');
+                // reset override fields
+                $markerFieldset.html('');
+                // load first preview
+                this.loadEmailPreview(previewUri, true);
             }.bind(this));
+            // bind home button event
             $closeButton.on('click', this.phoneClosingAnimation.bind(this));
         };
         SendMailWizard.prototype.phoneClosingAnimation = function (e) {
             e.preventDefault();
-            this.currentModal.find('#emailPreview').toggleClass('closeing');
+            this.$loaderTarget.toggleClass('closeing');
         };
         SendMailWizard.prototype.loadEmailPreview = function (uri) {
             var _this = this;
-            var $loaderTarget = this.currentModal.find('#emailPreview');
             Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
-                $loaderTarget.html(icon);
-                $.get(uri, _this.showEmailPreview.bind(_this), 'json');
+                _this.$loaderTarget.html(icon);
+                $.get(uri, _this.showEmailPreview.bind(_this, true), 'json');
             });
         };
-        SendMailWizard.prototype.showEmailPreview = function (data) {
-            console.log(data);
-            var $loaderTarget = this.currentModal.find('#emailPreview');
-            $loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
-            this.updateMarkerFieldset(data);
+        SendMailWizard.prototype.showEmailPreview = function (createMarkerFieldset, data) {
+            this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
+            if (createMarkerFieldset) {
+                this.createMarkerFieldset(data);
+            }
         };
-        SendMailWizard.prototype.updateMarkerFieldset = function (data) {
+        SendMailWizard.prototype.createMarkerFieldset = function (data) {
             var $markerFieldset = this.currentModal.find('#markerOverrideFieldset');
             // template contains no markers
             if (!data.hasOwnProperty('markerContent') || !data.markerContent.length) {
@@ -98,21 +103,31 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 $markerFieldset.hide();
                 return;
             }
+            // create input fields und bind event to update preview
             for (var i = 0; i < data.markerContent.length; i++) {
                 var m = data.markerContent[i];
                 var $input = (m.content && m.content.length) > 25 ? $('<textarea />') : $('<input />');
-                $input.attr('name', 'markerOverrides[' + m.name + ']');
-                $input.attr('id', 'markerOverrides[' + m.name + ']');
-                $input.attr('placeholder', m.content);
-                $input.attr('class', 'form-control');
+                $input
+                    .attr('name', 'markerOverrides[' + m.name + ']')
+                    .attr('id', 'markerOverrides[' + m.name + ']')
+                    .attr('placeholder', m.content)
+                    .attr('class', 'form-control')
+                    .bind('blur', this.onOverrideMarkerBlur.bind(this));
                 $input = $input.wrap('<div class="form-control-wrap"></div>').parent();
                 $input = $input.wrap('<div class="form-group"></div>').parent();
                 $input.prepend('<label for="markerOverrides[' + m.name + ']">' + m.name + ' override</label>');
                 $markerFieldset.append($input);
-                console.log($input);
             }
             $markerFieldset.show();
-            console.log(this.currentModal.find('form').serialize());
+        };
+        SendMailWizard.prototype.onOverrideMarkerBlur = function () {
+            var _this = this;
+            var templateSelector = this.currentModal.find('select#emailTemplate');
+            var previewUri = templateSelector.find('option:selected').data('preview-uri');
+            Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
+                _this.$loaderTarget.html(icon);
+                $.post(previewUri, _this.currentModal.find('#markerOverrideFieldset input, #markerOverrideFieldset textarea').serializeArray(), _this.showEmailPreview.bind(_this, false), 'json');
+            });
         };
         SendMailWizard.prototype.send = function (e) {
         };

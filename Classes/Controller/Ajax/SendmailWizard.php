@@ -95,12 +95,11 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \TYPO3\CMS\Core\Http\ServerRequest $request
      * @param \Psr\Http\Message\ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      */
-    public function emailpreviewAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function emailpreviewAction(\TYPO3\CMS\Core\Http\ServerRequest $request, ResponseInterface $response)
     {
         $queryParams = json_decode($request->getQueryParams()['arguments'], true);
 
@@ -112,6 +111,14 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // extract marker and replace html with overrides from params
         $marker = $this->getMarkerInHtml($html);
         $markerContent = $this->getMarkerContentInHtml($html, $marker);
+
+        if ($request->getMethod() === 'POST') {
+            $params = $request->getParsedBody();
+            if (isset($params['markerOverrides']) && sizeof($params['markerOverrides'])) {
+                $html = $this->overrideMarkerContentInHtml($html, $marker, $params['markerOverrides']);
+            }
+        }
+
         //$html = $this->overrideMarkerContentInHtml($html, $marker, $queryParams['markerOverrides']);
 
         // encode for display inside <iframe src="...">
@@ -135,6 +142,12 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $response;
     }
 
+    /**
+     * @param $html
+     * @param $marker
+     * @param $overrides
+     * @return mixed
+     */
     private function overrideMarkerContentInHtml($html, $marker, $overrides)
     {
         // abbort if no overrides
@@ -142,11 +155,26 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             return $html;
         }
 
-        foreach ($overrides as $override) {
+        // checks that there are no overrides for marker that dont exist
+        $validOverrides = array_intersect($marker, array_keys($overrides));
 
+        foreach ($validOverrides as $overrideName) {
+            // abbort if no override content
+            if (!$overrides[$overrideName]) continue;
+
+            // replace everything from marker start to marker end with override content
+            $regex = '/<!--\s+###' . $overrideName . '###\s+-->.*<!--\s+###' . $overrideName . '###\s+-->/';
+            $html = preg_replace($regex, $overrides[$overrideName], $html);
         }
+
+        return $html;
     }
 
+    /**
+     * @param $html
+     * @param $marker
+     * @return array
+     */
     protected function getMarkerContentInHtml($html, $marker)
     {
         $content = [];
@@ -160,6 +188,10 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $content;
     }
 
+    /**
+     * @param $html
+     * @return array
+     */
     protected function getMarkerInHtml($html)
     {
         preg_match_all('/(<!--\s+###)([\w\d]\w+)(###\s+-->)/', $html, $foundMarker);
@@ -230,6 +262,10 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $selection;
     }
 
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     */
     public function sendMailAction(ServerRequestInterface $request, ResponseInterface $response)
     {
 
