@@ -62,6 +62,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
         SendMailWizard.prototype.onModalOpened = function () {
             var templateSelector = this.currentModal.find('select#emailTemplate');
             var previewUri = templateSelector.find('option:selected').data('preview-uri');
+            var $closeButton = this.currentModal.find('#phoneCloseButton');
             // onload first template
             this.loadEmailPreview(previewUri);
             // bind events
@@ -69,6 +70,11 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 var previewUri = $(el.currentTarget).find('option:selected').data('preview-uri');
                 this.loadEmailPreview(previewUri);
             }.bind(this));
+            $closeButton.on('click', this.phoneClosingAnimation.bind(this));
+        };
+        SendMailWizard.prototype.phoneClosingAnimation = function (e) {
+            e.preventDefault();
+            this.currentModal.find('#emailPreview').toggleClass('closeing');
         };
         SendMailWizard.prototype.loadEmailPreview = function (uri) {
             var _this = this;

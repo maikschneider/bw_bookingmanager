@@ -82,6 +82,7 @@ class SendMailWizard {
   private onModalOpened() {
     const templateSelector = this.currentModal.find('select#emailTemplate');
     const previewUri = templateSelector.find('option:selected').data('preview-uri');
+    const $closeButton = this.currentModal.find('#phoneCloseButton');
 
     // onload first template
     this.loadEmailPreview(previewUri);
@@ -92,6 +93,13 @@ class SendMailWizard {
       this.loadEmailPreview(previewUri);
     }.bind(this));
 
+    $closeButton.on('click', this.phoneClosingAnimation.bind(this));
+
+  }
+
+  private phoneClosingAnimation(e: JQueryEventObject) {
+    e.preventDefault();
+    this.currentModal.find('#emailPreview').toggleClass('closeing');
   }
 
   private loadEmailPreview(uri) {
