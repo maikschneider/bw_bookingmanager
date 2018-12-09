@@ -132,8 +132,6 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
         }
 
-        //$html = $this->overrideMarkerContentInHtml($html, $marker, $queryParams['markerOverrides']);
-
         // encode for display inside <iframe src="...">
         function encodeURIComponent($str)
         {
@@ -253,7 +251,8 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getSendMailUri()
     {
         $routeName = 'ajax_sendbookingmail';
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac('', $routeName);
+        $uriArguments['arguments'] = json_encode([]);
+        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'], $routeName);
         $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName);
     }
@@ -280,10 +279,29 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function sendMailAction(ServerRequestInterface $request, ResponseInterface $response)
     {
+        $content = json_encode(array(
+            'status' => 'WARNING',
+            'message' => [
+                'headline' => 'Function not implemented yet.',
+                'text' => 'Please contact the webmaster.'
+            ]
+        ));
 
+        $content = json_encode(array(
+            'status' => 'OK',
+            'message' => [
+                'headline' => 'E-Mail send',
+                'text' => 'Mail successfully send.'
+            ]
+        ));
+
+        $response->getBody()->write($content);
+
+        return $response;
         //$this->notificationManager = GeneralUtility::makeInstance('Blueways\\BwBookingmanager\\Helper\\NotificationManager', $entry);
     }
 

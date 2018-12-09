@@ -35,7 +35,7 @@ return [
         ],
         'generalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general',
-            'showitem' => 'calendar, timeslot_dates_select, --linebreak--, timeslot, start_date, end_date, send_mail_button'
+            'showitem' => 'calendar, send_mail_button, timeslot_dates_select, --linebreak--, timeslot, start_date, end_date'
         ],
         'contactDataPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData',

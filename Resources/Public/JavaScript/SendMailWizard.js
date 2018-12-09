@@ -54,7 +54,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                         dataAttributes: {
                             action: 'save'
                         },
-                        trigger: this.send.bind(this)
+                        trigger: this.trySend.bind(this)
                     }
                 ]
             });
@@ -129,7 +129,61 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 $.post(previewUri, _this.currentModal.find('#markerOverrideFieldset input, #markerOverrideFieldset textarea').serializeArray(), _this.showEmailPreview.bind(_this, false), 'json');
             });
         };
-        SendMailWizard.prototype.send = function (e) {
+        SendMailWizard.prototype.trySend = function (e) {
+            this.confirmModal = Modal.advanced({
+                title: 'Are you sure?',
+                size: Modal.sizes.small,
+                style: Modal.styles.dark,
+                content: '<p>You are going to send the displayed HTML mail to <strong>' + this.currentModal.find('#emailRecipient').val() + '</strong></p>',
+                buttons: [
+                    {
+                        text: 'Yes, send',
+                        name: 'save',
+                        icon: 'actions-check',
+                        btnClass: 'btn-success',
+                        dataAttributes: {
+                            action: 'save'
+                        },
+                        trigger: this.doSend.bind(this)
+                    },
+                    {
+                        text: 'No, abbort',
+                        name: 'dismiss',
+                        icon: 'actions-close',
+                        btnClass: 'btn-danger',
+                        dataAttributes: {
+                            action: 'dismiss'
+                        },
+                        trigger: this.abortSend.bind(this)
+                    },
+                ],
+            });
+        };
+        SendMailWizard.prototype.doSend = function () {
+            var _this = this;
+            Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
+                _this.confirmModal.html(icon);
+                $.post(_this.currentModal.find('form').attr('action'), _this.currentModal.find('form').serialize(), _this.onSendResponse.bind(_this), 'json');
+            });
+        };
+        SendMailWizard.prototype.abortSend = function () {
+            this.confirmModal.trigger('modal-dismiss');
+        };
+        SendMailWizard.prototype.onSendResponse = function (data) {
+            this.confirmModal.trigger('modal-dismiss');
+            this.$loaderTarget.addClass('closeing');
+            setTimeout(function () {
+                this.currentModal.trigger('modal-dismiss');
+                if (data.status === 'OK') {
+                    top.TYPO3.Notification.success(data.message.headline, data.message.text);
+                }
+                else if (data.status === 'WARNING') {
+                    top.TYPO3.Notification.warning(data.message.headline, data.message.text);
+                }
+                else {
+                    top.TYPO3.Notification.error(data.message.headline, data.message.text);
+                }
+            }.bind(this), 2000);
         };
         return SendMailWizard;
     }());

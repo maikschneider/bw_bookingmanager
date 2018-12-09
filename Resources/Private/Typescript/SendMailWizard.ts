@@ -19,6 +19,7 @@ class SendMailWizard {
 
   private $sendMailButton: JQuery;
   private currentModal: JQuery;
+  private confirmModal: JQuery;
   private $loaderTarget: JQuery;
 
   public init() {
@@ -72,7 +73,7 @@ class SendMailWizard {
           dataAttributes: {
             action: 'save'
           },
-          trigger: this.send.bind(this)
+          trigger: this.trySend.bind(this)
         }
       ]
 
@@ -176,7 +177,77 @@ class SendMailWizard {
     });
   }
 
-  private send(e: JQueryEventObject) {
+  private trySend(e: JQueryEventObject) {
+
+    this.confirmModal = Modal.advanced({
+      title: 'Are you sure?',
+      size: Modal.sizes.small,
+      style: Modal.styles.dark,
+      content: '<p>You are going to send the displayed HTML mail to <strong>' + this.currentModal.find('#emailRecipient').val() + '</strong></p>',
+      buttons: [
+        {
+          text: 'Yes, send',
+          name: 'save',
+          icon: 'actions-check',
+          btnClass: 'btn-success',
+          dataAttributes: {
+            action: 'save'
+          },
+          trigger: this.doSend.bind(this)
+        },
+        {
+          text: 'No, abbort',
+          name: 'dismiss',
+          icon: 'actions-close',
+          btnClass: 'btn-danger',
+          dataAttributes: {
+            action: 'dismiss'
+          },
+          trigger: this.abortSend.bind(this)
+        },
+      ],
+    });
+
+  }
+
+  private doSend() {
+
+    Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
+      this.confirmModal.html(icon);
+      $.post(
+        this.currentModal.find('form').attr('action'),
+        this.currentModal.find('form').serialize(),
+        this.onSendResponse.bind(this),
+        'json'
+      );
+    });
+
+  }
+
+  private abortSend() {
+    this.confirmModal.trigger('modal-dismiss');
+  }
+
+  private onSendResponse(data) {
+
+    this.confirmModal.trigger('modal-dismiss');
+    this.$loaderTarget.addClass('closeing');
+
+    setTimeout(function(){
+
+      this.currentModal.trigger('modal-dismiss');
+
+      if (data.status === 'OK') {
+        top.TYPO3.Notification.success(data.message.headline, data.message.text);
+      } else if (data.status === 'WARNING') {
+        top.TYPO3.Notification.warning(data.message.headline, data.message.text);
+      } else {
+        top.TYPO3.Notification.error(data.message.headline, data.message.text);
+      }
+
+    }.bind(this), 2000);
+
+
 
   }
 
