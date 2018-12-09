@@ -81,17 +81,30 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $entry = $this->entryRepository->findByUid($this->queryParams['entry']);
         $emailTemplates = $this->getEmailTemplateSelection();
         $sendMailActionUri = $this->getSendMailUri();
+        $defaults = $this->getDefaultFormValues();
 
         $this->templateView->assignMultiple([
             'emailTemplates' => $emailTemplates,
             'entry' => $entry,
-            'sendMailActionUri' => $sendMailActionUri
+            'sendMailActionUri' => $sendMailActionUri,
+            'defaults' => $defaults
         ]);
         $this->templateView->setTemplate('Administration/SendMailWizard');
         $content = $this->templateView->render();
         $response->getBody()->write($content);
 
         return $response;
+    }
+
+    private function getDefaultFormValues()
+    {
+        $defaults = array(
+            'senderAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderAddress'],
+            'senderName' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderName'],
+            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'],
+            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['subject']
+        );
+        return $defaults;
     }
 
     /**
@@ -160,7 +173,9 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         foreach ($validOverrides as $overrideName) {
             // abbort if no override content
-            if (!$overrides[$overrideName]) continue;
+            if (!$overrides[$overrideName]) {
+                continue;
+            }
 
             // replace everything from marker start to marker end with override content
             $regex = '/<!--\s+###' . $overrideName . '###\s+-->[\s\S]*<!--\s+###' . $overrideName . '###\s+-->/';
