@@ -35,6 +35,7 @@ plugin.tx_bwbookingmanager_pi1 {
       replytoAddress =
       subject =
       template =
+      showUid =
     }
   }
 }

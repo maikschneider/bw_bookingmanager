@@ -19,6 +19,11 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     private $templateView;
 
     /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * CalendarRepository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
@@ -54,8 +59,8 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         parent::__construct();
 
-        $objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
-        $this->entryRepository = $objectManager->get('Blueways\\BwBookingmanager\\Domain\\Repository\\EntryRepository');
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+        $this->entryRepository = $this->objectManager->get('Blueways\\BwBookingmanager\\Domain\\Repository\\EntryRepository');
 
         $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
         $this->typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
@@ -110,6 +115,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'] ? $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'] : $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderAddress'],
             'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['subject'],
             'emailTemplate' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['template'],
+            'showUid' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['showUid'] ?? null,
             'recipientAddress' => '',
             'recipientName' => '',
         );
@@ -124,11 +130,16 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     public function emailpreviewAction(\TYPO3\CMS\Core\Http\ServerRequest $request, ResponseInterface $response)
     {
         $queryParams = json_decode($request->getQueryParams()['arguments'], true);
+        $emailSettings = $this->getDefaultEmailSettings();
 
         $entry = $this->entryRepository->findByUid($queryParams['entry']);
         $this->templateView->setTemplate('Email/' . $queryParams['emailTemplate']);
         $this->templateView->assign('entry', $entry);
+        $this->templateView->assign('showUid', $emailSettings['showUid']);
         $html = $this->templateView->render();
+
+        // hijack links and replace frontend links
+        $html = $this->replaceInternalLinks($html);
 
         // extract marker and replace html with overrides from params
         $marker = $this->getMarkerInHtml($html);
@@ -333,6 +344,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $entry = $this->entryRepository->findByUid($entryUid);
         $this->templateView->setTemplate('Email/' . $mailSettings['emailTemplate']);
         $this->templateView->assign('entry', $entry);
+        $this->templateView->assign('showUid', $mailSettings['showUid']);
         $html = $this->templateView->render();
 
         // check for overrides in POST and override html
@@ -348,7 +360,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             ->setSubject($mailSettings['subject'])
             ->setBody($html, 'text/html');
 
-        if($mailSettings['senderAddress'] !== $mailSettings['replytoAddress']) {
+        if ($mailSettings['senderAddress'] !== $mailSettings['replytoAddress']) {
             $message->setReplyTo($mailSettings['replytoAddress']);
         }
 
@@ -358,7 +370,6 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if (!$sendSuccess) {
             // @TODO: return error
         }
-
 
         $content = array(
             'status' => 'OK',
@@ -379,5 +390,52 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getLanguageService()
     {
         return $GLOBALS['LANG'];
+    }
+
+    /**
+     * @param $html
+     * @return string
+     */
+    protected function replaceInternalLinks($html)
+    {
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+
+        // find all links
+        $re = '/<\s*a(\s+.*?>|>).*?<\s*/\s*a\s*>/';
+        preg_match($re, $html, $links);
+
+        foreach ($links as $link) {
+            // abbort if not an internal link
+            $link = rawurldecode($link);
+            if (strpos($link, '/typo3/index.php?M=') === false) {
+                continue;
+            }
+
+            // extract parameters
+            preg_match('/(tx_bwbookingmanager_pi1\[)([\w]+)(\]=)([\w]+)(&|")/', $link, $linkArguments);
+
+            // create new link
+            $pageUid = 1;
+            $getAction = '';
+            $getController = '';
+            $getArgs = [];
+            foreach ($linkArguments as $arg) {
+                if ($arg[2] === 'controller') {
+                    $getController = $arg[4];
+                } elseif ($arg[2] == 'action') {
+                    $getAction = $arg[4];
+                } else {
+                    $getArgs[] = [$arg[2] => $arg[4]];
+                }
+            }
+            $uri = $uriBuilder->reset()
+                ->setTargetPageUid($pageUid)
+                ->setCreateAbsoluteUri(true)
+                ->uriFor($getAction, $getArgs, $getController, 'bwbookingmanager', 'pi1');
+
+            $html = str_replace($link, $uri, $html);
+        }
+
+        return $html;
     }
 }
