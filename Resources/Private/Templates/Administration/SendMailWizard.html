@@ -2,6 +2,7 @@
 	<div class="col-md-4">
 		<form action="{sendMailActionUri}" method="POST">
 			<input type="hidden" name="entryUid" value="{entry.uid}" />
+			<h2 class="form-section-headline">Settings</h2>
 			<fieldset class="form-section">
 				<div class="form-group">
 					<label for="emailTemplate"> Email-Template </label>
@@ -186,13 +187,13 @@
 		}
 
 		.phone-display {
-			min-height: calc(100vh - 400px);
 			border: 2px solid #d0d2d3;
 			margin: 0 20px;
 			text-align: center;
 			transition: all 0.01s ease;
 			transition-delay: 0.5s;
 			overflow: hidden;
+			position: relative;
 		}
 
 		.phone-display iframe {
@@ -215,7 +216,7 @@
 		}
 
 		.phone-display .t3js-icon {
-			top: 25vh;
+			top: 50%;
 		}
 
 

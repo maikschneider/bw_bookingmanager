@@ -61,6 +61,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
         };
         SendMailWizard.prototype.onModalOpened = function () {
             this.$loaderTarget = this.currentModal.find('#emailPreview');
+            this.$loaderTarget.css('height', this.currentModal.find('.modal-body').innerHeight() - 190);
             var templateSelector = this.currentModal.find('select#emailTemplate');
             var previewUri = templateSelector.find('option:selected').data('preview-uri');
             var $closeButton = this.currentModal.find('#phoneCloseButton');
@@ -90,7 +91,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             });
         };
         SendMailWizard.prototype.showEmailPreview = function (createMarkerFieldset, data) {
-            this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
+            this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; height: ' + this.$loaderTarget.css('height') + '" src="' + data.src + '"></iframe>');
             if (createMarkerFieldset) {
                 this.createMarkerFieldset(data);
             }

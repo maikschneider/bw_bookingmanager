@@ -82,6 +82,7 @@ class SendMailWizard {
 
   private onModalOpened() {
     this.$loaderTarget = this.currentModal.find('#emailPreview');
+    this.$loaderTarget.css('height', this.currentModal.find('.modal-body').innerHeight() - 190);
 
     const templateSelector = this.currentModal.find('select#emailTemplate');
     const previewUri = templateSelector.find('option:selected').data('preview-uri');
@@ -124,7 +125,7 @@ class SendMailWizard {
 
   private showEmailPreview(createMarkerFieldset, data) {
 
-    this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; min-height:calc(100vh - 400px); margin-bottom: -5px;" src="' + data.src + '"></iframe>');
+    this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; height: ' + this.$loaderTarget.css('height') + '" src="' + data.src + '"></iframe>');
 
     if (createMarkerFieldset) {
       this.createMarkerFieldset(data);
@@ -233,7 +234,7 @@ class SendMailWizard {
     this.confirmModal.trigger('modal-dismiss');
     this.$loaderTarget.addClass('closeing');
 
-    setTimeout(function(){
+    setTimeout(function () {
 
       this.currentModal.trigger('modal-dismiss');
 
@@ -246,7 +247,6 @@ class SendMailWizard {
       }
 
     }.bind(this), 2000);
-
 
 
   }
