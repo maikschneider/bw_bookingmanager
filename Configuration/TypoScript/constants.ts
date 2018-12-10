@@ -30,10 +30,11 @@ plugin.tx_bwbookingmanager_pi1 {
     }
 
     email {
-      senderAddress = noreply@example.com
-      senderName = My TYPO3v8 Installation
-      replytoAddress = replyto@example.com
-      subject = Automatic confirmation
+      senderAddress =
+      senderName =
+      replytoAddress =
+      subject =
+      template =
     }
   }
 }
