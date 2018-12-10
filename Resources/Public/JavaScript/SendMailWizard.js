@@ -135,7 +135,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 title: 'Are you sure?',
                 size: Modal.sizes.small,
                 style: Modal.styles.dark,
-                content: '<p>You are going to send the displayed HTML mail to <strong>' + this.currentModal.find('#emailRecipient').val() + '</strong></p>',
+                content: '<p>You are going to send the displayed HTML mail to <strong>' + this.currentModal.find('#recipientAddress').val() + '</strong></p>',
                 buttons: [
                     {
                         text: 'Yes, send',
@@ -163,7 +163,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
         SendMailWizard.prototype.doSend = function () {
             var _this = this;
             Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done(function (icon) {
-                _this.confirmModal.html(icon);
+                _this.confirmModal.find('.modal-title').html('Sending..');
+                _this.confirmModal.find('.modal-body').css('text-align', 'center').html(icon);
                 $.post(_this.currentModal.find('form').attr('action'), _this.currentModal.find('form').serialize(), _this.onSendResponse.bind(_this), 'json');
             });
         };

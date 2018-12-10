@@ -184,7 +184,7 @@ class SendMailWizard {
       title: 'Are you sure?',
       size: Modal.sizes.small,
       style: Modal.styles.dark,
-      content: '<p>You are going to send the displayed HTML mail to <strong>' + this.currentModal.find('#emailRecipient').val() + '</strong></p>',
+      content: '<p>You are going to send the displayed HTML mail to <strong>' + this.currentModal.find('#recipientAddress').val() + '</strong></p>',
       buttons: [
         {
           text: 'Yes, send',
@@ -214,7 +214,8 @@ class SendMailWizard {
   private doSend() {
 
     Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
-      this.confirmModal.html(icon);
+      this.confirmModal.find('.modal-title').html('Sending..');
+      this.confirmModal.find('.modal-body').css('text-align', 'center').html(icon);
       $.post(
         this.currentModal.find('form').attr('action'),
         this.currentModal.find('form').serialize(),

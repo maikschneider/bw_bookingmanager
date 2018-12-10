@@ -20,7 +20,7 @@ class SendMailButtonElement extends \TYPO3\CMS\Backend\Form\Element\AbstractForm
 
         $wizardUri = $this->getWizardUri();
 
-        $modalTitle = 'Email Preview';
+        $modalTitle = 'E-Mail Preview';
         $modalCancelButtonText = 'Cancel';
         $modalSendButtonText = 'Send';
 
