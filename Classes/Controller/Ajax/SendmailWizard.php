@@ -81,7 +81,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $entry = $this->entryRepository->findByUid($this->queryParams['entry']);
         $emailTemplates = $this->getEmailTemplateSelection();
         $sendMailActionUri = $this->getSendMailUri();
-        $defaults = $this->getDefaultFormValues();
+        $defaults = $this->getDefaultEmailSettings();
 
         $this->templateView->assignMultiple([
             'emailTemplates' => $emailTemplates,
@@ -96,13 +96,22 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         return $response;
     }
 
-    private function getDefaultFormValues()
+    /**
+     * read typoscript for email settings
+     *
+     * @TODO: move to email helper utility
+     * @return array
+     */
+    protected function getDefaultEmailSettings()
     {
         $defaults = array(
             'senderAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderAddress'],
             'senderName' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderName'],
-            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'],
-            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['subject']
+            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'] ? $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'] : $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderAddress'],
+            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['subject'],
+            'emailTemplate' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['template'],
+            'recipientAddress' => '',
+            'recipientName' => '',
         );
         return $defaults;
     }
@@ -159,7 +168,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param $overrides
      * @return mixed
      */
-    private function overrideMarkerContentInHtml($html, $marker, $overrides)
+    protected function overrideMarkerContentInHtml($html, $marker, $overrides)
     {
         // abbort if no overrides
         if (!$overrides || !sizeof($overrides)) {
@@ -236,8 +245,10 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $newQueryParams['emailTemplate'] = $emailTemplate;
 
         $uriArguments['arguments'] = json_encode($newQueryParams);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
-            $routeName);
+        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac(
+            $uriArguments['arguments'],
+            $routeName
+        );
 
         $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
 
@@ -252,7 +263,10 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $routeName = 'ajax_sendbookingmail';
         $uriArguments['arguments'] = json_encode([]);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'], $routeName);
+        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac(
+            $uriArguments['arguments'],
+            $routeName
+        );
         $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName);
     }
@@ -283,26 +297,78 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function sendMailAction(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $content = json_encode(array(
+        $content = array(
             'status' => 'WARNING',
             'message' => [
                 'headline' => 'Function not implemented yet.',
                 'text' => 'Please contact the webmaster.'
             ]
-        ));
+        );
 
-        $content = json_encode(array(
+        if ($request->getMethod() !== 'POST') {
+            return $response->withStatus(405, 'Method not allowed');
+        }
+
+        $params = $request->getParsedBody();
+
+        $entryUid = $params['entryUid'] ?? false;
+
+        if (!$entryUid) {
+            return $response->withStatus(400, 'Form error');
+        }
+
+        $mailSettings = $this->getDefaultEmailSettings();
+
+        // override defaults with POST parameter
+        array_walk($mailSettings, function (&$value, $key, $params) {
+            if (isset($params[$key]) && $params[$key] && $params[$key] !== "") {
+                $value = $params[$key];
+            }
+        }, $params);
+
+        // check that all params are collected and valid
+        // @TODO: implement check
+
+        // get html template
+        $entry = $this->entryRepository->findByUid($entryUid);
+        $this->templateView->setTemplate('Email/' . $mailSettings['emailTemplate']);
+        $this->templateView->assign('entry', $entry);
+        $html = $this->templateView->render();
+
+        // check for overrides in POST and override html
+        if (isset($params['markerOverrides']) && sizeof($params['markerOverrides'])) {
+            $marker = $this->getMarkerInHtml($html);
+            $html = $this->overrideMarkerContentInHtml($html, $marker, $params['markerOverrides']);
+        }
+
+        // actual send
+        $message = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+        $message->setTo($mailSettings['recipientAddress'], $mailSettings['recipientName'] ?? null)
+            ->setFrom($mailSettings['senderAddress'], $mailSettings['senderName'] ?? null)
+            ->setSubject($mailSettings['subject'])
+            ->setBody($html, 'text/html');
+
+        if($mailSettings['senderAddress'] !== $mailSettings['replytoAddress']) {
+            $message->setReplyTo($mailSettings['replytoAddress']);
+        }
+
+        $sendSuccess = $message->send();
+
+        // sending successfull?
+        if (!$sendSuccess) {
+            // @TODO: return error
+        }
+
+
+        $content = array(
             'status' => 'OK',
             'message' => [
                 'headline' => 'E-Mail send',
                 'text' => 'Mail successfully send.'
             ]
-        ));
-
-        $response->getBody()->write($content);
-
+        );
+        $response->getBody()->write(json_encode($content));
         return $response;
-        //$this->notificationManager = GeneralUtility::makeInstance('Blueways\\BwBookingmanager\\Helper\\NotificationManager', $entry);
     }
 
     /**
@@ -314,5 +380,4 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         return $GLOBALS['LANG'];
     }
-
 }

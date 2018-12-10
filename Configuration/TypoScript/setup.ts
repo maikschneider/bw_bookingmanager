@@ -46,6 +46,7 @@ plugin.tx_bwbookingmanager_pi1 {
       senderName = {$plugin.tx_bwbookingmanager_pi1.settings.email.senderName}
       replytoAddress = {$plugin.tx_bwbookingmanager_pi1.settings.email.replytoAddress}
       subject = {$plugin.tx_bwbookingmanager_pi1.settings.email.subject}
+      template = {$plugin.tx_bwbookingmanager_pi1.settings.email.template}
     }
   }
 }
