@@ -124,8 +124,15 @@ class SendMailWizard {
   }
 
   private showEmailPreview(createMarkerFieldset, data) {
+    const $showUidInput = this.currentModal.find('#showUid-form-group');
 
     this.$loaderTarget.html('<iframe frameborder="0" style="width:100%; height: ' + this.$loaderTarget.css('height') + '" src="' + data.src + '"></iframe>');
+
+    if (data.hasInternalLinks) {
+      $showUidInput.show();
+    } else {
+      $showUidInput.hide();
+    }
 
     if (createMarkerFieldset) {
       this.createMarkerFieldset(data);

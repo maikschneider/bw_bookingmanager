@@ -134,12 +134,10 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     public function emailpreviewAction(\TYPO3\CMS\Core\Http\ServerRequest $request, ResponseInterface $response)
     {
         $queryParams = json_decode($request->getQueryParams()['arguments'], true);
-        $emailSettings = $this->getDefaultEmailSettings();
 
         $entry = $this->entryRepository->findByUid($queryParams['entry']);
         $this->templateView->setTemplate('Email/' . $queryParams['emailTemplate']);
         $this->templateView->assign('entry', $entry);
-        $this->templateView->assign('showUid', $emailSettings['showUid']);
         $html = $this->templateView->render();
 
         // extract marker and replace html with overrides from params
@@ -152,6 +150,9 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $html = $this->overrideMarkerContentInHtml($html, $marker, $params['markerOverrides']);
             }
         }
+
+        // check for internal links
+        $hasInternalLinks = sizeof($this->getInternalLinks($html)) ? true : false;
 
         // encode for display inside <iframe src="...">
         function encodeURIComponent($str)
@@ -166,7 +167,8 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $content = json_encode(array(
             'src' => $src,
             'marker' => $marker,
-            'markerContent' => $markerContent
+            'markerContent' => $markerContent,
+            'hasInternalLinks' => $hasInternalLinks
         ));
 
         $response->getBody()->write($content);
@@ -309,14 +311,6 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function sendMailAction(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $content = array(
-            'status' => 'WARNING',
-            'message' => [
-                'headline' => 'Function not implemented yet.',
-                'text' => 'Please contact the webmaster.'
-            ]
-        );
-
         if ($request->getMethod() !== 'POST') {
             return $response->withStatus(405, 'Method not allowed');
         }
@@ -398,22 +392,36 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @param $html
+     * @return array
+     */
+    protected function getInternalLinks($html)
+    {
+        // find all links
+        $regex = '/(<a[^>]href=")(.[^"]*)/';
+        preg_match_all($regex, $html, $links);
+
+        // abbort if no links were found
+        if (!sizeof($links)) return [];
+
+        // remove links that are not internal
+        $links = array_filter($links[2], function($uri){
+            return strpos($uri, '/typo3/index.php?M=');
+        });
+
+        return $links;
+    }
+
+    /**
+     * @param $html
      * @param $pageUid
      * @return string
      * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
      */
     protected function replaceInternalLinks($html, $pageUid)
     {
-        // find all links
-        $regex = '/(<a[^>]href=")(.[^"]*)/';
-        preg_match_all($regex, $html, $links);
+        $links = $this->getInternalLinks($html);
 
-        foreach ($links[2] as $rawLink) {
-            // abbort if not an internal link
-            $link = htmlspecialchars_decode(urldecode($rawLink));
-            if (strpos($link, '/typo3/index.php?M=') === false) {
-                continue;
-            }
+        foreach ($links as $rawLink) {
 
             // extract parameters
             preg_match_all('/(tx_bwbookingmanager_pi1\[)([\w]+)(\]=)([\w]+)(&|$)/', $link, $linkArgs);
