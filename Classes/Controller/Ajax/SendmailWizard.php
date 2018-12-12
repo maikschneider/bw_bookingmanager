@@ -383,7 +383,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * Returns the LanguageService
      *
-     * @return LanguageService
+     * @return \TYPO3\CMS\Lang\LanguageService
      */
     protected function getLanguageService()
     {
@@ -424,6 +424,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         foreach ($links as $rawLink) {
 
             // extract parameters
+            $link = htmlspecialchars_decode(urldecode($rawLink));
             preg_match_all('/(tx_bwbookingmanager_pi1\[)([\w]+)(\]=)([\w]+)(&|$)/', $link, $linkArgs);
 
             // create new link
