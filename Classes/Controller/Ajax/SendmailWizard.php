@@ -4,11 +4,15 @@ namespace Blueways\BwBookingmanager\Controller\Ajax;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -137,9 +141,6 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->templateView->assign('entry', $entry);
         $this->templateView->assign('showUid', $emailSettings['showUid']);
         $html = $this->templateView->render();
-
-        // hijack links and replace frontend links
-        $html = $this->replaceInternalLinks($html);
 
         // extract marker and replace html with overrides from params
         $marker = $this->getMarkerInHtml($html);
@@ -353,6 +354,9 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $html = $this->overrideMarkerContentInHtml($html, $marker, $params['markerOverrides']);
         }
 
+        // hijack links and replace frontend links
+        $html = $this->replaceInternalLinks($html, $mailSettings['showUid']);
+
         // actual send
         $message = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
         $message->setTo($mailSettings['recipientAddress'], $mailSettings['recipientName'] ?? null)
@@ -394,46 +398,69 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @param $html
+     * @param $pageUid
      * @return string
+     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
      */
-    protected function replaceInternalLinks($html)
+    protected function replaceInternalLinks($html, $pageUid)
     {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-
         // find all links
-        $re = '/<\s*a(\s+.*?>|>).*?<\s*/\s*a\s*>/';
-        preg_match($re, $html, $links);
+        $regex = '/(<a[^>]href=")(.[^"]*)/';
+        preg_match_all($regex, $html, $links);
 
-        foreach ($links as $link) {
+        foreach ($links[2] as $rawLink) {
             // abbort if not an internal link
-            $link = rawurldecode($link);
+            $link = htmlspecialchars_decode(urldecode($rawLink));
             if (strpos($link, '/typo3/index.php?M=') === false) {
                 continue;
             }
 
             // extract parameters
-            preg_match('/(tx_bwbookingmanager_pi1\[)([\w]+)(\]=)([\w]+)(&|")/', $link, $linkArguments);
+            preg_match_all('/(tx_bwbookingmanager_pi1\[)([\w]+)(\]=)([\w]+)(&|$)/', $link, $linkArgs);
 
             // create new link
-            $pageUid = 1;
-            $getAction = '';
-            $getController = '';
             $getArgs = [];
-            foreach ($linkArguments as $arg) {
-                if ($arg[2] === 'controller') {
-                    $getController = $arg[4];
-                } elseif ($arg[2] == 'action') {
-                    $getAction = $arg[4];
-                } else {
-                    $getArgs[] = [$arg[2] => $arg[4]];
-                }
+            for ($i=0; $i<sizeof($linkArgs[0]); $i++){
+                $getArgs['tx_bwbookingmanager_pi1['.$linkArgs[2][$i].']'] = $linkArgs[4][$i];
             }
-            $uri = $uriBuilder->reset()
-                ->setTargetPageUid($pageUid)
-                ->setCreateAbsoluteUri(true)
-                ->uriFor($getAction, $getArgs, $getController, 'bwbookingmanager', 'pi1');
 
-            $html = str_replace($link, $uri, $html);
+            // initialize time tracker
+            if (!is_object($GLOBALS['TT'])) {
+                $GLOBALS['TT'] = new TimeTracker();
+                $GLOBALS['TT']->start();
+            }
+
+            // initialize TSFE
+            if (!is_object($GLOBALS['TSFE'])) {
+                /** @var TypoScriptFrontendController */
+                $GLOBALS['TSFE'] = GeneralUtility::makeInstance(TypoScriptFrontendController::class,
+                    $GLOBALS['TYPO3_CONF_VARS'], $pageUid, 0);
+                $GLOBALS['TSFE']->connectToDB();
+                $GLOBALS['TSFE']->initFEuser();
+                $GLOBALS['TSFE']->determineId();
+                $GLOBALS['TSFE']->initTemplate();
+                $GLOBALS['TSFE']->getConfigArray();
+            }
+
+            // make it work with realurl too
+            if (ExtensionManagementUtility::isLoaded('realurl')) {
+                $rootLine = BackendUtility::BEgetRootLine($pageUid);
+                $host = BackendUtility::firstDomainRecord($rootLine);
+                $_SERVER['HTTP_HOST'] = $host;
+            }
+
+            // create uri by typolink helper
+            $cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+            $uri = $cObj->typolink_URL([
+                'parameter' => $pageUid,
+                'linkAccessRestrictedPages' => 1,
+                'forceAbsoluteUrl' => 1,
+                'useCacheHash' => 1,
+                'additionalParams' => GeneralUtility::implodeArrayForUrl(null, $getArgs),
+            ]);
+
+            // replace link with new absolute one
+            $html = str_replace($rawLink, $uri, $html);
         }
 
         return $html;
