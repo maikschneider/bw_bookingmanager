@@ -401,10 +401,12 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         preg_match_all($regex, $html, $links);
 
         // abbort if no links were found
-        if (!sizeof($links)) return [];
+        if (!sizeof($links)) {
+            return [];
+        }
 
         // remove links that are not internal
-        $links = array_filter($links[2], function($uri){
+        $links = array_filter($links[2], function ($uri) {
             return strpos($uri, '/typo3/index.php?M=');
         });
 
@@ -429,7 +431,7 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             // create new link
             $getArgs = [];
-            for ($i=0; $i<sizeof($linkArgs[0]); $i++){
+            for ($i=0; $i<sizeof($linkArgs[0]); $i++) {
                 $getArgs['tx_bwbookingmanager_pi1['.$linkArgs[2][$i].']'] = $linkArgs[4][$i];
             }
 
@@ -442,8 +444,12 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             // initialize TSFE
             if (!is_object($GLOBALS['TSFE'])) {
                 /** @var TypoScriptFrontendController */
-                $GLOBALS['TSFE'] = GeneralUtility::makeInstance(TypoScriptFrontendController::class,
-                    $GLOBALS['TYPO3_CONF_VARS'], $pageUid, 0);
+                $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
+                    TypoScriptFrontendController::class,
+                    $GLOBALS['TYPO3_CONF_VARS'],
+                    $pageUid,
+                    0
+                );
                 $GLOBALS['TSFE']->connectToDB();
                 $GLOBALS['TSFE']->initFEuser();
                 $GLOBALS['TSFE']->determineId();
