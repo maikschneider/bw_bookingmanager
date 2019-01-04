@@ -136,7 +136,8 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $queryParams = json_decode($request->getQueryParams()['arguments'], true);
 
         $entry = $this->entryRepository->findByUid($queryParams['entry']);
-        $this->templateView->setTemplate('Email/' . $queryParams['emailTemplate']);
+        $this->templateView->getRenderingContext()->setControllerName('Email');
+        $this->templateView->setTemplate($queryParams['emailTemplate']);
         $this->templateView->assign('entry', $entry);
         $html = $this->templateView->render();
 
@@ -337,7 +338,8 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         // get html template
         $entry = $this->entryRepository->findByUid($entryUid);
-        $this->templateView->setTemplate('Email/' . $mailSettings['emailTemplate']);
+        $this->templateView->getRenderingContext()->setControllerName('Email');
+        $this->templateView->setTemplate($mailSettings['emailTemplate']);
         $this->templateView->assign('entry', $entry);
         $this->templateView->assign('showUid', $mailSettings['showUid']);
         $html = $this->templateView->render();
