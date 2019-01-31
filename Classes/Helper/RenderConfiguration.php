@@ -118,9 +118,9 @@ class RenderConfiguration
         $monthEnd->setTime(23, 59, 59);
 
         $nextMonth = clone $this->startDate;
-        $nextMonth->modify('+1 month');
+        $nextMonth->modify('first day of next month');
         $prevMonth = clone $this->startDate;
-        $prevMonth->modify('-1 month');
+        $prevMonth->modify('first day of last month');
 
         // #weeks = #mondays
         $numberOfWeeks = \Blueways\BwBookingmanager\Helper\TimeslotManager::dayCount($monthStart, $monthEnd, 1);
