@@ -1,22 +1,30 @@
 {
-    "name": "blueways/bw-bookingmanager",
-    "type": "typo3-cms-extension",
-    "description": "A generic bookingmanager",
-    "authors": [
-        {
-            "name": "Maik Schneider",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "typo3/cms-core": "^8.6.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "Blueways\\BwBookingmanager\\": "Classes"
-        }
-    },
-    "require-dev": {
-        "typo3-ci/typo3cms": "^6.2"
-    }
+	"name": "blueways/bw-bookingmanager",
+	"type": "typo3-cms-extension",
+	"description": "A generic bookingmanager",
+	"require": {
+		"typo3/cms-core": "^8.6.1",
+		"blueways/bw-email": "1.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Blueways\\BwBookingmanager\\": "Classes"
+		}
+	},
+	"require-dev": {
+		"typo3/cms-base-distribution": "9.5.*",
+		"bk2k/bootstrap-package": "9.1.*"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Maik Schneider",
+			"email": "m.schneider@blueways.de",
+			"homepage": "http://blueways.de",
+			"role": "Developer"
+		}
+	],
+	"keywords": [
+		"TYPO3"
+	]
 }
