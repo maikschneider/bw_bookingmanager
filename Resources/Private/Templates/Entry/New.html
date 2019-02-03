@@ -13,9 +13,29 @@
 		<f:form.hidden property="calendar" value="{newEntry.calendar}"/>
 		<f:form.hidden property="timeslot" value="{newEntry.timeslot}"/>
 
-		<f:render partial="Entry/FormFields" arguments="{_all}"/>
-
-		<f:form.submit value="Create new"/>
+		<f:render partial="Entry/Field/StartDate" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/EndDate" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Name" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Prename" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Street" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Zip" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/City" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Phone" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Email" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Newsletter" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Weight" arguments="{_all}"/>
+		<br/>
+		<f:render partial="Entry/Field/Submit" arguments="{_all}"/>
 	</f:form>
 	<f:link.action controller="Calendar"
 								 action="show"

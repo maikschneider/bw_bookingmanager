@@ -2,6 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
+/**
+ * Class EntryCreateValidator
+ *
+ * @package Blueways\BwBookingmanager\Domain\Validator
+ */
 class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
 {
 
@@ -43,9 +48,33 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
      */
     protected $entry_endDate;
 
+    /**
+     * @param mixed $entry
+     * @return bool
+     */
     public function isValid($entry)
     {
         $this->entry = clone $entry;
+
+        if ($this->entry->getCalendar()->isDirectBooking()) {
+            $this->validateDirectBooking();
+        } else {
+            $this->validateTimeslotBooking();
+        }
+
+        if (sizeof($this->result->getErrors())) {
+            return false;
+        }
+        return true;
+    }
+
+    private function validateDirectBooking()
+    {
+
+    }
+
+    private function validateTimeslotBooking()
+    {
         $this->timeslot = clone $this->entry->getTimeslot();
 
         // timezone fix
@@ -57,7 +86,8 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
 
         // DST fix
         $timezone = new \DateTimeZone('Europe/Berlin');
-        $transitions = $timezone->getTransitions($this->timeslot_startDate->getTimestamp(), $this->entry_startDate->getTimestamp());
+        $transitions = $timezone->getTransitions($this->timeslot_startDate->getTimestamp(),
+            $this->entry_startDate->getTimestamp());
         $lastTransitionIndex = sizeof($transitions) - 1;
         if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
             $this->timeslot_startDate->modify('+1 hour');
@@ -82,11 +112,6 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
             $this->timeslot_startDate->modify('+1 hour');
             $this->timeslot_endDate->modify('+1 hour');
         }
-
-        if (sizeof($this->result->getErrors())) {
-            return false;
-        }
-        return true;
     }
 
     private function validateDates()
@@ -98,9 +123,19 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
             case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
                 $this->validateWeeklyRepeatDates();
                 break;
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
+            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_MONTHLY:
                 $this->validateMonthlyRepeatDates();
                 break;
+        }
+    }
+
+    private function validateFuture()
+    {
+        if ($this->timeslot_startDate > $this->entry_startDate) {
+            $this->addError('Selected start date is in past', 1526170536);
+        }
+        if ($this->timeslot_endDate > $this->entry_endDate) {
+            $this->addError('Selected end date is in past', 1526170536);
         }
     }
 
@@ -116,16 +151,6 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         // end time
         if ($this->timeslot_endDate->format('H:i:s') != $this->entry_endDate->format('H:i:s')) {
             $this->addError('End time is not possible', 1526170536);
-        }
-    }
-
-    private function validateFuture()
-    {
-        if ($this->timeslot_startDate > $this->entry_startDate) {
-            $this->addError('Selected start date is in past', 1526170536);
-        }
-        if ($this->timeslot_endDate > $this->entry_endDate) {
-            $this->addError('Selected end date is in past', 1526170536);
         }
     }
 

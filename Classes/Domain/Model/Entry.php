@@ -139,7 +139,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @lazy
      * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
-     * @validate NotEmpty
      */
     protected $timeslot = null;
 

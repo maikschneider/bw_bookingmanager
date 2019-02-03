@@ -71,7 +71,7 @@
 																	 class="bw_bookingmanager__ajaxLink"
 																	 data="{ajax-container:'bw_bookingmanager__newEntry'}"
 																	 action="new"
-																	 arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
+																	 arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: timeslot.startDate.timestamp, end: timeslot.endDate.timestamp}">
 											book
 										</f:link.action>
 									</f:if>
