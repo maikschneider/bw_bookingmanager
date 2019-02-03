@@ -5,9 +5,9 @@ mod {
 	wizards.newContentElement.wizardItems.plugins {
 		elements {
 			bookingmanager {
-				icon = EXT:bw_bookingmanager/Resources/Public/Icons/Extension.svg
-				title = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bw_bookingmanager_domain_model_bookingmanager
-				description = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bw_bookingmanager_domain_model_bookingmanager.description
+				iconIdentifier = ext-bwbookingmanager-plugin-pi1
+				title = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:bwbookingmanager_pi1.title
+				description = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:bwbookingmanager_pi1.description
 				tt_content_defValues {
 					CType = list
 					list_type = bwbookingmanager_pi1

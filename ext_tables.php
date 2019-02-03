@@ -41,6 +41,7 @@ call_user_func(
                 'apps-pagetree-folder-contains-bm' => 'ext-bwbookingmanager-folder-tree.svg',
                 'ext-bwbookingmanager-type-entry' => 'tx_bwbookingmanager_domain_model_entry.svg',
                 'ext-bwbookingmanager-type-blockslot' => 'tx_bwbookingmanager_domain_model_blockslot.svg',
+                'ext-bwbookingmanager-plugin-pi1' => 'Extension.svg',
             ];
             $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
             foreach ($icons as $identifier => $path) {

@@ -3,6 +3,12 @@
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
+			<trans-unit id="bwbookingmanager_pi1.title">
+				<target>Kalender Plugin</target>
+			</trans-unit>
+			<trans-unit id="bwbookingmanager_pi1.description">
+				<target>Zeigt Kalender und Buchungsformulare an</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
 				<source>Calendar</source>
                 <target>Kalender</target>
