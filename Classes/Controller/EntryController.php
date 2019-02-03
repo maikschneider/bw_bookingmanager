@@ -1,9 +1,9 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Controller;
 
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * PHP version 7.2
  *
  * @package BwBookingManager
@@ -12,9 +12,14 @@ namespace Blueways\BwBookingmanager\Controller;
  * @version GIT: <git_id />
  * @link    http://www.blueways.de
  */
-
 class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
+
+    /**
+     * @var integer
+     */
+    protected $pageUid;
+
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
      * @inject
@@ -27,9 +32,87 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     protected $calendarRepository = null;
 
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot|null $timeslot
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry|null $newEntry
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidActionNameException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
+    public function newAction(
+        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null,
+        \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null
+    ) {
+        if (!$timeslot && !$calendar->isDirectBooking()) {
+            $this->throwStatus(403, 'Direct booking is not allowed');
+        }
+
+        $start = $end = null;
+
+        if ($this->request->hasArgument('start')) {
+            $start = new \DateTime();
+            $start->setTimestamp($this->request->getArgument('start'));
+        }
+
+        if ($this->request->hasArgument('end')) {
+            $end = new \DateTime();
+            $end->setTimestamp($this->request->getArgument('end'));
+        }
+
+        $newEntry = $newEntry ?: \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar::ENTRY_TYPE_CLASSNAME,
+            $calendar, $timeslot, $start, $end);
+
+        // set template
+        if ($this->settings['templateLayout'] != 'default') {
+            $this->view->setTemplate($this->settings['templateLayout']);
+        }
+
+        // To fix strange bug: override controllerActionName
+        $this->request->setControllerActionName('new');
+
+        $this->view->assign('page', $this->pageUid);
+        $this->view->assign('calendar', $calendar);
+        $this->view->assign('timeslot', $timeslot);
+        $this->view->assign('newEntry', $newEntry);
+    }
+
+    /**
+     * action create
+     *
+     * @param  \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
+    public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
+    {
+        $this->initializeAction();
+        $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html',
+            '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $newEntry->generateToken();
+        // override PID (just in case the storage PID differs from current calendar)
+        $newEntry->setPid($newEntry->getCalendar()->getPid());
+        $this->entryRepository->add($newEntry);
+
+        // persist by hand to get uid field and make redirect possible
+        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager->persistAll();
+
+        // send mails
+        $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
+        $notificationManager->notify();
+
+        $this->redirect('show', null, null, array('entry' => $newEntry, 'token' => $newEntry->getToken()));
+    }
+
     public function initializeAction()
     {
-        $this->pageUid = (int) \TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
+        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
 
@@ -54,13 +137,13 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 'U'
             );
 
-
             $arguments = $this->request->getArguments();
             $calendarUid = isset($arguments['calendar']) ? $arguments['calendar'] : $arguments['newEntry']['calendar']['__identity'];
+            /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
             $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
-            $entityClass = $calendar->getEntryTypeClassname();
+            $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
 
-            // override validator and entity class
+            // override validator and entity class in case of inheritance
             if ($entityClass !== \Blueways\BwBookingmanager\Domain\Model\Calendar::ENTRY_TYPE_CLASSNAME) {
                 $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
                 $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
@@ -69,11 +152,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
                 $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
 
-                /**
- * @var \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument $user
-*/
                 $newEntry = $this->arguments['newEntry'];
-                $newEntry->setDataType($entityClass);
+                $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
             }
         }
 
@@ -94,76 +174,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     /**
-     * action new
-     *
-     * @param  \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param  \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
-     * @param  \Blueways\BwBookingmanager\Domain\Model\Entry    $newEntry
-     * @return string HTML of form
-     */
-    public function newAction(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar, \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot, \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null)
-    {
-        /*
-        $start = $this->request->hasArgument('start') ? new \DateTime(date('Y-m-d H:i:sP',
-            $this->request->getArgument('start')), new \DateTimeZone('UTC')) : null;
-        $end = $this->request->hasArgument('end') ? new \DateTime(date('Y-m-d H:i:sP',
-            $this->request->getArgument('end')), new \DateTimeZone('UTC')) : null;
-        */
-        $start = null;
-        $end = null;
-
-        if ($this->request->hasArgument('start') && $this->request->hasArgument('end')) {
-            $end = new \DateTime();
-            $end->setTimestamp($this->request->getArgument('end'));
-            $start = new \DateTime();
-            $start->setTimestamp($this->request->getArgument('start'));
-        }
-
-        $newEntry = $newEntry ? $newEntry : \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar->getEntryTypeClassname(), $calendar, $timeslot, $start, $end);
-
-        // set template
-        if ($this->settings['templateLayout'] != 'default') {
-            $this->view->setTemplate($this->settings['templateLayout']);
-        }
-
-        // To fix strange bug: override controllerActionName
-        $this->request->setControllerActionName('new');
-
-        $this->view->assign('page', $this->pageUid);
-        $this->view->assign('calendar', $calendar);
-        $this->view->assign('timeslot', $timeslot);
-        $this->view->assign('newEntry', $newEntry);
-    }
-
-    /**
-     * action create
-     *
-     * @param  \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
-     * @return void
-     */
-    public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
-    {
-        $this->initializeAction();
-        $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
-        $newEntry->generateToken();
-        // override PID (just in case the storage PID differs from current calendar)
-        $newEntry->setPid($newEntry->getCalendar()->getPid());
-        $this->entryRepository->add($newEntry);
-
-        // persist by hand to get uid field and make redirect possible
-        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
-        $persistenceManager->persistAll();
-
-        // send mails
-        $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
-        $notificationManager->notify();
-
-        $this->redirect('show', null, null, array('entry' => $newEntry, 'token' => $newEntry->getToken()));
-    }
-
-    /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
-     * @param string                                        $token
+     * @param string $token
      * @return void
      */
     public function showAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry, $token = null)
@@ -178,6 +190,10 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {

@@ -33,6 +33,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
 				<source>Notifications</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.direct_booking">
+				<source>Allow direct bookings</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
 			</trans-unit>

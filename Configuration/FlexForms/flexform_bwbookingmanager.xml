@@ -20,7 +20,7 @@
                                 <items>
                                     <numIndex index="0">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_list</numIndex>
-                                        <numIndex index="1">Calendar->list;Calendar->show</numIndex>
+                                        <numIndex index="1">Calendar->list;Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</numIndex>
                                     </numIndex>
                                     <numIndex index="1">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show</numIndex>

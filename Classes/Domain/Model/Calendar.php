@@ -59,6 +59,27 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $notifications = null;
 
     /**
+     * @var boolean
+     */
+    protected $directBooking;
+
+    /**
+     * @return bool
+     */
+    public function isDirectBooking(): bool
+    {
+        return $this->directBooking;
+    }
+
+    /**
+     * @param bool $directBooking
+     */
+    public function setDirectBooking(bool $directBooking)
+    {
+        $this->directBooking = $directBooking;
+    }
+
+    /**
      * Returns the name
      *
      * @return string $name
@@ -245,15 +266,5 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getNotifications()
     {
         return $this->notifications;
-    }
-
-    /**
-     * Return the class name of entries that get associated with this type of calendar
-     *
-     * @return string
-     */
-    public function getEntryTypeClassname()
-    {
-        return static::ENTRY_TYPE_CLASSNAME;
     }
 }

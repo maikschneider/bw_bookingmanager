@@ -1,81 +1,75 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-<f:comment>
-	<label for="startDate">
-		<f:translate key="tx_bwbookingmanager_domain_model_entry.start_date" />
-	</label>
-	<br />
-	<f:form.textfield property="startDate" value="{newEntry.startDate->f:format.date()}" readonly="TRUE" />
-	<br />
-	<label for="endDate">
-		<f:translate key="tx_bwbookingmanager_domain_model_entry.end_date" />
-	</label>
-	<br />
-	<f:form.textfield property="endDate" value="{newEntry.endDate->f:format.date()}" readonly="TRUE" />
-	<br />
-</f:comment>
+
+<f:if condition="{newEntry.startDate}">
+	<f:then>
+		<f:form.hidden property="startDate" value="{newEntry.startDate.timestamp}"/>
+	</f:then>
+	<f:else>
+		<label for="startDate">
+			<f:translate key="tx_bwbookingmanager_domain_model_entry.start_date"/>
+		</label> <br/>
+		<f:form.textfield property="startDate"/>
+		<br/>
+	</f:else>
+</f:if>
+
+<f:if condition="{newEntry.endDate}">
+	<f:then>
+		<f:form.hidden property="endDate" value="{f:format.date(date: newEntry.endDate, format:'d-m-Y-H:i:s')}"/>
+	</f:then>
+	<f:else>
+		<label for="endDate">
+			<f:translate key="tx_bwbookingmanager_domain_model_entry.end_date"/>
+		</label> <br/>
+		<f:form.textfield property="endDate"/>
+		<br/>
+	</f:else>
+</f:if>
+
 <label for="name">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.name" />
-</label>
-<br />
-<f:form.textfield property="name" />
-<br />
-<label for="prename">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.prename" />
-</label>
-<br />
-<f:form.textfield property="prename" />
-<br />
-<label for="street">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.street" />
-</label>
-<br />
-<f:form.textfield property="street" />
-<br />
-<label for="zip">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.zip" />
-</label>
-<br />
-<f:form.textfield property="zip" />
-<br />
-<label for="city">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.city" />
-</label>
-<br />
-<f:form.textfield property="city" />
-<br />
-<label for="phone">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.phone" />
-</label>
-<br />
-<f:form.textfield property="phone" />
-<br />
-<label for="email">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.email" />
-</label>
-<br />
-<f:form.textfield property="email" />
-<br />
-<label for="newsletter">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.newsletter" />
-</label>
-<br />
-<f:form.checkbox property="newsletter" value="1" />
-<br />
-<label for="weight">
-	<f:translate key="tx_bwbookingmanager_domain_model_entry.weight" />
-</label>
-<br />
-<f:form.textfield property="weight" />
-<br />
-<f:translate key="tx_bwbookingmanager_domain_model_entry.special1" />
-</label>
-<br />
-<f:form.checkbox property="special1" value="1" />
-<br />
-<f:translate key="tx_bwbookingmanager_domain_model_entry.special2" />
-</label>
-<br />
-<f:form.checkbox property="special2" value="1" />
-<br />
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.name"/>
+</label> <br/>
+<f:form.textfield property="name"/>
+<br/> <label for="prename">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.prename"/>
+</label> <br/>
+<f:form.textfield property="prename"/>
+<br/> <label for="street">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.street"/>
+</label> <br/>
+<f:form.textfield property="street"/>
+<br/> <label for="zip">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.zip"/>
+</label> <br/>
+<f:form.textfield property="zip"/>
+<br/> <label for="city">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.city"/>
+</label> <br/>
+<f:form.textfield property="city"/>
+<br/> <label for="phone">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.phone"/>
+</label> <br/>
+<f:form.textfield property="phone"/>
+<br/> <label for="email">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.email"/>
+</label> <br/>
+<f:form.textfield property="email"/>
+<br/> <label for="newsletter">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.newsletter"/>
+</label> <br/>
+<f:form.checkbox property="newsletter" value="1"/>
+<br/> <label for="weight">
+	<f:translate key="tx_bwbookingmanager_domain_model_entry.weight"/>
+</label> <br/>
+<f:form.textfield property="weight"/>
+<br/>
+<f:translate key="tx_bwbookingmanager_domain_model_entry.special1"/>
+</label><br/>
+<f:form.checkbox property="special1" value="1"/>
+<br/>
+<f:translate key="tx_bwbookingmanager_domain_model_entry.special2"/>
+</label><br/>
+<f:form.checkbox property="special2" value="1"/>
+<br/>
 
 </html>

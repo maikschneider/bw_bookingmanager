@@ -12,6 +12,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_calendar (
 	blockslots int(11) unsigned DEFAULT '0' NOT NULL,
 	holidays int(11) unsigned DEFAULT '0' NOT NULL,
 	notifications int(11) unsigned DEFAULT '0' NOT NULL,
+	direct_booking smallint(5) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

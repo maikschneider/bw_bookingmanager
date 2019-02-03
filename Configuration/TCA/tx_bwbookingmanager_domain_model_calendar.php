@@ -18,10 +18,10 @@ return [
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, holidays, notifications',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications',
     ],
     'types' => [
-        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, blockslots, holidays, notifications'],
+        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications'],
     ],
     'columns' => [
         'record_type' => [
@@ -146,6 +146,18 @@ return [
                 'MM_opposite_field' => 'calendars',
                 'size' => 10,
                 'maxitems' => 9999,
+            ],
+        ],
+        'direct_booking' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.direct_booking',
+            'config' => [
+                'type' => 'check',
+                'items' => [
+                    '1' => [
+                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                    ],
+                ],
             ],
         ],
 
