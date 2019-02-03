@@ -181,6 +181,7 @@ return [
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
                 'MM' => 'tx_bwbookingmanager_calendar_timeslot_mm',
                 'size' => 10,
+                'minitems' => 1,
                 'maxitems' => 9999,
             ],
         ],
