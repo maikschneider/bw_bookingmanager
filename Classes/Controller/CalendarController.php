@@ -63,6 +63,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         }
 
         // override settings, if used as parameter from ajax call
+        // @TODO: Find better solution
         if ($this->request->hasArgument('settings')) {
             $newSettings = $this->request->getArgument('settings');
             $this->settings = $newSettings;
@@ -79,7 +80,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $calendars = $this->calendarRepository->findAll();
 
         // set template
-        if ($this->settings['templateLayout'] != 'default') {
+        if ($this->settings['templateLayout'] !== 'default') {
             $this->view->setTemplate($this->settings['templateLayout']);
         }
 
