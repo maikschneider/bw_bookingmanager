@@ -20,7 +20,7 @@
                                 <items>
                                     <numIndex index="0">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_list</numIndex>
-                                        <numIndex index="1">Calendar->list</numIndex>
+                                        <numIndex index="1">Calendar->list;Calendar->show</numIndex>
                                     </numIndex>
                                     <numIndex index="1">
                                         <numIndex index="0">LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show</numIndex>
@@ -37,7 +37,6 @@
                     <settings.showPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.showPid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->list</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -51,7 +50,6 @@
                     <settings.calendarPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.calendarUid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -65,7 +63,6 @@
                     <settings.entryPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.entryPid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -79,7 +76,6 @@
                     <settings.backPid>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.backPid</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>group</type>
                                 <internal_type>db</internal_type>
@@ -93,7 +89,6 @@
                     <settings.dateRange>
                         <TCEforms>
                             <label>LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange</label>
-                            <displayCond>FIELD:switchableControllerActions:=:Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete</displayCond>
                             <config>
                                 <type>select</type>
                                 <renderType>selectSingle</renderType>

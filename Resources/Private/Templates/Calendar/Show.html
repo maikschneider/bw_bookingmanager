@@ -11,13 +11,13 @@ keep Otherwise your changes will be overwritten the next time you save the exten
   <f:if condition="{settings.ajax.enable}">
     <div id="bw_bookingmanager__newEntry"></div>
   </f:if>
-  
+
   <f:if condition="{settings.dateRange}==0">
-    <f:render partial="Calendar/Month" arguments="{_all}"></f:render>
+    <f:render partial="Calendar/Month" arguments="{_all}" />
   </f:if>
 
   <f:if condition="{settings.dateRange}==1">
-    <f:render partial="Calendar/Week" arguments="{_all}"></f:render>
+    <f:render partial="Calendar/Week" arguments="{_all}" />
   </f:if>
 
 </f:section>
