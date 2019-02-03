@@ -2,6 +2,7 @@
 namespace Blueways\BwBookingmanager\Hooks;
 
 use Blueways\BwBookingmanager\Backend\RecordList\RecordListConstraint;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Recordlist\RecordList\AbstractDatabaseRecordList;
 
@@ -20,13 +21,13 @@ class TableListHook
         $this->recordListConstraint = GeneralUtility::makeInstance(RecordListConstraint::class);
     }
 
-    public function buildQueryParametersPostProcess(
+    public function modifyQuery(
         array &$parameters,
         string $table,
         int $pageId,
         array $additionalConstraints,
         array $fieldList,
-        AbstractDatabaseRecordList $parentObject
+        QueryBuilder $queryBuilder
     ) {
         if ($table === $this->recordListConstraint::TABLE && $this->recordListConstraint->isInAdministrationModule()) {
             $demands = [];
@@ -34,7 +35,7 @@ class TableListHook
             if (is_array($vars) && is_array($vars['demand'])) {
                 $demands = $vars['demand'];
             }
-            $this->recordListConstraint->extendQuery($parameters, $demands, $parentObject->id);
+            $this->recordListConstraint->extendQuery($parameters, $demands);
         }
     }
 }
