@@ -21,14 +21,9 @@ class RenderConfiguration
     protected $timeslots;
 
     /**
-     * @var \DateTime|null
+     * @var \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf
      */
-    protected $startDate;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $endDate;
+    protected $dateConf;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
@@ -38,19 +33,18 @@ class RenderConfiguration
     /**
      * RenderConfiguration constructor.
      *
-     * @param \DateTime|null $startDate
-     * @param \DateTime|null $endDate
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar|null $calendar
+     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      */
-    public function __construct($startDate = null, $endDate = null, $calendar = null)
+    public function __construct($dateConf, $calendar)
     {
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
+        $this->dateConf = $dateConf;
         $this->calendar = $calendar;
     }
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getConfigurationForList()
     {
@@ -67,6 +61,7 @@ class RenderConfiguration
      * @param \DateTime $startDate
      * @param integer $daysCount
      * @return array
+     * @throws \Exception
      */
     private function getDaysArrayForRange($startDate, $daysCount)
     {
@@ -77,7 +72,7 @@ class RenderConfiguration
                 'date' => clone $startDate,
                 'timeslots' => $this->getTimeslotsForDay($startDate),
                 'isCurrentDay' => $this->isCurrentDay($startDate),
-                'isNotInMonth' => !($startDate->format('m') == $this->startDate->format('m')),
+                'isNotInMonth' => !($startDate->format('m') == $this->dateConf->start->format('m')),
                 'isInPast' => $this->isInPast($startDate)
             ];
             $days[$i]['isBookable'] = $this->getDayIsBookable($days[$i]['timeslots']);
@@ -140,70 +135,49 @@ class RenderConfiguration
                 $isBookable = true;
             }
         }
+
+        // @TODO: check if direct_bookings are possible
+
         return $isBookable;
     }
 
     /**
-     * @return array
+     * @param $timeslots
      */
-    public function getConfigurationForWeek()
+    public function setTimeslots($timeslots)
     {
-        $weekStart = clone $this->startDate;
-        $weekStart->modify('tomorrow');
-        $weekStart->modify('last monday');
-        $weekStart->setTime(0, 0, 0);
-
-        $nextWeek = clone $weekStart;
-        $nextWeek->modify('+1 week');
-        $prevWeek = clone $weekStart;
-        $prevWeek->modify('-1 week');
-
-        $days = $this->getDaysArrayForWeek($weekStart);
-
-        return array(
-            'days' => $days,
-            'nextWeek' => [
-                'date' => $nextWeek,
-                'day' => $nextWeek->format('j'),
-                'month' => $nextWeek->format('m'),
-                'year' => $nextWeek->format('Y'),
-            ],
-            'prevWeek' => [
-                'date' => $prevWeek,
-                'day' => $prevWeek->format('j'),
-                'month' => $prevWeek->format('m'),
-                'year' => $prevWeek->format('Y'),
-            ],
-        );
-    }
-
-    /**
-     * @param \DateTime $weekStart
-     * @return array
-     */
-    private function getDaysArrayForWeek($weekStart)
-    {
-        return $this->getDaysArrayForRange($weekStart, 7);
+        $this->timeslots = $timeslots;
     }
 
     /**
      * @return array
+     * @throws \Exception
+     */
+    public function getRenderConfiguration()
+    {
+        if ($this->dateConf->viewType === 0) {
+            return $this->getConfigurationForMonth();
+        }
+        if ($this->dateConf->viewType === 1) {
+            return $this->getConfigurationForWeek();
+        }
+        if ($this->dateConf->viewType === 2) {
+            return $this->getConfigurationForDays($this->dateConf::DEFAULT_DAYS_LENGTH);
+        }
+        return [];
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
      */
     public function getConfigurationForMonth()
     {
-        $monthStart = clone $this->startDate;
-        $monthStart->modify('first day of this month');
-        $monthStart->modify('last monday');
-        $monthStart->setTime(0, 0, 0);
+        $monthStart = clone $this->dateConf->start;
+        $monthEnd = clone $this->dateConf->end;
 
-        $monthEnd = clone $this->startDate;
-        $monthEnd->modify('last day of this month');
-        $monthEnd->setTime(23, 59, 59);
-
-        $nextMonth = clone $this->startDate;
-        $nextMonth->modify('first day of next month');
-        $prevMonth = clone $this->startDate;
-        $prevMonth->modify('first day of last month');
+        $nextMonth = $this->dateConf->next;
+        $prevMonth = $this->dateConf->prev;
 
         // #weeks = #mondays
         $numberOfWeeks = \Blueways\BwBookingmanager\Helper\TimeslotManager::dayCount($monthStart, $monthEnd, 1);
@@ -236,22 +210,57 @@ class RenderConfiguration
     }
 
     /**
+     * @param \DateTime $weekStart
+     * @return array
+     * @throws \Exception
+     */
+    private function getDaysArrayForWeek($weekStart)
+    {
+        return $this->getDaysArrayForRange($weekStart, 7);
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getConfigurationForWeek()
+    {
+        $weekStart = clone $this->dateConf->start;
+
+        $nextWeek = $this->dateConf->next;
+        $prevWeek = $this->dateConf->prev;
+
+        $days = $this->getDaysArrayForWeek($weekStart);
+
+        return array(
+            'days' => $days,
+            'nextWeek' => [
+                'date' => $nextWeek,
+                'day' => $nextWeek->format('j'),
+                'month' => $nextWeek->format('m'),
+                'year' => $nextWeek->format('Y'),
+            ],
+            'prevWeek' => [
+                'date' => $prevWeek,
+                'day' => $prevWeek->format('j'),
+                'month' => $prevWeek->format('m'),
+                'year' => $prevWeek->format('Y'),
+            ],
+        );
+    }
+
+    /**
      * @param integer $daysCount
      * @return array
+     * @throws \Exception
      */
     public function getConfigurationForDays($daysCount)
     {
-        $daysStart = clone $this->startDate;
-        $daysStart->setTime(0, 0, 0);
+        $daysStart = clone $this->dateConf->start;
 
-        $daysEnd = clone $this->startDate;
-        $daysEnd->modify('+' . $daysCount . ' days');
-        $daysEnd->setTime(23, 59, 59);
+        $nextdays = $this->dateConf->next;
 
-        $nextdays = clone $this->startDate;
-        $nextdays->modify('+' . ($daysCount + 1) . ' days');
-        $prevdays = clone $this->startDate;
-        $prevdays->modify('-' . ($daysCount + 1) . ' days');
+        $prevdays = $this->dateConf->prev;
 
         $days = $this->getDaysArrayForRange($daysStart, $daysCount);
 
@@ -270,14 +279,6 @@ class RenderConfiguration
                 'year' => $prevdays->format('Y'),
             ],
         );
-    }
-
-    /**
-     * @param $timeslots
-     */
-    public function setTimeslots($timeslots)
-    {
-        $this->timeslots = $timeslots;
     }
 
     private function getEntriesForDay($day)

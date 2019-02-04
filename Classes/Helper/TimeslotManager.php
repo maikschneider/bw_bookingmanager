@@ -220,6 +220,9 @@ class TimeslotManager
 
     /**
      * duplicates daily timeslot for whole date range
+     *
+     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @return array
      */
     private function repeatDailyTimeslot($timeslot)
     {

@@ -1,9 +1,12 @@
 <?php
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Utility\DateUtility;
+
 /**
  * Calendar Controller for list, show view of calendar entries
- *
  * PHP version 7.2
  *
  * @package  BwBookingManager
@@ -25,6 +28,12 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     protected $calendarRepository = null;
 
     /**
+     * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
+     * @inject
+     */
+    protected $entryRepository;
+
+    /**
      * Page uid
      *
      * @var int
@@ -42,6 +51,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     public function initializeAction()
     {
         $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
+        $this->entryRepository = $this->objectManager->get(EntryRepository::class);
         $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
 
@@ -88,17 +98,15 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     }
 
     /**
-     * action show
-     *
-     * @param  \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @return void
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar|null $calendar
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
     public function showAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
     ) {
         // Calendar detail view gets calendar from settings
         if (!$calendar) {
-            $calendar = $this->calendarRepository->findByUid($this->settings['calendarPid']);
+            $calendar = $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
         }
 
         $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : null;
@@ -108,6 +116,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $startDate = new \DateTime('now');
         $startDate->setTime(0, 0, 0);
         if ($day && $month && $year) {
+            // @TODO: This can be done by TypeConverter
             $startDate = $startDate->createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
         }
 
@@ -116,33 +125,18 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             $this->view->setTemplate($this->settings['templateLayout']);
         }
 
-        // get configuration array for template rendering
-        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($startDate);
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+        $entries = $this->entryRepository->findInRange($calendar, $dateConf);
+        $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
 
-        // get timeslots by date range
-        switch ($this->settings['dateRange']) {
-            case 1:
-                $timeslots = $this->timeslotRepository->findInWeek($calendar, $startDate);
-                $calendarConfiguration->setTimeslots($timeslots);
-                $configuration = $calendarConfiguration->getConfigurationForWeek();
-                break;
-            case 2:
-                // @todo get $dayCount from flexform setting
-                $days = 150;
-                $timeslots = $this->timeslotRepository->findInDays($calendar, $startDate, $days);
-                $calendarConfiguration->setTimeslots($timeslots);
-                $configuration = $calendarConfiguration->getConfigurationForDays($days);
-                break;
-            default:
-                $timeslots = $this->timeslotRepository->findInMonth($calendar, $startDate);
-                $calendarConfiguration->setTimeslots($timeslots);
-                $configuration = $calendarConfiguration->getConfigurationForMonth();
-                break;
-        }
+        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
+        $calendarConfiguration->setTimeslots($timeslots);
+        $configuration = $calendarConfiguration->getRenderConfiguration();
 
         $this->view->assign('page', $this->pageUid);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('timeslots', $timeslots);
         $this->view->assign('configuration', $configuration);
+        $this->view->assign('entries', $entries);
     }
 }
