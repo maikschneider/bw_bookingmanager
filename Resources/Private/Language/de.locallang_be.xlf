@@ -24,7 +24,7 @@
                 <target>Neuer Eintrag</target>
             </trans-unit>
             <trans-unit id="flexforms_general.mode.blockslot_new">
-				<source>New entry</source>
+				<source>New blockslot</source>
 				<target>Neuer Blockslot</target>
 			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
