@@ -49,8 +49,6 @@ class DateConf
         $this->startOrig = $date;
 
         $this->configureSelf($date);
-
-        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this, __LINE__ . ' in ' . __CLASS__);
     }
 
     private function configureSelf($date)

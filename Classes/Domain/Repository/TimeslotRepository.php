@@ -1,15 +1,12 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
 /***
- *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
  ***/
 
 /**
@@ -17,6 +14,29 @@ namespace Blueways\BwBookingmanager\Domain\Repository;
  */
 class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @return array|\Blueways\BwBookingmanager\Domain\Model\Timeslot[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
+    {
+        $timeslots = $this->findAllPossibleByDateRange($calendar, $dateConf->start, $dateConf->end);
+        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
+            $dateConf->start,
+            $dateConf->end);
+        return $timeslotManager->getTimeslots();
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
     public function findAllPossibleByDateRange(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         \DateTime $startDate,
@@ -47,82 +67,5 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         return $query->execute();
-    }
-
-    public function findInMonth(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
-        \DateTime $dayInMonth
-    ) {
-        $startDate = clone $dayInMonth;
-        $startDate->modify('first day of this month');
-
-        $endDate = clone $dayInMonth;
-        $endDate->modify('last day of this month');
-        $endDate->setTime(23, 59, 59);
-
-        // @TODO: This function does not return any Timeslots when called by ajax request
-        // use all timeslots as a fix
-        // $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
-        $timeslots = $calendar->getTimeslots();
-
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
-
-        return $timeslotManager->getTimeslots();
-    }
-
-    public function findInWeek(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
-        \DateTime $dayInWeek
-    ) {
-        $startDate = clone $dayInWeek;
-        $startDate->modify('tomorrow');
-        $startDate->modify('last monday');
-
-        $endDate = clone $dayInWeek;
-        $endDate->modify('yesterday');
-        $endDate->modify('next sunday');
-        $endDate->setTime(23, 59, 59);
-
-        // @TODO: This function does not return any Timeslots when called by ajax request
-        // use all timeslots as a fix
-        //$timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
-        $timeslots = $calendar->getTimeslots();
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
-
-        return $timeslotManager->getTimeslots();
-    }
-
-    public function findInDays(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
-        \DateTime $startDate,
-        int $days
-    ) {
-        $startDate = clone $startDate;
-        $startDate->setTime(0, 0, 0);
-
-        $endDate = clone $startDate;
-        $endDate->modify('+' . $days . ' days');
-        $endDate->setTime(23, 59, 59);
-
-        // @TODO: This function does not return any Timeslots when called by ajax request
-        // use all timeslots as a fix
-        // $timeslots = $this->findAllPossibleByDateRange($calendar, $startDate, $endDate);
-        $timeslots = $calendar->getTimeslots();
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $startDate, $endDate);
-
-        return $timeslotManager->getTimeslots();
-    }
-
-    /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
-     * @return array|\Blueways\BwBookingmanager\Domain\Model\Timeslot[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     */
-    public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
-    {
-        $timeslots = $this->findAllPossibleByDateRange($calendar, $dateConf->start, $dateConf->end);
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar, $dateConf->start,
-            $dateConf->end);
-        return $timeslotManager->getTimeslots();
     }
 }

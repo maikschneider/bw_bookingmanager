@@ -42,7 +42,7 @@
 					</li>
 				</f:for>
 			</ul>
-			<f:if condition="{calendar.directBooking}">
+			<f:if condition="{day.isDirectBookable}">
 				<f:link.action controller="Entry"
 											 pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid)}"
 											 action="new"
