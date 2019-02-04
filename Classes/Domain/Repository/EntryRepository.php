@@ -27,17 +27,24 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $query->equals('calendar', $calendar),
                 $query->greaterThanOrEqual('startDate', $dateConf->start),
                 $query->lessThanOrEqual('startDate', $dateConf->end),
-            ]),
-            $query->setOrderings(
-                [
-                    'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
-                ]
-            )
+            ])
+        );
+        $query->setOrderings(
+            [
+                'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+            ]
         );
 
         return $query->execute();
     }
 
+    /**
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @deprecated
+     */
     public function findAllInRange(
         \DateTime $startDate,
         \DateTime $endDate

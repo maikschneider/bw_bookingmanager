@@ -131,6 +131,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 
         $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
         $calendarConfiguration->setTimeslots($timeslots);
+        $calendarConfiguration->setEntries($entries);
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
         $this->view->assign('page', $this->pageUid);

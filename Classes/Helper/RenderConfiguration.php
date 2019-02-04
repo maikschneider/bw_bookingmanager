@@ -21,6 +21,11 @@ class RenderConfiguration
     protected $timeslots;
 
     /**
+     * @var \Blueways\BwBookingmanager\Domain\Model\Entry[]
+     */
+    protected $entries;
+
+    /**
      * @var \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf
      */
     protected $dateConf;
@@ -40,6 +45,14 @@ class RenderConfiguration
     {
         $this->dateConf = $dateConf;
         $this->calendar = $calendar;
+    }
+
+    /**
+     * @param $entries
+     */
+    public function setEntries($entries)
+    {
+        $this->entries = $entries;
     }
 
     /**
@@ -83,11 +96,13 @@ class RenderConfiguration
             $days[$i] = [
                 'date' => clone $startDate,
                 'timeslots' => $this->getTimeslotsForDay($startDate),
+                'entries' => $this->getEntriesForDay($startDate),
                 'isCurrentDay' => $this->isCurrentDay($startDate),
                 'isNotInMonth' => !($startDate->format('m') == $this->dateConf->start->format('m')),
                 'isInPast' => $this->isInPast($startDate)
             ];
             $days[$i]['isBookable'] = $this->getDayIsBookable($days[$i]['timeslots']);
+            $days[$i]['isDirectBookable'] = $this->isDirectBookable($days[$i]['entries']);
 
             $startDate->modify('+1 day');
         }
@@ -101,6 +116,11 @@ class RenderConfiguration
     private function getTimeslotsForDay($day)
     {
         $timeslots = [];
+
+        if (!$this->timeslots) {
+            return $timeslots;
+        }
+
         $dayEnd = clone $day;
         $dayEnd->setTime(23, 59, 59);
 
@@ -148,8 +168,30 @@ class RenderConfiguration
             }
         }
 
-        // @TODO: check if direct_bookings are possible
-
         return $isBookable;
+    }
+
+    private function getEntriesForDay(\DateTime $day)
+    {
+        $entries = [];
+
+        if (!$this->entries) {
+            return $entries;
+        }
+
+        $dayEnd = clone $day;
+        $dayEnd->setTime(23, 59, 59);
+
+        foreach ($this->entries as $entry) {
+            if (!($entry->getEndDate() < $day || $entry->getStartDate() > $dayEnd)) {
+                $entries[] = $entry;
+            }
+        }
+        return $entries;
+    }
+
+    private function isDirectBookable($entries)
+    {
+        return $this->calendar->isDirectBooking() && !sizeof($entries);
     }
 }
