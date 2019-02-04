@@ -69,8 +69,14 @@ class RenderConfiguration
      */
     public function getRenderConfiguration()
     {
+        $start = $this->dateConf->start;
+        $daysCount = $this->dateConf->start->diff($this->dateConf->end)->days;
+        $numberOfWeeks = \Blueways\BwBookingmanager\Helper\TimeslotManager::dayCount($this->dateConf->start,
+            $this->dateConf->end, 1);
+
         return array(
-            'days' => $this->getDaysArray(),
+            'days' => $this->getDaysArray($start, $daysCount),
+            'weeks' => $this->getWeeksArray($start, $numberOfWeeks),
             'next' => [
                 'date' => $this->dateConf->next,
                 'day' => $this->dateConf->next->format('j'),
@@ -86,11 +92,10 @@ class RenderConfiguration
         );
     }
 
-    private function getDaysArray()
+    private function getDaysArray($startDate, $daysCount)
     {
         $days = [];
-        $startDate = $this->dateConf->start;
-        $daysCount = $this->dateConf->start->diff($this->dateConf->end)->days;
+        $startDate = clone $startDate;
 
         for ($i = 0; $i <= $daysCount; $i++) {
             $days[$i] = [
@@ -132,6 +137,25 @@ class RenderConfiguration
         return $timeslots;
     }
 
+    private function getEntriesForDay(\DateTime $day)
+    {
+        $entries = [];
+
+        if (!$this->entries) {
+            return $entries;
+        }
+
+        $dayEnd = clone $day;
+        $dayEnd->setTime(23, 59, 59);
+
+        foreach ($this->entries as $entry) {
+            if (!($entry->getEndDate() < $day || $entry->getStartDate() > $dayEnd)) {
+                $entries[] = $entry;
+            }
+        }
+        return $entries;
+    }
+
     /**
      * @param \DateTime $day
      * @return bool
@@ -171,27 +195,23 @@ class RenderConfiguration
         return $isBookable;
     }
 
-    private function getEntriesForDay(\DateTime $day)
-    {
-        $entries = [];
-
-        if (!$this->entries) {
-            return $entries;
-        }
-
-        $dayEnd = clone $day;
-        $dayEnd->setTime(23, 59, 59);
-
-        foreach ($this->entries as $entry) {
-            if (!($entry->getEndDate() < $day || $entry->getStartDate() > $dayEnd)) {
-                $entries[] = $entry;
-            }
-        }
-        return $entries;
-    }
-
     private function isDirectBookable($entries)
     {
         return $this->calendar->isDirectBooking() && !sizeof($entries);
+    }
+
+    private function getWeeksArray($start, $numberOfWeeks)
+    {
+        $weeks = [];
+
+        for ($i = 0; $i < $numberOfWeeks; $i++) {
+            $weekStart = clone $start;
+
+            $weeks[] = $this->getDaysArray($weekStart, 7);
+
+            $weekStart->modify('next monday');
+        }
+
+        return $weeks;
     }
 }
