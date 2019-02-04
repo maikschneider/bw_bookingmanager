@@ -101,21 +101,21 @@ class RenderConfiguration
     private function getDaysArray($startDate, $daysCount)
     {
         $days = [];
-        $startDate = clone $startDate;
+        $date = clone $startDate;
 
         for ($i = 0; $i <= $daysCount; $i++) {
             $days[$i] = [
-                'date' => clone $startDate,
-                'timeslots' => $this->getTimeslotsForDay($startDate),
-                'entries' => $this->getEntriesForDay($startDate),
-                'isCurrentDay' => $this->isCurrentDay($startDate),
-                'isNotInMonth' => !($startDate->format('m') == $this->dateConf->start->format('m')),
-                'isInPast' => $this->isInPast($startDate)
+                'date' => clone $date,
+                'timeslots' => $this->getTimeslotsForDay($date),
+                'entries' => $this->getEntriesForDay($date),
+                'isCurrentDay' => $this->isCurrentDay($date),
+                'isNotInMonth' => !($date->format('m') == $this->dateConf->startOrig->format('m')),
+                'isInPast' => $this->isInPast($date)
             ];
             $days[$i]['isBookable'] = $this->getDayIsBookable($days[$i]['timeslots']);
             $days[$i]['isDirectBookable'] = $this->isDirectBookable($days[$i]['entries']);
 
-            $startDate->modify('+1 day');
+            $date->modify('+1 day');
         }
         return $days;
     }
@@ -218,17 +218,20 @@ class RenderConfiguration
      * @param \DateTime $start
      * @param integer $numberOfWeeks
      * @return array
+     * @throws \Exception
      */
     private function getWeeksArray($start, $numberOfWeeks)
     {
         $weeks = [];
+        $weekstart = clone $start;
 
         for ($i = 0; $i < $numberOfWeeks; $i++) {
-            $weekStart = clone $start;
 
-            $weeks[] = $this->getDaysArray($weekStart, 7);
+            $weekstart = clone $weekstart;
 
-            $weekStart->modify('next monday');
+            $weeks[] = $this->getDaysArray($weekstart, 6);
+
+            $weekstart->modify('next monday');
         }
 
         return $weeks;

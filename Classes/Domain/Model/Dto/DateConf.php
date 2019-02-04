@@ -28,6 +28,11 @@ class DateConf
     public $prev;
 
     /**
+     * @var \DateTime
+     */
+    public $startOrig;
+
+    /**
      * @var integer
      */
     public $viewType;
@@ -41,31 +46,34 @@ class DateConf
     public function __construct($viewType, $date)
     {
         $this->viewType = $viewType;
+        $this->startOrig = $date;
 
         $this->configureSelf($date);
+
+        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this, __LINE__ . ' in ' . __CLASS__);
     }
 
     private function configureSelf($date)
     {
         if ($this->viewType === 0) {
-            $this->start = clone self::getMonthStart($date);
-            $this->end = clone self::getMonthEnd($date);
-            $this->next = clone self::getNextMonth($date);
-            $this->prev = clone self::getPrevMonth($date);
+            $this->start = self::getMonthStart($date);
+            $this->end = self::getMonthEnd($date);
+            $this->next = self::getNextMonth($date);
+            $this->prev = self::getPrevMonth($date);
         }
 
         if ($this->viewType === 1) {
-            $this->start = clone self::getWeekStart($date);
-            $this->end = clone self::getWeekEnd($date);
-            $this->next = clone self::getNextWeek($date);
-            $this->prev = clone self::getPrevWeek($date);
+            $this->start = self::getWeekStart($date);
+            $this->end = self::getWeekEnd($date);
+            $this->next = self::getNextWeek($date);
+            $this->prev = self::getPrevWeek($date);
         }
 
         if ($this->viewType === 2) {
-            $this->start = clone self::getDayStart($date);
-            $this->end = clone self::getDayEnd($date);
-            $this->next = clone self::getNextDay($date);
-            $this->prev = clone self::getPrevDay($date);
+            $this->start = self::getDayStart($date);
+            $this->end = self::getDayEnd($date);
+            $this->next = self::getNextDay($date);
+            $this->prev = self::getPrevDay($date);
         }
     }
 
@@ -75,10 +83,11 @@ class DateConf
      */
     public static function getMonthStart($date)
     {
-        $date->modify('first day of this month');
-        $date->modify('last monday');
-        $date->setTime(0, 0, 0);
-        return $date;
+        $newDate = clone $date;
+        $newDate->modify('first day of this month');
+        $newDate->modify('last monday');
+        $newDate->setTime(0, 0, 0);
+        return $newDate;
     }
 
     /**
@@ -87,10 +96,11 @@ class DateConf
      */
     public static function getMonthEnd($date)
     {
-        $date->modify('last day of this month');
-        $date->modify('next sunday');
-        $date->setTime(23, 59, 59);
-        return $date;
+        $newDate = clone $date;
+        $newDate->modify('last day of this month');
+        $newDate->modify('next sunday');
+        $newDate->setTime(23, 59, 59);
+        return $newDate;
     }
 
     /**
@@ -99,8 +109,9 @@ class DateConf
      */
     public static function getNextMonth($date)
     {
-        $date->modify('first day of next month');
-        return $date;
+        $newDate = clone $date;
+        $newDate->modify('first day of next month');
+        return $newDate;
     }
 
     /**
@@ -109,8 +120,9 @@ class DateConf
      */
     public static function getPrevMonth($date)
     {
-        $date->modify('first day of last month');
-        return $date;
+        $newDate = clone $date;
+        $newDate->modify('first day of last month');
+        return $newDate;
     }
 
     /**
@@ -119,10 +131,11 @@ class DateConf
      */
     public static function getWeekStart($date)
     {
-        $date->modify('tomorrow');
-        $date->modify('last monday');
-        $date->setTime(0, 0, 0);
-        return $date;
+        $newDate = clone $date;
+        $newDate->modify('tomorrow');
+        $newDate->modify('last monday');
+        $newDate->setTime(0, 0, 0);
+        return $newDate;
     }
 
     /**
@@ -131,10 +144,11 @@ class DateConf
      */
     public static function getWeekEnd($date)
     {
-        $date = clone self::getWeekStart($date);
-        $date->modify('+6 days');
-        $date->setTime(23, 59, 59);
-        return $date;
+        $newDate = clone $date;
+        $newDate = self::getWeekStart($newDate);
+        $newDate->modify('+6 days');
+        $newDate->setTime(23, 59, 59);
+        return $newDate;
     }
 
     /**
@@ -143,9 +157,10 @@ class DateConf
      */
     public static function getNextWeek($date)
     {
-        $date = clone self::getWeekStart($date);
-        $date->modify('+1 week');
-        return $date;
+        $newDate = clone $date;
+        $newDate = self::getWeekStart($newDate);
+        $newDate->modify('+1 week');
+        return $newDate;
     }
 
     /**
@@ -154,9 +169,10 @@ class DateConf
      */
     public static function getPrevWeek($date)
     {
-        $date = clone self::getWeekStart($date);
-        $date->modify('-1 week');
-        return $date;
+        $newDate = clone $date;
+        $newDate = self::getWeekStart($newDate);
+        $newDate->modify('-1 week');
+        return $newDate;
     }
 
     /**
@@ -165,9 +181,10 @@ class DateConf
      */
     public static function getPrevDay($date)
     {
-        $date = clone self::getDayStart($date);
-        $date->modify('-' . self::DEFAULT_DAYS_LENGTH . ' days');
-        return $date;
+        $newDate = clone $date;
+        $newDate = self::getDayStart($newDate);
+        $newDate->modify('-' . self::DEFAULT_DAYS_LENGTH . ' days');
+        return $newDate;
     }
 
     /**
@@ -176,8 +193,9 @@ class DateConf
      */
     public static function getDayStart($date)
     {
-        $date->setTime(0, 0, 0);
-        return $date;
+        $newDate = clone $date;
+        $newDate->setTime(0, 0, 0);
+        return $newDate;
     }
 
     /**
@@ -186,9 +204,10 @@ class DateConf
      */
     public static function getNextDay($date)
     {
-        $date = clone self::getDayEnd($date);
-        $date->modify('+1 day');
-        return $date;
+        $newDate = clone $date;
+        $newDate = self::getDayEnd($newDate);
+        $newDate->modify('+1 day');
+        return $newDate;
     }
 
     /**
@@ -197,9 +216,10 @@ class DateConf
      */
     public static function getDayEnd($date)
     {
-        $date->modify('+' . self::DEFAULT_DAYS_LENGTH . ' days');
-        $date->setTime(23, 59, 59);
-        return $date;
+        $newDate = clone $date;
+        $newDate->modify('+' . self::DEFAULT_DAYS_LENGTH . ' days');
+        $newDate->setTime(23, 59, 59);
+        return $newDate;
     }
 
 }
