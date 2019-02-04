@@ -131,7 +131,7 @@ class DateConf
      */
     public static function getWeekEnd($date)
     {
-        $date = self::getWeekStart($date);
+        $date = clone self::getWeekStart($date);
         $date->modify('+6 days');
         $date->setTime(23, 59, 59);
         return $date;
@@ -143,7 +143,7 @@ class DateConf
      */
     public static function getNextWeek($date)
     {
-        $date = self::getWeekStart($date);
+        $date = clone self::getWeekStart($date);
         $date->modify('+1 week');
         return $date;
     }
@@ -154,7 +154,7 @@ class DateConf
      */
     public static function getPrevWeek($date)
     {
-        $date = self::getWeekStart($date);
+        $date = clone self::getWeekStart($date);
         $date->modify('-1 week');
         return $date;
     }
@@ -165,7 +165,7 @@ class DateConf
      */
     public static function getPrevDay($date)
     {
-        $date = self::getDayStart($date);
+        $date = clone self::getDayStart($date);
         $date->modify('-' . self::DEFAULT_DAYS_LENGTH . ' days');
         return $date;
     }
@@ -186,7 +186,7 @@ class DateConf
      */
     public static function getNextDay($date)
     {
-        $date = self::getDayEnd($date);
+        $date = clone self::getDayEnd($date);
         $date->modify('+1 day');
         return $date;
     }
