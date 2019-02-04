@@ -92,6 +92,12 @@ class RenderConfiguration
         );
     }
 
+    /**
+     * @param \DateTime $startDate
+     * @param integer $daysCount
+     * @return array
+     * @throws \Exception
+     */
     private function getDaysArray($startDate, $daysCount)
     {
         $days = [];
@@ -137,6 +143,10 @@ class RenderConfiguration
         return $timeslots;
     }
 
+    /**
+     * @param \DateTime $day
+     * @return array
+     */
     private function getEntriesForDay(\DateTime $day)
     {
         $entries = [];
@@ -195,11 +205,20 @@ class RenderConfiguration
         return $isBookable;
     }
 
+    /**
+     * @param $entries
+     * @return bool
+     */
     private function isDirectBookable($entries)
     {
         return $this->calendar->isDirectBooking() && !sizeof($entries);
     }
 
+    /**
+     * @param \DateTime $start
+     * @param integer $numberOfWeeks
+     * @return array
+     */
     private function getWeeksArray($start, $numberOfWeeks)
     {
         $weeks = [];
