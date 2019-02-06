@@ -110,10 +110,12 @@ class RenderConfiguration
                 'entries' => $this->getEntriesForDay($date),
                 'isCurrentDay' => $this->isCurrentDay($date),
                 'isNotInMonth' => !($date->format('m') == $this->dateConf->startOrig->format('m')),
-                'isInPast' => $this->isInPast($date)
+                'isInPast' => $this->isInPast($date),
+                'isSelectedDay' => $this->isSelectedDay($date)
             ];
-            $days[$i]['isBookable'] = $this->getDayIsBookable($days[$i]['timeslots']);
+            $days[$i]['hasBookableTimeslots'] = $this->hasBookableTimeslots($days[$i]['timeslots']);
             $days[$i]['isDirectBookable'] = $this->isDirectBookable($days[$i]['entries']);
+            $days[$i]['isBookable'] = (!$days[$i]['isInPast'] && ($days[$i]['hasBookableTimeslots'] || $days[$i]['isDirectBookable']));
 
             $date->modify('+1 day');
         }
@@ -188,17 +190,22 @@ class RenderConfiguration
         return $day < $now;
     }
 
+    private function isSelectedDay($day)
+    {
+        return $this->dateConf->startOrig->format('d.m.Y') === $day->format('d.m.Y');
+    }
+
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot[] $timeslots
      * @return bool
      */
-    private function getDayIsBookable($timeslots)
+    private function hasBookableTimeslots($timeslots)
     {
         $isBookable = false;
         foreach ($timeslots as $timeslot) {
             $slotIsBookable = $timeslot->getIsBookable();
             if ($slotIsBookable) {
-                $isBookable = true;
+                return true;
             }
         }
 

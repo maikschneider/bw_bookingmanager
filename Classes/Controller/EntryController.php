@@ -2,6 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * PHP version 7.2
@@ -14,17 +19,23 @@ namespace Blueways\BwBookingmanager\Controller;
  */
 class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
+
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
      * @inject
      */
-    protected $entryRepository = null;
+    protected $entryRepository;
+
+    /**
+     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     */
+    protected $timeslotRepository;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
      * @inject
      */
-    protected $calendarRepository = null;
+    protected $calendarRepository;
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
@@ -33,6 +44,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function newAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
@@ -43,10 +55,10 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->throwStatus(403, 'Direct booking is not allowed');
         }
 
-        $start = $end = null;
+        $start = new \DateTime();
+        $end = null;
 
         if ($this->request->hasArgument('start')) {
-            $start = new \DateTime();
             $start->setTimestamp($this->request->getArgument('start'));
         }
 
@@ -58,11 +70,21 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $newEntry = $newEntry ?: \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar::ENTRY_TYPE_CLASSNAME,
             $calendar, $timeslot, $start, $end);
 
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $start);
+        $entries = $this->entryRepository->findInRange($calendar, $dateConf);
+        $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
+
+        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
+        $calendarConfiguration->setTimeslots($timeslots);
+        $calendarConfiguration->setEntries($entries);
+        $configuration = $calendarConfiguration->getRenderConfiguration();
+
         $this->view->setTemplate($this->settings['template']['entry']['new']);
         $this->view->assignMultiple([
             'calendar' => $calendar,
             'timeslot' => $timeslot,
-            'newEntry' => $newEntry
+            'newEntry' => $newEntry,
+            'configuration' => $configuration
         ]);
     }
 
@@ -99,14 +121,9 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     public function initializeAction()
     {
-        $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
-        $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
-
-        // override settings, if used as parameter from ajax call
-        if ($this->request->hasArgument('settings')) {
-            $newSettings = $this->request->getArgument('settings');
-            $this->settings = $newSettings;
-        }
+        $this->entryRepository = $this->objectManager->get(EntryRepository::class);
+        $this->calendarRepository = $this->objectManager->get(CalendarRepository::class);
+        $this->timeslotRepository = $this->objectManager->get(TimeslotRepository::class);
 
         // in newAction and createAction
         if ($this->arguments->hasArgument('newEntry')) {

@@ -3,7 +3,9 @@
 namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 
 /**
  * Calendar Controller for list, show view of calendar entries
@@ -43,8 +45,8 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     public function initializeAction()
     {
         $this->entryRepository = $this->objectManager->get(EntryRepository::class);
-        $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
-        $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
+        $this->timeslotRepository = $this->objectManager->get(TimeslotRepository::class);
+        $this->calendarRepository = $this->objectManager->get(CalendarRepository::class);
 
         // include javascript
         if ($this->settings['ajax']['enable']) {

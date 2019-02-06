@@ -61,6 +61,9 @@
 						<f:else>
 							<h3>{f:format.date(date:day.date, format:'j')}</h3>
 							<ul>
+								<f:if condition="{day.isSelectedDay}">
+									<strong>selected</strong>
+								</f:if>
 								<f:for each="{day.timeslots}" as="timeslot">
 									<li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate,
 										format:'H:i')}
@@ -87,6 +90,7 @@
 									direct booking
 								</f:link.action>
 							</f:if>
+
 						</f:else>
 					</f:if>
 				</td>
