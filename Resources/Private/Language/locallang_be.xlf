@@ -9,13 +9,13 @@
             <trans-unit id="flexforms_general.mode">
                 <source>Display mode</source>
             </trans-unit>
-            <trans-unit id="flexforms_general.mode.calendar_list">
+            <trans-unit id="flexforms_general.mode.0">
                 <source>Calendar list</source>
             </trans-unit>
-            <trans-unit id="flexforms_general.mode.calendar_show">
-                <source>Calendar show</source>
+            <trans-unit id="flexforms_general.mode.1">
+                <source>Single Calendar</source>
             </trans-unit>
-            <trans-unit id="flexforms_general.mode.entry_new">
+            <trans-unit id="flexforms_general.mode.2">
                 <source>New entry</source>
             </trans-unit>
             <trans-unit id="flexforms_general.mode.blockslot_new">

@@ -13,42 +13,37 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<switchableControllerActions>
+					<settings.mode>
 						<TCEforms>
 							<label>
 								LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode
 							</label>
-							<onChange>reload</onChange>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items>
-									<numIndex index="0">
+									<numIndex type="array" index="0">
 										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_list
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.0
 										</numIndex>
-										<numIndex index="1">
-											Calendar->list;Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete
-										</numIndex>
+										<numIndex index="1">0</numIndex>
 									</numIndex>
-									<numIndex index="1">
+									<numIndex type="array" index="1">
 										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.calendar_show
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.1
 										</numIndex>
-										<numIndex index="1">
-											Calendar->show;Entry->new;Entry->create;Entry->show;Entry->delete
-										</numIndex>
+										<numIndex index="1">1</numIndex>
 									</numIndex>
-									<numIndex index="2">
+									<numIndex type="array" index="2">
 										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.2
 										</numIndex>
-										<numIndex index="1">Entry->new;Entry->create;Entry->show;Entry->delete
-										</numIndex>
+										<numIndex index="1">2</numIndex>
 									</numIndex>
 								</items>
 							</config>
 						</TCEforms>
-					</switchableControllerActions>
+					</settings.mode>
 					<settings.showPid>
 						<TCEforms>
 							<label>

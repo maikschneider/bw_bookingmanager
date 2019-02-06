@@ -1,9 +1,9 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
-use Blueways\BwBookingmanager\Utility\DateUtility;
 
 /**
  * Calendar Controller for list, show view of calendar entries
@@ -15,10 +15,9 @@ use Blueways\BwBookingmanager\Utility\DateUtility;
  * @version  GIT: <git_id />
  * @link     http: //www.blueways.de
  */
-
-
 class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
+
     /**
      * CalendarRepository
      *
@@ -74,12 +73,18 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     }
 
     /**
-     * action list
-     *
-     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
     public function listAction()
     {
+        if ((int)$this->settings['mode'] === 1) {
+            $this->forward('show');
+        }
+
+        if ((int)$this->settings['mode'] === 2) {
+            $this->forward('new', 'Entry');
+        }
+
         $calendars = $this->calendarRepository->findAll();
 
         $this->view->setTemplate($this->settings['template']['calendar']['list']);
@@ -105,9 +110,9 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             $startDate = $startDate->createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
         }
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
-        
+
         // query calendar, entries, timeslots
-        $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
+        $calendar = $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
         $entries = $this->entryRepository->findInRange($calendar, $dateConf);
         $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
 
