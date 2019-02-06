@@ -32,10 +32,7 @@
 						format:'H:i')}
 						<p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
 						<f:if condition="{timeslot.isBookable}">
-							<f:link.action controller="Entry"
-														 pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid)}"
-														 action="new"
-														 arguments="{settings: settings, calendar: calendar, timeslot: timeslot, start: '{f:format.date(date: timeslot.startDate, format:\'Y-m-d H:i:s\')}', end: '{f:format.date(date: timeslot.endDate, format:\'Y-m-d H:i:s\')}'}">
+							<f:link.action controller="Entry" pageUid="{settings.entryPid}" action="new" arguments="{calendar: calendar, timeslot: timeslot, start: timeslot.startDate.timestamp, end: timeslot.endDate.timestamp}">
 								book
 							</f:link.action>
 						</f:if>
@@ -44,7 +41,7 @@
 			</ul>
 			<f:if condition="{day.isDirectBookable}">
 				<f:link.action controller="Entry"
-											 pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid)}"
+											 pageUid="{settings.entryPid}"
 											 action="new"
 											 arguments="{calendar: calendar, start: day.date.timestamp}">
 					direct booking
