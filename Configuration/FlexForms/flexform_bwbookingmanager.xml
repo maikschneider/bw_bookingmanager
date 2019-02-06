@@ -44,6 +44,37 @@
 							</config>
 						</TCEforms>
 					</settings.mode>
+					<settings.dateRange>
+						<TCEforms>
+							<label>
+								LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange
+							</label>
+							<config>
+								<type>select</type>
+								<renderType>selectSingle</renderType>
+								<items>
+									<numIndex index="0" type="array">
+										<numIndex index="0">
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.month
+										</numIndex>
+										<numIndex index="1">0</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.week
+										</numIndex>
+										<numIndex index="1">1</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.days
+										</numIndex>
+										<numIndex index="1">2</numIndex>
+									</numIndex>
+								</items>
+							</config>
+						</TCEforms>
+					</settings.dateRange>
 					<settings.showPid>
 						<TCEforms>
 							<label>
@@ -104,56 +135,6 @@
 							</config>
 						</TCEforms>
 					</settings.backPid>
-					<settings.dateRange>
-						<TCEforms>
-							<label>
-								LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange
-							</label>
-							<config>
-								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<items>
-									<numIndex index="0" type="array">
-										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.month
-										</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.week
-										</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.dateRange.days
-										</numIndex>
-										<numIndex index="1">2</numIndex>
-									</numIndex>
-								</items>
-							</config>
-						</TCEforms>
-					</settings.dateRange>
-					<settings.templateLayout>
-						<TCEforms>
-							<label>
-								LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout
-							</label>
-							<config>
-								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<items>
-									<numIndex index="0" type="array">
-										<numIndex index="0">
-											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.templateLayout.default
-										</numIndex>
-										<numIndex index="1">default</numIndex>
-									</numIndex>
-								</items>
-							</config>
-						</TCEforms>
-					</settings.templateLayout>
 					<persistence.storagePid>
 						<TCEforms>
 							<label>
