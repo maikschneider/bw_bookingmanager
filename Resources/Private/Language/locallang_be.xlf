@@ -75,6 +75,24 @@
             <trans-unit id="flexforms_email.template.default">
                 <source>Default</source>
             </trans-unit>
+			<trans-unit id="flexforms_template">
+				<source>Templates</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_calendar_list">
+				<source>Calendar list template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_calendar_show">
+				<source>Calendar show template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_entry_new">
+				<source>Entry new template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_entry_show">
+				<source>Entry show template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_entry_delete">
+				<source>Entry delete template</source>
+			</trans-unit>
             <trans-unit id="bwbookingmanager-folder">
                 <source>Booking Manager</source>
             </trans-unit>

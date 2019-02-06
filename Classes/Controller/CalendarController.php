@@ -71,13 +71,6 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
                 $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
             }
         }
-
-        // override settings, if used as parameter from ajax call
-        // @TODO: Find better solution
-        if ($this->request->hasArgument('settings')) {
-            $newSettings = $this->request->getArgument('settings');
-            $this->settings = $newSettings;
-        }
     }
 
     /**
@@ -89,10 +82,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     {
         $calendars = $this->calendarRepository->findAll();
 
-        // set template
-        if ($this->settings['templateLayout'] !== 'default') {
-            $this->view->setTemplate($this->settings['templateLayout']);
-        }
+        $this->view->setTemplate($this->settings['template']['calendar']['list']);
 
         $this->view->assign('calendars', $calendars);
     }
@@ -100,44 +90,40 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar|null $calendar
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function showAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
     ) {
-        // Calendar detail view gets calendar from settings
-        if (!$calendar) {
-            $calendar = $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
-        }
-
+        // create date from arguments and configuration
+        $startDate = new \DateTime('now');
+        $startDate->setTime(0, 0, 0);
         $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : null;
         $month = $this->request->hasArgument('month') ? $this->request->getArgument('month') : null;
         $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : null;
-
-        $startDate = new \DateTime('now');
-        $startDate->setTime(0, 0, 0);
         if ($day && $month && $year) {
-            // @TODO: This can be done by TypeConverter
             $startDate = $startDate->createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
         }
-
-        // set template
-        if ($this->settings['templateLayout'] != 'default') {
-            $this->view->setTemplate($this->settings['templateLayout']);
-        }
-
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+        
+        // query calendar, entries, timeslots
+        $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
         $entries = $this->entryRepository->findInRange($calendar, $dateConf);
         $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
 
+        // build render configuration
         $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
         $calendarConfiguration->setTimeslots($timeslots);
         $calendarConfiguration->setEntries($entries);
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
-        $this->view->assign('page', $this->pageUid);
-        $this->view->assign('calendar', $calendar);
-        $this->view->assign('timeslots', $timeslots);
-        $this->view->assign('configuration', $configuration);
-        $this->view->assign('entries', $entries);
+        $this->view->setTemplate($this->settings['template']['calendar']['show']);
+        $this->view->assignMultiple([
+            'page' => $this->pageUid,
+            'calendar' => $calendar,
+            'timeslots' => $timeslots,
+            'configuration' => $configuration,
+            'entries' => $entries
+        ]);
     }
 }
