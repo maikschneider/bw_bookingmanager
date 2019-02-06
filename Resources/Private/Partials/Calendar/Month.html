@@ -67,8 +67,8 @@
 										<p>{timeslot.bookedWeight} / {timeslot.maxWeight} booked</p>
 										<f:if condition="{timeslot.isBookable}">
 											<f:link.action controller="Entry"
-																		 pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid, else:page)}"
-																		 pageType="{f:if(condition:settings.ajax.enable, then:settings.ajax.typeNum, else:0)}"
+																		 pageUid="{settings.entryPid}"
+																		 pageType="{f:if(condition:settings.ajax.enable, then:settings.ajax.typeNum)}"
 																		 class="bw_bookingmanager__ajaxLink"
 																		 data="{ajax-container:'bw_bookingmanager__newEntry'}"
 																		 action="new"

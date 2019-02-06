@@ -14,12 +14,6 @@ namespace Blueways\BwBookingmanager\Controller;
  */
 class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-
-    /**
-     * @var integer
-     */
-    protected $pageUid;
-
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
      * @inject
@@ -36,7 +30,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot|null $timeslot
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry|null $newEntry
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidActionNameException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
@@ -65,18 +58,12 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $newEntry = $newEntry ?: \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar::ENTRY_TYPE_CLASSNAME,
             $calendar, $timeslot, $start, $end);
 
-        // set template
-        if ($this->settings['templateLayout'] != 'default') {
-            $this->view->setTemplate($this->settings['templateLayout']);
-        }
-
-        // To fix strange bug: override controllerActionName
-        $this->request->setControllerActionName('new');
-
-        $this->view->assign('page', $this->pageUid);
-        $this->view->assign('calendar', $calendar);
-        $this->view->assign('timeslot', $timeslot);
-        $this->view->assign('newEntry', $newEntry);
+        $this->view->setTemplate($this->settings['template']['entry']['new']);
+        $this->view->assignMultiple([
+            'calendar' => $calendar,
+            'timeslot' => $timeslot,
+            'newEntry' => $newEntry
+        ]);
     }
 
     /**
@@ -112,7 +99,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     public function initializeAction()
     {
-        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
         $this->entryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
 
@@ -182,7 +168,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     {
         $deleteable = $entry->isValidToken($token);
 
-        $this->view->assign('page', $this->pageUid);
         $this->view->assign('deleteable', $deleteable);
         $this->view->assign('entry', $entry);
     }

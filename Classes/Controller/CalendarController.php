@@ -33,13 +33,6 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     protected $entryRepository;
 
     /**
-     * Page uid
-     *
-     * @var int
-     */
-    protected $pageUid = 0;
-
-    /**
      * timeslotRepository
      *
      * @var    \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
@@ -49,7 +42,6 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 
     public function initializeAction()
     {
-        $this->pageUid = (int)\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('id');
         $this->entryRepository = $this->objectManager->get(EntryRepository::class);
         $this->timeslotRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository::class);
         $this->calendarRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Blueways\BwBookingmanager\Domain\Repository\CalendarRepository::class);
@@ -124,7 +116,6 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 
         $this->view->setTemplate($this->settings['template']['calendar']['show']);
         $this->view->assignMultiple([
-            'page' => $this->pageUid,
             'calendar' => $calendar,
             'timeslots' => $timeslots,
             'configuration' => $configuration,
