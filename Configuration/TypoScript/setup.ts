@@ -93,4 +93,4 @@ module.tx_bwbookingmanager {
   }
 }
 
-@import 'Setup/ddev.typoscript'
+@import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/ddev.typoscript'
