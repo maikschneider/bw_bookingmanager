@@ -3,3 +3,7 @@ node_modules
 .tscache
 vendor
 .idea
+public
+var
+config
+.ddev
