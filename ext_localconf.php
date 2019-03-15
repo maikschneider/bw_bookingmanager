@@ -9,6 +9,7 @@ call_user_func(
             [
                 'Calendar' => 'list, show',
                 'Entry' => 'new, create, show, delete',
+                'Api' => 'calendarList, calendarShow'
             ],
             // non-cacheable actions
             [

@@ -15,10 +15,13 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:section name="main">
 <f:flashMessages />
 
+	<f:link.action action="calendarList" controller="Api" pageType="555">API-Link</f:link.action>
+
 <ul class="tx-bw-bookingmanager-calendar-list">
 	<f:for each="{calendars}" as="calendar">
 			<li>
 				<f:link.action action="show" pageUid="{settings.showPid}" arguments="{calendar : calendar}"> {calendar.name}</f:link.action>
+				(<f:link.action action="calendarShow" pageType="555" controller="Api" arguments="{calendar : calendar}">API</f:link.action>)
 			</li>
 	</f:for>
 </ul>
