@@ -144,6 +144,22 @@
 			<trans-unit id="flashmessage.booking.success.message">
 				<target>Die Buchung war erfolgreich, Sie erhalten eine Bestätigungsmail.</target>
 			</trans-unit>
+			<trans-unit id="flashmessage.delete.success.title">
+				<source>Booking canceled</source>
+				<source>Buchung gelöscht</source>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.success.message">
+				<source>Your booking was successfully deleted.</source>
+				<source>Ihre Buchung wurde erfolgreich gelöscht.</source>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.error.title">
+				<source>Error deleting</source>
+				<target>Fehler beim Löschen</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.error.message">
+				<source>There was an error deleting your booking. Please get in touch with us.</source>
+				<target>Beim Löschen Ihrer Buchung ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Support.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

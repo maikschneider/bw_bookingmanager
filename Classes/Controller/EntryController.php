@@ -217,6 +217,19 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // check token und delete
         if ($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token'])) {
             $this->entryRepository->remove($entry);
+
+            $this->addFlashMessage(
+                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
+                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
+            );
+        } else {
+
+            $this->addFlashMessage(
+                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.message'),
+                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.title'),
+                \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+            );
         }
 
         // redirect to backPid

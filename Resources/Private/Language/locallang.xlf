@@ -129,6 +129,18 @@
 			<trans-unit id="flashmessage.booking.success.message">
 				<source>The booking was successfull. You will receive an confirmation email.</source>
 			</trans-unit>
+			<trans-unit id="flashmessage.delete.succes.title">
+				<source>Booking canceled</source>
+			</trans-unit>s
+			<trans-unit id="flashmessage.delete.success.message">
+				<source>Your booking was successfully deleted.</source>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.error.title">
+				<source>Error deleting</source>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.error.message">
+				<source>There was an error deleting your booking. Please get in touch with us.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
