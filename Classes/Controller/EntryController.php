@@ -100,9 +100,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
     {
-        $this->initializeAction();
-        $this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html',
-            '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $newEntry->generateToken();
         // override PID (just in case the storage PID differs from current calendar)
         $newEntry->setPid($newEntry->getCalendar()->getPid());
@@ -116,7 +113,21 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
         $notificationManager->notify();
 
+        $this->addFlashMessage(
+            $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.message'),
+            $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.title'),
+            \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
+        );
+
         $this->redirect('show', null, null, array('entry' => $newEntry, 'token' => $newEntry->getToken()));
+    }
+
+    /**
+     * @return mixed|\TYPO3\CMS\Lang\LanguageService
+     */
+    private function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
     }
 
     public function initializeAction()
@@ -189,6 +200,10 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->view->assign('entry', $entry);
     }
 
+    // public function errorAction() {
+    //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
+    // }
+
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
      * @return void
@@ -213,8 +228,4 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
         }
     }
-
-    // public function errorAction() {
-    //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
-    // }
 }

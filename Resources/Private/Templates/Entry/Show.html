@@ -6,7 +6,11 @@ your changes will be overwritten the next time you save the extension in the ext
 <f:section name="main">
     <h1>Entry Show</h1>
 
-    <f:flashMessages />
+	<f:flashMessages />
+
+	<p>Date: {entry.startDate->f:format.date()} - {entry.endDate->f:format.date()}</p>
+	<p>Name: {entry.name}</p>
+
 
     <f:if condition="{deleteable}">
         <f:form action="delete" name="entry" object="{entry}">

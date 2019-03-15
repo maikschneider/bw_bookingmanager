@@ -56,11 +56,8 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
     {
         $this->entry = clone $entry;
 
-        if ($this->entry->getCalendar()->isDirectBooking()) {
-            $this->validateDirectBooking();
-        } else {
-            $this->validateTimeslotBooking();
-        }
+        $this->validateDirectBooking();
+        $this->validateTimeslotBooking();
 
         if (sizeof($this->result->getErrors())) {
             return false;
@@ -70,11 +67,21 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
 
     private function validateDirectBooking()
     {
+        // skip if direct booking is not enabled
+        if (!$this->entry->getCalendar()->isDirectBooking()) {
+            return;
+        }
+
 
     }
 
     private function validateTimeslotBooking()
     {
+        // skip if no timeslot is attached
+        if (!$this->entry->getTimeslot()) {
+            return;
+        }
+
         $this->timeslot = clone $this->entry->getTimeslot();
 
         // timezone fix

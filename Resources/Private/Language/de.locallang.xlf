@@ -137,6 +137,13 @@
 				<source>Reason</source>
                 <target>Grund</target>
 			</trans-unit>
+			<trans-unit id="flashmessage.booking.success.title">
+				<source>Booking success</source>
+				<target>Buchung erfolgreich</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.booking.success.message">
+				<target>Die Buchung war erfolgreich, Sie erhalten eine Bestätigungsmail.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
