@@ -14,7 +14,7 @@ plugin.tx_bwbookingmanager_pi1 {
   }
 
   features {
-    skipDefaultArguments = 1
+    skipDefaultArguments = 0
     # if set to 1, the enable fields are ignored in BE context
     ignoreAllEnableFieldsInBe = 0
     # Should be on by default, but can be disabled if all action in the plugin are uncached
@@ -30,11 +30,6 @@ plugin.tx_bwbookingmanager_pi1 {
     calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
     entryPid = {$plugin.tx_bwbookingmanager_pi1.settings.entryPid}
     backPid = {$plugin.tx_bwbookingmanager_pi1.settings.backPid}
-    javascript {
-      jquery = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.jquery}
-      customValidators = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.customValidators}
-      bookingmanager = {$plugin.tx_bwbookingmanager_pi1.settings.javascript.bookingmanager}
-    }
 
     ajax {
       enable = {$plugin.tx_bwbookingmanager_pi1.settings.ajax.enable}

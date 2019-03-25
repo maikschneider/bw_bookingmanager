@@ -6,6 +6,7 @@ use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 class ApiController extends ActionController
 {
@@ -33,19 +34,42 @@ class ApiController extends ActionController
      */
     protected $entryRepository;
 
+    /**
+     * @var UriBuilder
+     */
+    protected $uriBuilder;
+
     public function calendarListAction()
     {
         $calendars = $this->calendarRepository->findAllIgnorePid();
+        $uris = [];
+
+        foreach ($calendars as $key => $calendar) {
+            $uris[$key] = $this->uriBuilder
+                ->setCreateAbsoluteUri(true)
+                ->setTargetPageType(555)
+                ->uriFor('calendarShow', ['calendar' => $calendar->getUid()], 'Api', 'BwBookingmanager', 'Pi1');
+        }
 
         $this->view->assign('calendars', $calendars);
-        $this->view->setVariablesToRender(array('calendars'));
+        $this->view->assign('uris', $uris);
+
+        $this->view->setVariablesToRender(array('calendars', 'uris'));
     }
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function calendarShowAction(Calendar $calendar)
     {
+        if(!$calendar) {
+            $this->throwStatus(404, 'Calendar not found');
+        }
+
         $startDate = new \DateTime('now');
         $startDate->setTime(0, 0, 0);
         $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : null;
@@ -58,7 +82,6 @@ class ApiController extends ActionController
 
         // query calendar, entries, timeslots
         /** @var Calendar $calendar */
-        $calendar = $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
         $entries = $this->entryRepository->findInRange($calendar, $dateConf);
         $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
 

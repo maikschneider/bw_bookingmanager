@@ -18,7 +18,7 @@
 
 	<f:render partial="FormErrors" arguments="{object:Entry}"/>
 
-	<f:form action="create" name="newEntry" object="{newEntry}">
+	<f:form action="create" name="newEntry" object="{newEntry}" pageType="555">
 
 		<f:form.hidden property="calendar" value="{newEntry.calendar}"/>
 		<f:form.hidden property="timeslot" value="{newEntry.timeslot}"/>

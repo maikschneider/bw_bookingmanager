@@ -170,21 +170,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
             }
         }
-
-        // include javascript
-        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Page\\PageRenderer');
-        if ($this->settings['javascript']['jquery']) {
-            $jqueryJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['jquery']);
-            $pageRenderer->addJsFooterFile($jqueryJs, null, false, false, '', true);
-        }
-        if ($this->settings['javascript']['customValidators']) {
-            $customValidators = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['customValidators']);
-            $pageRenderer->addJsFooterFile($customValidators, null, true, false, '', true);
-        }
-        if ($this->settings['javascript']['bookingmanager']) {
-            $bookingmanagerJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['bookingmanager']);
-            $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
-        }
     }
 
     /**
