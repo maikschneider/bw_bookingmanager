@@ -27,12 +27,12 @@
 			"php": "7.2"
 		}
 	},
-	"license": "MIT",
+	"license": "proprietary",
 	"authors": [
 		{
 			"name": "Maik Schneider",
 			"email": "m.schneider@blueways.de",
-			"homepage": "http://blueways.de",
+			"homepage": "https://www.blueways.de",
 			"role": "Developer"
 		}
 	],
