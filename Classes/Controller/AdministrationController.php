@@ -181,7 +181,9 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList($this->getBackendUser()->groupData['tables_modify'],
                     $tableConfiguration['table'])
             ) {
-                $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+                // @TODO repair translation
+                //$title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+                $title = $tableConfiguration['label'];
                 $viewButton = $buttonBar->makeLinkButton()
                     ->setHref($uriBuilder->reset()->setRequest($this->request)->uriFor($tableConfiguration['action'],
                         [], 'Administration'))
