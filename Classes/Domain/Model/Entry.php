@@ -45,7 +45,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * prename
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=2, maximum=50)
      */
     protected $prename = '';
 
@@ -53,7 +52,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * street
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $street = '';
 
@@ -61,7 +59,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * zip
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $zip = '';
 
@@ -69,7 +66,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * city
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $city = '';
 
@@ -77,7 +73,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * phone
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
      */
     protected $phone = '';
 
