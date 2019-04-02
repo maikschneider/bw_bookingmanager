@@ -4,6 +4,7 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
@@ -66,7 +67,7 @@ class ApiController extends ActionController
      */
     public function calendarShowAction(Calendar $calendar)
     {
-        if(!$calendar) {
+        if (!$calendar) {
             $this->throwStatus(404, 'Calendar not found');
         }
 
@@ -96,5 +97,83 @@ class ApiController extends ActionController
         ]);
 
         $this->view->setVariablesToRender(array('configuration'));
+    }
+
+    public function initializeEntryCreateAction()
+    {
+        if ($this->arguments->hasArgument('newEntry')) {
+            // allow creation of Entry
+            $propertyMappingConfiguration = $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration();
+            $propertyMappingConfiguration->allowAllProperties();
+            $propertyMappingConfiguration->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                true);
+
+            // convert timestamps
+            $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(
+                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'U'
+            );
+            $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(
+                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
+                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'U'
+            );
+
+            // set new validator
+            $newEntry = $this->request->getArgument('newEntry');
+            $calendar = $this->calendarRepository->findByIdentifier($newEntry['calendar']);
+            $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
+
+            $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
+            $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
+            $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
+            $validatorConjunction->addValidator($entryValidator);
+
+            $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
+
+            $newEntry = $this->arguments['newEntry'];
+            $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
+
+        }
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
+     * @Extbase\IgnoreValidation("newEntry")
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
+    public function entryCreateAction($newEntry)
+    {
+        $newEntry->generateToken();
+        // override PID (just in case the storage PID differs from current calendar)
+        $newEntry->setPid($newEntry->getCalendar()->getPid());
+        $this->entryRepository->add($newEntry);
+
+        // persist by hand to get uid field and make redirect possible
+        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager->persistAll();
+
+        $this->view->assign('entry', $newEntry);
+        $this->view->setVariablesToRender(array('entry'));
+    }
+
+    public function errorAction()
+    {
+        if ($this->request->getControllerActionName() === "entryCreate") {
+            $errors = $this->arguments->validate()->forProperty('newEntry')->getFlattenedErrors();
+
+            $errors = array_map(function($error){
+                return $error[0]->getMessage();
+            }, $errors);
+
+            $content = [
+                'errors:' => $errors
+            ];
+
+            $this->throwStatus(406, 'Validation failed', json_encode($content));
+
+        }
     }
 }
