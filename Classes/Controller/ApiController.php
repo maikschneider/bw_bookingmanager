@@ -23,20 +23,12 @@ class ApiController extends ActionController
      * @var array
      */
     protected $configuration = [
-        'entry' => [
-            '_descendAll' => [
-                '_exclude' => ['token']
-            ]
-        ],
         'newEntry' => [
-            '_descendAll' => [
-                '_exclude' => ['token']
-            ]
-        ],
-        'Entry' => [
-            '_descendAll' => [
-                '_exclude' => ['token']
-            ]
+            '_exclude' => ['token', 'confirmed'],
+            '_descend' => [
+                'timeslot' => [],
+                'calendar' => []
+            ],
         ]
     ];
 
@@ -203,8 +195,9 @@ class ApiController extends ActionController
         $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
 
-        $this->view->assign('entry', $newEntry);
-        $this->view->setVariablesToRender(array('entry'));
+        $this->view->setConfiguration($this->configuration);
+        $this->view->assign('newEntry', $newEntry);
+        $this->view->setVariablesToRender(array('newEntry'));
     }
 
     /**
