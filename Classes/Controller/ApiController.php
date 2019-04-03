@@ -133,6 +133,7 @@ class ApiController extends ActionController
                 true);
 
             // set Entry class name from calendar constant
+            /** @var array $newEntry */
             $newEntry = $this->request->getArgument('newEntry');
             $calendar = $this->calendarRepository->findByIdentifier($newEntry['calendar']);
             $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
