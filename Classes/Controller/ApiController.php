@@ -109,9 +109,10 @@ class ApiController extends ActionController
 
         $this->view->assignMultiple([
             'configuration' => $configuration,
+            'calendar' => $calendar
         ]);
 
-        $this->view->setVariablesToRender(array('configuration'));
+        $this->view->setVariablesToRender(array('configuration', 'calendar'));
     }
 
     public function initializeEntryCreateAction()
