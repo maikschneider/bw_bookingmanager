@@ -116,47 +116,49 @@ class ApiController extends ActionController
 
     public function initializeEntryCreateAction()
     {
-        if ($this->arguments->hasArgument('newEntry')) {
-
-            // allow creation of Entry
-            $propertyMappingConfiguration = $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration();
-            $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
-                PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
-                true);
-
-            // set Entry class name from calendar constant
-            /** @var array $newEntry */
-            $newEntry = $this->request->getArgument('newEntry');
-            $calendar = $this->calendarRepository->findByIdentifier((int)$newEntry['calendar']);
-            if (!$calendar) {
-                $content = ['errors' => ['calendar' => 'calendar not found']];
-                $this->throwStatus(406, 'Validation failed', json_encode($content));
-            }
-            $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
-            $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
-                PersistentObjectConverter::CONFIGURATION_TARGET_TYPE, $entityClass);
-
-            // convert timestamps
-            $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(DateTimeConverter::class,
-                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
-                'U'
-            );
-            $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(DateTimeConverter::class,
-                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
-                'U'
-            );
-
-            // set allowed properties
-            $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields($entityClass));
-            $propertyMappingConfiguration->skipUnknownProperties();
-
-            // set validator
-            $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
-            $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
-            $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
-            $validatorConjunction->addValidator($entryValidator);
-            $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
+        if (!$this->arguments->hasArgument('newEntry')) {
+            $content = ['errors' => ['entry' => 'no data for new entry given']];
+            $this->throwStatus(406, 'Validation failed', json_encode($content));
         }
+
+        // allow creation of Entry
+        $propertyMappingConfiguration = $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration();
+        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
+            PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+            true);
+
+        // set Entry class name from calendar constant
+        /** @var array $newEntry */
+        $newEntry = $this->request->getArgument('newEntry');
+        $calendar = $this->calendarRepository->findByIdentifier((int)$newEntry['calendar']);
+        if (!$calendar) {
+            $content = ['errors' => ['calendar' => 'calendar not found']];
+            $this->throwStatus(406, 'Validation failed', json_encode($content));
+        }
+        $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
+        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
+            PersistentObjectConverter::CONFIGURATION_TARGET_TYPE, $entityClass);
+
+        // convert timestamps
+        $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(DateTimeConverter::class,
+            DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+            'U'
+        );
+        $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(DateTimeConverter::class,
+            DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+            'U'
+        );
+
+        // set allowed properties
+        $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields($entityClass));
+        $propertyMappingConfiguration->skipUnknownProperties();
+
+        // set validator
+        $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
+        $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
+        $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
+        $validatorConjunction->addValidator($entryValidator);
+        $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
     }
 
     private function getAllowedEntryFields($entityClass)
