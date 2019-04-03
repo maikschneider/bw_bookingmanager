@@ -127,7 +127,11 @@ class ApiController extends ActionController
             // set Entry class name from calendar constant
             /** @var array $newEntry */
             $newEntry = $this->request->getArgument('newEntry');
-            $calendar = $this->calendarRepository->findByIdentifier($newEntry['calendar']);
+            $calendar = $this->calendarRepository->findByIdentifier((int)$newEntry['calendar']);
+            if (!$calendar) {
+                $content = ['errors' => ['calendar' => 'calendar not found']];
+                $this->throwStatus(406, 'Validation failed', json_encode($content));
+            }
             $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
             $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
                 PersistentObjectConverter::CONFIGURATION_TARGET_TYPE, $entityClass);
@@ -215,7 +219,7 @@ class ApiController extends ActionController
             }, $errors);
 
             $content = [
-                'errors:' => $errors
+                'errors' => $errors
             ];
 
             $this->throwStatus(406, 'Validation failed', json_encode($content));
