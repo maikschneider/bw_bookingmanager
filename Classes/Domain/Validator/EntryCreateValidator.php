@@ -56,6 +56,10 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
     {
         $this->entry = clone $entry;
 
+        if (!$this->timeslot && !$this->entry->getCalendar()->isDirectBooking()) {
+            $this->addError('Direct booking is not allowed', 1526170536);
+        }
+
         $this->validateDirectBooking();
         $this->validateTimeslotBooking();
 
@@ -65,6 +69,9 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         return true;
     }
 
+    /**
+     * Validate if calendar is bookable in the specified time
+     */
     private function validateDirectBooking()
     {
         // skip if direct booking is not enabled
@@ -72,7 +79,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
             return;
         }
 
-
+        // @TODO: Implement direct booking validation
     }
 
     private function validateTimeslotBooking()

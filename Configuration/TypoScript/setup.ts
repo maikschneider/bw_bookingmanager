@@ -88,4 +88,5 @@ module.tx_bwbookingmanager {
   }
 }
 
+@import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/config.typoscript'
 @import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/ddev.typoscript'

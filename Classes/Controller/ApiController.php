@@ -4,10 +4,12 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
+use ReflectionClass;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
+use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 
 class ApiController extends ActionController
 {
@@ -16,6 +18,27 @@ class ApiController extends ActionController
      * @var string
      */
     protected $defaultViewObjectName = JsonView::class;
+
+    /**
+     * @var array
+     */
+    protected $configuration = [
+        'entry' => [
+            '_descendAll' => [
+                '_exclude' => ['token']
+            ]
+        ],
+        'newEntry' => [
+            '_descendAll' => [
+                '_exclude' => ['token']
+            ]
+        ],
+        'Entry' => [
+            '_descendAll' => [
+                '_exclude' => ['token']
+            ]
+        ]
+    ];
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
@@ -102,46 +125,70 @@ class ApiController extends ActionController
     public function initializeEntryCreateAction()
     {
         if ($this->arguments->hasArgument('newEntry')) {
+
             // allow creation of Entry
             $propertyMappingConfiguration = $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration();
-            $propertyMappingConfiguration->allowAllProperties();
-            $propertyMappingConfiguration->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter',
-                \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+            $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
+                PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
                 true);
 
-            // convert timestamps
-            $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(
-                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
-                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
-                'U'
-            );
-            $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(
-                'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
-                \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
-                'U'
-            );
-
-            // set new validator
+            // set Entry class name from calendar constant
             $newEntry = $this->request->getArgument('newEntry');
             $calendar = $this->calendarRepository->findByIdentifier($newEntry['calendar']);
             $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
+            $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
+                PersistentObjectConverter::CONFIGURATION_TARGET_TYPE, $entityClass);
 
+            // convert timestamps
+            $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(DateTimeConverter::class,
+                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'U'
+            );
+            $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(DateTimeConverter::class,
+                DateTimeConverter::CONFIGURATION_DATE_FORMAT,
+                'U'
+            );
+
+            // set allowed properties
+            $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields($entityClass));
+            $propertyMappingConfiguration->skipUnknownProperties();
+
+            // set validator
             $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
             $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
             $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
             $validatorConjunction->addValidator($entryValidator);
-
             $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
-
-            $newEntry = $this->arguments['newEntry'];
-            $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
-
         }
+    }
+
+    private function getAllowedEntryFields($entityClass)
+    {
+        $reflectionClass = $this->objectManager->get(ReflectionClass::class, $entityClass);
+        $entryFields = $reflectionClass->getProperties();
+        $entryFields = array_filter($entryFields, function ($obj) {
+            $excludeFields = [
+                'pid',
+                'uid',
+                '_localizedUid',
+                '_languageUid',
+                '_versionedUid',
+                'token',
+                'confirmed',
+                'crdate',
+            ];
+            return !in_array($obj->name, $excludeFields);
+        });
+
+        $entryFields = array_map(function ($field) {
+            return $field->name;
+        }, $entryFields);
+
+        return $entryFields;
     }
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
-     * @Extbase\IgnoreValidation("newEntry")
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function entryCreateAction($newEntry)
@@ -159,12 +206,17 @@ class ApiController extends ActionController
         $this->view->setVariablesToRender(array('entry'));
     }
 
+    /**
+     * @return string|void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
     public function errorAction()
     {
         if ($this->request->getControllerActionName() === "entryCreate") {
             $errors = $this->arguments->validate()->forProperty('newEntry')->getFlattenedErrors();
 
-            $errors = array_map(function($error){
+            $errors = array_map(function ($error) {
                 return $error[0]->getMessage();
             }, $errors);
 
@@ -173,7 +225,6 @@ class ApiController extends ActionController
             ];
 
             $this->throwStatus(406, 'Validation failed', json_encode($content));
-
         }
     }
 }
