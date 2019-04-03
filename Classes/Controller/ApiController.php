@@ -27,9 +27,13 @@ class ApiController extends ActionController
             '_exclude' => ['token', 'confirmed'],
             '_descend' => [
                 'timeslot' => [],
-                'calendar' => []
+                'calendar' => [],
+                'endDate' => [],
+                'startDate' => [],
+                'displayStartDate' => [],
+                'displayEndDate' => [],
             ],
-        ]
+        ],
     ];
 
     /**
@@ -112,6 +116,7 @@ class ApiController extends ActionController
             'calendar' => $calendar
         ]);
 
+        $this->view->setConfiguration($this->configuration);
         $this->view->setVariablesToRender(array('configuration', 'calendar'));
     }
 
