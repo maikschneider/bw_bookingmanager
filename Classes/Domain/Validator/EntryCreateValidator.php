@@ -56,7 +56,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
     {
         $this->entry = clone $entry;
 
-        if (!$this->timeslot && !$this->entry->getCalendar()->isDirectBooking()) {
+        if (!$this->entry->getTimeslot() && !$this->entry->getCalendar()->isDirectBooking()) {
             $this->addError('Direct booking is not allowed', 1526170536);
         }
 
