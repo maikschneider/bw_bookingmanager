@@ -131,7 +131,7 @@
 
 						<div class="calendar-view calendar-view--list">
 
-							<f:for each="{c.listView.days}" as="day">
+							<f:for each="{c.monthView.days}" as="day">
 
 								<f:variable name="isInThisDay" value=""/>
 								<f:variable name="isCurrentDay" value=""/>
@@ -193,7 +193,7 @@
 
 					<div id="calendar-tab-{c.calendar.uid}" class="calendar-tab {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}">
 
-						<f:for each="{c.listView.days}" as="day">
+						<f:for each="{c.monthView.days}" as="day">
 
 							<f:variable name="isInThisDay" value=""/>
 							<f:for each="{day.timeslots}" as="timeslot">
