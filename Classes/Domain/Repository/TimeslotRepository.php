@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -20,14 +22,25 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
      * @return array|\Blueways\BwBookingmanager\Domain\Model\Timeslot[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
     public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
     {
-        $timeslots = $this->findAllPossibleByDateRange($calendar, $dateConf->start, $dateConf->end);
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
-            $dateConf->start,
-            $dateConf->end);
-        return $timeslotManager->getTimeslots();
+        $cacheIdentifier = sha1($calendar->getUid() . $dateConf->start->getTimestamp() . $dateConf->end->getTimestamp());
+        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+
+        if (($timeslots = $cache->get($cacheIdentifier)) === FALSE) {
+
+            $timeslots = $this->findAllPossibleByDateRange($calendar, $dateConf->start, $dateConf->end);
+            $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
+                $dateConf->start,
+                $dateConf->end);
+            $timeslots = $timeslotManager->getTimeslots();
+
+            $cache->set($cacheIdentifier, $timeslots, ['calendar' . $calendar->getUid()], 2592000);
+        }
+
+        return $timeslots;
     }
 
     /**
