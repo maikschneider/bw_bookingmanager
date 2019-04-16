@@ -117,6 +117,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         // send mails
         $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
+        $notificationManager->setSettings($this->settings);
         $notificationManager->notify();
 
         $this->addFlashMessage(

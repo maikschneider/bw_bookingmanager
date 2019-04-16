@@ -36,14 +36,14 @@ plugin.tx_bwbookingmanager_pi1 {
       typeNum = {$plugin.tx_bwbookingmanager_pi1.settings.ajax.typeNum}
     }
 
-    email {
-      doSendConfirmation = {$plugin.tx_bwbookingmanager_pi1.settings.email.doSendConfirmation}
-      senderAddress = {$plugin.tx_bwbookingmanager_pi1.settings.email.senderAddress}
-      senderName = {$plugin.tx_bwbookingmanager_pi1.settings.email.senderName}
-      replytoAddress = {$plugin.tx_bwbookingmanager_pi1.settings.email.replytoAddress}
-      subject = {$plugin.tx_bwbookingmanager_pi1.settings.email.subject}
-      template = {$plugin.tx_bwbookingmanager_pi1.settings.email.template}
-      showUid = {$plugin.tx_bwbookingmanager_pi1.settings.email.showUid}
+    mail {
+      senderAddress = noreply@example.com
+      senderName = Example sender name
+      replytoAddress = noreply@example.com
+      subject = Example subject
+      template = Default
+      showUid =
+      doSendConfirmation = 1
     }
   }
 }

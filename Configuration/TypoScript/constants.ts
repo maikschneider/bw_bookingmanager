@@ -22,15 +22,5 @@ plugin.tx_bwbookingmanager_pi1 {
     ajax {
       typeNum = 555
     }
-
-    email {
-      senderAddress = noreply@example.com
-      senderName = Example sender name
-      replytoAddress = noreply@example.com
-      subject = Example subject
-      template = Default
-      showUid =
-      doSendConfirmation = 0
-    }
   }
 }

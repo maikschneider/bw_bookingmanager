@@ -13,6 +13,7 @@ namespace Blueways\BwBookingmanager\Helper;
  * @link     http://www.blueways.de
  */
 
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class NotificationManager
@@ -49,6 +50,15 @@ class NotificationManager
         $this->notifications = $entry->getCalendar()->getNotifications();
         $this->configurationManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Configuration\ConfigurationManager');
         $this->extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+    }
+
+    /**
+     * Override (Merge) settings from plugin settings with typoscript
+     * @param array $settings
+     */
+    public function setSettings(array $settings)
+    {
+        ArrayUtility::mergeRecursiveWithOverrule($this->extbaseFrameworkConfiguration['settings'], $settings);
     }
 
     public function notify()
