@@ -24,12 +24,13 @@ plugin.tx_bwbookingmanager_pi1 {
     }
 
     email {
-      senderAddress =
-      senderName =
-      replytoAddress =
-      subject =
-      template =
+      senderAddress = noreply@example.com
+      senderName = Example sender name
+      replytoAddress = noreply@example.com
+      subject = Example subject
+      template = Default
       showUid =
+      doSendConfirmation = 0
     }
   }
 }

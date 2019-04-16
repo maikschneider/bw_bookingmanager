@@ -4,6 +4,8 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Helper\NotificationManager;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use ReflectionClass;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
@@ -206,6 +208,10 @@ class ApiController extends ActionController
         // persist by hand to get uid field and make redirect possible
         $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
+
+        // send mails
+        $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);
+        $notificationManager->notify();
 
         $this->view->setConfiguration($this->configuration);
         $this->view->assign('newEntry', $newEntry);

@@ -37,6 +37,7 @@ plugin.tx_bwbookingmanager_pi1 {
     }
 
     email {
+      doSendConfirmation = {$plugin.tx_bwbookingmanager_pi1.settings.email.doSendConfirmation}
       senderAddress = {$plugin.tx_bwbookingmanager_pi1.settings.email.senderAddress}
       senderName = {$plugin.tx_bwbookingmanager_pi1.settings.email.senderName}
       replytoAddress = {$plugin.tx_bwbookingmanager_pi1.settings.email.replytoAddress}
