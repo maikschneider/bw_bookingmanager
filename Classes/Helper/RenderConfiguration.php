@@ -198,23 +198,6 @@ class RenderConfiguration
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot[] $timeslots
-     * @return bool
-     */
-    private function hasBookableTimeslots($timeslots)
-    {
-        $isBookable = false;
-        foreach ($timeslots as $timeslot) {
-            $slotIsBookable = $timeslot->getIsBookable();
-            if ($slotIsBookable) {
-                return true;
-            }
-        }
-
-        return $isBookable;
-    }
-
-    /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot[] $timeslots
      * @return float|int
      */
     private function getBookableTimeslotsStatus($timeslots)
