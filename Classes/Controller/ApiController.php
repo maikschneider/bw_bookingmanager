@@ -7,6 +7,7 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use ReflectionClass;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
@@ -113,6 +114,9 @@ class ApiController extends ActionController
         $calendarConfiguration->setEntries($entries);
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
+        //$manager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+        //$manager->getConfiguration($dateConf);
+
         $this->view->assignMultiple([
             'configuration' => $configuration,
             'calendar' => $calendar
@@ -208,6 +212,10 @@ class ApiController extends ActionController
         // persist by hand to get uid field and make redirect possible
         $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
+
+        // delete calendar cache
+        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache->flushByTag('calendar'.$newEntry->getCalendar()->getUid());
 
         // send mails
         $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);

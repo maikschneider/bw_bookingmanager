@@ -6,6 +6,7 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -97,6 +98,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
     public function createAction(\Blueways\BwBookingmanager\Domain\Model\Entry $newEntry)
     {
@@ -108,6 +110,10 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         // persist by hand to get uid field and make redirect possible
         $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
+
+        // delete calendar cache
+        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache->flushByTag('calendar' . $newEntry->getCalendar()->getUid());
 
         // send mails
         $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($newEntry);
@@ -196,11 +202,18 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
     public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {
         // check token und delete
         if ($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token'])) {
+
+            // delete calendar cache
+            $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+            $cache->flushByTag('calendar' . $entry->getCalendar()->getUid());
+
+            // delete entry
             $this->entryRepository->remove($entry);
 
             $this->addFlashMessage(
