@@ -36,8 +36,9 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $dateConf->start,
                 $dateConf->end);
             $timeslots = $timeslotManager->getTimeslots();
+            $tags = $timeslotManager->getCacheTags();
 
-            $cache->set($cacheIdentifier, $timeslots, ['calendar' . $calendar->getUid()], 2592000);
+            $cache->set($cacheIdentifier, $timeslots, $tags, 2592000);
         }
 
         return $timeslots;

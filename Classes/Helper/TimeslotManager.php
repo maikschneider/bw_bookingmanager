@@ -36,6 +36,11 @@ class TimeslotManager
     protected $filterCritera;
 
     /**
+     * @var array
+     */
+    protected $cacheTags = [];
+
+    /**
      * __construct
      *
      * @param $timeslots
@@ -53,6 +58,8 @@ class TimeslotManager
         $this->calendar = $calendar;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        // init cache tags with calendar
+        $this->cacheTags = ['calendar'.$calendar->getUid()];
     }
 
     /**
@@ -66,6 +73,14 @@ class TimeslotManager
         $this->filterEntries();
 
         return $this->timeslots;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCacheTags()
+    {
+        return $this->cacheTags;
     }
 
     /**
@@ -88,6 +103,9 @@ class TimeslotManager
             if ($repeatType === Timeslot::REPEAT_MONTHLY) {
                 $newTimeslots = array_merge($newTimeslots, $this->repeatMonthlyTimeslot($timeslot));
             }
+
+            // add timeslot to cache tags
+            $this->cacheTags[] = 'timeslot' . $timeslot->getUid();
         }
 
         $this->timeslots = array_merge($timeslots, $newTimeslots);
@@ -212,6 +230,9 @@ class TimeslotManager
             foreach ($timeslot->getEntries() as $entry) {
                 if ($entry->getCalendar()->getUid() === $this->calendar->getUid() && $entry->getStartDate() == $timeslotStartDate && $entry->getEndDate() == $timeslotEndDate) {
                     $entries->attach($entry);
+
+                    // add cache tag
+                    $this->cacheTags[] = 'entry'.$entry->getUid();
                 }
             };
             $timeslot->setEntries($entries);
