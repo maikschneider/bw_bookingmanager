@@ -71,6 +71,9 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         if (!$templateView) {
             $templateView = GeneralUtility::makeInstance(StandaloneView::class);
+            if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('bw_email')) {
+                $templateView = GeneralUtility::makeInstance('Blueways\BwEmail\View\EmailView');
+            }
             $templateView->setLayoutRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['layoutRootPaths.']);
             $templateView->setPartialRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['partialRootPaths.']);
             $templateView->setTemplateRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['templateRootPaths.']);

@@ -1,9 +1,9 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Helper;
 
 /**
  * This is fwefewfew
- *
  * PHP version 7.2
  *
  * @package  BwBookingManager
@@ -14,10 +14,11 @@ namespace Blueways\BwBookingmanager\Helper;
  */
 
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class NotificationManager
 {
+
     /**
      * @var \Blueways\BwBookingmanager\Domain\Model\Entry $entry
      */
@@ -54,6 +55,7 @@ class NotificationManager
 
     /**
      * Override (Merge) settings from plugin settings with typoscript
+     *
      * @param array $settings
      */
     public function setSettings(array $settings)
@@ -82,6 +84,36 @@ class NotificationManager
         $replyTo = $from;
 
         $this->sendMail($from, $to, $subject, $body, $replyTo);
+    }
+
+    private function getMailBody($templateName)
+    {
+        $emailView = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('bw_email')) {
+            $emailView = GeneralUtility::makeInstance('Blueways\BwEmail\View\EmailView');
+        }
+        $emailView->setLayoutRootPaths($this->extbaseFrameworkConfiguration['view']['layoutRootPaths']);
+        $emailView->setPartialRootPaths($this->extbaseFrameworkConfiguration['view']['partialRootPaths']);
+        $emailView->setTemplateRootPaths($this->extbaseFrameworkConfiguration['view']['templateRootPaths']);
+        $emailView->getRenderingContext()->setControllerName('Email');
+        $emailView->setTemplate($templateName);
+        $emailView->assign('entry', $this->entry);
+
+        $emailBody = $emailView->render();
+
+        return $emailBody;
+    }
+
+    private function sendMail($from, $to, $subject, $body, $replyTo)
+    {
+        $message = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+        $message->setTo($to)
+            ->setReplyTo($replyTo)
+            ->setFrom($from)
+            ->setSubject($subject)
+            ->setBody($body, 'text/html');
+
+        $message->send();
     }
 
     private function sendNotifications()
@@ -116,33 +148,6 @@ class NotificationManager
         $replyTo = $this->entry->getEmail();
 
         $this->sendMail($from, $to, $subject, $body, $replyTo);
-    }
-
-    private function sendMail($from, $to, $subject, $body, $replyTo)
-    {
-        $message = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
-        $message->setTo($to)
-            ->setReplyTo($replyTo)
-            ->setFrom($from)
-            ->setSubject($subject)
-            ->setBody($body, 'text/html');
-
-        $message->send();
-    }
-
-    private function getMailBody($templateName)
-    {
-        $emailView = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
-        $emailView->setLayoutRootPaths($this->extbaseFrameworkConfiguration['view']['layoutRootPaths']);
-        $emailView->setPartialRootPaths($this->extbaseFrameworkConfiguration['view']['partialRootPaths']);
-        $emailView->setTemplateRootPaths($this->extbaseFrameworkConfiguration['view']['templateRootPaths']);
-        $emailView->getRenderingContext()->setControllerName('Email');
-        $emailView->setTemplate($templateName);
-        $emailView->assign('entry', $this->entry);
-
-        $emailBody = $emailView->render();
-
-        return $emailBody;
     }
 
     public function getEntry()
