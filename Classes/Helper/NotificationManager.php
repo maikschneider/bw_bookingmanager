@@ -132,12 +132,10 @@ class NotificationManager
 
     private function getMailBody($templateName)
     {
-        $extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-
         $emailView = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
-        $emailView->setLayoutRootPaths($extbaseFrameworkConfiguration['view']['layoutRootPaths']);
-        $emailView->setPartialRootPaths($extbaseFrameworkConfiguration['view']['partialRootPaths']);
-        $emailView->setTemplateRootPaths($extbaseFrameworkConfiguration['view']['templateRootPaths']);
+        $emailView->setLayoutRootPaths($this->extbaseFrameworkConfiguration['view']['layoutRootPaths']);
+        $emailView->setPartialRootPaths($this->extbaseFrameworkConfiguration['view']['partialRootPaths']);
+        $emailView->setTemplateRootPaths($this->extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->getRenderingContext()->setControllerName('Email');
         $emailView->setTemplate($templateName);
         $emailView->assign('entry', $this->entry);
