@@ -43,7 +43,7 @@ plugin.tx_bwbookingmanager_pi1 {
       subject = Example subject
       template = Default
       showUid =
-      doSendConfirmation = 1
+      doSendConfirmation = 0
     }
   }
 }
