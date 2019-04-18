@@ -5,7 +5,6 @@ namespace Blueways\BwBookingmanager\Controller;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
-use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use ReflectionClass;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -114,6 +113,27 @@ class ApiController extends ActionController
         $calendarConfiguration->setEntries($entries);
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
+        // links for next / prev show action
+        $configuration['next']['link'] = $this->uriBuilder
+            ->setCreateAbsoluteUri(true)
+            ->setTargetPageType(555)
+            ->uriFor('calendarShow', [
+                'calendar' => $calendar->getUid(),
+                'day' => $configuration['next']['day'],
+                'month' => $configuration['next']['month'],
+                'year' => $configuration['next']['year']
+            ], 'Api', 'BwBookingmanager', 'Pi1');
+
+        $configuration['prev']['link'] = $this->uriBuilder
+            ->setCreateAbsoluteUri(true)
+            ->setTargetPageType(555)
+            ->uriFor('calendarShow', [
+                'calendar' => $calendar->getUid(),
+                'day' => $configuration['prev']['day'],
+                'month' => $configuration['prev']['month'],
+                'year' => $configuration['prev']['year']
+            ], 'Api', 'BwBookingmanager', 'Pi1');
+
         //$manager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
         //$manager->getConfiguration($dateConf);
 
@@ -201,6 +221,7 @@ class ApiController extends ActionController
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      */
     public function entryCreateAction($newEntry)
     {
@@ -215,7 +236,7 @@ class ApiController extends ActionController
 
         // delete calendar cache
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
-        $cache->flushByTag('calendar'.$newEntry->getCalendar()->getUid());
+        $cache->flushByTag('calendar' . $newEntry->getCalendar()->getUid());
 
         // send mails
         $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);
