@@ -144,8 +144,8 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             $calendarsArray[$key]['calendar'] = $calendar;
             $calendarsArray[$key]['monthView'] = $renderConfiguration->getRenderConfiguration();
-            $calendarsArray[$key]['monthView']['prevMonth'] = $this->getWizardUriForNewDate($dateConf->next);
-            $calendarsArray[$key]['monthView']['nextMonth'] = $this->getWizardUriForNewDate($dateConf->prev);
+            $calendarsArray[$key]['monthView']['prevMonth'] = $this->getWizardUriForNewDate($dateConf->prev);
+            $calendarsArray[$key]['monthView']['nextMonth'] = $this->getWizardUriForNewDate($dateConf->next);
             //$calendarsArray[$key]['listView'] = $renderConfiguration->getConfigurationForDays(150);
         }
 
