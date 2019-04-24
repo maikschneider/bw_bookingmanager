@@ -2,8 +2,6 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -26,20 +24,11 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
     {
-        $cacheIdentifier = sha1($calendar->getUid() . $dateConf->start->getTimestamp() . $dateConf->end->getTimestamp());
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
-
-        if (($timeslots = $cache->get($cacheIdentifier)) === FALSE) {
-
-            $timeslots = $this->findAllPossibleByDateRange($calendar, $dateConf->start, $dateConf->end);
-            $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
-                $dateConf->start,
-                $dateConf->end);
-            $timeslots = $timeslotManager->getTimeslots();
-            $tags = $timeslotManager->getCacheTags();
-
-            $cache->set($cacheIdentifier, $timeslots, $tags, 2592000);
-        }
+        $timeslots = $this->findAllPossibleByDateRange($calendar, $dateConf->start, $dateConf->end);
+        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
+            $dateConf->start,
+            $dateConf->end);
+        $timeslots = $timeslotManager->getTimeslots();
 
         return $timeslots;
     }

@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Controller;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use ReflectionClass;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -102,16 +103,8 @@ class ApiController extends ActionController
         }
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
-        // query calendar, entries, timeslots
-        /** @var Calendar $calendar */
-        $entries = $this->entryRepository->findInRange($calendar, $dateConf);
-        $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
-
-        // build render configuration
-        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
-        $calendarConfiguration->setTimeslots($timeslots);
-        $calendarConfiguration->setEntries($entries);
-        $configuration = $calendarConfiguration->getRenderConfiguration();
+        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+        $configuration = $calendarManager->getConfiguration($dateConf);
 
         // links for next / prev show action
         $configuration['next']['link'] = $this->uriBuilder
@@ -133,9 +126,6 @@ class ApiController extends ActionController
                 'month' => $configuration['prev']['month'],
                 'year' => $configuration['prev']['year']
             ], 'Api', 'BwBookingmanager', 'Pi1');
-
-        //$manager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
-        //$manager->getConfiguration($dateConf);
 
         $this->view->assignMultiple([
             'configuration' => $configuration,
