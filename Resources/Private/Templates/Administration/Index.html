@@ -31,9 +31,18 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 				<f:be.infobox title="Filter options" state="-1" iconName="filter" disableIcon="false">
 
 					<f:form class="settings" method="GET" name="demand" object="{demand}">
-						<input type="hidden" name="M" value="web_BwBookingmanagerTxBookingmanagerM1"> <input type="hidden"
-																																																 name="moduleToken"
-																																																 value="{moduleToken}">
+
+						<f:if condition="{is9up}">
+							<f:then>
+								<input type="hidden" name="route" value="/web/BwBookingmanagerTxBookingmanagerM1/">
+								<input type="hidden" name="token"  value="{moduleToken}">
+							</f:then>
+							<f:else>
+								<input type="hidden" name="M" value="web_BwBookingmanagerTxBookingmanagerM1">
+								<input type="hidden" name="moduleToken" value="{moduleToken}">
+							</f:else>
+						</f:if>
+
 						<input type="hidden" name="id" value="{page}">
 
 						<div class="row form-horizontal">
@@ -50,7 +59,7 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 																		 property="calendarUid"
 																		 id="calendarUid"
 																		 options="{calendars}"
-																		 optionLabelField="name" />
+																		 optionLabelField="name"/>
 										</div>
 									</div>
 								</div>

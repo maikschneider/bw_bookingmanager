@@ -97,6 +97,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
         $this->createMenu();
         $this->createButtons();
+        $view->assign('is9up', self::is9up());
     }
 
     /**
@@ -294,12 +295,19 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      */
     protected function getToken($tokenOnly = false)
     {
-        $token = FormProtectionFactory::get()->generateToken('moduleCall', 'web_BwBookingmanagerTxBookingmanagerM1');
+        if (self::is9up()) {
+            $tokenParameterName = 'token';
+            $token = FormProtectionFactory::get('backend')->generateToken('route', 'web_BwBookingmanagerTxBookingmanagerM1');
+        } else {
+            $tokenParameterName = 'moduleToken';
+            $token = FormProtectionFactory::get()->generateToken('moduleCall', 'web_BwBookingmanagerTxBookingmanagerM1');
+        }
+
         if ($tokenOnly) {
             return $token;
-        } else {
-            return '&moduleToken=' . $token;
         }
+
+        return '&' . $tokenParameterName . '=' . $token;
     }
 
     public function timeslotAction()
@@ -343,7 +351,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $pid = (int)$this->tsConfiguration['defaultPid.'][$table];
         }
 
-        $returnUrl = 'index.php?M=web_BwBookingmanagerTxBookingmanagerM1&id=' . $this->pageUid . $this->getToken();
+        if (self::is9up()) {
+            $returnUrl = 'index.php?route=/web/BwBookingmanagerTxBookingmanagerM1/';
+        } else {
+            $returnUrl = 'index.php?M=web_BwBookingmanagerTxBookingmanagerM1';
+        }
+
+        $returnUrl .= '&id=' . $this->pageUid . $this->getToken();
         $url = BackendUtilityCore::getModuleUrl('record_edit', [
             'edit[' . $table . '][' . $pid . ']' => 'new',
             'returnUrl' => $returnUrl
@@ -365,6 +379,14 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     public function newBlockslotAction()
     {
         $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_blockslot');
+    }
+
+    /**
+     * @return bool
+     */
+    private static function is9up(): bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
     }
 
 }
