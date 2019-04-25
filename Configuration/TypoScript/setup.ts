@@ -12,6 +12,15 @@ plugin.tx_bwbookingmanager {
     callDefaultActionIfActionCantBeResolved = 1
   }
 
+  view {
+    templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
+    templateRootPaths.1 = {$plugin.tx_bwbookingmanager.view.templateRootPath}
+    partialRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Partials/
+    partialRootPaths.1 = {$plugin.tx_bwbookingmanager.view.partialRootPath}
+    layoutRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Layouts/
+    layoutRootPaths.1 = {$plugin.tx_bwbookingmanager.view.layoutRootPath}
+  }
+
   settings {
     mail {
       senderAddress = noreply@example.com
@@ -29,14 +38,6 @@ plugin.tx_bwbookingmanager {
 ### CONTENT PLUGIN ###
 ######################
 plugin.tx_bwbookingmanager_pi1 {
-  view {
-    templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
-    templateRootPaths.1 = {$plugin.tx_bwbookingmanager_pi1.view.templateRootPath}
-    partialRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Partials/
-    partialRootPaths.1 = {$plugin.tx_bwbookingmanager_pi1.view.partialRootPath}
-    layoutRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Layouts/
-    layoutRootPaths.1 = {$plugin.tx_bwbookingmanager_pi1.view.layoutRootPath}
-  }
 
   features {
     skipDefaultArguments = 0
