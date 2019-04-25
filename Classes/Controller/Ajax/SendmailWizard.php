@@ -74,9 +74,9 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('bw_email')) {
                 $templateView = GeneralUtility::makeInstance('Blueways\BwEmail\View\EmailView');
             }
-            $templateView->setLayoutRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['layoutRootPaths.']);
-            $templateView->setPartialRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['partialRootPaths.']);
-            $templateView->setTemplateRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['view.']['templateRootPaths.']);
+            $templateView->setLayoutRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager.']['view.']['layoutRootPaths.']);
+            $templateView->setPartialRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager.']['view.']['partialRootPaths.']);
+            $templateView->setTemplateRootPaths($this->typoscript['plugin.']['tx_bwbookingmanager.']['view.']['templateRootPaths.']);
         }
         $this->templateView = $templateView;
     }
@@ -117,12 +117,12 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getDefaultEmailSettings()
     {
         $defaults = array(
-            'senderAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderAddress'],
-            'senderName' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderName'],
-            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'] ? $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['replytoAddress'] : $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['senderAddress'],
-            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['subject'],
-            'emailTemplate' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['template'],
-            'showUid' => $this->typoscript['plugin.']['tx_bwbookingmanager_pi1.']['settings.']['email.']['showUid'] ?? null,
+            'senderAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['senderAddress'],
+            'senderName' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['senderName'],
+            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['replytoAddress'] ? $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['replytoAddress'] : $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['senderAddress'],
+            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['subject'],
+            'emailTemplate' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['template'],
+            'showUid' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['showUid'] ?? null,
             'recipientAddress' => '',
             'recipientName' => '',
         );
