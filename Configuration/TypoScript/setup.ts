@@ -86,6 +86,9 @@ BOOKINGMANAGER {
   }
 }
 
+######################
+### BACKEND MODULE ###
+######################
 module.tx_bwbookingmanager {
   settings {
     tableFields {

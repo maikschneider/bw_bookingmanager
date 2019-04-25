@@ -1,4 +1,7 @@
 plugin.tx_bwbookingmanager {
+  persistence {
+    storagePid =
+  }
   view {
     templateRootPath =
     partialRootPath =
@@ -7,9 +10,6 @@ plugin.tx_bwbookingmanager {
 }
 
 plugin.tx_bwbookingmanager_pi1 {
-  persistence {
-    storagePid =
-  }
   settings {
     showPid =
     calendarPid =
