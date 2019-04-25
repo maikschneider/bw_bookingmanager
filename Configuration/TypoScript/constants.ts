@@ -6,7 +6,6 @@ plugin.tx_bwbookingmanager_pi1 {
   }
 
   persistence {
-    # cat=plugin.tx_bwbookingmanager_pi1//a; type=string; label=Default storage PID
     storagePid =
   }
 
@@ -15,9 +14,5 @@ plugin.tx_bwbookingmanager_pi1 {
     calendarPid =
     entryPid =
     backPid =
-
-    ajax {
-      typeNum = 555
-    }
   }
 }

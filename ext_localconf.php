@@ -8,8 +8,7 @@ call_user_func(
             'Pi1',
             [
                 'Calendar' => 'list, show',
-                'Entry' => 'new, create, show, delete',
-                'Api' => 'calendarList, calendarShow, entryCreate'
+                'Entry' => 'new, create, show, delete'
             ],
             // non-cacheable actions
             [
@@ -17,6 +16,16 @@ call_user_func(
                 'Timeslot' => '',
                 'Entry' => 'create',
             ]
+        );
+
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Blueways.BwBookingmanager',
+            'Api',
+            [
+                'Api' => 'calendarList, calendarShow, calendarShowDate, entryCreate'
+            ],
+            // non-cacheable actions
+            []
         );
 
         // notification hooks

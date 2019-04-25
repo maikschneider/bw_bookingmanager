@@ -82,12 +82,14 @@ class RenderConfiguration
                 'day' => $this->dateConf->next->format('j'),
                 'month' => $this->dateConf->next->format('m'),
                 'year' => $this->dateConf->next->format('Y'),
+                'link' => '/api/calendar/' . $this->calendar->getUid() . '/' . $this->dateConf->next->format('j') . '-' . $this->dateConf->next->format('m') . '-' . $this->dateConf->next->format('Y') . '.json'
             ],
             'prev' => [
                 'date' => $this->dateConf->prev,
                 'day' => $this->dateConf->prev->format('j'),
                 'month' => $this->dateConf->prev->format('m'),
                 'year' => $this->dateConf->prev->format('Y'),
+                'link' => '/api/calendar/' . $this->calendar->getUid() . '/' . $this->dateConf->prev->format('j') . '-' . $this->dateConf->prev->format('m') . '-' . $this->dateConf->prev->format('Y') . '.json'
             ],
         );
     }
@@ -191,6 +193,10 @@ class RenderConfiguration
         return $day < $now;
     }
 
+    /**
+     * @param \DateTime $day
+     * @return bool
+     */
     private function isSelectedDay($day)
     {
         return $this->dateConf->startOrig->format('d.m.Y') === $day->format('d.m.Y');
@@ -202,11 +208,13 @@ class RenderConfiguration
      */
     private function getBookableTimeslotsStatus($timeslots)
     {
-        if(!sizeof($timeslots)) return 0;
+        if (!sizeof($timeslots)) {
+            return 0;
+        }
 
         $bookableCount = 0;
-        foreach($timeslots as $timeslot) {
-            if($timeslot->getIsBookable()) {
+        foreach ($timeslots as $timeslot) {
+            if ($timeslot->getIsBookable()) {
                 $bookableCount++;
             }
         }

@@ -65,67 +65,51 @@ class ApiController extends ActionController
     public function calendarListAction()
     {
         $calendars = $this->calendarRepository->findAllIgnorePid();
-        $uris = [];
-
-        foreach ($calendars as $key => $calendar) {
-            $uris[$key] = $this->uriBuilder
-                ->setCreateAbsoluteUri(true)
-                ->setTargetPageType(555)
-                ->uriFor('calendarShow', ['calendar' => $calendar->getUid()], 'Api', 'BwBookingmanager', 'Pi1');
-        }
 
         $this->view->assign('calendars', $calendars);
-        $this->view->assign('uris', $uris);
-
-        $this->view->setVariablesToRender(array('calendars', 'uris'));
+        $this->view->setVariablesToRender(array('calendars'));
     }
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \Exception
      */
     public function calendarShowAction(Calendar $calendar)
     {
-        if (!$calendar) {
-            $this->throwStatus(404, 'Calendar not found');
-        }
-
         $startDate = new \DateTime('now');
         $startDate->setTime(0, 0, 0);
-        $day = $this->request->hasArgument('day') ? $this->request->getArgument('day') : null;
-        $month = $this->request->hasArgument('month') ? $this->request->getArgument('month') : null;
-        $year = $this->request->hasArgument('year') ? $this->request->getArgument('year') : null;
-        if ($day && $month && $year) {
-            $startDate = $startDate->createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
-        }
+
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
         $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
         $configuration = $calendarManager->getConfiguration($dateConf);
 
-        // links for next / prev show action
-        $configuration['next']['link'] = $this->uriBuilder
-            ->setCreateAbsoluteUri(true)
-            ->setTargetPageType(555)
-            ->uriFor('calendarShow', [
-                'calendar' => $calendar->getUid(),
-                'day' => $configuration['next']['day'],
-                'month' => $configuration['next']['month'],
-                'year' => $configuration['next']['year']
-            ], 'Api', 'BwBookingmanager', 'Pi1');
+        $this->view->assignMultiple([
+            'configuration' => $configuration,
+            'calendar' => $calendar
+        ]);
 
-        $configuration['prev']['link'] = $this->uriBuilder
-            ->setCreateAbsoluteUri(true)
-            ->setTargetPageType(555)
-            ->uriFor('calendarShow', [
-                'calendar' => $calendar->getUid(),
-                'day' => $configuration['prev']['day'],
-                'month' => $configuration['prev']['month'],
-                'year' => $configuration['prev']['year']
-            ], 'Api', 'BwBookingmanager', 'Pi1');
+        $this->view->setConfiguration($this->configuration);
+        $this->view->setVariablesToRender(array('configuration', 'calendar'));
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param int $day
+     * @param int $month
+     * @param int $year
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year)
+    {
+        $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+
+        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+        $configuration = $calendarManager->getConfiguration($dateConf);
 
         $this->view->assignMultiple([
             'configuration' => $configuration,
