@@ -118,7 +118,7 @@ class RenderConfiguration
             $days[$i]['bookableTimeslotsStatus'] = $this->getBookableTimeslotsStatus($days[$i]['timeslots']);
             $days[$i]['hasBookableTimeslots'] = (boolean)$days[$i]['bookableTimeslotsStatus'];
             $days[$i]['isDirectBookable'] = $this->isDirectBookable($days[$i]['entries']);
-            $days[$i]['isBookable'] = (!$days[$i]['isInPast'] && ($days[$i]['hasBookableTimeslots'] || $days[$i]['isDirectBookable']));
+            $days[$i]['isBookable'] = ((!$days[$i]['isInPast'] || $days[$i]['isCurrentDay']) && ($days[$i]['hasBookableTimeslots'] || $days[$i]['isDirectBookable']));
 
             $date->modify('+1 day');
         }
