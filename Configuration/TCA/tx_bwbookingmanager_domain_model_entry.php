@@ -136,7 +136,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim',
+                'eval' => 'trim,required',
             ],
         ],
         'prename' => [
@@ -190,7 +190,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim',
+                'eval' => 'trim,required',
             ],
         ],
         'newsletter' => [
@@ -252,6 +252,7 @@ return [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int',
+                'default' => 1
             ],
         ],
         'timeslot' => [
