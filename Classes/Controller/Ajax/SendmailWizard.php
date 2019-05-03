@@ -117,12 +117,12 @@ class SendmailWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected function getDefaultEmailSettings()
     {
         $defaults = array(
-            'senderAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['senderAddress'],
-            'senderName' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['senderName'],
-            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['replytoAddress'] ? $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['replytoAddress'] : $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['senderAddress'],
-            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['subject'],
-            'emailTemplate' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['template'],
-            'showUid' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['email.']['showUid'] ?? null,
+            'senderAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['senderAddress'],
+            'senderName' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['senderName'],
+            'replytoAddress' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['replytoAddress'] ? $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['replytoAddress'] : $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['senderAddress'],
+            'subject' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['subject'],
+            'emailTemplate' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['template'],
+            'showUid' => $this->typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['showUid'] ?? null,
             'recipientAddress' => '',
             'recipientName' => '',
         );
