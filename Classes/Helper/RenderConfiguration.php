@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * PHP version 7.2
@@ -145,6 +147,12 @@ class RenderConfiguration
                 $timeslots[] = $timeslot;
             }
         }
+
+        // sort timeslots
+        usort($timeslots, function(Timeslot $a, Timeslot $b) {
+           return $a->getStartDate() > $b->getStartDate();
+        });
+
         return $timeslots;
     }
 
