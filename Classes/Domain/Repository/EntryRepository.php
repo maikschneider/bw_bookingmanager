@@ -17,6 +17,12 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
     public function findInRange(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
         DateConf $dateConf
