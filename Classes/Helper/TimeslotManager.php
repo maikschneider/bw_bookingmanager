@@ -88,6 +88,9 @@ class TimeslotManager
             if ($repeatType === Timeslot::REPEAT_MONTHLY) {
                 $newTimeslots = array_merge($newTimeslots, $this->repeatMonthlyTimeslot($timeslot));
             }
+            if ($repeatType === Timeslot::REPEAT_MULTIPLE_WEEKLY) {
+                $newTimeslots = array_merge($newTimeslots, $this->repeatMultipleWeeklyTimeslot($timeslot));
+            }
         }
 
         $this->timeslots = array_merge($timeslots, $newTimeslots);
@@ -377,5 +380,37 @@ class TimeslotManager
     private function repeatMonthlyTimeslot($timeslot)
     {
         return [];
+    }
+
+    /**
+     * @param Timeslot $timeslot
+     * @return array
+     */
+    private function repeatMultipleWeeklyTimeslot($timeslot)
+    {
+        $timeslots = [];
+        $repeatDays = $timeslot->getRepeatDaysSelectedWeekDays();
+        $startWeekDay = (int)$timeslot->getStartDate()->format('w');
+        $daysToCrawl = $this->endDate->diff($timeslot->getStartDate())->days;
+
+        for ($i=1; $i<= $daysToCrawl; $i++) {
+            $currentWeekDay = ($i + $startWeekDay) % 7;
+            if(in_array($currentWeekDay, $repeatDays)) {
+
+                $newTimeslot = clone $timeslot;
+                $newStartDate = clone $timeslot->getStartDate();
+                $newStartDate->modify('+ '.$i.' days');
+                $newEndDate = clone $timeslot->getEndDate();
+                $newEndDate->modify('+ ' . $i . ' days');
+
+                $newTimeslot->setStartDate($newStartDate);
+                $newTimeslot->setEndDate($newEndDate);
+
+                $timeslots[] = $newTimeslot;
+            }
+        }
+
+        return $timeslots;
+
     }
 }

@@ -28,7 +28,7 @@ return [
     'palettes' => [
         'datesPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates',
-            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end, --linebreak--, holiday_setting'
+            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end, --linebreak--, repeat_days, --linebreak--, holiday_setting'
         ]
     ],
     'columns' => [
@@ -108,7 +108,25 @@ return [
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.daily', 1],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.weekly', 2],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly', 3],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.weeklyMultiple', 4],
                 ],
+            ]
+        ],
+        'repeat_days' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_days',
+            'config' => [
+                'type' => 'check',
+                'cols' => 'inline',
+                'items' => [
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.0', ''],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.1', ''],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.2', ''],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.3', ''],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.4', ''],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.5', ''],
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.6', ''],
+                ]
             ]
         ],
         'holiday_setting' => [

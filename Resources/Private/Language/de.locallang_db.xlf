@@ -55,6 +55,9 @@
 				<source>Repeat Type</source>
 				<target>Wiederholungsart</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_days">
+				<target>Wochentage für Wiederholung</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.no">
 				<source>No repeat</source>
 				<target>keine Wiederholungen</target>
@@ -70,6 +73,10 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
 				<source>Monthly repeat</source>
 				<target>monatliche Wiederholung</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.weeklyMultiple">
+				<source>Multiple weekly repeat</source>
+				<target>mehrere wöchentliche Wiederholungen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting">
 				<target>Ferien Verhalten</target>

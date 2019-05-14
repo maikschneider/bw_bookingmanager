@@ -21,6 +21,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     const REPEAT_DAILY = 1;
     const REPEAT_WEEKLY = 2;
     const REPEAT_MONTHLY = 3;
+    const REPEAT_MULTIPLE_WEEKLY = 4;
 
     const HOLIDAY_NO_EFFECT = 0;
     const HOLIDAY_NOT_DURING = 1;
@@ -106,6 +107,11 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $isBookableHooks = 0;
+
+    /**
+     * @var int
+     */
+    protected $repeatDays = 0;
 
     /**
      * Returns the startDate
@@ -199,6 +205,40 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getIsBookableHooks()
     {
         return $this->isBookableHooks;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRepeatDays(): int
+    {
+        return $this->repeatDays;
+    }
+
+    /**
+     * @param int $repeatDays
+     */
+    public function setRepeatDays(int $repeatDays)
+    {
+        $this->repeatDays = $repeatDays;
+    }
+
+    /**
+     * e.g. 73 => [1,0,0,1,0,0,1] => [0,3,6] (Su, We, Sa)
+     *
+     * @return array
+     */
+    public function getRepeatDaysSelectedWeekDays()
+    {
+        $selectedDays = [];
+
+        foreach(array_reverse(str_split(decbin($this->getRepeatDays()))) as $key => $value) {
+            if ($value === '1') {
+                $selectedDays[] = $key;
+            }
+        }
+
+        return $selectedDays;
     }
 
     /**
