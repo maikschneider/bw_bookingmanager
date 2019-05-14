@@ -1,11 +1,14 @@
 # blueways Booking Manager
 
-## TODO
+## Todo
 
-* configure urls
-* allow direct bookings (add entry to calendar without tineslot)
+* better repeating configuration
+* performance
+* remove email button, use bw_email
+* dashboard integration
+* support for TYPO3 v8
 
-## Upgrade notes
+## Upgrade notes to v2
 
 Some validators for new Entry attributes have been removed:
 
