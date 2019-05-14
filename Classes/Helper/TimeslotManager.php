@@ -393,6 +393,9 @@ class TimeslotManager
         $startWeekDay = (int)$timeslot->getStartDate()->format('w');
         $daysToCrawl = $this->endDate->diff($timeslot->getStartDate())->days;
 
+        $isDst = $timeslot->getStartDate()->format('I');
+        $startEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
+
         for ($i=1; $i<= $daysToCrawl; $i++) {
             $currentWeekDay = ($i + $startWeekDay) % 7;
             if(in_array($currentWeekDay, $repeatDays)) {
@@ -400,10 +403,19 @@ class TimeslotManager
                 $newTimeslot = clone $timeslot;
                 $newStartDate = clone $timeslot->getStartDate();
                 $newStartDate->modify('+ '.$i.' days');
-                $newEndDate = clone $timeslot->getEndDate();
-                $newEndDate->modify('+ ' . $i . ' days');
 
+                // DST fix
+                if ($isDst && !$newStartDate->format('I')) {
+                    $newStartDate->modify('+1 hour');
+                }
+                if (!$isDst && $newStartDate->format('I')) {
+                    $newStartDate->modify('-1 hour');
+                }
+
+                // set new start end times
                 $newTimeslot->setStartDate($newStartDate);
+                $newEndDate = clone $newStartDate;
+                $newEndDate->add($startEndDiff);
                 $newTimeslot->setEndDate($newEndDate);
 
                 $timeslots[] = $newTimeslot;
