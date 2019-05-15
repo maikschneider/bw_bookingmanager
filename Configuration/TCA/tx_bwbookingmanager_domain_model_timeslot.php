@@ -86,7 +86,8 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.start_date',
             'config' => [
                 'type' => 'input',
-                'eval' => 'datetime,required',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime,int,required',
             ],
         ],
         'end_date' => [
@@ -94,7 +95,8 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.end_date',
             'config' => [
                 'type' => 'input',
-                'eval' => 'datetime,required',
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime,int,required',
             ],
         ],
         'repeat_type' => [
@@ -208,8 +210,9 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_end',
             'config' => [
                 'type' => 'input',
-                'eval' => 'datetime',
-                'default' => '0'
+                'renderType' => 'inputDateTime',
+                'eval' => 'datetime,int',
+                'default' => 0,
             ],
         ],
 
