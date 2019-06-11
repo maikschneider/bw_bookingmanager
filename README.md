@@ -23,7 +23,9 @@
 * TypoScript changes:
     * Rename constants **plugin.tx_bwbookingmanager_pi1** to **plugin.tx_bwbookingmanager**. This is due to the new api plugin which should use the same templates
     
-* FlexForms changes: 
+* FlexForms changes:
+    * Pi1 plugin now uses separate template names for individual views: Adjust template name paths in TCEFORM:
+        * ```TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.sDEF.settings\.templateLayout``` changed to ```TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.template.settings\.template\.```**calendar**```\.```**list** (calendar: list & show + entry: new, show & new) 
     * Open and save **all** tt_content elements containing the **tx_bwbookingmanager_pi1** plugin in order to override the old FlexForm paths.
     
 * JavaScript changes:
