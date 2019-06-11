@@ -47,23 +47,6 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $this->entryRepository = $this->objectManager->get(EntryRepository::class);
         $this->timeslotRepository = $this->objectManager->get(TimeslotRepository::class);
         $this->calendarRepository = $this->objectManager->get(CalendarRepository::class);
-
-        // include javascript
-        if ($this->settings['ajax']['enable']) {
-            $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Page\\PageRenderer');
-            $jqueryJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['jquery']);
-            $bookingmanagerJs = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['bookingmanager']);
-            $customValidators = $GLOBALS['TSFE']->tmpl->getFileName($this->settings['javascript']['customValidators']);
-            if ($jqueryJs) {
-                $pageRenderer->addJsFooterFile($jqueryJs, null, false, false, '', true);
-            }
-            if ($customValidators) {
-                $pageRenderer->addJsFooterFile($customValidators, null, true, false, '', true);
-            }
-            if ($bookingmanagerJs) {
-                $pageRenderer->addJsFooterFile($bookingmanagerJs, null, true, false, '', true);
-            }
-        }
     }
 
     /**
