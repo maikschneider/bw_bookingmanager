@@ -39,25 +39,53 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected $calendarRepository;
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot|null $timeslot
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry|null $newEntry
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("newEntry")
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \Exception
      */
     public function newAction(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
-        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null,
         \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry = null
     ) {
+        $start = new \DateTime();
+        $end = $calendarUid = $timeslotUid = $calendar = null;
+
+        $arguments = $this->request->getArguments();
+
+        if ($this->request->hasArgument('timeslot')) {
+            $timeslotUid = $arguments['timeslot'];
+        }
+
+        if ($this->request->hasArgument('calendar')) {
+            $calendarUid = $arguments['calendar'];
+        }
+
+        if ($this->request->hasArgument('newEntry') && isset($arguments['newEntry']['calendar'])) {
+            $calendarUid = $arguments['newEntry']['calendar']['__identity'];
+        }
+
+        if ($this->request->hasArgument('newEntry') && isset($arguments['newEntry']['timeslot'])) {
+            $timeslotUid = $arguments['newEntry']['timeslot']['__identity'];
+        }
+
+        if (!$calendar) {
+            $this->throwStatus(403, 'No calendar selected');
+        }
+
+        /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
+        $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
+
+        if ($timeslotUid) {
+            $timeslot = $this->timeslotRepository->findByIdentifier($timeslotUid);
+        }
+
         if (!$timeslot && !$calendar->isDirectBooking()) {
             $this->throwStatus(403, 'Direct booking is not allowed');
         }
-
-        $start = new \DateTime();
-        $end = null;
 
         if ($this->request->hasArgument('start')) {
             $start->setTimestamp($this->request->getArgument('start'));
@@ -81,6 +109,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
         $this->view->setTemplate($this->settings['template']['entry']['new']);
+        $this->getControllerContext()->getRequest()->setControllerActionName('new');
+
         $this->view->assignMultiple([
             'calendar' => $calendar,
             'timeslot' => $timeslot,
@@ -192,10 +222,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->view->assign('entry', $entry);
     }
 
-    // public function errorAction() {
-    //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
-    // }
-
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
      * @return void
@@ -238,6 +264,28 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 ->setTargetPageUid($this->settings['backPid'])
                 ->build();
             $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
+        }
+    }
+
+    /**
+     * @return string|void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
+    public function errorAction()
+    {
+        if ($this->request->getControllerActionName() === "create") {
+
+            /** @var \TYPO3\CMS\Extbase\Mvc\Request $referringRequest */
+            $referringRequest = $this->request->getReferringRequest();
+
+            if ($referringRequest !== null) {
+                $originalRequest = clone $this->request;
+                $this->request->setOriginalRequest($originalRequest);
+                $this->request->setOriginalRequestMappingResults($this->arguments->getValidationResults());
+                $this->forward($referringRequest->getControllerActionName(), $referringRequest->getControllerName(),
+                    $referringRequest->getControllerExtensionName(), $referringRequest->getArguments());
+            }
         }
     }
 }
