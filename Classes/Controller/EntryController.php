@@ -97,6 +97,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * action create
      *
      * @param  \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @return void
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
@@ -162,21 +163,14 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 'U'
             );
 
+            // override entity class in case of inheritance
             $arguments = $this->request->getArguments();
             $calendarUid = isset($arguments['calendar']) ? $arguments['calendar'] : $arguments['newEntry']['calendar']['__identity'];
             /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
             $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
             $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
-
-            // override validator and entity class in case of inheritance
+            
             if ($entityClass !== \Blueways\BwBookingmanager\Domain\Model\Calendar::ENTRY_TYPE_CLASSNAME) {
-                $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
-                $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
-                $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
-                $validatorConjunction->addValidator($entryValidator);
-
-                $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
-
                 $newEntry = $this->arguments['newEntry'];
                 $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
             }
