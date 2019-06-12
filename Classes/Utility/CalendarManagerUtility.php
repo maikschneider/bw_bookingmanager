@@ -63,16 +63,16 @@ class CalendarManagerUtility
             }
 
             // build render configuration
-            $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $this->calendar);
+            $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf,
+                $this->calendar);
             $calendarConfiguration->setTimeslots($timeslots);
             $calendarConfiguration->setEntries($entries);
             $configuration = $calendarConfiguration->getRenderConfiguration();
 
-            $cache->set($cacheIdentifier, $configuration, $cacheTags, 2592000);
-
+            $cache->set($cacheIdentifier, $configuration, array_unique($cacheTags), 2592000);
         }
 
         return $configuration;
-
     }
+
 }
