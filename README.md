@@ -28,6 +28,9 @@
         * ```TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.sDEF.settings\.templateLayout``` changed to ```TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.template.settings\.template\.```**calendar**```\.```**list** (calendar: list & show + entry: new, show & new) 
     * Open and save **all** tt_content elements containing the **tx_bwbookingmanager_pi1** plugin in order to override the old FlexForm paths.
     
+* Template variable changes:
+    * next / prev links now under ```configuration.prev.``` 
+    
 * JavaScript changes:
     * jQuery is no longer included
     * BookingManager.js is no longer included:
