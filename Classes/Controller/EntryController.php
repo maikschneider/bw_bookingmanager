@@ -6,6 +6,7 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -48,6 +49,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \Exception
      */
     public function newAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
@@ -74,13 +76,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $calendar, $timeslot, $start, $end);
 
         $dateConf = new DateConf((int)$this->settings['dateRange'], $start);
-        $entries = $this->entryRepository->findInRange($calendar, $dateConf);
-        $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
-
-        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
-        $calendarConfiguration->setTimeslots($timeslots);
-        $calendarConfiguration->setEntries($entries);
-        $configuration = $calendarConfiguration->getRenderConfiguration();
+        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+        $configuration = $calendarManager->getConfiguration($dateConf);
 
         $this->view->setTemplate($this->settings['template']['entry']['new']);
         $this->getControllerContext()->getRequest()->setControllerActionName('new');
@@ -169,7 +166,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
             $calendar = $this->calendarRepository->findByIdentifier($calendarUid);
             $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
-            
+
             if ($entityClass !== \Blueways\BwBookingmanager\Domain\Model\Calendar::ENTRY_TYPE_CLASSNAME) {
                 $newEntry = $this->arguments['newEntry'];
                 $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);

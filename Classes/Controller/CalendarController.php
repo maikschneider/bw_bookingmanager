@@ -6,6 +6,7 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 
 /**
  * Calendar Controller for list, show view of calendar entries
@@ -88,23 +89,16 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         }
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
-        // query calendar, entries, timeslots
-        $calendar = $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
-        $entries = $this->entryRepository->findInRange($calendar, $dateConf);
-        $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
-
         // build render configuration
-        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
-        $calendarConfiguration->setTimeslots($timeslots);
-        $calendarConfiguration->setEntries($entries);
-        $configuration = $calendarConfiguration->getRenderConfiguration();
+        /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
+        $calendar = $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
+        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+        $configuration = $calendarManager->getConfiguration($dateConf);
 
         $this->view->setTemplate($this->settings['template']['calendar']['show']);
         $this->view->assignMultiple([
             'calendar' => $calendar,
-            'timeslots' => $timeslots,
             'configuration' => $configuration,
-            'entries' => $entries
         ]);
     }
 }
