@@ -4,6 +4,7 @@
 		<td>
 			<f:link.action title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.prevMonth')}"
 										 class="button"
+										 controller="Calendar"
 										 action="show"
 										 arguments="{calendar: calendar, day: configuration.prev.day, month: configuration.prev.month, year: configuration.prev.year}">
 				prev month
@@ -18,6 +19,7 @@
 		<td>
 			<f:link.action title="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.nextMonth')}"
 										 class="button"
+										 controller="Calendar"
 										 action="show"
 										 arguments="{calendar: calendar, day: configuration.next.day, month: configuration.next.month, year: configuration.next.year}">
 				next month
