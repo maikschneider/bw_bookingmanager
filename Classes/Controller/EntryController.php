@@ -42,6 +42,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot|null $timeslot
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry|null $newEntry
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidActionNameException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
@@ -81,6 +83,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
         $this->view->setTemplate($this->settings['template']['entry']['new']);
+        $this->getControllerContext()->getRequest()->setControllerActionName('new');
+
         $this->view->assignMultiple([
             'calendar' => $calendar,
             'timeslot' => $timeslot,
@@ -238,6 +242,27 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 ->setTargetPageUid($this->settings['backPid'])
                 ->build();
             $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
+        }
+    }
+
+    /**
+     * @return string|void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     */
+    public function errorAction()
+    {
+        if ($this->request->getControllerActionName() === "create") {
+
+            /** @var \TYPO3\CMS\Extbase\Mvc\Request $referringRequest */
+            $referringRequest = $this->request->getReferringRequest();
+
+            if ($referringRequest !== null) {
+                $originalRequest = clone $this->request;
+                $this->request->setOriginalRequest($originalRequest);
+                $this->request->setOriginalRequestMappingResults($this->arguments->getValidationResults());
+                $this->forward($referringRequest->getControllerActionName(), $referringRequest->getControllerName(),
+                    $referringRequest->getControllerExtensionName(), $referringRequest->getArguments());
+            }
         }
     }
 }
