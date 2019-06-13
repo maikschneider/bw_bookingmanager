@@ -610,4 +610,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->crdate;
     }
+
+    public function getApiOutput()
+    {
+        return [
+            'uid' => $this->uid,
+            'start' => $this->startDate->format('c'),
+            'end' => $this->endDate->format('c')
+        ];
+    }
 }

@@ -78,28 +78,32 @@ class RenderConfiguration
     {
         $start = $this->dateConf->start;
         $daysCount = $this->dateConf->start->diff($this->dateConf->end)->days;
-        $numberOfWeeks = \Blueways\BwBookingmanager\Helper\TimeslotManager::dayCount($this->dateConf->start,
-            $this->dateConf->end, 1);
 
-        $configuration = array(
-            'days' => $this->getDaysArray($start, $daysCount),
-            //'weeks' => $this->getWeeksArray($start, $numberOfWeeks),
-            'next' => [
-                'date' => $this->dateConf->next,
-                'day' => $this->dateConf->next->format('j'),
-                'month' => $this->dateConf->next->format('m'),
-                'year' => $this->dateConf->next->format('Y'),
-                'link' => '/api/calendar/' . $this->calendar->getUid() . '/' . $this->dateConf->next->format('j') . '-' . $this->dateConf->next->format('m') . '-' . $this->dateConf->next->format('Y') . '.json'
-            ],
-            'prev' => [
-                'date' => $this->dateConf->prev,
-                'day' => $this->dateConf->prev->format('j'),
-                'month' => $this->dateConf->prev->format('m'),
-                'year' => $this->dateConf->prev->format('Y'),
-                'link' => '/api/calendar/' . $this->calendar->getUid() . '/' . $this->dateConf->prev->format('j') . '-' . $this->dateConf->prev->format('m') . '-' . $this->dateConf->prev->format('Y') . '.json'
-            ],
-            //'timeslots' => $this->timeslots
-        );
+        $configuration = [];
+        $configuration['timeslots'] = $this->timeslots;
+        $configuration['entries'] = $this->entries;
+        $configuration['days'] = $this->getDaysArray($start, $daysCount);
+        $configuration['weeks'] = $this->getWeeksArray($daysCount);
+        $configuration['next'] = [
+            'date' => $this->dateConf->next,
+            'day' => $this->dateConf->next->format('j'),
+            'month' => $this->dateConf->next->format('m'),
+            'year' => $this->dateConf->next->format('Y'),
+            'link' => '/api/calendar/' . $this->calendar->getUid() . '/' .
+                $this->dateConf->next->format('j') . '-' .
+                $this->dateConf->next->format('m') . '-' .
+                $this->dateConf->next->format('Y') . '.json'
+        ];
+        $configuration['prev'] = [
+            'date' => $this->dateConf->prev,
+            'day' => $this->dateConf->prev->format('j'),
+            'month' => $this->dateConf->prev->format('m'),
+            'year' => $this->dateConf->prev->format('Y'),
+            'link' => '/api/calendar/' . $this->calendar->getUid() . '/' .
+                $this->dateConf->prev->format('j') . '-' .
+                $this->dateConf->prev->format('m') . '-' .
+                $this->dateConf->prev->format('Y') . '.json'
+        ];
 
         return $configuration;
     }
@@ -107,6 +111,7 @@ class RenderConfiguration
     /**
      * @param \DateTime $startDate
      * @param integer $daysCount
+     * @param bool $returnOffsets
      * @return array
      * @throws \Exception
      */
@@ -116,7 +121,7 @@ class RenderConfiguration
         $date = clone $startDate;
 
         for ($i = 0; $i <= $daysCount; $i++) {
-            $days[$i] = $this->getDay($date);
+            $days[$i] = $this->getDayArray($date);
             $date->modify('+1 day');
         }
         return $days;
@@ -127,14 +132,15 @@ class RenderConfiguration
      * @return array
      * @throws \Exception
      */
-    private function getDay($date)
+    private function getDayArray($date)
     {
         $timeslots = $this->getTimeslotsForDay($date);
         $entries = $this->getEntriesForDay($date);
 
         $day = [];
         $day['date'] = $date->format('c');
-        $day['timeslots'] = $this->getTimeslotUids($timeslots);
+        $day['entries'] = $this->getEntryOffsets($entries);
+        $day['timeslots'] = $this->getTimeslotOffsets($timeslots);
         $day['isCurrentDay'] = $this->isCurrentDay($date);
         $day['isNotInMonth'] = !($date->format('m') == $this->dateConf->startOrig->format('m'));
         $day['isInPast'] = $this->isInPast($date);
@@ -145,17 +151,6 @@ class RenderConfiguration
         $day['isBookable'] = ((!$day['isInPast'] || $day['isCurrentDay']) && ($day['hasBookableTimeslots'] || $day['isDirectBookable']));
 
         return $day;
-    }
-
-    /**
-     * @param array $timeslots
-     * @return array
-     */
-    private function getTimeslotUids($timeslots)
-    {
-        return array_map(function($t){
-            return $t->getUid();
-        }, $timeslots);
     }
 
     /**
@@ -203,6 +198,28 @@ class RenderConfiguration
             }
         }
         return $entries;
+    }
+
+    private function getEntryOffsets($entries)
+    {
+        $offsets = [];
+        foreach ($this->entries as $key => $entry) {
+            if (in_array($entry, $entries)) {
+                $offsets[] = $key;
+            }
+        }
+        return $offsets;
+    }
+
+    private function getTimeslotOffsets($timeslots)
+    {
+        $offsets = [];
+        foreach ($this->timeslots as $key => $timeslot) {
+            if (in_array($timeslot, $timeslots)) {
+                $offsets[] = $key;
+            }
+        }
+        return $offsets;
     }
 
     /**
@@ -266,23 +283,25 @@ class RenderConfiguration
     }
 
     /**
-     * @param \DateTime $start
-     * @param integer $numberOfWeeks
+     * @param int $daysCount
      * @return array
-     * @throws \Exception
      */
-    private function getWeeksArray($start, $numberOfWeeks)
+    private function getWeeksArray($daysCount)
     {
         $weeks = [];
-        $weekstart = clone $start;
 
-        for ($i = 0; $i < $numberOfWeeks; $i++) {
+        $dayOffset = 0;
 
-            $weekstart = clone $weekstart;
+        while ($dayOffset < $daysCount) {
 
-            $weeks[] = $this->getDaysArray($weekstart, 6);
+            $week = [];
 
-            $weekstart->modify('next monday');
+            for ($j = 0; $j < 7; $j++) {
+                $week[] = $dayOffset;
+                $dayOffset++;
+            }
+
+            $weeks[] = $week;
         }
 
         return $weeks;
