@@ -62,6 +62,11 @@ class RenderConfiguration
      */
     public function setTimeslots($timeslots)
     {
+        // sort timeslots
+        usort($timeslots, function (Timeslot $a, Timeslot $b) {
+            return $a->getStartDate() > $b->getStartDate();
+        });
+
         $this->timeslots = $timeslots;
     }
 
@@ -76,9 +81,9 @@ class RenderConfiguration
         $numberOfWeeks = \Blueways\BwBookingmanager\Helper\TimeslotManager::dayCount($this->dateConf->start,
             $this->dateConf->end, 1);
 
-        return array(
+        $configuration = array(
             'days' => $this->getDaysArray($start, $daysCount),
-            'weeks' => $this->getWeeksArray($start, $numberOfWeeks),
+            //'weeks' => $this->getWeeksArray($start, $numberOfWeeks),
             'next' => [
                 'date' => $this->dateConf->next,
                 'day' => $this->dateConf->next->format('j'),
@@ -93,7 +98,10 @@ class RenderConfiguration
                 'year' => $this->dateConf->prev->format('Y'),
                 'link' => '/api/calendar/' . $this->calendar->getUid() . '/' . $this->dateConf->prev->format('j') . '-' . $this->dateConf->prev->format('m') . '-' . $this->dateConf->prev->format('Y') . '.json'
             ],
+            //'timeslots' => $this->timeslots
         );
+
+        return $configuration;
     }
 
     /**
@@ -108,28 +116,51 @@ class RenderConfiguration
         $date = clone $startDate;
 
         for ($i = 0; $i <= $daysCount; $i++) {
-            $days[$i] = [
-                'date' => clone $date,
-                'timeslots' => $this->getTimeslotsForDay($date),
-                'entries' => $this->getEntriesForDay($date),
-                'isCurrentDay' => $this->isCurrentDay($date),
-                'isNotInMonth' => !($date->format('m') == $this->dateConf->startOrig->format('m')),
-                'isInPast' => $this->isInPast($date),
-                'isSelectedDay' => $this->isSelectedDay($date)
-            ];
-            $days[$i]['bookableTimeslotsStatus'] = $this->getBookableTimeslotsStatus($days[$i]['timeslots']);
-            $days[$i]['hasBookableTimeslots'] = (boolean)$days[$i]['bookableTimeslotsStatus'];
-            $days[$i]['isDirectBookable'] = $this->isDirectBookable($days[$i]['entries']);
-            $days[$i]['isBookable'] = ((!$days[$i]['isInPast'] || $days[$i]['isCurrentDay']) && ($days[$i]['hasBookableTimeslots'] || $days[$i]['isDirectBookable']));
-
+            $days[$i] = $this->getDay($date);
             $date->modify('+1 day');
         }
         return $days;
     }
 
     /**
-     * @param \DateTime $day
+     * @param \DateTime $date
      * @return array
+     * @throws \Exception
+     */
+    private function getDay($date)
+    {
+        $timeslots = $this->getTimeslotsForDay($date);
+        $entries = $this->getEntriesForDay($date);
+
+        $day = [];
+        $day['date'] = $date->format('c');
+        $day['timeslots'] = $this->getTimeslotUids($timeslots);
+        $day['isCurrentDay'] = $this->isCurrentDay($date);
+        $day['isNotInMonth'] = !($date->format('m') == $this->dateConf->startOrig->format('m'));
+        $day['isInPast'] = $this->isInPast($date);
+        $day['isSelectedDay'] = $this->isSelectedDay($date);
+        $day['bookableTimeslotsStatus'] = $this->getBookableTimeslotsStatus($timeslots);
+        $day['hasBookableTimeslots'] = (boolean)$day['bookableTimeslotsStatus'];
+        $day['isDirectBookable'] = $this->isDirectBookable($entries);
+        $day['isBookable'] = ((!$day['isInPast'] || $day['isCurrentDay']) && ($day['hasBookableTimeslots'] || $day['isDirectBookable']));
+
+        return $day;
+    }
+
+    /**
+     * @param array $timeslots
+     * @return array
+     */
+    private function getTimeslotUids($timeslots)
+    {
+        return array_map(function($t){
+            return $t->getUid();
+        }, $timeslots);
+    }
+
+    /**
+     * @param \DateTime $day
+     * @return array<Timeslot>
      */
     private function getTimeslotsForDay($day)
     {
@@ -147,11 +178,6 @@ class RenderConfiguration
                 $timeslots[] = $timeslot;
             }
         }
-
-        // sort timeslots
-        usort($timeslots, function(Timeslot $a, Timeslot $b) {
-           return $a->getStartDate() > $b->getStartDate();
-        });
 
         return $timeslots;
     }
@@ -173,7 +199,7 @@ class RenderConfiguration
 
         foreach ($this->entries as $entry) {
             if (!($entry->getEndDate() < $day || $entry->getStartDate() > $dayEnd)) {
-                $entries[] = $entry;
+                $entries[] = $entry->getUid();
             }
         }
         return $entries;
