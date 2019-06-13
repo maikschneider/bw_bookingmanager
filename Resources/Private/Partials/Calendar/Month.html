@@ -12,8 +12,8 @@
 		</td>
 		<td colspan="5">
 			<h2 class="text-center">
-				<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:configuration.weeks.1.0.date, format:'n')}"/>
-				{f:format.date(date:configuration.weeks.1.0.date, format:'Y')}
+				<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:configuration.weeks.10.date, format:'n')}"/>
+				{f:format.date(date:configuration.days.10.date, format:'Y')}
 			</h2>
 		</td>
 		<td>
@@ -55,6 +55,7 @@
 	<f:for each="{configuration.weeks}" as="week">
 		<tr>
 			<f:for each="{week}" as="day">
+				<f:variable name="day">{configuration.days.{day}}</f:variable>
 				<td>
 					<f:if condition="{day.isNotInMonth}">
 						<f:then>
@@ -67,14 +68,15 @@
 									<strong>selected day</strong>
 								</f:if>
 								<f:for each="{day.timeslots}" as="timeslot">
-									<li>{f:format.date(date:timeslot.startDate, format:'H:i')} - {f:format.date(date:timeslot.endDate,
+									<f:variable name="timeslot">{configuration.timeslots.{timeslot}}</f:variable>
+									<li>{f:format.date(date:timeslot.start, format:'H:i')} - {f:format.date(date:timeslot.end,
 										format:'H:i')}
 										<p>({timeslot.bookedWeight}/{timeslot.maxWeight} booked)</p>
 										<f:if condition="{timeslot.isBookable}">
 											<f:link.action controller="Entry"
 																		 pageUid="{settings.entryPid}"
 																		 action="new"
-																		 arguments="{calendar: calendar, timeslot: timeslot, start: timeslot.startDate.timestamp, end: timeslot.endDate.timestamp}">
+																		 arguments="{calendar: calendar, timeslot: timeslot.uid, start: timeslot.start, end: timeslot.end}">
 												book
 											</f:link.action>
 										</f:if>
@@ -86,12 +88,11 @@
 									<f:link.action controller="Entry"
 																 pageUid="{f:if(condition:settings.entryPid, then:settings.entryPid)}"
 																 action="new"
-																 arguments="{calendar: calendar, start: day.date.timestamp}">
+																 arguments="{calendar: calendar, start: day.date}">
 										direct booking
 									</f:link.action>
 								</f:if>
 							</f:if>
-
 						</f:else>
 					</f:if>
 				</td>
