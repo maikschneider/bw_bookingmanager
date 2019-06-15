@@ -492,8 +492,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return [
             'uid' => $this->uid,
-            'start' => $this->startDate->getTimestamp(),
-            'end' => $this->endDate->getTimestamp(),
+            'startDate' => $this->startDate->getTimestamp(),
+            'displayStartDate' => $this->getDisplayStartDate(),
+            'endDate' => $this->endDate->getTimestamp(),
+            'displayEndDate' => $this->getDisplayEndDate(),
             'maxWeight' => $this->maxWeight,
             'isBookable' => $this->getIsBookable(),
             'freeWeight' => $this->getFreeWeight(),
