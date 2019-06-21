@@ -41,19 +41,19 @@ class ApiController extends ActionController
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
-     * @inject
+     *
      */
     protected $calendarRepository;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     * @inject
+     *
      */
     protected $timeslotRepository;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     * @inject
+     *
      */
     protected $entryRepository;
 
@@ -165,6 +165,23 @@ class ApiController extends ActionController
         $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
         $validatorConjunction->addValidator($entryValidator);
         $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
+    }
+
+    public function injectCalendarRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
+    ) {
+        $this->calendarRepository = $calendarRepository;
+    }
+
+    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
+    {
+        $this->entryRepository = $entryRepository;
+    }
+
+    public function injectTimeslotRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+    ) {
+        $this->timeslotRepository = $timeslotRepository;
     }
 
     private function getAllowedEntryFields($entityClass)

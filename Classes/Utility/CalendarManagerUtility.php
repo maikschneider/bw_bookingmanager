@@ -92,6 +92,7 @@ class CalendarManagerUtility
         $entries = $this->entryRepository->findInRange($this->calendar, $dateConf)->toArray();
         $timeslots = $this->timeslotRepository->findInRange($this->calendar, $dateConf);
 
+        /** @var \Blueways\BwBookingmanager\Helper\RenderConfiguration $calendarConfiguration */
         $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf,
             $this->calendar);
         $calendarConfiguration->setTimeslots($timeslots);
