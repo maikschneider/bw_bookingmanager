@@ -69,14 +69,14 @@
 								</f:if>
 								<f:for each="{day.timeslots}" as="timeslot">
 									<f:variable name="timeslot">{configuration.timeslots.{timeslot}}</f:variable>
-									<li>{f:format.date(date:timeslot.start, format:'H:i')} - {f:format.date(date:timeslot.end,
+									<li>{f:format.date(date:timeslot.displayStartDate, format:'H:i')} - {f:format.date(date:timeslot.displayEndDate,
 										format:'H:i')}
 										<p>({timeslot.bookedWeight}/{timeslot.maxWeight} booked)</p>
 										<f:if condition="{timeslot.isBookable}">
 											<f:link.action controller="Entry"
 																		 pageUid="{settings.entryPid}"
 																		 action="new"
-																		 arguments="{calendar: calendar, timeslot: timeslot.uid, start: timeslot.start, end: timeslot.end}">
+																		 arguments="{calendar: calendar, timeslot: timeslot.uid, start: timeslot.startDate, end: timeslot.endDate}">
 												book
 											</f:link.action>
 										</f:if>

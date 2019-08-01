@@ -1,15 +1,12 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model;
 
 /***
- *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
  ***/
 
 /**
@@ -17,6 +14,7 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
     /**
      * startDate
      *
@@ -150,6 +148,12 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $crdate;
 
     /**
+     * @lazy
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     */
+    protected $feUser;
+
+    /**
      * __construct
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
@@ -176,6 +180,22 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if ($endDate) {
             $this->setEndDate($endDate);
         }
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     */
+    public function getFeUser()
+    {
+        return $this->feUser;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser
+     */
+    public function setFeUser(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser)
+    {
+        $this->feUser = $feUser;
     }
 
     /**
@@ -389,6 +409,16 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Returns the boolean state of newsletter
+     *
+     * @return bool
+     */
+    public function isNewsletter()
+    {
+        return $this->newsletter;
+    }
+
+    /**
      * Returns the newsletter
      *
      * @return bool $newsletter
@@ -410,21 +440,21 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the boolean state of newsletter
-     *
-     * @return bool
-     */
-    public function isNewsletter()
-    {
-        return $this->newsletter;
-    }
-
-    /**
      * Returns the confirmed
      *
      * @return bool $confirmed
      */
     public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * Returns the boolean state of confirmed
+     *
+     * @return bool
+     */
+    public function isConfirmed()
     {
         return $this->confirmed;
     }
@@ -441,13 +471,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the boolean state of confirmed
+     * Returns the boolean state of special1
      *
      * @return bool
      */
-    public function isConfirmed()
+    public function isSpecial1()
     {
-        return $this->confirmed;
+        return $this->special1;
     }
 
     /**
@@ -472,13 +502,13 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the boolean state of special1
+     * Returns the boolean state of special2
      *
      * @return bool
      */
-    public function isSpecial1()
+    public function isSpecial2()
     {
-        return $this->special1;
+        return $this->special2;
     }
 
     /**
@@ -500,16 +530,6 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setSpecial2($special2)
     {
         $this->special2 = $special2;
-    }
-
-    /**
-     * Returns the boolean state of special2
-     *
-     * @return bool
-     */
-    public function isSpecial2()
-    {
-        return $this->special2;
     }
 
     /**
@@ -618,5 +638,35 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'start' => $this->startDate->format('c'),
             'end' => $this->endDate->format('c')
         ];
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser
+     */
+    public function mergeWithFeUser($feUser)
+    {
+        $this->setFeUser($feUser);
+
+        if ($feUser->getEmail()) {
+            $this->setEmail($feUser->getEmail());
+        }
+        if ($feUser->getName()) {
+            $this->setName($feUser->getName());
+        }
+        if ($feUser->getFirstName()) {
+            $this->setPrename($feUser->getFirstName());
+        }
+        if ($feUser->getLastName()) {
+            $this->setName($feUser->getLastName());
+        }
+        if ($feUser->getAddress()) {
+            $this->setStreet($feUser->getAddress());
+        }
+        if ($feUser->getZip()) {
+            $this->setZip($feUser->getZip());
+        }
+        if ($feUser->getTelephone()) {
+            $this->setPhone($feUser->getTelephone());
+        }
     }
 }

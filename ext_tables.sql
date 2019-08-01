@@ -94,6 +94,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	special1 smallint(5) unsigned DEFAULT '0' NOT NULL,
 	special2 smallint(5) unsigned DEFAULT '0' NOT NULL,
 	weight int(11) DEFAULT '0' NOT NULL,
+	fe_user int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -253,4 +254,8 @@ CREATE TABLE tx_bwbookingmanager_calendar_notification_mm (
 
     KEY uid_local (uid_local),
     KEY uid_foreign (uid_foreign)
+);
+
+CREATE TABLE fe_users (
+	entries varchar(11) DEFAULT 0 NOT NULL
 );
