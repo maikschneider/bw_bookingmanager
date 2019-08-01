@@ -22,6 +22,7 @@ plugin.tx_bwbookingmanager {
   }
 
   settings {
+    cancelTime = {$plugin.tx_bwbookingmanager.settings.cancelTime}
     mail {
       senderAddress = noreply@example.com
       senderName = Example sender name

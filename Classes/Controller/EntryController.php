@@ -8,6 +8,7 @@ use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -228,21 +229,42 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {
+        $validToken = $this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token']);
+        $validUser = $this->accessControlService->hasLoggedInFrontendUser() && $entry->getFeUser() && $entry->getFeUser()->getUid() === $this->accessControlService->getFrontendUserUid();
+
         // check token und delete
-        if ($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token'])) {
+        if ($validToken || $validUser) {
 
-            // delete calendar cache
-            $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
-            $cache->flushByTag('calendar' . $entry->getCalendar()->getUid());
+            $configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+            $typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+            $cancelTime = $typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['cancelTime'];
 
-            // delete entry
-            $this->entryRepository->remove($entry);
+            $cancelDate = new \DateTime();
+            $cancelDate->modify('+ ' . $cancelTime . 'minutes');
 
-            $this->addFlashMessage(
-                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
-                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
-            );
+            if ($entry->getStartDate() > $cancelDate) {
+
+                // delete calendar cache
+                $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+                $cache->flushByTag('calendar' . $entry->getCalendar()->getUid());
+
+                // delete entry
+                $this->entryRepository->remove($entry);
+
+                $this->addFlashMessage(
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
+                    \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
+                );
+            } else {
+
+                $this->addFlashMessage(
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.message'),
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.title'),
+                    \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                );
+
+            }
         } else {
             $this->addFlashMessage(
                 $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.message'),
