@@ -263,7 +263,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                     $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.title'),
                     \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
                 );
-
             }
         } else {
             $this->addFlashMessage(
@@ -289,10 +288,13 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $feUserUid = $this->accessControlService->getFrontendUserUid();
             $feUser = $this->frontendUserRepository->findByIdentifier($feUserUid);
             $entries = $this->entryRepository->getByUserId($feUserUid);
+            $cancelDate = new \DateTime();
+            $cancelDate->modify('+ ' . $this->settings['cancelTime'] . ' minutes');
 
             $this->view->assignMultiple([
                 'feUser' => $feUser,
-                'entries' => $entries
+                'entries' => $entries,
+                'cancelDate' => $cancelDate
             ]);
         }
     }

@@ -1,8 +1,11 @@
-
 <ul>
 	<f:for each="{entries}" as="entry">
 		<li>{entry.displayStartDate->f:format.date(format: 'd.m. H:i')} - {entry.displayEndDate->f:format.date(format:
-			'H:i')} (<f:link.action action="delete" arguments="{entry:entry}">delete</f:link.action>)
+			'H:i')}
+			<f:if condition="{entry.startDate} > {cancelDate}">(
+				<f:link.action action="delete" arguments="{entry:entry}">delete</f:link.action>
+				)
+			</f:if>
 		</li>
 	</f:for>
 </ul>
