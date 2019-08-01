@@ -60,6 +60,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
             $this->addError('Direct booking is not allowed', 1526170536);
         }
 
+        $this->validateAttributes();
         $this->validateDirectBooking();
         $this->validateTimeslotBooking();
 
@@ -67,6 +68,17 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
             return false;
         }
         return true;
+    }
+
+    private function validateAttributes()
+    {
+        if (!$this->entry->getName()) {
+            $this->addError('No name given', 1526170536);
+        }
+
+        if (!$this->entry->getEmail()) {
+            $this->addError('No email given', 1526170536);
+        }
     }
 
     /**
@@ -78,7 +90,6 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         if (!$this->entry->getCalendar()->isDirectBooking()) {
             return;
         }
-
         // @TODO: Implement direct booking validation
     }
 

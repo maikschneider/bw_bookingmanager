@@ -645,6 +645,10 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function mergeWithFeUser($feUser)
     {
+        if (!$feUser) {
+            return;
+        }
+
         $this->setFeUser($feUser);
 
         if ($feUser->getEmail()) {
