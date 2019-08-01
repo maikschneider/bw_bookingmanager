@@ -216,6 +216,11 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.sendMail.button">
 				<source>Send E-Mail</source>
+				<target>E-Mail senden</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.fe_user">
+				<source>Frontend user</source>
+				<target>Benutzer</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
