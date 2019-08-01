@@ -261,6 +261,20 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
     }
 
+    public function listAction()
+    {
+        if ($this->accessControlService->hasLoggedInFrontendUser()) {
+            $feUserUid = $this->accessControlService->getFrontendUserUid();
+            $feUser = $this->frontendUserRepository->findByIdentifier($feUserUid);
+            $entries = $this->entryRepository->getByUserId($feUserUid);
+
+            $this->view->assignMultiple([
+                'feUser' => $feUser,
+                'entries' => $entries
+            ]);
+        }
+    }
+
     /**
      * @return string|void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException

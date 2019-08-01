@@ -1,0 +1,9 @@
+<f:debug>{_all}</f:debug>
+
+<ul>
+	<f:for each="{entries}" as="entry">
+		<li>{entry.displayStartDate->f:format.date(format: 'd.m. H:i')} - {entry.displayEndDate->f:format.date(format:
+			'H:i')}
+		</li>
+	</f:for>
+</ul>

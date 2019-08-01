@@ -75,6 +75,10 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             $this->forward('new', 'Entry');
         }
 
+        if ((int)$this->settings['mode'] === 3) {
+            $this->forward('list', 'Entry');
+        }
+
         $calendars = $this->calendarRepository->findAll();
 
         $this->view->setTemplate($this->settings['template']['calendar']['list']);
