@@ -149,7 +149,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     /**
      * @lazy
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
      */
     protected $feUser;
 

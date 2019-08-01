@@ -36,6 +36,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     * @inject
      */
     protected $timeslotRepository;
 
@@ -147,8 +148,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $notificationManager->notify();
 
         $this->addFlashMessage(
-            $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.message'),
-            $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.title'),
+            $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.message'),
+            $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.title'),
             \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
         );
 
@@ -195,6 +196,11 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $newEntry = $this->arguments['newEntry'];
                 $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
             }
+
+            // unset feUser if empty
+            if ($arguments['newEntry']['feUser'] === "") {
+                $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->skipProperties('feUser');
+            }
         }
     }
 
@@ -210,10 +216,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->view->assign('deleteable', $deleteable);
         $this->view->assign('entry', $entry);
     }
-
-    // public function errorAction() {
-    //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
-    // }
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
@@ -237,14 +239,14 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $this->entryRepository->remove($entry);
 
             $this->addFlashMessage(
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
+                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
+                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
                 \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
             );
         } else {
             $this->addFlashMessage(
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.message'),
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.title'),
+                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.message'),
+                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.title'),
                 \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
             );
         }
