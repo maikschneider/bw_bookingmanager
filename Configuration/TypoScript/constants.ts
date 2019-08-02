@@ -8,7 +8,7 @@ plugin.tx_bwbookingmanager {
     layoutRootPath =
   }
   settings {
-    cancelTime = 7200
+    cancelTime = 1440
   }
 }
 

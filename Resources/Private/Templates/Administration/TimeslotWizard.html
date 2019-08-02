@@ -72,6 +72,7 @@
 								<f:for each="{c.monthView.weeks}" as="week">
 									<div class="grid-x small-up-7 cell auto bw_bookingmanager__week">
 										<f:for each="{week}" as="day">
+											<f:variable name="day">{c.monthView.days.{day}}</f:variable>
 
 											<f:comment>
 												CREATE CSS CLASSES
