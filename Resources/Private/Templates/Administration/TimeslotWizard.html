@@ -4,7 +4,6 @@
 
 <f:section name="Main">
 	<link rel="stylesheet" href="{css}" type="text/css" />
-
 		<div class="row">
 			<div class="col-xs-12 col-md-3">
 				<h2>Calendars</h2>
@@ -82,6 +81,7 @@
 											<f:variable name="isInPast" value=""/>
 
 											<f:for each="{day.timeslots}" as="timeslot">
+												<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
 												<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
 													<f:variable name="isInThisDay"
 																value="bw_bookingmanager__day--isSelectedDay"/>
@@ -139,6 +139,7 @@
 								<f:variable name="hasNoSlot" value=""/>
 
 								<f:for each="{day.timeslots}" as="timeslot">
+									<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
 									<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
 										<f:variable name="isInThisDay"
 												value="bw_bookingmanager__day--isSelectedDay"/>
@@ -197,6 +198,7 @@
 
 							<f:variable name="isInThisDay" value=""/>
 							<f:for each="{day.timeslots}" as="timeslot">
+								<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
 								<f:if condition="{currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
 									<f:variable name="isInThisDay"
 												value="active daydetail--blue"/>
@@ -208,6 +210,7 @@
 								<p>{day.timeslots->f:count()} Timeslots:</p>
 
 								<f:for each="{day.timeslots}" as="timeslot">
+									<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
 									<div class="daydetail__timeslot">
 										<f:if condition="{timeslot.isBookable} || {currentStartEndTimestamp}=={timeslot.startEndTimestamp}">
 											<f:then>
