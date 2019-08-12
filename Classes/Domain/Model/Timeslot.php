@@ -490,6 +490,12 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     public function getApiOutput()
     {
+        $feUsers = [];
+
+        foreach ($this->getEntries() as $entry) {
+            $feUsers[] = $entry->getFeUser();
+        }
+
         return [
             'uid' => $this->uid,
             'startDate' => $this->startDate->getTimestamp(),
@@ -499,7 +505,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'maxWeight' => $this->maxWeight,
             'isBookable' => $this->getIsBookable(),
             'freeWeight' => $this->getFreeWeight(),
-            'bookedWeight' => $this->getBookedWeight()
+            'bookedWeight' => $this->getBookedWeight(),
+            'feUsers' => $feUsers;
         ];
     }
 
