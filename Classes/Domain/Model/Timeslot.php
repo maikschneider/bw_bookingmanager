@@ -506,7 +506,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'isBookable' => $this->getIsBookable(),
             'freeWeight' => $this->getFreeWeight(),
             'bookedWeight' => $this->getBookedWeight(),
-            'feUsers' => $feUsers;
+            'feUsers' => $feUsers
         ];
     }
 
