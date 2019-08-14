@@ -298,6 +298,18 @@
 				<source>New Booking</source>
 				<target>Neue Buchung</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
+				<source>Event</source>
+				<target>Ereignis</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.0">
+				<source>New entry</source>
+				<target>Neuer Eintrag</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.1">
+				<source>Entry deletion</source>
+				<target>Eintrag Löschung</target>
+			</trans-unit>
 			<trans-unit id="date.dayNames.short.0">
 				<source>Su</source>
 				<target>So</target>

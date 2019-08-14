@@ -234,6 +234,15 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
 				<source>New Booking</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
+				<source>Event</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.0">
+				<source>New entry</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.1">
+				<source>Entry deletion</source>
+			</trans-unit>
 			<trans-unit id="date.dayNames.short.0">
 				<source>Su</source>
 			</trans-unit>

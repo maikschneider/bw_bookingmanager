@@ -21,6 +21,9 @@
             <trans-unit id="email_subject.description">
                 <source>email subject</source>
             </trans-unit>
+			<trans-unit id="event.description">
+				<source>event</source>
+			</trans-unit>
         </body>
     </file>
 </xliff>

@@ -18,10 +18,10 @@ return [
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_notification.svg',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, email, email_subject, template, hook, calendars',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, event, name, email, email_subject, template, hook, calendars',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, email, email_subject, template, hook, calendars'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, event, name, email, email_subject, template, hook, calendars'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -89,6 +89,24 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim,required',
+            ],
+        ],
+        'event' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.event',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.event.0',
+                        '0'
+                    ],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.event.1',
+                        '1'
+                    ],
+                ],
             ],
         ],
         'hook' => [
