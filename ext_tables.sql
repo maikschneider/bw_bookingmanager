@@ -125,6 +125,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_notification (
 	email varchar(255) DEFAULT '' NOT NULL,
 	hook varchar(255) DEFAULT '' NOT NULL,
 	calendars int(11) unsigned DEFAULT '0' NOT NULL,
+	event int(11) unsigned DEFAULT '0' NOT NULL,
 	template varchar(255) DEFAULT '' NOT NULL,
 	email_subject varchar(255) DEFAULT '' NOT NULL,
 

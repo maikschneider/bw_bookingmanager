@@ -229,7 +229,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {
-        $validToken = $this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token']);
+        $validToken = $this->request->hasArgument('entry') && isset($this->request->getArgument('entry')['token']) && $entry->isValidToken($this->request->getArgument('entry')['token']);
         $validUser = $this->accessControlService->hasLoggedInFrontendUser() && $entry->getFeUser() && $entry->getFeUser()->getUid() === $this->accessControlService->getFrontendUserUid();
 
         // check token und delete
@@ -243,6 +243,11 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $cancelDate->modify('+ ' . $cancelTime . 'minutes');
 
             if ($entry->getStartDate() > $cancelDate) {
+
+                // send mails
+                $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($entry);
+                $notificationManager->setSettings($this->settings);
+                $notificationManager->notifyDeletion();
 
                 // delete calendar cache
                 $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
