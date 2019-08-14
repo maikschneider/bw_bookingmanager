@@ -76,7 +76,7 @@ class NotificationManager
             return false;
         }
 
-        $from = $this->extbaseFrameworkConfiguration['settings']['mail']['sender'];
+        $from = $this->extbaseFrameworkConfiguration['settings']['mail']['senderAddress'];
         $to = $this->entry->getEmail();
         $subject = $this->extbaseFrameworkConfiguration['settings']['mail']['subject'];
         $template = $this->extbaseFrameworkConfiguration['settings']['mail']['template'];
@@ -140,7 +140,7 @@ class NotificationManager
      */
     public function sendNotification($notification)
     {
-        $from = $this->extbaseFrameworkConfiguration['settings']['mail']['sender'];
+        $from = $this->extbaseFrameworkConfiguration['settings']['mail']['senderAddress'];
         $to = $notification->getEmail();
         $subject = $notification->getEmailSubject();
         $template = $notification->getTemplate();
