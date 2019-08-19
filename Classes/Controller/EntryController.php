@@ -285,6 +285,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 ->build();
             $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
         }
+
+        $this->redirect('list');
     }
 
     public function listAction()
