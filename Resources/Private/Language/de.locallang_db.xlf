@@ -35,6 +35,10 @@
 				<source>Notifications</source>
 				<target>Benachrichtigungen</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.entries">
+				<source>Entries</source>
+				<target>Einträge</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.direct_booking">
 				<source>Allow direct bookings</source>
 				<target>Direktbuchungen erlauben</target>

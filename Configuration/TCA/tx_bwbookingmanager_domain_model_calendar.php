@@ -18,10 +18,10 @@ return [
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_calendar.svg',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications, entries',
     ],
     'types' => [
-        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications'],
+        'Blueways\BwBookingmanager\Domain\Model\Calendar' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications, entries'],
     ],
     'columns' => [
         'record_type' => [
@@ -106,6 +106,7 @@ return [
                 'size' => 10,
                 'maxitems' => 9999,
             ],
+            'displayCond' => 'FIELD:direct_booking:REQ:false'
         ],
         'blockslots' => [
             'exclude' => true,
@@ -148,6 +149,20 @@ return [
                 'size' => 10,
                 'maxitems' => 9999,
             ],
+        ],
+        'entries' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.entries',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_bwbookingmanager_domain_model_entry',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
+                'foreign_table_field' => 'calendar',
+                'size' => 10,
+                'maxitems' => 9999,
+            ],
+            'displayCond' => 'FIELD:direct_booking:REQ:true'
         ],
         'direct_booking' => [
             'exclude' => true,

@@ -1,15 +1,12 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model;
 
 /***
- *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
  ***/
 
 /**
@@ -17,6 +14,7 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
     const ENTRY_TYPE_CLASSNAME = 'Blueways\\BwBookingmanager\\Domain\\Model\\Entry';
 
     /**
@@ -59,9 +57,56 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $notifications = null;
 
     /**
+     * entries
+     *
+     * @lazy
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
+     */
+    protected $entries = null;
+
+    /**
      * @var boolean
      */
     protected $directBooking;
+
+    /**
+     * __construct
+     */
+    public function __construct()
+    {
+        //Do not remove the next line: It would break the functionality
+        $this->initStorageObjects();
+    }
+
+    /**
+     * Initializes all ObjectStorage properties
+     * Do not modify this method!
+     * It will be rewritten on each save in the extension builder
+     * You may modify the constructor of this class instead
+     *
+     * @return void
+     */
+    protected function initStorageObjects()
+    {
+        $this->timeslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->blockslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries
+     */
+    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
+    {
+        $this->entries = $entries;
+    }
 
     /**
      * @return bool
@@ -101,29 +146,6 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * __construct
-     */
-    public function __construct()
-    {
-        //Do not remove the next line: It would break the functionality
-        $this->initStorageObjects();
-    }
-
-    /**
-     * Initializes all ObjectStorage properties
-     * Do not modify this method!
-     * It will be rewritten on each save in the extension builder
-     * You may modify the constructor of this class instead
-     *
-     * @return void
-     */
-    protected function initStorageObjects()
-    {
-        $this->timeslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->blockslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-    }
-
-    /**
      * Adds a Blockslot
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot
@@ -156,6 +178,17 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Sets the blockslots
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot> $blockslots
+     * @return void
+     */
+    public function setBlockslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $blockslots)
+    {
+        $this->blockslots = $blockslots;
+    }
+
+    /**
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
      */
     public function getHolidays(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
@@ -169,17 +202,6 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setHolidays(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays): void
     {
         $this->holidays = $holidays;
-    }
-
-    /**
-     * Sets the blockslots
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot> $blockslots
-     * @return void
-     */
-    public function setBlockslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $blockslots)
-    {
-        $this->blockslots = $blockslots;
     }
 
     /**
@@ -226,17 +248,6 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Sets the notifications
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
-     * @return void
-     */
-    public function setNotifications(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $notifications)
-    {
-        $this->notifications = $notifications;
-    }
-
-    /**
      * Adds a Notification
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Notification $notification
@@ -266,5 +277,16 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getNotifications()
     {
         return $this->notifications;
+    }
+
+    /**
+     * Sets the notifications
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
+     * @return void
+     */
+    public function setNotifications(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $notifications)
+    {
+        $this->notifications = $notifications;
     }
 }
