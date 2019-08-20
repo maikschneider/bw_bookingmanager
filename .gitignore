@@ -7,3 +7,4 @@ public
 var
 config
 bin
+.php_cs.cache
