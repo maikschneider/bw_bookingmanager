@@ -158,7 +158,7 @@ return [
                 'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_entry',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
-                'foreign_table_field' => 'calendar',
+                'foreign_field' => 'calendar',
                 'size' => 10,
                 'maxitems' => 9999,
             ],
