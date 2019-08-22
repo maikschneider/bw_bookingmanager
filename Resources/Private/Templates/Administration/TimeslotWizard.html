@@ -95,14 +95,14 @@
 												<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
 											</f:if>
 
-											<f:if condition="{day.timeslots->f:count()}==0">
+											<f:if condition="{day.timeslots->f:count()}==0 && !{day.isDirectBookable}">
 												<div
 													class="cell grid-x align-middle align-center bw_bookingmanager__day {isCurrentDay} {f:if(condition:day.isNotInMonth, then:'bw_bookingmanager__day--notInMonth')} {isInPast}">
 													{f:format.date(date:day.date, format:'j')}
 												</div>
 											</f:if>
 
-											<f:if condition="{day.timeslots->f:count()}">
+											<f:if condition="{day.timeslots->f:count()} || {day.isDirectBookable}">
 
 												<f:if condition="{day.isBookable}">
 													<f:then>

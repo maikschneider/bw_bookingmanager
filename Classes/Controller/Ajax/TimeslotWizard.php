@@ -138,7 +138,7 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             $renderConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf, $calendar);
             $timeslots = $this->timeslotRepository->findInRange($calendar, $dateConf);
-            $entries = $this->entryRepository->findInRange($calendar, $dateConf);
+            $entries = $this->entryRepository->findInRange($calendar, $dateConf, false)->toArray();
             $renderConfiguration->setTimeslots($timeslots);
             $renderConfiguration->setEntries($entries);
 

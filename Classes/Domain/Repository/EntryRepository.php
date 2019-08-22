@@ -20,12 +20,14 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @param bool $respectStoragePage
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function findInRange(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
-        DateConf $dateConf
+        DateConf $dateConf,
+        bool $respectStoragePage = true
     ) {
         $query = $this->createQuery();
         $query->matching(
@@ -40,6 +42,8 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
             ]
         );
+
+        $query->getQuerySettings()->setRespectStoragePage($respectStoragePage);
 
         return $query->execute();
     }
