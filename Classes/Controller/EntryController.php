@@ -8,6 +8,7 @@ use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -23,6 +24,12 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
+     * @var \Blueways\BwBookingmanager\Service\AccessControlService
+     * @inject
+     */
+    protected $accessControlService;
+
+    /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
      * @inject
      */
@@ -30,6 +37,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     * @inject
      */
     protected $timeslotRepository;
 
@@ -38,6 +46,12 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @inject
      */
     protected $calendarRepository;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+     * @inject
+     */
+    protected $frontendUserRepository;
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
@@ -62,6 +76,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $start = new \DateTime();
         $end = null;
+        $feUser = false;
 
         if ($this->request->hasArgument('start')) {
             $start->setTimestamp($this->request->getArgument('start'));
@@ -72,8 +87,18 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $end->setTimestamp($this->request->getArgument('end'));
         }
 
-        $newEntry = $newEntry ?: \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($calendar::ENTRY_TYPE_CLASSNAME,
-            $calendar, $timeslot, $start, $end);
+        $newEntry = $newEntry ?: \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            $calendar::ENTRY_TYPE_CLASSNAME,
+            $calendar,
+            $timeslot,
+            $start,
+            $end
+        );
+
+        if ($this->accessControlService->hasLoggedInFrontendUser()) {
+            $feUser = $this->frontendUserRepository->findByIdentifier($this->accessControlService->getFrontendUserUid());
+            $newEntry->mergeWithFeUser($feUser);
+        }
 
         $dateConf = new DateConf((int)$this->settings['dateRange'], $start);
         $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
@@ -86,6 +111,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             'calendar' => $calendar,
             'timeslot' => $timeslot,
             'newEntry' => $newEntry,
+            'feUser' => $feUser,
             'configuration' => $configuration
         ]);
     }
@@ -123,8 +149,8 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $notificationManager->notify();
 
         $this->addFlashMessage(
-            $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.message'),
-            $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.title'),
+            $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.message'),
+            $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.booking.success.title'),
             \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
         );
 
@@ -171,6 +197,11 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $newEntry = $this->arguments['newEntry'];
                 $newEntry->setDataType($calendar::ENTRY_TYPE_CLASSNAME);
             }
+
+            // unset feUser if empty
+            if ($arguments['newEntry']['feUser'] === "") {
+                $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->skipProperties('feUser');
+            }
         }
     }
 
@@ -187,10 +218,6 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->view->assign('entry', $entry);
     }
 
-    // public function errorAction() {
-    //     \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->arguments->getValidationResults());
-    // }
-
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
      * @return void
@@ -202,26 +229,50 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function deleteAction(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
     {
+        $validToken = $this->request->hasArgument('entry') && isset($this->request->getArgument('entry')['token']) && $entry->isValidToken($this->request->getArgument('entry')['token']);
+        $validUser = $this->accessControlService->hasLoggedInFrontendUser() && $entry->getFeUser() && $entry->getFeUser()->getUid() === $this->accessControlService->getFrontendUserUid();
+
         // check token und delete
-        if ($this->request->hasArgument('entry') && $this->request->getArgument('entry')['token'] && $entry->isValidToken($this->request->getArgument('entry')['token'])) {
+        if ($validToken || $validUser) {
 
-            // delete calendar cache
-            $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
-            $cache->flushByTag('calendar' . $entry->getCalendar()->getUid());
+            $configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+            $typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+            $cancelTime = $typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['cancelTime'];
 
-            // delete entry
-            $this->entryRepository->remove($entry);
+            $cancelDate = new \DateTime();
+            $cancelDate->modify('+ ' . $cancelTime . 'minutes');
 
-            $this->addFlashMessage(
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
-                \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
-            );
+            if ($entry->getStartDate() > $cancelDate) {
+
+                // send mails
+                $notificationManager = new \Blueways\BwBookingmanager\Helper\NotificationManager($entry);
+                $notificationManager->setSettings($this->settings);
+                $notificationManager->notifyDeletion();
+
+                // delete calendar cache
+                $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+                $cache->flushByTag('calendar' . $entry->getCalendar()->getUid());
+
+                // delete entry
+                $this->entryRepository->remove($entry);
+
+                $this->addFlashMessage(
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.message'),
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.success.title'),
+                    \TYPO3\CMS\Core\Messaging\AbstractMessage::OK
+                );
+            } else {
+
+                $this->addFlashMessage(
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.message'),
+                    $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.title'),
+                    \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
+                );
+            }
         } else {
-
             $this->addFlashMessage(
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.message'),
-                $this->getLanguageService()->sL('EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.title'),
+                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.message'),
+                $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.error.title'),
                 \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR
             );
         }
@@ -233,6 +284,23 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 ->setTargetPageUid($this->settings['backPid'])
                 ->build();
             $this->redirectToURI($uri, $delay = 0, $statusCode = 303);
+        }
+    }
+
+    public function listAction()
+    {
+        if ($this->accessControlService->hasLoggedInFrontendUser()) {
+            $feUserUid = $this->accessControlService->getFrontendUserUid();
+            $feUser = $this->frontendUserRepository->findByIdentifier($feUserUid);
+            $entries = $this->entryRepository->getByUserId($feUserUid);
+            $cancelDate = new \DateTime();
+            $cancelDate->modify('+ ' . $this->settings['cancelTime'] . ' minutes');
+
+            $this->view->assignMultiple([
+                'feUser' => $feUser,
+                'entries' => $entries,
+                'cancelDate' => $cancelDate
+            ]);
         }
     }
 
@@ -251,8 +319,12 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $originalRequest = clone $this->request;
                 $this->request->setOriginalRequest($originalRequest);
                 $this->request->setOriginalRequestMappingResults($this->arguments->getValidationResults());
-                $this->forward($referringRequest->getControllerActionName(), $referringRequest->getControllerName(),
-                    $referringRequest->getControllerExtensionName(), $referringRequest->getArguments());
+                $this->forward(
+                    $referringRequest->getControllerActionName(),
+                    $referringRequest->getControllerName(),
+                    $referringRequest->getControllerExtensionName(),
+                    $referringRequest->getArguments()
+                );
             }
         }
     }

@@ -40,6 +40,12 @@
 										</numIndex>
 										<numIndex index="1">2</numIndex>
 									</numIndex>
+									<numIndex type="array" index="3">
+										<numIndex index="0">
+											LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.3
+										</numIndex>
+										<numIndex index="1">3</numIndex>
+									</numIndex>
 								</items>
 							</config>
 						</TCEforms>

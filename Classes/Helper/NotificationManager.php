@@ -13,6 +13,7 @@ namespace Blueways\BwBookingmanager\Helper;
  * @link     http://www.blueways.de
  */
 
+use Blueways\BwBookingmanager\Domain\Model\Notification;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -66,7 +67,12 @@ class NotificationManager
     public function notify()
     {
         $this->sendConfirmation();
-        $this->sendNotifications();
+        $this->sendNotifications(Notification::EVENT_CREATION);
+    }
+
+    public function notifyDeletion()
+    {
+        $this->sendNotifications(Notification::EVENT_DELETION);
     }
 
     private function sendConfirmation()
@@ -116,9 +122,14 @@ class NotificationManager
         $message->send();
     }
 
-    private function sendNotifications()
+    private function sendNotifications($eventType)
     {
         foreach ($this->notifications as $notification) {
+
+            if ($notification->getEvent() !== $eventType) {
+                continue;
+            }
+
             if ($notification->hasHook()) {
                 $this->triggerHook($notification);
             } else {

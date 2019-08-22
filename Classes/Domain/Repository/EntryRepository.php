@@ -71,4 +71,30 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $query->execute();
     }
+
+    /**
+     * @param $feUserId
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function getByUserId($feUserId)
+    {
+        $now = new \DateTime();
+        $now->setTime(0, 0, 0);
+
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd([
+                $query->equals('feUser', $feUserId),
+                $query->greaterThanOrEqual('startDate', $now->getTimestamp())
+            ]),
+            $query->setOrderings(
+                [
+                    'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                ]
+            )
+        );
+
+        return $query->execute();
+    }
 }

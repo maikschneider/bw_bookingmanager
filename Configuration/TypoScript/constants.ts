@@ -8,6 +8,7 @@ plugin.tx_bwbookingmanager {
     layoutRootPath =
   }
   settings {
+  cancelTime = 1440
     mail {
       senderAddress = noreply@example.com
       senderName = Example sender name

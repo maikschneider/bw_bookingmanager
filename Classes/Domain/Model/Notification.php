@@ -17,6 +17,9 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    const EVENT_CREATION = 0;
+    const EVENT_DELETION = 1;
+
     /**
      * name
      *
@@ -51,6 +54,27 @@ class Notification extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $emailSubject = '';
+
+    /**
+     * @return int
+     */
+    public function getEvent(): int
+    {
+        return $this->event;
+    }
+
+    /**
+     * @param int $event
+     */
+    public function setEvent(int $event)
+    {
+        $this->event = $event;
+    }
+
+    /**
+     * @var int
+     */
+    protected $event = self::EVENT_CREATION;
 
     /**
      * Returns the name
