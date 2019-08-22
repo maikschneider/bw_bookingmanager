@@ -17,7 +17,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
      * timeslot repository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     * @inject
+     *
      */
     protected $timeslotRepository;
 
@@ -138,8 +138,10 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
 
         // DST fix
         $timezone = new \DateTimeZone('Europe/Berlin');
-        $transitions = $timezone->getTransitions($this->timeslot_startDate->getTimestamp(),
-            $this->entry_startDate->getTimestamp());
+        $transitions = $timezone->getTransitions(
+            $this->timeslot_startDate->getTimestamp(),
+            $this->entry_startDate->getTimestamp()
+        );
         $lastTransitionIndex = sizeof($transitions) - 1;
         if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
             $this->timeslot_startDate->modify('+1 hour');
@@ -237,5 +239,11 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         if ($this->timeslot->getMaxWeight() < ($bookedWeight + $this->entry->getWeight())) {
             $this->addError('Selected timeslot has not enough free space or is booked out', 1526170536);
         }
+    }
+
+    public function injectTimeslotRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+    ) {
+        $this->timeslotRepository = $timeslotRepository;
     }
 }
