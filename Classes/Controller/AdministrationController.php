@@ -112,6 +112,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             ['action' => 'index', 'label' => 'entryListing'],
             ['action' => 'blockslot', 'label' => 'blockslotListing'],
             ['action' => 'dashboard', 'label' => 'dashboard'],
+            ['action' => 'shift', 'label' => 'shift'],
         ];
 
         foreach ($actions as $action) {
@@ -363,6 +364,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             'returnUrl' => $returnUrl
         ]);
         HttpUtility::redirect($url);
+    }
+
+    public function shiftAction()
+    {
+        $calendars = $this->calendarRepository->findAllIgnorePid();
+
+        $this->view->assign('calendars', $calendars);
     }
 
     /**
