@@ -4,6 +4,7 @@ node_modules
 vendor
 .idea
 public
+!Resources/Public
 var
 config
 bin

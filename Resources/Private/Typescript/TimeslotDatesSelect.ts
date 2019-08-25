@@ -165,6 +165,7 @@ class TimeslotDatesSelect {
     	daylink.addClass('active');
 		dayDetailDiv.addClass('daydetail--selected');
 
+      // @ts-ignore
       this.newDataLink = link;
       this.calendarDataLinks.removeClass('active');
       link.addClass('active');
@@ -312,10 +313,12 @@ class TimeslotDatesSelect {
 
     const triggerHandler: Function = (e: JQueryEventObject): void => {
       e.preventDefault();
+      // @ts-ignore
       this.trigger = $(e.currentTarget);
       this.show();
     };
 
+    // @ts-ignore
     $('.t3js-timeslotdatesselect-trigger').off('click').click(triggerHandler);
   }
 
