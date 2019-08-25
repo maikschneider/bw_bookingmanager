@@ -6,9 +6,23 @@
 <div class="row">
 	<div class="col-md-12">
 		<h1>Schichten</h1>
+
+		<f:for each="{calendars}" as="calendar">
+			<div class="bookingmanager-show-calendar calendar--loading calendar--only-bookable"
+					 data-calendar-uids="{calendar.uid}">
+				<span class="icon-spinner"></span>
+				<div class="calendar__item calendar__button">
+					<a href="#" class="button green no-margin" data-load-more data-next-link>
+						<span class="icon-arrow-sync"></span>
+						Mehr laden
+					</a>
+				</div>
+			</div>
+		</f:for>
+		
 	</div>
 </div>
 
-<f:for each="{calendars}" as="calendar">
- {calendar.uid}
-</f:for>
+
+
+
