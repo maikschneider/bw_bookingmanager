@@ -22,8 +22,9 @@ function typescript() {
 
 function watch() {
   gulp.watch("Resources/Private/Scss/**/*.scss", sass);
+  gulp.watch("Resources/Private/TypeScript/**/*.js", typescript);
 }
 
 gulp.task('sass', sass);
 gulp.task('ts', typescript);
-gulp.task('default', gulp.series('sass', watch));
+gulp.task('default', gulp.series('sass', 'ts', watch));
