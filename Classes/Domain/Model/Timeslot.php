@@ -1,15 +1,12 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model;
 
 /***
- *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
  ***/
 
 /**
@@ -17,6 +14,7 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
     const REPEAT_NO = 0;
     const REPEAT_DAILY = 1;
     const REPEAT_WEEKLY = 2;
@@ -54,22 +52,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      */
     protected $holidaySetting = Timeslot::HOLIDAY_NO_EFFECT;
-
-    /**
-     * @return int
-     */
-    public function getHolidaySetting(): int
-    {
-        return $this->holidaySetting;
-    }
-
-    /**
-     * @param int $holidaySetting
-     */
-    public function setHolidaySetting(int $holidaySetting): void
-    {
-        $this->holidaySetting = $holidaySetting;
-    }
 
     /**
      * maxWeight
@@ -114,45 +96,42 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $repeatDays = 0;
 
     /**
-     * Returns the startDate
-     *
-     * @return \DateTime $startDate
+     * __construct
      */
-    public function getStartDate()
+    public function __construct()
     {
-        return $this->startDate;
+        //Do not remove the next line: It would break the functionality
+        $this->initStorageObjects();
     }
 
     /**
-     * Sets the startDate
+     * Initializes all ObjectStorage properties
+     * Do not modify this method!
+     * It will be rewritten on each save in the extension builder
+     * You may modify the constructor of this class instead
      *
-     * @param \DateTime $startDate
      * @return void
      */
-    public function setStartDate(\DateTime $startDate)
+    protected function initStorageObjects()
     {
-        $this->startDate = $startDate;
+        $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->calendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
-     * Returns the endDate
-     *
-     * @return \DateTime $endDate
+     * @return int
      */
-    public function getEndDate()
+    public function getHolidaySetting(): int
     {
-        return $this->endDate;
+        return $this->holidaySetting;
     }
 
     /**
-     * Sets the endDate
-     *
-     * @param \DateTime $endDate
-     * @return void
+     * @param int $holidaySetting
      */
-    public function setEndDate(\DateTime $endDate)
+    public function setHolidaySetting(int $holidaySetting): void
     {
-        $this->endDate = $endDate;
+        $this->holidaySetting = $holidaySetting;
     }
 
     /**
@@ -198,13 +177,21 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the isBookableHooks
+     * e.g. 73 => [1,0,0,1,0,0,1] => [0,3,6] (Su, We, Sa)
      *
-     * @return int $isBookableHooks
+     * @return array
      */
-    public function getIsBookableHooks()
+    public function getRepeatDaysSelectedWeekDays()
     {
-        return $this->isBookableHooks;
+        $selectedDays = [];
+
+        foreach (array_reverse(str_split(decbin($this->getRepeatDays()))) as $key => $value) {
+            if ($value === '1') {
+                $selectedDays[] = $key;
+            }
+        }
+
+        return $selectedDays;
     }
 
     /**
@@ -221,58 +208,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setRepeatDays(int $repeatDays)
     {
         $this->repeatDays = $repeatDays;
-    }
-
-    /**
-     * e.g. 73 => [1,0,0,1,0,0,1] => [0,3,6] (Su, We, Sa)
-     *
-     * @return array
-     */
-    public function getRepeatDaysSelectedWeekDays()
-    {
-        $selectedDays = [];
-
-        foreach(array_reverse(str_split(decbin($this->getRepeatDays()))) as $key => $value) {
-            if ($value === '1') {
-                $selectedDays[] = $key;
-            }
-        }
-
-        return $selectedDays;
-    }
-
-    /**
-     * Sets the isBookableHooks
-     *
-     * @param int $isBookableHooks
-     * @return void
-     */
-    public function setIsBookableHooks($isBookableHooks)
-    {
-        $this->isBookableHooks = $isBookableHooks;
-    }
-
-    /**
-     * __construct
-     */
-    public function __construct()
-    {
-        //Do not remove the next line: It would break the functionality
-        $this->initStorageObjects();
-    }
-
-    /**
-     * Initializes all ObjectStorage properties
-     * Do not modify this method!
-     * It will be rewritten on each save in the extension builder
-     * You may modify the constructor of this class instead
-     *
-     * @return void
-     */
-    protected function initStorageObjects()
-    {
-        $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->calendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -295,27 +230,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function removeEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove)
     {
         $this->entries->detach($entryToRemove);
-    }
-
-    /**
-     * Returns the entries
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
-     */
-    public function getEntries()
-    {
-        return $this->entries;
-    }
-
-    /**
-     * Sets the entries
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
-     * @return void
-     */
-    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
-    {
-        $this->entries = $entries;
     }
 
     /**
@@ -382,62 +296,114 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->repeatEnd = $repeatEnd;
     }
 
-    /**
-     * It's important to call this function only on timeslot objects, that
-     * have been processed by the TimeslotManager
-     */
-    public function getBookedWeight()
+    public function getStartEndTimestamp()
     {
-        $weight = 0;
-        foreach ($this->entries as $entry) {
-            $weight += $entry->getWeight();
-        }
-        return $weight;
+        return $this->getStartDate()->getTimestamp() . '' . $this->getEndDate()->getTimestamp();
     }
 
     /**
-     * It's important to call this function only on timeslot objects, that
-     * have been processed by the TimeslotManager
+     * Returns the startDate
+     *
+     * @return \DateTime $startDate
      */
-    public function getFreeWeight()
+    public function getStartDate()
     {
-        return $this->maxWeight - $this->getBookedWeight();
+        return $this->startDate;
     }
 
     /**
-     * converts number of $isBookableHooks to array of activated hooks
-     * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
-     * @return Array
+     * Sets the startDate
+     *
+     * @param \DateTime $startDate
+     * @return void
      */
-    public function getIsBookableHooksArray()
+    public function setStartDate(\DateTime $startDate)
     {
-        return array_map(
-            function ($value) {
-                return $value === '1';
-            },
-            array_reverse(str_split(decbin($this->getIsBookableHooks())))
-        );
+        $this->startDate = $startDate;
     }
 
-    public function getIsBookableByHooks()
+    /**
+     * Returns the endDate
+     *
+     * @return \DateTime $endDate
+     */
+    public function getEndDate()
     {
-        $activeHooks = $this->getIsBookableHooksArray();
+        return $this->endDate;
+    }
 
-        foreach ($activeHooks as $key => $isActiveHook) {
-            // dont call hook if not checked via TCA
-            if (!$isActiveHook) {
-                continue;
+    /**
+     * Sets the endDate
+     *
+     * @param \DateTime $endDate
+     * @return void
+     */
+    public function setEndDate(\DateTime $endDate)
+    {
+        $this->endDate = $endDate;
+    }
+
+    public function getApiOutput()
+    {
+        $feUsers = [];
+
+        foreach ($this->getEntries() as $entry) {
+            if ($entry->getFeUser()) {
+                $feUsers[] = $entry->getFeUser()->getUid();
             }
-
-            // get the hook from offset of global registed hooks array, make instance and call it
-            $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
-            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
-            if (!$_procObj->isBookable($this)) {
-                return false;
-            }
         }
 
-        return true;
+        return [
+            'uid' => $this->uid,
+            'startDate' => $this->startDate->getTimestamp(),
+            'displayStartDate' => $this->getDisplayStartDate(),
+            'endDate' => $this->endDate->getTimestamp(),
+            'displayEndDate' => $this->getDisplayEndDate(),
+            'maxWeight' => $this->maxWeight,
+            'isBookable' => $this->getIsBookable(),
+            'freeWeight' => $this->getFreeWeight(),
+            'bookedWeight' => $this->getBookedWeight(),
+            'feUsers' => $feUsers
+        ];
+    }
+
+    /**
+     * Returns the entries
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+    /**
+     * Sets the entries
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     * @return void
+     */
+    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
+    {
+        $this->entries = $entries;
+    }
+
+    public function getDisplayStartDate()
+    {
+        $date = $this->startDate;
+        if ($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
+    }
+
+    public function getDisplayEndDate()
+    {
+        $date = $this->endDate;
+        if ($date) {
+            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        }
+        return $date;
     }
 
     /**
@@ -465,42 +431,84 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return true;
     }
 
-    public function getStartEndTimestamp()
+    /**
+     * It's important to call this function only on timeslot objects, that
+     * have been processed by the TimeslotManager
+     */
+    public function getBookedWeight()
     {
-        return $this->getStartDate()->getTimestamp() . '' . $this->getEndDate()->getTimestamp();
-    }
-
-    public function getDisplayStartDate()
-    {
-        $date = $this->startDate;
-        if ($date) {
-            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $weight = 0;
+        foreach ($this->entries as $entry) {
+            $weight += $entry->getWeight();
         }
-        return $date;
+        return $weight;
     }
 
-    public function getDisplayEndDate()
+    public function getIsBookableByHooks()
     {
-        $date = $this->endDate;
-        if($date) {
-            $date->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $activeHooks = $this->getIsBookableHooksArray();
+
+        foreach ($activeHooks as $key => $isActiveHook) {
+            // dont call hook if not checked via TCA
+            if (!$isActiveHook) {
+                continue;
+            }
+
+            // get the hook from offset of global registed hooks array, make instance and call it
+            $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
+            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
+            if (!$_procObj->isBookable($this)) {
+                return false;
+            }
         }
-        return $date;
+
+        return true;
     }
 
-    public function getApiOutput()
+    /**
+     * converts number of $isBookableHooks to array of activated hooks
+     * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
+     *
+     * @return Array
+     */
+    public function getIsBookableHooksArray()
     {
-        return [
-            'uid' => $this->uid,
-            'startDate' => $this->startDate->getTimestamp(),
-            'displayStartDate' => $this->getDisplayStartDate(),
-            'endDate' => $this->endDate->getTimestamp(),
-            'displayEndDate' => $this->getDisplayEndDate(),
-            'maxWeight' => $this->maxWeight,
-            'isBookable' => $this->getIsBookable(),
-            'freeWeight' => $this->getFreeWeight(),
-            'bookedWeight' => $this->getBookedWeight()
-        ];
+        return array_map(
+            function ($value) {
+                return $value === '1';
+            },
+            array_reverse(str_split(decbin($this->getIsBookableHooks())))
+        );
+    }
+
+    /**
+     * Returns the isBookableHooks
+     *
+     * @return int $isBookableHooks
+     */
+    public function getIsBookableHooks()
+    {
+        return $this->isBookableHooks;
+    }
+
+    /**
+     * Sets the isBookableHooks
+     *
+     * @param int $isBookableHooks
+     * @return void
+     */
+    public function setIsBookableHooks($isBookableHooks)
+    {
+        $this->isBookableHooks = $isBookableHooks;
+    }
+
+    /**
+     * It's important to call this function only on timeslot objects, that
+     * have been processed by the TimeslotManager
+     */
+    public function getFreeWeight()
+    {
+        return $this->maxWeight - $this->getBookedWeight();
     }
 
 }

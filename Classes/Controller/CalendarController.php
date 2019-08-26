@@ -43,6 +43,18 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
      */
     protected $timeslotRepository = null;
 
+    /**
+     * @var \Blueways\BwBookingmanager\Service\AccessControlService
+     * @inject
+     */
+    protected $accessControlService;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+     * @inject
+     */
+    protected $frontendUserRepository;
+
     public function initializeAction()
     {
         $this->entryRepository = $this->objectManager->get(EntryRepository::class);
@@ -63,6 +75,10 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             $this->forward('new', 'Entry');
         }
 
+        if ((int)$this->settings['mode'] === 3) {
+            $this->forward('list', 'Entry');
+        }
+
         $calendars = $this->calendarRepository->findAll();
 
         $this->view->setTemplate($this->settings['template']['calendar']['list']);
@@ -78,6 +94,13 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     public function showAction(
         \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
     ) {
+        // check for fe_user
+        $feUser = false;
+        if ($this->accessControlService->hasLoggedInFrontendUser()) {
+            $feUser = $this->frontendUserRepository->findByIdentifier($this->accessControlService->getFrontendUserUid());
+        }
+
+
         // create date from arguments and configuration
         $startDate = new \DateTime('now');
         $startDate->setTime(0, 0, 0);
@@ -99,6 +122,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $this->view->assignMultiple([
             'calendar' => $calendar,
             'configuration' => $configuration,
+            'feUser' => $feUser
         ]);
     }
 }

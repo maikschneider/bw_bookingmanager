@@ -5,7 +5,11 @@
 		"sourceMap": false,
 		"removeComments": false,
 		"pretty": true,
-        "baseUrl": ".",
+		"baseUrl": ".",
+		"moduleResolution": "node",
+		"alwaysStrict": true,
+		"downlevelIteration": true,
+		"experimentalDecorators": true
 		"paths": {
 			"TYPO3/CMS/BwBookingmanager/*": [
 				"Resources/Private/TypeScript/*",
@@ -14,12 +18,22 @@
 			"TYPO3/CMS/Backend/*": [
 				"public/typo3/sysext/backend/Resources/Private/TypeScript/*",
 				"public/typo3/sysext/backend/Resources/Public/JavaScript/*"
+			],
+			"TYPO3/CMS/Core/*": [
+				"public/typo3/sysext/core/Resources/Private/TypeScript/*"
 			]
-		}
+		},
+		"typeRoots": [
+			"node_modules/@types",
+			"types"
+		]
 	},
-    "exclude": [
-      "node_modules",
-      "Configuration",
-      "public"
-    ]
+	"include": [
+		"Resources/Private/TypeScript/*"
+	],
+	"exclude": [
+		"node_modules",
+		"Configuration",
+		"public"
+	]
 }

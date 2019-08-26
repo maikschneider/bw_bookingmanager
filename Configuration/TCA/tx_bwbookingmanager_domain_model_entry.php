@@ -15,11 +15,11 @@ return [
         'enablecolumns' => [
             'disabled' => 'hidden',
         ],
-        'searchFields' => 'start_date,end_date,name,prename,token,street,zip,city,phone,email,newsletter,weight,timeslot,calendar,special1,special2,confirmed',
+        'searchFields' => 'start_date,end_date,name,prename,token,street,zip,city,phone,email,newsletter,weight,timeslot,calendar,special1,special2,confirmed,fe_user',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_entry.svg',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, token, hidden, calendar, timeslot, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight,special1, special2, confirmed',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, token, hidden, calendar, timeslot, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight,special1, special2, confirmed, fe_user',
     ],
     'types' => [
         'Blueways\BwBookingmanager\Domain\Model\Entry' => ['showitem' => '
@@ -39,7 +39,7 @@ return [
         ],
         'contactDataPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData',
-            'showitem' => 'name, prename, --linebreak--, street, zip, --linebreak--, city, phone, --linebreak--, email'
+            'showitem' => 'name, prename, --linebreak--, street, zip, --linebreak--, city, phone, --linebreak--, email, fe_user'
         ],
         'specialPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.special',
@@ -299,5 +299,31 @@ return [
                 'type' => 'passthrough',
             ],
         ],
+        'fe_user' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.fe_user',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'fe_users',
+                'foreign_table' => 'fe_users',
+                'foreign_table_field' => 'entries',
+                'size' => 1,
+                'maxitems' => 1,
+                'eval' => 'int',
+                'default' => 0,
+                'suggestOptions' => [
+                    'fe_users' => [
+                        'searchWholePhrase' => 1,
+                        'additionalSearchFields' => 'name, short_name, first_name, last_name'
+                    ]
+                ],
+                'fieldWizard' => [
+                    'recordsOverview' => [
+                        'disabled' => true,
+                    ],
+                ],
+            ]
+        ]
     ],
 ];

@@ -103,6 +103,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             else {
                 daylink.addClass('active');
                 dayDetailDiv.addClass('daydetail--selected');
+                // @ts-ignore
                 this.newDataLink = link;
                 this.calendarDataLinks.removeClass('active');
                 link.addClass('active');
@@ -226,9 +227,11 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             var _this = this;
             var triggerHandler = function (e) {
                 e.preventDefault();
+                // @ts-ignore
                 _this.trigger = $(e.currentTarget);
                 _this.show();
             };
+            // @ts-ignore
             $('.t3js-timeslotdatesselect-trigger').off('click').click(triggerHandler);
         };
         return TimeslotDatesSelect;

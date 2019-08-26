@@ -141,6 +141,12 @@
 			<trans-unit id="flashmessage.delete.error.message">
 				<source>There was an error deleting your booking. Please get in touch with us.</source>
 			</trans-unit>
+			<trans-unit id="flashmessage.delete.toolate.title">
+				<source>Too late.</source>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.toolate.message">
+				<source>This entry could not be deleted, it's too late.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

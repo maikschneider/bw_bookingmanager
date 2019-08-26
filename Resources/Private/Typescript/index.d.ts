@@ -55,21 +55,6 @@ declare namespace TBE_EDITOR {
 	export let fieldChanged: Function;
 }
 
-/**
- * Current AMD/RequireJS modules are returning *instances* of ad-hoc *classes*, make that known to TypeScript
- */
-declare module 'TYPO3/CMS/Backend/FormEngineValidation' {
-	export = new TYPO3.CMS.Backend.FormEngineValidation();
-}
-
-declare module 'TYPO3/CMS/Backend/FormEngine' {
-	export = new TYPO3.CMS.Backend.FormEngine();
-}
-
-declare module 'TYPO3/CMS/Backend/Wizard' {
-	export = new TYPO3.CMS.Backend.Wizard();
-}
-
 // type definition for global namespace object
 interface Window {
 	TYPO3: any;
@@ -117,5 +102,7 @@ interface JQuery {
 
 	// To be able to use jquery/autocomplete-slider we have to override the definition of jquerui
 	autocomplete(options?: { [key: string]: any }): any;
+
+
 }
 

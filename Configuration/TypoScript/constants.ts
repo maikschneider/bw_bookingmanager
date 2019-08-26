@@ -7,6 +7,9 @@ plugin.tx_bwbookingmanager {
     partialRootPath =
     layoutRootPath =
   }
+  settings {
+    cancelTime = 1440
+  }
 }
 
 plugin.tx_bwbookingmanager_pi1 {

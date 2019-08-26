@@ -11,6 +11,22 @@
                 <source>Display mode</source>
                 <target>Anzeige Art</target>
             </trans-unit>
+			<trans-unit id="flexforms_general.mode.0">
+				<source>Calendar list</source>
+				<target>Kalenderliste</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.1">
+				<source>Single Calendar</source>
+				<target>Einzelner Kalender</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.2">
+				<source>New entry</source>
+				<target>Neuer Eintrag</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.3">
+				<source>Entry list</source>
+				<target>Einträge anzeigen</target>
+			</trans-unit>
             <trans-unit id="flexforms_general.mode.calendar_list">
                 <source>Calendar list</source>
                 <target>Kalender Liste</target>
@@ -134,6 +150,9 @@
             <trans-unit id="module.dashboard">
                 <target>Übersicht</target>
             </trans-unit>
+			<trans-unit id="module.shift">
+				<target>Schichtansicht</target>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
                 <target>Für die Ausgewählte Seite wurden keine Kalendereinträge gefunden.</target>
