@@ -50,7 +50,7 @@ class TimeslotDatesSelect {
    */
   private init(): void
   {
-    this.cacheDom();
+    this.cacheModalDom();
     this.bindEvents();
     this.openFirstView();
   }
@@ -198,7 +198,7 @@ class TimeslotDatesSelect {
     this.currentCalendarViewUid = $(e.currentTarget).data('calendar-uid');
   }
 
-  private cacheDom()
+  private cacheModalDom()
   {
     this.newDataLink = null;
     this.calendarTabs = this.currentModal.find('.calendar-tab');
@@ -213,14 +213,9 @@ class TimeslotDatesSelect {
     if(!this.savedLink.length) this.savedLink = null;
   }
 
-  private show()
+  private cacheFormDom()
   {
-    const wizardUri = this.trigger.data('wizard-uri');
-    const modalTitle = this.trigger.data('modal-title');
-    const modalSaveButtonText = this.trigger.data('modal-save-button-text');
-    const modalViewButtonText = this.trigger.data('modal-view-button-text');
-    const modalCancelButtonText = this.trigger.data('modal-cancel-button-text');
-
+    this.trigger = $('.t3js-timeslotdatesselect-trigger');
     this.calendarSelectField = $('select[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[calendar]"]');
     this.hiddenStartDateField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[start_date]"]');
     this.hiddenEndDateField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[end_date]"]');
@@ -228,6 +223,15 @@ class TimeslotDatesSelect {
 
     this.startDateText = $('#savedStartDate');
     this.endDateText = $('#savedEndDate');
+  }
+
+  private show()
+  {
+    const wizardUri = this.trigger.data('wizard-uri');
+    const modalTitle = this.trigger.data('modal-title');
+    const modalSaveButtonText = this.trigger.data('modal-save-button-text');
+    const modalViewButtonText = this.trigger.data('modal-view-button-text');
+    const modalCancelButtonText = this.trigger.data('modal-cancel-button-text');
 
     this.currentModal = Modal.advanced({
 		type: 'ajax',
@@ -309,17 +313,31 @@ class TimeslotDatesSelect {
 
   }
 
+  /**
+   * Set default values that were added to the trigger.
+   */
+  private setDefaults()
+  {
+    if(this.trigger.data('default-start-date')) {
+      this.hiddenStartDateField.val(this.trigger.data('default-start-date'));
+    }
+    if (this.trigger.data('default-end-date')) {
+      this.hiddenEndDateField.val(this.trigger.data('default-end-date'));
+    }
+  }
+
   public initializeTrigger(): void {
+
+    this.cacheFormDom();
+    this.setDefaults();
 
     const triggerHandler: Function = (e: JQueryEventObject): void => {
       e.preventDefault();
-      // @ts-ignore
-      this.trigger = $(e.currentTarget);
       this.show();
     };
 
     // @ts-ignore
-    $('.t3js-timeslotdatesselect-trigger').off('click').click(triggerHandler);
+    this.trigger.off('click').click(triggerHandler);
   }
 
 

@@ -467,6 +467,7 @@ $not-bookable: #d1695b;
 
         &__timeslot {
             padding: 0.5rem;
+            display: block;
 
             &.bookable {
                 background: $bookable;

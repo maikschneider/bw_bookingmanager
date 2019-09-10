@@ -9,14 +9,14 @@
 <div class="row">
 	<div class="col-md-12 calendar">
 		<h1>Schichten</h1>
-
+		<f:debug>{_all}</f:debug>
 		<f:for each="{calendars}" as="c">
 
 			<h2>{c.calendar.name}</h2>
 
 			<div class="calendar calendar--list">
 
-				<div class="bookingmanager-show-calendar calendar--only-bookable"
+				<div class="bookingmanager-show-calendar"
 						 data-calendar-uids="{c.calendar.uid}"
 						 data-fe-user="{feUser.uid}">
 
@@ -53,13 +53,27 @@
 										<f:if condition="{timeslot.isBookable}">
 											<f:then>
 
-												<f:link.action action="newEntry" arguments="{name: 'test', calendar: c.calendar.uid, timeslot: timeslot.uid, startDate: timeslot.startDate, endDate: timeslot.endDate}">
+												<f:link.action action="newEntry"
+																			 class="calendar__item calendar__timeslot {bookable}"
+																			 arguments="{calendar: c.calendar.uid, timeslot: timeslot.uid, startDate: timeslot.startDate, endDate: timeslot.endDate}">
 
 													{timeslot.startDate->f:format.date(format: 'H:m')} - {timeslot.endDate->f:format.date(format:
 													'H:m')}
 												</f:link.action>
 
 											</f:then>
+											<f:else>
+
+													<f:for each="{timeslot.entries}" as="entry">
+														<be:link.editRecord uid="{entry}"
+																								class="calendar__item calendar__timeslot {bookable}"
+																								table="tx_bwbookingmanager_domain_model_entry">
+															{timeslot.startDate->f:format.date(format: 'H:m')} -
+															{timeslot.endDate->f:format.date(format: 'H:m')}
+														</be:link.editRecord>
+													</f:for>
+
+											</f:else>
 										</f:if>
 
 									</f:for>
