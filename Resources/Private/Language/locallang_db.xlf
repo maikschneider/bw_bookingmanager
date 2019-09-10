@@ -267,6 +267,30 @@
 			<trans-unit id="date.dayNames.short.6">
 				<source>Sa</source>
 			</trans-unit>
+			<trans-unit id="date.dayNames.long.0">
+				<source>Sunday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.7">
+				<source>Sunday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.1">
+				<source>Monday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.2">
+				<source>Tuesday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.3">
+				<source>Wednesday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.4">
+				<source>Thursday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.5">
+				<source>Friday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.6">
+				<source>Saturday</source>
+			</trans-unit>
 			<trans-unit id="date.monthNames.1">
 				<source>January</source>
 			</trans-unit>

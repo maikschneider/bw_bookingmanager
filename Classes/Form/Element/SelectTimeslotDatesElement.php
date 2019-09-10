@@ -1,14 +1,16 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Form\Element;
 
-use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Backend\Form\NodeFactory;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class SelectTimeslotDatesElement extends AbstractFormElement
 {
+
     /**
      * @var StandaloneView
      */
@@ -18,21 +20,6 @@ class SelectTimeslotDatesElement extends AbstractFormElement
      * @var UriBuilder
      */
     protected $uriBuilder;
-
-    /**
-     * @param NodeFactory $nodeFactory
-     * @param array $data
-     */
-    public function __construct(NodeFactory $nodeFactory, array $data)
-    {
-        parent::__construct($nodeFactory, $data);
-        // Would be great, if we could inject the view here, but since the constructor is in the interface, we can't
-        $this->templateView = GeneralUtility::makeInstance(StandaloneView::class);
-        $this->templateView->setLayoutRootPaths([GeneralUtility::getFileAbsFileName('EXT:bw_bookingmanager/Resources/Private/Layouts/')]);
-        $this->templateView->setPartialRootPaths([GeneralUtility::getFileAbsFileName('EXT:bw_bookingmanager/Resources/Private/Partials/')]);
-        $this->templateView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName('EXT:bw_bookingmanager/Resources/Private/Templates/Administration/TimeslotDatesElement.html'));
-        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-    }
 
     /**
      * Default field wizards enabled for this element.
@@ -56,6 +43,21 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             ],
         ],
     ];
+
+    /**
+     * @param NodeFactory $nodeFactory
+     * @param array $data
+     */
+    public function __construct(NodeFactory $nodeFactory, array $data)
+    {
+        parent::__construct($nodeFactory, $data);
+        // Would be great, if we could inject the view here, but since the constructor is in the interface, we can't
+        $this->templateView = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->templateView->setLayoutRootPaths([GeneralUtility::getFileAbsFileName('EXT:bw_bookingmanager/Resources/Private/Layouts/')]);
+        $this->templateView->setPartialRootPaths([GeneralUtility::getFileAbsFileName('EXT:bw_bookingmanager/Resources/Private/Partials/')]);
+        $this->templateView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName('EXT:bw_bookingmanager/Resources/Private/Templates/Administration/TimeslotDatesElement.html'));
+        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+    }
 
     /**
      * This will render the date and timeslot picker
@@ -107,7 +109,12 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $now = new \DateTime('now');
         $now = $now->getTimestamp();
 
-        if($row['start_date']) {
+        if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']) && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate']) && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'])) {
+            $startDate = $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate'];
+            $endDate = $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'];
+        }
+
+        if ($row['start_date']) {
             $startDate = $row['start_date'];
 
             $now = new \DateTime();

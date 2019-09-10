@@ -1,24 +1,80 @@
 <f:be.pageRenderer includeRequireJsModules="{
    0:'TYPO3/CMS/BwBookingmanager/Calendar'
+}" includeCssFiles="{
+	0:'{f:uri.resource(path:\'Css/administration-calendar.css\')}'
 }"/>
 
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12 calendar">
 		<h1>Schichten</h1>
 
-		<f:for each="{calendars}" as="calendar">
-			<div class="bookingmanager-show-calendar calendar--loading calendar--only-bookable"
-					 data-calendar-uids="{calendar.uid}">
-				<span class="icon-spinner"></span>
-				<div class="calendar__item calendar__button">
-					<a href="#" class="button green no-margin" data-load-more data-next-link>
-						<span class="icon-arrow-sync"></span>
-						Mehr laden
-					</a>
+		<f:for each="{calendars}" as="c">
+
+			<h2>{c.calendar.name}</h2>
+
+			<div class="calendar calendar--list">
+
+				<div class="bookingmanager-show-calendar calendar--only-bookable"
+						 data-calendar-uids="{c.calendar.uid}"
+						 data-fe-user="{feUser.uid}">
+
+					<div class="calendar__container calendar__container--{c.configuration.weeks->f:count()}-weeks">
+
+						<f:for as="day" each="{c.configuration.days}" iteration="i">
+
+							<f:variable name="bookable">{f:if(condition: day.isBookable, then: 'bookable', else: 'not-bookable')}
+							</f:variable>
+							<f:variable name="inPast">{f:if(condition: day.isInPast, then: 'in-past', else: 'not-in-past')}
+							</f:variable>
+							<f:variable name="notInMonth">{f:if(condition: day.isNotInMonth, then: 'not-in-month', else: 'in-month')}
+							</f:variable>
+
+							<div class="calendar__day calendar__day--{bookable} calendar__day--{inPast} calendar__day--{notInMonth}">
+
+								<h4>{day.date->f:format.date(format:'d.m.Y')}</h4>
+								<h3 class="short">
+									<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.{day.date->f:format.date(format:'w')}"/>
+								</h3>
+								<h3 class="long">
+									<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.long.{day.date->f:format.date(format:'w')}"/>
+								</h3>
+
+								<div class="calendar__timeslots">
+
+									<f:for each="{day.timeslots}" as="timeslot">
+
+										<f:variable name="timeslot">{c.configuration.timeslots.{timeslot}}</f:variable>
+										<f:variable name="bookable">{f:if(condition: timeslot.isBookable, then: 'bookable', else:
+											'not-bookable')}
+										</f:variable>
+
+										<f:if condition="{timeslot.isBookable}">
+											<f:then>
+
+												<f:link.action action="newEntry" arguments="{name: 'test', calendar: c.calendar.uid, timeslot: timeslot.uid, startDate: timeslot.startDate, endDate: timeslot.endDate}">
+
+													{timeslot.startDate->f:format.date(format: 'H:m')} - {timeslot.endDate->f:format.date(format:
+													'H:m')}
+												</f:link.action>
+
+											</f:then>
+										</f:if>
+
+									</f:for>
+
+								</div>
+
+							</div>
+
+						</f:for>
+
+					</div>
+
 				</div>
 			</div>
 		</f:for>
-
 	</div>
 </div>
 

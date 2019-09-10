@@ -14,6 +14,8 @@ namespace Blueways\BwBookingmanager\Controller;
  */
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
@@ -194,23 +196,26 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
     public function shiftAction()
     {
+        $startDate = new \DateTime('now');
+        $startDate->setTime(0, 0, 0);
+
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+
         $calendars = $this->calendarRepository->findAll();
-        $calendarUids = '';
-        $calendarLinks = '';
+
+        $calendarsConf = [];
 
         foreach ($calendars as $calendar) {
-            $link = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri(
-                'ajax_api_calendar_show',
-                ['calendar' => $calendar->getUid()]
-            );
+            $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+            $configuration = $calendarManager->getConfiguration($dateConf);
 
-            $calendarUids .= $calendar->getUid() . ',';
-            $calendarLinks .= $link . ',';
+            $calendarsConf[] = [
+                'configuration' => $configuration,
+                'calendar' => $calendar
+            ];
         }
 
-        $this->view->assign('calendars', $calendars);
-        $this->view->assign('calendarUids', substr($calendarUids, 0, -1));
-        $this->view->assign('calendarLinks', substr($calendarLinks, 0, -1));
+        $this->view->assign('calendars', $calendarsConf);
     }
 
     /**
@@ -218,15 +223,28 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      */
     public function newEntryAction()
     {
-        $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_entry');
+        $defaults = [];
+        $params = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
+
+        if ($params['calendar'] && $params['timeslot'] && $params['startDate'] && $params['endDate']) {
+            $defaults = [
+                'defVals[tx_bwbookingmanager_domain_model_entry][calendar]' => $params['calendar'],
+                'defVals[tx_bwbookingmanager_domain_model_entry][timeslot]' => $params['timeslot'],
+                'defVals[tx_bwbookingmanager_domain_model_entry][startDate]' => $params['startDate'],
+                'defVals[tx_bwbookingmanager_domain_model_entry][endDate]' => $params['endDate']
+            ];
+        }
+
+        $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_entry', $defaults);
     }
 
     /**
      * Redirect to tceform creating a new record
      *
      * @param string $table table name
+     * @param array $defValues
      */
-    private function redirectToCreateNewRecord($table)
+    private function redirectToCreateNewRecord($table, $defValues = [])
     {
         $pid = $this->pageUid;
         if ($pid === 0 && isset($this->tsConfiguration['defaultPid.'])
@@ -241,12 +259,14 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         } else {
             $returnUrl = 'index.php?M=web_BwBookingmanagerTxBookingmanagerM1';
         }
-
         $returnUrl .= '&id=' . $this->pageUid . $this->getToken();
-        $url = BackendUtilityCore::getModuleUrl('record_edit', [
+
+        $params = array_merge([
             'edit[' . $table . '][' . $pid . ']' => 'new',
             'returnUrl' => $returnUrl
-        ]);
+        ], $defValues);
+
+        $url = BackendUtilityCore::getModuleUrl('record_edit', $params);
         HttpUtility::redirect($url);
     }
 
@@ -394,8 +414,8 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         ];
         foreach ($buttons as $key => $tableConfiguration) {
             if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList(
-                    $this->getBackendUser()->groupData['tables_modify'],
-                    $tableConfiguration['table']
+                $this->getBackendUser()->groupData['tables_modify'],
+                $tableConfiguration['table']
                 )
             ) {
                 // @TODO repair translation
