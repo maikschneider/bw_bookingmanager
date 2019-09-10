@@ -37,7 +37,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      * entryRepository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     *
      */
     protected $entryRepository = null;
 
@@ -45,7 +44,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      * calendarRepository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
-     *
      */
     protected $calendarRepository = null;
 
@@ -142,6 +140,14 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         return '&' . $tokenParameterName . '=' . $token;
     }
 
+    /**
+     * @return bool
+     */
+    private static function is9up(): bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
+    }
+
     public function blockslotAction()
     {
         $hideForm = true;
@@ -188,18 +194,23 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
     public function shiftAction()
     {
-        $calendars = $this->calendarRepository->findAllIgnorePid();
-        $links = [];
+        $calendars = $this->calendarRepository->findAll();
+        $calendarUids = '';
+        $calendarLinks = '';
 
         foreach ($calendars as $calendar) {
-            $links[] = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri(
+            $link = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri(
                 'ajax_api_calendar_show',
-                ['calendar' => $calendar]
+                ['calendar' => $calendar->getUid()]
             );
+
+            $calendarUids .= $calendar->getUid() . ',';
+            $calendarLinks .= $link . ',';
         }
 
         $this->view->assign('calendars', $calendars);
-        $this->view->assign('links', $links);
+        $this->view->assign('calendarUids', substr($calendarUids, 0, -1));
+        $this->view->assign('calendarLinks', substr($calendarLinks, 0, -1));
     }
 
     /**
@@ -247,6 +258,17 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_blockslot');
     }
 
+    public function injectCalendarRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
+    ) {
+        $this->calendarRepository = $calendarRepository;
+    }
+
+    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
+    {
+        $this->entryRepository = $entryRepository;
+    }
+
     protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
     {
         parent::initializeView($view);
@@ -263,17 +285,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->createMenu();
         $this->createButtons();
         $view->assign('is9up', self::is9up());
-    }
-
-    public function injectCalendarRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
-    ) {
-        $this->calendarRepository = $calendarRepository;
-    }
-
-    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
-    {
-        $this->entryRepository = $entryRepository;
     }
 
     /**
@@ -355,6 +366,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $printButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
                 ->setDataAttributes([
+                    'toggle' => 'tooltip',
                     'placement' => 'bottom',
                 ])
                 ->setOnClick('window.print()')
@@ -382,13 +394,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         ];
         foreach ($buttons as $key => $tableConfiguration) {
             if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList(
-                $this->getBackendUser()->groupData['tables_modify'],
-                $tableConfiguration['table']
-            )
+                    $this->getBackendUser()->groupData['tables_modify'],
+                    $tableConfiguration['table']
+                )
             ) {
                 // @TODO repair translation
                 //$title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
-                $title = $tableConfiguration['label'];
+                $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
                 $viewButton = $buttonBar->makeLinkButton()
                     ->setHref($uriBuilder->reset()->setRequest($this->request)->uriFor(
                         $tableConfiguration['action'],
@@ -427,13 +439,5 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     protected function getBackendUser()
     {
         return $GLOBALS['BE_USER'];
-    }
-
-    /**
-     * @return bool
-     */
-    private static function is9up(): bool
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
     }
 }
