@@ -8,6 +8,7 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 
 class ApiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
@@ -17,6 +18,11 @@ class ApiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @var string
      */
     protected $defaultViewObjectName = JsonView::class;
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+     */
+    protected $feUserRepository;
 
     /**
      * @var array
@@ -33,6 +39,9 @@ class ApiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 'displayEndDate' => [],
             ],
         ],
+        'feUser' => [
+            '_exclude' => ['password']
+        ]
     ];
 
     /**
@@ -64,6 +73,27 @@ class ApiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
     ) {
         $this->calendarRepository = $calendarRepository;
+    }
+
+    public function injectFeUserRepository(\TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository $feUserRepository
+    ) {
+        $this->feUserRepository = $feUserRepository;
+    }
+
+    /**
+     * @param $feUser
+     */
+    public function getFeUser(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $queryParameters = $request->getParsedBody();
+        $feUserId = (int)$queryParameters['feUserId'];
+
+        if ($feUserId) {
+            $feUser = $this->feUserRepository->findByIdentifier($feUserId);
+            $this->view->assign('feUser', $feUser);
+        }
+
+        $this->view->setConfiguration($this->configuration);
     }
 
     protected function isSignatureValid(ServerRequestInterface $request, $routeName)

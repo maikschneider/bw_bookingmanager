@@ -92,6 +92,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             'fieldWizard' => $fieldWizardHtml,
             'savedData' => $savedData,
             'wizardUri' => $this->getWizardUri($savedData),
+            'feUserApiUri' => $this->getFeUserApiUri()
         ];
 
         $this->templateView->assignMultiple($arguments);
@@ -146,6 +147,14 @@ class SelectTimeslotDatesElement extends AbstractFormElement
     {
         $routeName = 'ajax_wizard_timeslots';
         $uriArguments['arguments'] = json_encode($savedData);
+        $uriArguments['signature'] = GeneralUtility::hmac($uriArguments['arguments'], $routeName);
+        return (string)$this->uriBuilder->buildUriFromRoute($routeName, $uriArguments);
+    }
+
+    protected function getFeUserApiUri()
+    {
+        $routeName = 'ajax_api_feuser_get';
+        $uriArguments['arguments'] = json_encode([]);
         $uriArguments['signature'] = GeneralUtility::hmac($uriArguments['arguments'], $routeName);
         return (string)$this->uriBuilder->buildUriFromRoute($routeName, $uriArguments);
     }

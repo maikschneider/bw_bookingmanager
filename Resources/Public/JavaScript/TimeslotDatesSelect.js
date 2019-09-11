@@ -1,10 +1,10 @@
 define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Backend/Icons", "jquery-ui/draggable", "jquery-ui/resizable"], function (require, exports, Modal, $, Icons) {
     "use strict";
     /**
-    * Module: TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
+     * Module: TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
      *
-    * @exports TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
-    */
+     * @exports TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
+     */
     var TimeslotDatesSelect = /** @class */ (function () {
         function TimeslotDatesSelect() {
         }
