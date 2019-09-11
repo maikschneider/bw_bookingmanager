@@ -13,6 +13,7 @@ namespace Blueways\BwBookingmanager\Controller;
  * @link     http://www.blueways.de
  */
 
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
@@ -20,6 +21,8 @@ use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -194,10 +197,14 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->view->assign('calendars', $calendars);
     }
 
-    public function shiftAction()
+    public function shiftAction(Calendar $calendar = null, int $day = 0, int $month = 0, int $year = 0)
     {
-        $startDate = new \DateTime('now');
-        $startDate->setTime(0, 0, 0);
+        if ($calendar && $day && $month && $year) {
+            $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
+        } else {
+            $startDate = new \DateTime('now');
+            $startDate->setTime(0, 0, 0);
+        }
 
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
@@ -209,9 +216,16 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
             $configuration = $calendarManager->getConfiguration($dateConf);
 
+            $entries = [];
+            $timeslotEntries = $calendar->getTimeslotEntries();
+            foreach ($timeslotEntries as $entry) {
+                $entries[$entry->getUid()] = $entry;
+            }
+
             $calendarsConf[] = [
                 'configuration' => $configuration,
-                'calendar' => $calendar
+                'calendar' => $calendar,
+                'entries' => $entries
             ];
         }
 
@@ -414,8 +428,8 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         ];
         foreach ($buttons as $key => $tableConfiguration) {
             if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList(
-                $this->getBackendUser()->groupData['tables_modify'],
-                $tableConfiguration['table']
+                    $this->getBackendUser()->groupData['tables_modify'],
+                    $tableConfiguration['table']
                 )
             ) {
                 // @TODO repair translation

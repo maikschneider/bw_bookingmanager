@@ -9,16 +9,14 @@
 <div class="row">
 	<div class="col-md-12 calendar">
 		<h1>Schichten</h1>
-		<f:debug>{_all}</f:debug>
+
 		<f:for each="{calendars}" as="c">
 
 			<h2>{c.calendar.name}</h2>
 
 			<div class="calendar calendar--list">
 
-				<div class="bookingmanager-show-calendar"
-						 data-calendar-uids="{c.calendar.uid}"
-						 data-fe-user="{feUser.uid}">
+				<div class="bookingmanager-show-calendar" data-calendar-uids="{c.calendar.uid}" data-fe-user="{feUser.uid}">
 
 					<div class="calendar__container calendar__container--{c.configuration.weeks->f:count()}-weeks">
 
@@ -64,14 +62,15 @@
 											</f:then>
 											<f:else>
 
-													<f:for each="{timeslot.entries}" as="entry">
-														<be:link.editRecord uid="{entry}"
-																								class="calendar__item calendar__timeslot {bookable}"
-																								table="tx_bwbookingmanager_domain_model_entry">
-															{timeslot.startDate->f:format.date(format: 'H:m')} -
-															{timeslot.endDate->f:format.date(format: 'H:m')}
-														</be:link.editRecord>
-													</f:for>
+												<f:for each="{timeslot.entries}" as="entry">
+													<be:link.editRecord uid="{entry}"
+																							class="calendar__item calendar__timeslot {bookable}"
+																							table="tx_bwbookingmanager_domain_model_entry">
+														{timeslot.startDate->f:format.date(format: 'H:m')} -
+														{timeslot.endDate->f:format.date(format: 'H:m')} <strong>{c.entries.{entry}.prename}
+														{c.entries.{entry}.name}</strong>
+													</be:link.editRecord>
+												</f:for>
 
 											</f:else>
 										</f:if>
@@ -83,6 +82,23 @@
 							</div>
 
 						</f:for>
+
+						<f:comment>
+							<div class="calendar_navigation">
+								<f:be.link class="calendar_navigation__link"
+													 route="view_shift"
+													 parameters="{calendar: c.calendar.uid, day: c.configuration.prev.day, month: c.configuration.prev.month, year: c.configuration.prev.year}">
+									zurück
+								</f:be.link>
+
+								<f:be.link class="calendar_navigation__link"
+													 route="view_shift"
+													 parameters="{calendar: c.calendar.uid, day: c.configuration.next.day, month: c.configuration.next.month, year: c.configuration.next.year}">
+									weiter
+								</f:be.link>
+
+							</div>
+						</f:comment>
 
 					</div>
 
