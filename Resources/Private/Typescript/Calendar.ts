@@ -1,5 +1,5 @@
-
 import $ = require('jquery');
+import Icons = require('TYPO3/CMS/Backend/Icons');
 
 
 declare global {
@@ -28,7 +28,7 @@ class Calendar {
   }
 
   private cacheDom() {
-
+    this.$calendarWrapper = $('.bookingmanager-show-calendar');
   }
 
   private bindEvents() {
@@ -57,11 +57,31 @@ class Calendar {
     }
 
     // start building the calendar
+    const urls = this.$calendarWrapper.attr('data-calendar-urls').split(',').map(function (item) {
+      return item;
+    });
+
     for (let i = 0; i < this.calendarUids.length; i++) {
-      const url = '/api/calendar/' + this.calendarUids[i] + '.json';
-      //$.BookingManager.loadCalendar(this.calendarUids[i], this._buildCalendarMarkup.bind(this, url));
+      this.loadCalendar(urls[i], this.buildCalendarMarkup.bind(this));
     }
 
+  }
+
+  private loadCalendar(url, callback)
+  {
+    Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
+      this.$calendarWrapper.html(icon);
+      $.get(
+        url,
+        callback.bind(this),
+        'json'
+      );
+    });
+  }
+
+  private buildCalendarMarkup(data)
+  {
+    console.log(data);
   }
 }
 
