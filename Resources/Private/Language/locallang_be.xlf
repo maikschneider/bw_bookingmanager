@@ -22,6 +22,9 @@
 				<source>Entry list</source>
 			</trans-unit>
             <trans-unit id="flexforms_general.mode.blockslot_new">
+				<source>New blockslot</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.entry_new">
 				<source>New entry</source>
 			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
@@ -123,6 +126,9 @@
             <trans-unit id="module.dashboard">
                 <source>Dashboard</source>
             </trans-unit>
+			<trans-unit id="module.shift">
+				<source>Shift listing</source>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
             </trans-unit>

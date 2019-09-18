@@ -4,9 +4,11 @@ namespace Blueways\BwBookingmanager\Backend\RecordList;
 
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 class RecordListConstraint
 {
+
     const TABLE = 'tx_bwbookingmanager_domain_model_entry';
 
     /**
@@ -16,8 +18,19 @@ class RecordListConstraint
      */
     public function isInAdministrationModule()
     {
-        $vars = GeneralUtility::_GET('M');
-        return $vars === 'web_BwBookingmanagerTxBookingmanagerM1';
+        if (self::is9Up()) {
+            return GeneralUtility::_GET('route') === '/web/BwBookingmanagerTxBookingmanagerM1/';
+        }
+
+        return GeneralUtility::_GET('M') === 'web_BwBookingmanagerTxBookingmanagerM1';
+    }
+
+    /**
+     * @return bool
+     */
+    private static function is9up(): bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
     }
 
     public function extendQuery(array &$parameters, array $arguments)
@@ -52,7 +65,7 @@ class RecordListConstraint
         }
 
         // hidden
-        $hidden = (int) $arguments['hidden'];
+        $hidden = (int)$arguments['hidden'];
         if ($hidden > 0) {
             if ($hidden === 1) {
                 $parameters['where'][] = 'hidden=1';
@@ -72,8 +85,8 @@ class RecordListConstraint
         }
 
         // calendar
-        if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !=='0') {
-            $parameters['where'][] = "calendar=" .$arguments['calendarUid'];
+        if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !== '0') {
+            $parameters['where'][] = "calendar=" . $arguments['calendarUid'];
         }
     }
 

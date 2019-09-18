@@ -1,0 +1,613 @@
+$primary-color: blue;
+$blue: blue;
+$body-font-color: #333;
+$light-gray: #ddd;
+$medium-gray: #ccc;
+$dark-gray: #bbb;
+$yellow: yellow;
+$bookable: #adca84;
+$not-bookable: #d1695b;
+
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.calendar {
+    background: #FFF;
+    padding: 1rem;
+
+    .icon-spinner {
+        display: none;
+        font-size: 4rem;
+        color: $primary-color;
+        animation: spin 1s linear infinite;
+    }
+
+    &--loading {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        min-height: 3rem;
+
+        .icon-spinner {
+            display: block;
+            margin-bottom: 3rem;
+        }
+
+        .calendar__button {
+            display: none !important;
+        }
+    }
+
+    &--is-updating {
+        opacity: 0.5;
+
+        .icon-arrow-sync {
+            display: inline-block;
+            animation: spin 0.5s linear infinite;
+        }
+    }
+
+    &--controls {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        margin-bottom: 2rem;
+        align-items: center;
+
+        .button + .button {
+            margin-left: 0;
+        }
+
+        h3 {
+            margin-bottom: 1rem;
+        }
+    }
+
+    &--week {
+        display: grid;
+        grid-template-columns: auto 1fr;
+
+        .bookingmanager-show-calendar {
+            overflow: hidden;
+        }
+    }
+
+    &--week .calendar {
+
+
+        &--controls {
+            grid-column: 1 / 3;
+        }
+
+        &__week-controls {
+            grid-column: 2 / 3;
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: space-between;
+        }
+
+
+        &__navigation, &__month-header, &__week-header, &__day-month, &__button {
+            display: none;
+        }
+
+        &--only-bookable {
+            .calendar__timeslot.not-bookable {
+                display: none;
+            }
+        }
+
+        &__container {
+            display: none;
+            width: 400%;
+            grid-template-columns: repeat(35, 1fr);
+            transition: transform 0.5s ease;
+
+            // 5-7 weeks per month (container from one load)
+            @for $i from 5 through 6 {
+                &--#{$i}-weeks {
+                    width: $i * 100%;
+                    grid-template-columns: repeat(7 * $i, 1fr);
+
+                    @for $j from 1 through ($i - 1) {
+                        &[data-active-week="#{$j}"] {
+                            transform: translate3d((-100% / $i) * $j, 0, 0);
+                        }
+                    }
+                }
+            }
+
+            &--active {
+                display: grid;
+            }
+        }
+
+        &__day {
+            display: grid;
+            grid-template-columns: auto auto;
+
+            h4 {
+                order: 2;
+                width: 5ch;
+                overflow: hidden;
+                font-weight: bold;
+                margin-left: 3px;
+            }
+
+            h3 {
+                order: 1;
+                text-align: right;
+                margin-right: 3px;
+
+                &.long {
+                    display: none;
+                }
+            }
+
+            &-month--2 + .calendar__day,
+            &-month--4 + .calendar__day,
+            &-month--6 + .calendar__day {
+                background-color: rgba(#ccc, 0.2);
+            }
+        }
+
+        &__timeslots {
+            grid-column: 1 / 3;
+            order: 3;
+            min-height: 1000px;
+            display: grid;
+            background-image: linear-gradient(to bottom, transparent 0%, transparent 24%, $medium-gray 24%, $medium-gray 25%, transparent 25%, transparent 49%, $dark-gray 49%, $dark-gray 50%, transparent 50%, transparent 74%, $medium-gray 74%, $medium-gray 75%, transparent 75%, transparent 99%, $dark-gray 99%, $dark-gray 100%);
+            background-size: auto 100px;
+        }
+
+        &__timeslot {
+            background: $not-bookable;
+            display: grid;
+            align-content: center;
+            justify-content: center;
+            line-height: 0;
+            margin-right: 1px;
+            font-size: 0.8rem;
+
+            &.bookable {
+                background-color: $bookable;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: darken($bookable, 10%);
+                }
+            }
+
+            &.is-mine {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 0 15px 15px 0;
+                    border-color: transparent $yellow transparent transparent;
+                    position: absolute;
+                    display: block;
+                    right: 0;
+                    top: 0;
+                }
+
+            }
+        }
+
+        &__week-times {
+            min-height: 1000px;
+            display: grid;
+            margin-top: rem-calc(30);
+        }
+
+        &__week-time {
+            font-size: 0.8rem;
+            margin-right: 1rem;
+            line-height: 0;
+        }
+
+    }
+
+    &--month .calendar {
+
+        &__week-controls, &__week-times {
+            display: none;
+        }
+
+        &--only-bookable {
+            .calendar__timeslot.not-bookable {
+                display: none;
+            }
+        }
+
+        &__container {
+            display: none;
+            grid-template-columns: repeat(7, 1fr);
+            //@include breakpoint(large) {
+                grid-template-columns: repeat(7, 1fr) 7fr;
+            //}
+            background: $light-gray;
+            grid-column-gap: 1px;
+            grid-row-gap: 1px;
+            text-align: center;
+
+            &--active {
+                display: grid;
+            }
+        }
+
+        &__month-header {
+            grid-column: 2 / 7;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        &__navigation {
+            display: grid;
+            align-content: center;
+        }
+
+        &__week-header {
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 0.8rem;
+            background: $medium-gray;
+            padding: 0.4rem;
+
+            &--1 {
+                grid-column: 1/ 2;
+            }
+
+        }
+
+        &__day {
+            grid-column: 1 / 8;
+            grid-row: 9 / 10;
+            //@include breakpoint(large) {
+                grid-column: 8 / 9;
+                grid-row: 1 / 9;
+            //}
+            display: none;
+            background: $light-gray;
+            grid-template-columns: 1fr 1fr;
+            align-content: center;
+            padding: 2rem;
+
+            h3 {
+                text-align: right;
+                order: 1;
+                margin-right: 5px;
+
+                &.short {
+                    display: none;
+                }
+
+                &:after {
+                    content: ", ";
+                }
+            }
+
+            h4 {
+                grid-column: 2 / 3;
+                text-align: left;
+                order: 2;
+                font-weight: bold;
+            }
+        }
+
+        &__timeslots {
+            grid-column: 1 / 3;
+            order: 3;
+            justify-self: center;
+        }
+
+        &__timeslot {
+            background: $not-bookable;
+            padding: 0.5rem 2rem;
+            margin-bottom: 0.5rem;
+            max-width: 200px;
+
+            &.bookable {
+                cursor: pointer;
+                background-color: $bookable;
+                transition: background-color 0.2s ease;
+
+                &:hover {
+                    background-color: darken($bookable, 10%);
+                }
+            }
+
+            &.is-mine {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 0 15px 15px 0;
+                    border-color: transparent $yellow transparent transparent;
+                    position: absolute;
+                    display: block;
+                    right: 0;
+                    top: 0;
+                }
+
+            }
+        }
+
+        &__day-month {
+
+            background: #FFF;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+
+            &--1 {
+                grid-column: 1 / 2;
+            }
+
+
+            &--not-bookable {
+                background-color: $not-bookable;
+            }
+
+            &--in-past, &--not-in-month {
+                background-color: $light-gray;
+                color: $dark-gray;
+            }
+
+            &--bookable {
+                background-color: $bookable;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+                color: $body-font-color;
+
+                &:hover {
+                    background-color: darken($bookable, 10%);
+                }
+
+                &:hover + .calendar__day, &.calendar__day-month--selected + .calendar__day {
+                    display: grid;
+                    z-index: 1;
+                }
+
+                &:hover ~ .calendar__day-month--selected + .calendar__day {
+                    display: none;
+                }
+            }
+
+            &--selected, &--selected:hover {
+                background-color: $blue;
+                color: #FFF;
+                z-index: 0;
+            }
+
+        }
+
+        &__button {
+            display: none;
+        }
+    }
+
+    &--list .calendar {
+
+        &__month-header, &__navigation, &__week-header, &__week-controls, &__week-times {
+            display: none;
+        }
+
+
+        &--only-bookable {
+            .calendar__timeslot.not-bookable {
+                display: none;
+            }
+
+            .calendar__day:not(.calendar__day--bookable) {
+                display: none;
+            }
+        }
+
+        &__day-month {
+            display: none;
+        }
+
+        &__day {
+            display: grid;
+            grid-template-columns: 3rem 3rem 1fr;
+            grid-column-gap: 1rem;
+            border-bottom: 1px solid rgba($dark-gray, 0.6);
+            padding: 0.5rem;
+            align-items: center;
+            box-shadow: inset 4rem 0 0 $light-gray, inset 8rem 0 0 $medium-gray;
+
+            &--6, &--7 {
+                background: $light-gray;
+            }
+
+            &--in-past {
+                display: none;
+            }
+
+            h3 {
+                font-weight: bold;
+                margin-bottom: 0;
+                font-size: 1.2rem;
+                justify-self: center;
+
+                &.long {
+                    display: none;
+                }
+            }
+
+            h4 {
+                margin-bottom: 0;
+                font-size: 1.1rem;
+                width: 5ch;
+                overflow: hidden;
+            }
+        }
+
+        &__timeslot {
+            padding: 0.5rem;
+            display: block;
+
+            &.bookable {
+                background: $bookable;
+                cursor: pointer;
+
+                &:hover {
+                    background: darken($bookable, 10%);
+                }
+            }
+
+            &.not-bookable {
+                background: $not-bookable;
+            }
+
+            & + .calendar__timeslot {
+                margin-top: 0.2rem;
+            }
+
+            &.is-mine {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 0 5px 5px 0;
+                    border-color: transparent $yellow transparent transparent;
+                    position: absolute;
+                    display: block;
+                    right: 0;
+                    top: 0;
+                }
+
+            }
+        }
+
+        &__button {
+            display: grid;
+            justify-content: center;
+            align-content: center;
+            height: 6rem;
+            background: $light-gray;
+        }
+
+    }
+
+    &__lightbox {
+        overflow: hidden;
+        position: relative;
+        max-width: 500px;
+
+        .tx-bw-bookingmanager & {
+            display: none;
+        }
+
+        &__wrap {
+            width: 300%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            transition: transform 0.5s ease;
+
+            [data-step="2"] & {
+                transform: translate3d(-33.3%, 0, 0);
+            }
+
+            [data-step="success"] &, [data-step="error"] & {
+                transform: translate3d(-66.6%, 0, 0);
+            }
+        }
+
+        &__step {
+            display: grid;
+            justify-content: center;
+            align-content: center;
+
+            &--error {
+                display: none;
+            }
+
+            [data-step="error"] &--error {
+                display: grid;
+            }
+
+            [data-step="error"] &--success {
+                display: none;
+            }
+        }
+
+        .icon-spinner {
+            font-size: 4rem;
+            color: $primary-color;
+            animation: spin 1s linear infinite;
+        }
+
+        img {
+            max-width: 100px;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            opacity: 0.8;
+            margin-bottom: 0;
+        }
+
+        h3 {
+            font-weight: bold;
+        }
+
+        .button-group, img, h2 {
+            justify-self: center;
+        }
+
+        p.question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .callout {
+            margin: 1.5rem 0 2rem 0;
+            width: 99%;
+        }
+
+        .button-group {
+            margin-top: 1rem;
+        }
+
+    }
+}
+
+$h: 0;
+@for $i from 9 through 19 {
+    @for $j from 0 through 59 {
+        [data-ws="#{$i}-#{$j}"] {
+            grid-row-start: ($h * 60) + $j + 2;
+        }
+        [data-we="#{$i}-#{$j}"] {
+            grid-row-end: ($h * 60) + $j + 1;
+        }
+    }
+    $h: $h + 1;
+}

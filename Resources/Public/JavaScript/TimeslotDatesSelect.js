@@ -1,10 +1,10 @@
 define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Backend/Icons", "jquery-ui/draggable", "jquery-ui/resizable"], function (require, exports, Modal, $, Icons) {
     "use strict";
     /**
-    * Module: TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
+     * Module: TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
      *
-    * @exports TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
-    */
+     * @exports TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
+     */
     var TimeslotDatesSelect = /** @class */ (function () {
         function TimeslotDatesSelect() {
         }
@@ -14,7 +14,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
          * @private
          */
         TimeslotDatesSelect.prototype.init = function () {
-            this.cacheDom();
+            this.cacheModalDom();
             this.bindEvents();
             this.openFirstView();
         };
@@ -103,6 +103,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             else {
                 daylink.addClass('active');
                 dayDetailDiv.addClass('daydetail--selected');
+                // @ts-ignore
                 this.newDataLink = link;
                 this.calendarDataLinks.removeClass('active');
                 link.addClass('active');
@@ -127,7 +128,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             // save uid for next reopen
             this.currentCalendarViewUid = $(e.currentTarget).data('calendar-uid');
         };
-        TimeslotDatesSelect.prototype.cacheDom = function () {
+        TimeslotDatesSelect.prototype.cacheModalDom = function () {
             this.newDataLink = null;
             this.calendarTabs = this.currentModal.find('.calendar-tab');
             this.calendarViews = this.currentModal.find('.calendar-view');
@@ -141,18 +142,21 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             if (!this.savedLink.length)
                 this.savedLink = null;
         };
-        TimeslotDatesSelect.prototype.show = function () {
-            var wizardUri = this.trigger.data('wizard-uri');
-            var modalTitle = this.trigger.data('modal-title');
-            var modalSaveButtonText = this.trigger.data('modal-save-button-text');
-            var modalViewButtonText = this.trigger.data('modal-view-button-text');
-            var modalCancelButtonText = this.trigger.data('modal-cancel-button-text');
+        TimeslotDatesSelect.prototype.cacheFormDom = function () {
+            this.trigger = $('.t3js-timeslotdatesselect-trigger');
             this.calendarSelectField = $('select[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[calendar]"]');
             this.hiddenStartDateField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[start_date]"]');
             this.hiddenEndDateField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[end_date]"]');
             this.hiddenTimeslotField = $('input[name^="data[tx_bwbookingmanager_domain_model_entry]"][name$="[timeslot]"]');
             this.startDateText = $('#savedStartDate');
             this.endDateText = $('#savedEndDate');
+        };
+        TimeslotDatesSelect.prototype.show = function () {
+            var wizardUri = this.trigger.data('wizard-uri');
+            var modalTitle = this.trigger.data('modal-title');
+            var modalSaveButtonText = this.trigger.data('modal-save-button-text');
+            var modalViewButtonText = this.trigger.data('modal-view-button-text');
+            var modalCancelButtonText = this.trigger.data('modal-cancel-button-text');
             this.currentModal = Modal.advanced({
                 type: 'ajax',
                 content: wizardUri,
@@ -222,14 +226,27 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 }, 'html');
             });
         };
+        /**
+         * Set default values that were added to the trigger.
+         */
+        TimeslotDatesSelect.prototype.setDefaults = function () {
+            if (this.trigger.data('default-start-date')) {
+                this.hiddenStartDateField.val(this.trigger.data('default-start-date'));
+            }
+            if (this.trigger.data('default-end-date')) {
+                this.hiddenEndDateField.val(this.trigger.data('default-end-date'));
+            }
+        };
         TimeslotDatesSelect.prototype.initializeTrigger = function () {
             var _this = this;
+            this.cacheFormDom();
+            this.setDefaults();
             var triggerHandler = function (e) {
                 e.preventDefault();
-                _this.trigger = $(e.currentTarget);
                 _this.show();
             };
-            $('.t3js-timeslotdatesselect-trigger').off('click').click(triggerHandler);
+            // @ts-ignore
+            this.trigger.off('click').click(triggerHandler);
         };
         return TimeslotDatesSelect;
     }());

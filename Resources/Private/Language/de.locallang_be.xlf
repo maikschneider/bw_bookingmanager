@@ -150,6 +150,9 @@
             <trans-unit id="module.dashboard">
                 <target>Übersicht</target>
             </trans-unit>
+			<trans-unit id="module.shift">
+				<target>Schichtansicht</target>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
                 <target>Für die Ausgewählte Seite wurden keine Kalendereinträge gefunden.</target>

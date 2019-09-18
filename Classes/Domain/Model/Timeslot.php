@@ -346,11 +346,14 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getApiOutput()
     {
         $feUsers = [];
+        $entries = [];
 
         foreach ($this->getEntries() as $entry) {
             if ($entry->getFeUser()) {
                 $feUsers[] = $entry->getFeUser()->getUid();
             }
+
+            $entries[] = $entry->getUid();
         }
 
         return [
@@ -363,7 +366,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'isBookable' => $this->getIsBookable(),
             'freeWeight' => $this->getFreeWeight(),
             'bookedWeight' => $this->getBookedWeight(),
-            'feUsers' => $feUsers
+            'feUsers' => $feUsers,
+            'entries' => $entries
         ];
     }
 

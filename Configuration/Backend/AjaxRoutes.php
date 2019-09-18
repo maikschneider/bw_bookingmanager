@@ -23,5 +23,13 @@ return [
     'emailpreview' => [
         'path' => '/sendmail/get-email-preview',
         'target' => \Blueways\BwBookingmanager\Controller\Ajax\SendmailWizard::class . '::emailPreviewAction'
+    ],
+    'api_calendar_show' => [
+        'path' => '/api/calendar/show',
+        'target' => \Blueways\BwBookingmanager\Controller\ApiController::class . '::calendarShowAction'
+    ],
+    'api_feuser_get' => [
+        'path' => '/api/feuser',
+        'target' => \Blueways\BwBookingmanager\Controller\Ajax\ApiController::class . '::getFeUser'
     ]
 ];

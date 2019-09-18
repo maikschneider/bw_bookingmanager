@@ -13,16 +13,21 @@ namespace Blueways\BwBookingmanager\Controller;
  * @link     http://www.blueways.de
  */
 
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Lang\LanguageService;
@@ -37,7 +42,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      * entryRepository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     * @inject
      */
     protected $entryRepository = null;
 
@@ -45,7 +49,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      * calendarRepository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
-     * @inject
      */
     protected $calendarRepository = null;
 
@@ -82,148 +85,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         parent::initializeAction();
     }
 
-    protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
-    {
-        parent::initializeView($view);
-
-        $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-
-        if ($view instanceof BackendTemplateView) {
-            $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
-        }
-
-        $this->createMenu();
-        $this->createButtons();
-        $view->assign('is9up', self::is9up());
-    }
-
-    /**
-     * Create menu
-     */
-    protected function createMenu()
-    {
-        $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
-        $menu->setIdentifier('bw_bookingmanager');
-
-        $actions = [
-            ['action' => 'index', 'label' => 'entryListing'],
-            ['action' => 'blockslot', 'label' => 'blockslotListing'],
-            ['action' => 'dashboard', 'label' => 'dashboard'],
-        ];
-
-        foreach ($actions as $action) {
-            $item = $menu->makeMenuItem()
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:module.' . $action['label']))
-                ->setHref($this->getHref('Administration', $action['action']))
-                ->setActive($this->request->getControllerActionName() === $action['action']);
-            $menu->addMenuItem($item);
-        }
-
-        $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
-        if (is_array($this->pageInformation)) {
-            $this->view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation($this->pageInformation);
-        }
-    }
-
-    /**
-     * Create the panel of buttons
-     */
-    protected function createButtons()
-    {
-        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
-
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
-
-        // Filter and print Buttons
-        if ($this->request->getControllerActionName() === 'index') {
-            $toggleButton = $buttonBar->makeLinkButton()
-                ->setHref('#')
-                ->setDataAttributes([
-                    'togglelink' => '1',
-                    'toggle' => 'tooltip',
-                    'placement' => 'bottom',
-                ])
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.buttonTitle'))
-                ->setIcon($this->iconFactory->getIcon('actions-filter', Icon::SIZE_SMALL));
-
-            $printButton = $buttonBar->makeLinkButton()
-                ->setHref('#')
-                ->setDataAttributes([
-                    'placement' => 'bottom',
-                ])
-                ->setOnClick('window.print()')
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.print.buttonTitle'))
-                ->setIcon($this->iconFactory->getIcon('actions-file-csv', Icon::SIZE_SMALL));
-
-            $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
-            $buttonBar->addButton($printButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
-        }
-
-        // New Entry Button
-        $buttons = [
-            [
-                'table' => 'tx_bwbookingmanager_domain_model_entry',
-                'label' => 'flexforms_general.mode.entry_new',
-                'action' => 'newEntry',
-                'icon' => 'ext-bwbookingmanager-type-entry'
-            ],
-            [
-                'table' => 'tx_bwbookingmanager_domain_model_blockslot',
-                'label' => 'flexforms_general.mode.blockslot_new',
-                'action' => 'newBlockslot',
-                'icon' => 'ext-bwbookingmanager-type-blockslot'
-            ]
-        ];
-        foreach ($buttons as $key => $tableConfiguration) {
-            if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList($this->getBackendUser()->groupData['tables_modify'],
-                    $tableConfiguration['table'])
-            ) {
-                // @TODO repair translation
-                //$title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
-                $title = $tableConfiguration['label'];
-                $viewButton = $buttonBar->makeLinkButton()
-                    ->setHref($uriBuilder->reset()->setRequest($this->request)->uriFor($tableConfiguration['action'],
-                        [], 'Administration'))
-                    ->setDataAttributes([
-                        'toggle' => 'tooltip',
-                        'placement' => 'bottom',
-                        'title' => $title
-                    ])
-                    ->setTitle($title)
-                    ->setIcon($this->iconFactory->getIcon($tableConfiguration['icon'], Icon::SIZE_SMALL,
-                        'overlay-new'));
-                $buttonBar->addButton($viewButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
-            }
-        }
-
-        // Refresh
-        $path = VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >= VersionNumberUtility::convertVersionNumberToInteger('8.6') ? 'Resources/Private/Language/' : '';
-        $refreshButton = $buttonBar->makeLinkButton()
-            ->setHref(GeneralUtility::getIndpEnv('REQUEST_URI'))
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:lang/' . $path . 'locallang_core.xlf:labels.reload'))
-            ->setIcon($this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
-        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
-    }
-
-    /**
-     * Creates the URI for a backend action
-     *
-     * @param string $controller
-     * @param string $action
-     * @param array $parameters
-     * @return string
-     */
-    protected function getHref($controller, $action, $parameters = [])
-    {
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
-        return $uriBuilder->reset()->uriFor($action, $parameters, $controller);
-    }
-
     public function indexAction()
     {
         $hideForm = true;
@@ -255,6 +116,43 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->view->assign('calendars', $calendars);
     }
 
+    /**
+     * Get a CSRF token
+     *
+     * @param bool $tokenOnly Set it to TRUE to get only the token, otherwise including the &moduleToken= as prefix
+     * @return string
+     */
+    protected function getToken($tokenOnly = false)
+    {
+        if (self::is9up()) {
+            $tokenParameterName = 'token';
+            $token = FormProtectionFactory::get('backend')->generateToken(
+                'route',
+                'web_BwBookingmanagerTxBookingmanagerM1'
+            );
+        } else {
+            $tokenParameterName = 'moduleToken';
+            $token = FormProtectionFactory::get()->generateToken(
+                'moduleCall',
+                'web_BwBookingmanagerTxBookingmanagerM1'
+            );
+        }
+
+        if ($tokenOnly) {
+            return $token;
+        }
+
+        return '&' . $tokenParameterName . '=' . $token;
+    }
+
+    /**
+     * @return bool
+     */
+    private static function is9up(): bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
+    }
+
     public function blockslotAction()
     {
         $hideForm = true;
@@ -274,40 +172,23 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $startDate = new \DateTime('now');
         $startDate = $startDate->format('d-m-Y');
 
-        $chart1UriYear = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri('ajax_dashboard_chart1',
-            ['view' => 'year', 'startDate' => $startDate]);
-        $chart1UriMonth = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri('ajax_dashboard_chart1',
-            ['view' => 'month', 'startDate' => $startDate]);
-        $chart1UriWeek = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri('ajax_dashboard_chart1',
-            ['view' => 'week', 'startDate' => $startDate]);
+        $chart1UriYear = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri(
+            'ajax_dashboard_chart1',
+            ['view' => 'year', 'startDate' => $startDate]
+        );
+        $chart1UriMonth = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri(
+            'ajax_dashboard_chart1',
+            ['view' => 'month', 'startDate' => $startDate]
+        );
+        $chart1UriWeek = \Blueways\BwBookingmanager\Helper\DashboardCharts::getStaticDashboardChartUri(
+            'ajax_dashboard_chart1',
+            ['view' => 'week', 'startDate' => $startDate]
+        );
 
         $this->view->assign('calendars', $calendars);
         $this->view->assign('chart1UriYear', $chart1UriYear);
         $this->view->assign('chart1UriMonth', $chart1UriMonth);
         $this->view->assign('chart1UriWeek', $chart1UriWeek);
-    }
-
-    /**
-     * Get a CSRF token
-     *
-     * @param bool $tokenOnly Set it to TRUE to get only the token, otherwise including the &moduleToken= as prefix
-     * @return string
-     */
-    protected function getToken($tokenOnly = false)
-    {
-        if (self::is9up()) {
-            $tokenParameterName = 'token';
-            $token = FormProtectionFactory::get('backend')->generateToken('route', 'web_BwBookingmanagerTxBookingmanagerM1');
-        } else {
-            $tokenParameterName = 'moduleToken';
-            $token = FormProtectionFactory::get()->generateToken('moduleCall', 'web_BwBookingmanagerTxBookingmanagerM1');
-        }
-
-        if ($tokenOnly) {
-            return $token;
-        }
-
-        return '&' . $tokenParameterName . '=' . $token;
     }
 
     public function timeslotAction()
@@ -316,32 +197,68 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->view->assign('calendars', $calendars);
     }
 
-    /**
-     * Returns the LanguageService
-     *
-     * @return LanguageService
-     */
-    protected function getLanguageService()
+    public function shiftAction(Calendar $calendar = null, int $day = 0, int $month = 0, int $year = 0)
     {
-        return $GLOBALS['LANG'];
+        if ($calendar && $day && $month && $year) {
+            $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
+        } else {
+            $startDate = new \DateTime('now');
+            $startDate->setTime(0, 0, 0);
+        }
+
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+
+        $calendars = $this->calendarRepository->findAll();
+
+        $calendarsConf = [];
+
+        foreach ($calendars as $calendar) {
+            $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
+            $configuration = $calendarManager->getConfiguration($dateConf);
+
+            $entries = [];
+            $timeslotEntries = $calendar->getTimeslotEntries();
+            foreach ($timeslotEntries as $entry) {
+                $entries[$entry->getUid()] = $entry;
+            }
+
+            $calendarsConf[] = [
+                'configuration' => $configuration,
+                'calendar' => $calendar,
+                'entries' => $entries
+            ];
+        }
+
+        $this->view->assign('calendars', $calendarsConf);
     }
 
     /**
-     * Get backend user
-     *
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     * Redirect to form to create a new Entry record
      */
-    protected function getBackendUser()
+    public function newEntryAction()
     {
-        return $GLOBALS['BE_USER'];
+        $defaults = [];
+        $params = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
+
+        if ($params['calendar'] && $params['timeslot'] && $params['startDate'] && $params['endDate']) {
+            $defaults = [
+                'defVals[tx_bwbookingmanager_domain_model_entry][calendar]' => $params['calendar'],
+                'defVals[tx_bwbookingmanager_domain_model_entry][timeslot]' => $params['timeslot'],
+                'defVals[tx_bwbookingmanager_domain_model_entry][startDate]' => $params['startDate'],
+                'defVals[tx_bwbookingmanager_domain_model_entry][endDate]' => $params['endDate']
+            ];
+        }
+
+        $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_entry', $defaults);
     }
 
     /**
      * Redirect to tceform creating a new record
      *
      * @param string $table table name
+     * @param array $defValues
      */
-    private function redirectToCreateNewRecord($table)
+    private function redirectToCreateNewRecord($table, $defValues = [])
     {
         $pid = $this->pageUid;
         if ($pid === 0 && isset($this->tsConfiguration['defaultPid.'])
@@ -356,21 +273,15 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         } else {
             $returnUrl = 'index.php?M=web_BwBookingmanagerTxBookingmanagerM1';
         }
-
         $returnUrl .= '&id=' . $this->pageUid . $this->getToken();
-        $url = BackendUtilityCore::getModuleUrl('record_edit', [
+
+        $params = array_merge([
             'edit[' . $table . '][' . $pid . ']' => 'new',
             'returnUrl' => $returnUrl
-        ]);
-        HttpUtility::redirect($url);
-    }
+        ], $defValues);
 
-    /**
-     * Redirect to form to create a new Entry record
-     */
-    public function newEntryAction()
-    {
-        $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_entry');
+        $url = BackendUtilityCore::getModuleUrl('record_edit', $params);
+        HttpUtility::redirect($url);
     }
 
     /**
@@ -381,12 +292,186 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->redirectToCreateNewRecord('tx_bwbookingmanager_domain_model_blockslot');
     }
 
-    /**
-     * @return bool
-     */
-    private static function is9up(): bool
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
+    public function injectCalendarRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
+    ) {
+        $this->calendarRepository = $calendarRepository;
     }
 
+    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
+    {
+        $this->entryRepository = $entryRepository;
+    }
+
+    protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
+    {
+        parent::initializeView($view);
+
+        $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+
+        if ($view instanceof BackendTemplateView) {
+            $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/DateTimePicker');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
+        }
+
+        $this->createMenu();
+        $this->createButtons();
+        $view->assign('is9up', self::is9up());
+    }
+
+    /**
+     * Create menu
+     */
+    protected function createMenu()
+    {
+        $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('bw_bookingmanager');
+
+        $actions = [
+            ['action' => 'index', 'label' => 'entryListing'],
+            ['action' => 'blockslot', 'label' => 'blockslotListing'],
+            ['action' => 'dashboard', 'label' => 'dashboard'],
+            ['action' => 'shift', 'label' => 'shift'],
+        ];
+
+        foreach ($actions as $action) {
+            $item = $menu->makeMenuItem()
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:module.' . $action['label']))
+                ->setHref($this->getHref('Administration', $action['action']))
+                ->setActive($this->request->getControllerActionName() === $action['action']);
+            $menu->addMenuItem($item);
+        }
+
+        $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+        if (is_array($this->pageInformation)) {
+            $this->view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation($this->pageInformation);
+        }
+    }
+
+    /**
+     * Returns the LanguageService
+     *
+     * @return LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
+     * Creates the URI for a backend action
+     *
+     * @param string $controller
+     * @param string $action
+     * @param array $parameters
+     * @return string
+     */
+    protected function getHref($controller, $action, $parameters = [])
+    {
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+        return $uriBuilder->reset()->uriFor($action, $parameters, $controller);
+    }
+
+    /**
+     * Create the panel of buttons
+     */
+    protected function createButtons()
+    {
+        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+
+        // Filter and print Buttons
+        if ($this->request->getControllerActionName() === 'index') {
+            $toggleButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setDataAttributes([
+                    'togglelink' => '1',
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                ])
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.buttonTitle'))
+                ->setIcon($this->iconFactory->getIcon('actions-filter', Icon::SIZE_SMALL));
+
+            $printButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setDataAttributes([
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                ])
+                ->setOnClick('window.print()')
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.print.buttonTitle'))
+                ->setIcon($this->iconFactory->getIcon('actions-file-csv', Icon::SIZE_SMALL));
+
+            $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+            $buttonBar->addButton($printButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+        }
+
+        // New Entry Button
+        $buttons = [
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_entry',
+                'label' => 'flexforms_general.mode.entry_new',
+                'action' => 'newEntry',
+                'icon' => 'ext-bwbookingmanager-type-entry'
+            ],
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_blockslot',
+                'label' => 'flexforms_general.mode.blockslot_new',
+                'action' => 'newBlockslot',
+                'icon' => 'ext-bwbookingmanager-type-blockslot'
+            ]
+        ];
+        foreach ($buttons as $key => $tableConfiguration) {
+            if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList(
+                    $this->getBackendUser()->groupData['tables_modify'],
+                    $tableConfiguration['table']
+                )
+            ) {
+                // @TODO repair translation
+                //$title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+                $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+                $viewButton = $buttonBar->makeLinkButton()
+                    ->setHref($uriBuilder->reset()->setRequest($this->request)->uriFor(
+                        $tableConfiguration['action'],
+                        [],
+                        'Administration'
+                    ))
+                    ->setDataAttributes([
+                        'toggle' => 'tooltip',
+                        'placement' => 'bottom',
+                        'title' => $title
+                    ])
+                    ->setTitle($title)
+                    ->setIcon($this->iconFactory->getIcon(
+                        $tableConfiguration['icon'],
+                        Icon::SIZE_SMALL,
+                        'overlay-new'
+                    ));
+                $buttonBar->addButton($viewButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
+            }
+        }
+
+        // Refresh
+        $path = VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >= VersionNumberUtility::convertVersionNumberToInteger('8.6') ? 'Resources/Private/Language/' : '';
+        $refreshButton = $buttonBar->makeLinkButton()
+            ->setHref(GeneralUtility::getIndpEnv('REQUEST_URI'))
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:lang/' . $path . 'locallang_core.xlf:labels.reload'))
+            ->setIcon($this->iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
+        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
+    }
+
+    /**
+     * Get backend user
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
+    }
 }

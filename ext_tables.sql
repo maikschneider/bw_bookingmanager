@@ -21,15 +21,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_calendar (
 	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
 	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
 
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-	l10n_state text,
-
 	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
-
+	KEY parent (pid)
 );
 
 #
@@ -57,15 +50,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_timeslot (
 	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
 	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
 
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-	l10n_state text,
-
 	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
-
+	KEY parent (pid)
 );
 
 #
@@ -103,15 +89,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
 	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
 
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-	l10n_state text,
-
 	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
-
+	KEY parent (pid)
 );
 
 #
@@ -136,14 +115,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_notification (
 	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
 	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
 
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-	l10n_state text,
-
 	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
+	KEY parent (pid)
 );
 
 #
@@ -165,15 +138,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_blockslot (
 	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
 	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
 
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-	l10n_state text,
-
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
-
 );
 
 #
@@ -195,15 +161,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_holiday (
 	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
 	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
 
-	sys_language_uid int(11) DEFAULT '0' NOT NULL,
-	l10n_parent int(11) DEFAULT '0' NOT NULL,
-	l10n_diffsource mediumblob,
-	l10n_state text,
-
 	PRIMARY KEY (uid),
-	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
-
+	KEY parent (pid)
 );
 
 #

@@ -1,0 +1,17 @@
+.bm_headline {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+}
+
+.bm_headline a {
+	background: #ff8700;
+	color: #FFF;
+	padding: 5px 10px;
+	font-weight: bold;
+}
+
+.bw_calendar__navigation {
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+}
