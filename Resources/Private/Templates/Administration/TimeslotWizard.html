@@ -2,6 +2,7 @@
 
 
 <f:section name="Main">
+	<f:debug>{_all}</f:debug>
 	<link rel="stylesheet" href="{css}" type="text/css"/>
 	<div class="row">
 		<div class="col-xs-12 col-md-3">
@@ -9,6 +10,7 @@
 			<ul class="list-group">
 				<f:for each="{calendars}" as="c" iteration="i">
 					<a data-calendar-uid="{c.calendar.uid}"
+						 data-direct-booking="{c.calendar.directBooking}"
 						 class="list-group-item {f:if(condition:'{c.calendar.uid}=={currentCalendar}', then:'active')}"
 						 href="#calendar-tab-{c.calendar.uid}">{c.calendar.name}
 					</a>
@@ -209,7 +211,14 @@
 
 							<f:if condition="{c.calendar.directBooking}">
 								<f:then>
-									<p>@TODO: Form inputs for start and end time</p>
+
+									<f:for each="{c.monthView.}"
+									<div class="form-group">
+										<label>Start time</label> <input type="text" class="form-control" id="datetimepicker1"/>
+									</div>
+									<div class="form-group">
+										<label>End time</label> <input type="text" class="form-control" id="datetimepicker2"/>
+									</div>
 								</f:then>
 								<f:else>
 
