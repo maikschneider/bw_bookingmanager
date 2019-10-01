@@ -8,13 +8,13 @@ call_user_func(
             'Pi1',
             [
                 'Calendar' => 'list, show',
-                'Entry' => 'new, create, show, delete, list'
+                'Entry' => 'new, show'
             ],
             // non-cacheable actions
             [
                 'Calendar' => 'show',
                 'Timeslot' => '',
-                'Entry' => 'create',
+                'Entry' => 'create, list, delete',
             ]
         );
 
