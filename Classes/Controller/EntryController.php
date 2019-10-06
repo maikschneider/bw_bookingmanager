@@ -172,15 +172,15 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $this->timeslotRepository = $this->objectManager->get(TimeslotRepository::class);
 
         // in newAction and createAction
-        if ($this->request->hasArgument('newEntry')) {
+        if ($this->arguments->hasArgument('newEntry')) {
             // convert dateTime from new action
 
-            $this->request->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption(
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('startDate')->setTypeConverterOption(
                 'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
                 \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
                 'U'
             );
-            $this->request->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption(
+            $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->forProperty('endDate')->setTypeConverterOption(
                 'TYPO3\\CMS\\Extbase\\Property\\TypeConverter\\DateTimeConverter',
                 \TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter::CONFIGURATION_DATE_FORMAT,
                 'U'
@@ -200,7 +200,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
             // unset feUser if empty
             if ($arguments['newEntry']['feUser'] === "") {
-                $this->request->getArgument('newEntry')->getPropertyMappingConfiguration()->skipProperties('feUser');
+                $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->skipProperties('feUser');
             }
         }
     }
