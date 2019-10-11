@@ -2,6 +2,9 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+
 /**
  * Class EntryCreateValidator
  *
@@ -14,7 +17,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
      * timeslot repository
      *
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     * @inject
+     *
      */
     protected $timeslotRepository;
 
@@ -90,7 +93,31 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         if (!$this->entry->getCalendar()->isDirectBooking()) {
             return;
         }
-        // @TODO: Implement direct booking validation
+
+        $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+        $typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+
+        $minLength = (int)$typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['directBooking.']['minLength'];
+        $minLength = $minLength >= 0 ? $minLength : 0;
+
+        if ($minLength > 0 && $this->entry->getStartDate()->diff($this->entry->getEndDate())->m < $minLength) {
+            $this->addError('Duration of booking is too short', 1526170537);
+        }
+
+        $timeOffset = (int)$typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['directBooking.']['timeBetween'];
+        $timeOffset = $timeOffset >= 0 ? $timeOffset : 0;
+
+        $startTime = clone $this->entry->getStartDate();
+        $startTime->modify('-' . $timeOffset . ' minutes');
+        $endTime = clone $this->entry->getEndDate();
+        $endTime->modify('-' . $timeOffset . ' minutes');
+
+        foreach ($this->entry->getCalendar()->getEntries() as $entry) {
+            if ($entry->getEndDate() > $startTime && $entry->getStartDate() < $endTime) {
+                $this->addError('Selected time is not bookable due to overlapping', 1526170536);
+                break;
+            }
+        }
     }
 
     private function validateTimeslotBooking()
@@ -111,8 +138,10 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
 
         // DST fix
         $timezone = new \DateTimeZone('Europe/Berlin');
-        $transitions = $timezone->getTransitions($this->timeslot_startDate->getTimestamp(),
-            $this->entry_startDate->getTimestamp());
+        $transitions = $timezone->getTransitions(
+            $this->timeslot_startDate->getTimestamp(),
+            $this->entry_startDate->getTimestamp()
+        );
         $lastTransitionIndex = sizeof($transitions) - 1;
         if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
             $this->timeslot_startDate->modify('+1 hour');
@@ -210,5 +239,11 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         if ($this->timeslot->getMaxWeight() < ($bookedWeight + $this->entry->getWeight())) {
             $this->addError('Selected timeslot has not enough free space or is booked out', 1526170536);
         }
+    }
+
+    public function injectTimeslotRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+    ) {
+        $this->timeslotRepository = $timeslotRepository;
     }
 }

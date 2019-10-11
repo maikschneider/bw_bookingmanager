@@ -67,6 +67,7 @@ return [
                 'size' => 10,
                 'maxitems' => 9999,
             ],
+            'displayCond' => 'FIELD:direct_booking:REQ:false'
         ],
         'blockslots' => [
             'exclude' => true,
@@ -109,6 +110,20 @@ return [
                 'size' => 10,
                 'maxitems' => 9999,
             ],
+        ],
+        'entries' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.entries',
+            'config' => [
+                'type' => 'group',
+                'internal_type' => 'db',
+                'allowed' => 'tx_bwbookingmanager_domain_model_entry',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
+                'foreign_field' => 'calendar',
+                'size' => 10,
+                'maxitems' => 9999,
+            ],
+            'displayCond' => 'FIELD:direct_booking:REQ:true'
         ],
         'direct_booking' => [
             'exclude' => true,

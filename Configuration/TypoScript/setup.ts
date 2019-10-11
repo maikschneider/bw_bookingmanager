@@ -24,13 +24,19 @@ plugin.tx_bwbookingmanager {
   settings {
     cancelTime = {$plugin.tx_bwbookingmanager.settings.cancelTime}
     mail {
-      senderAddress = noreply@example.com
-      senderName = Example sender name
-      replytoAddress = noreply@example.com
-      subject = Example subject
-      template = Default
-      showUid =
-      doSendConfirmation = 0
+      senderAddress = {$plugin.tx_bwbookingmanager.settings.mail.senderAddress}
+      senderName = {$plugin.tx_bwbookingmanager.settings.mail.senderName}
+      replytoAddress = {$plugin.tx_bwbookingmanager.settings.mail.replytoAddress}
+      subject = {$plugin.tx_bwbookingmanager.settings.mail.subject}
+      template = {$plugin.tx_bwbookingmanager.settings.mail.template}
+      showUid = {$plugin.tx_bwbookingmanager.settings.mail.showUid}
+      doSendConfirmation = {$plugin.tx_bwbookingmanager.settings.mail.doSendConfirmation}
+    }
+    directBooking {
+      defaultStartTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultStartTime}
+      defaultEndTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultEndTime}
+      timeBetween = {$plugin.tx_bwbookingmanager.settings.directBooking.timeBetween}
+      minLength = {$plugin.tx_bwbookingmanager.settings.directBooking.minLength}
     }
   }
 }

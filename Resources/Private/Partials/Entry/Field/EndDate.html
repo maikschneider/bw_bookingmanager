@@ -6,6 +6,17 @@
 		<label for="endDate">
 			<f:translate key="tx_bwbookingmanager_domain_model_entry.end_date"/>
 			<f:form.textfield property="endDate" id="endDate" />
+			<button id="convertEndDate	">convert to timestamp</button>
 		</label>
+
+		<script type="text/javascript">
+			document.getElementById("convertEndDate	").addEventListener('click', function (e) {
+				e.preventDefault();
+				var dateString = document.getElementById("endDate").value;
+				var unixDate = new Date(dateString);
+				document.getElementById("endDate").value = unixDate.getTime() / 1000;
+			});
+		</script>
 	</f:else>
 </f:if>
+
