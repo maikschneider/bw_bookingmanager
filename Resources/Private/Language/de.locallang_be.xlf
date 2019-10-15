@@ -135,6 +135,18 @@
                 <source>Additional</source>
                 <target>Zusatz</target>
             </trans-unit>
+			<trans-unit id="tca.tt_content.calendar">
+				<target>Kalender anzeigen</target>
+				<source>Show calendar</source>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.palette">
+				<source>Booking Manager</source>
+				<target>Buchungsmanager</target>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.none">
+				<source>None</source>
+				<target>Keinen</target>
+			</trans-unit>
             <trans-unit id="module.entryListing">
                 <source>Entry listing</source>
                 <target>Listenansicht Einträge</target>

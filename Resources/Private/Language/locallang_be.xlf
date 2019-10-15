@@ -114,6 +114,15 @@
             <trans-unit id="tca.entry.palettes.special">
                 <source>Additional</source>
             </trans-unit>
+			<trans-unit id="tca.tt_content.calendar">
+				<source>Show calendar</source>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.palette">
+				<source>Booking Manager</source>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.none">
+				<source>None</source>
+			</trans-unit>
             <trans-unit id="module.entryListing">
                 <source>Entry listing</source>
             </trans-unit>
