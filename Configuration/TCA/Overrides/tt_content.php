@@ -31,9 +31,9 @@ $temporaryColumns = array(
             'renderType' => 'selectSingle',
             'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
             'items' => [
-                ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.tt_content.none', '']
+                ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.tt_content.none', 0]
             ],
-            'default' => ''
+            'default' => 0
         ]
     ]
 );
