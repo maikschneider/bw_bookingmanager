@@ -23,4 +23,18 @@ class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setRespectStoragePage(false);
         return $query->execute();
     }
+
+    /**
+     * @param int $pid
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findAllByPid(int $pid)
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->matching(
+            $query->equals('pid', $pid)
+        );
+        return $query->execute();
+    }
 }

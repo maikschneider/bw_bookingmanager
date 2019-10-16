@@ -107,6 +107,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
 
         $startDate = null;
         $endDate = null;
+        $pid = 0;
         $now = new \DateTime('now');
         $now = $now->getTimestamp();
 
@@ -127,12 +128,17 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             $endDate = $row['end_date'];
         }
 
+        if (isset($row['pid']) && $row['pid']) {
+            $pid = $row['pid'];
+        }
+
         $savedData = [
             'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'now' => $now
+            'now' => $now,
+            'pid' => $pid
         ];
 
         return $savedData;

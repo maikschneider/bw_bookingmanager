@@ -132,7 +132,7 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $calendarsArray = [];
         $dateConf = new DateConf(0, $date);
-        $calendars = $this->calendarRepository->findAllIgnorePid();
+        $calendars = $this->calendarRepository->findAllByPid($this->queryParams['pid']);
 
         foreach ($calendars as $key => $calendar) {
 
