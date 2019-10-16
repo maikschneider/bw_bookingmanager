@@ -2,7 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Backend\RecordList;
 
-use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
@@ -35,6 +35,10 @@ class RecordListConstraint
 
     public function extendQuery(array &$parameters, array $arguments)
     {
+        $parameters['whereDoctrine'] = [];
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_bwbookingmanager_domain_model_entry');
+        $expressionBuilder = $queryBuilder->expr();
+
         // always extend query with start date, use current date as default
         $startDate = new \DateTime('now');
         if (isset($arguments['startDate']) && !empty($arguments['startDate'])) {
@@ -55,7 +59,25 @@ class RecordListConstraint
         if (isset($arguments['searchWord']) && !empty($arguments['searchWord'])) {
             $words = GeneralUtility::trimExplode(' ', $arguments['searchWord'], true);
             $fields = ['name', 'prename', 'email', 'street', 'city', 'zip', 'phone'];
-            $parameters['where'][] = $this->getDatabaseConnection()->searchQuery($words, $fields, self::TABLE);
+            $fieldParts = [];
+            foreach ($fields as $field) {
+                $likeParts = [];
+                $nameParts = str_getcsv($arguments['searchWord'], ' ');
+                foreach ($nameParts as $part) {
+                    $part = trim($part);
+                    if ($part !== '') {
+                        $likeParts[] = $expressionBuilder->like(
+                            $field,
+                            $queryBuilder->quote('%' . $queryBuilder->escapeLikeWildcards($part) . '%')
+                        );
+                    }
+                }
+                if (!empty($likeParts)) {
+                    $fieldParts[] = $expressionBuilder->orX(...$likeParts);
+                }
+            }
+            $parameters['whereDoctrine'][] = $expressionBuilder->orX(...$fieldParts);
+            $parameters['where'][] = $expressionBuilder->orX(...$fieldParts);
         }
 
         // order
