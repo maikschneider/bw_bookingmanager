@@ -30,6 +30,10 @@ class TableListHook
         QueryBuilder $queryBuilder
     ) {
         if ($table === $this->recordListConstraint::TABLE && $this->recordListConstraint->isInAdministrationModule()) {
+
+            // Fix for TYPO3 v9+: After the where parameter gets extended, the default parameter for storagePid gets lost
+            $parameters['where'][] = 'pid='.$pageId;
+
             $demands = [];
             $vars = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
             if (is_array($vars) && is_array($vars['demand'])) {
