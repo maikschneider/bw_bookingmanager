@@ -57,6 +57,14 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $notifications = null;
 
     /**
+     * entries
+     *
+     * @lazy
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
+     */
+    protected $entries = null;
+
+    /**
      * @var boolean
      */
     protected $directBooking;
@@ -82,6 +90,22 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->timeslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
         $this->blockslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries
+     */
+    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
+    {
+        $this->entries = $entries;
     }
 
     /**
