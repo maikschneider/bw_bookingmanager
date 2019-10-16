@@ -2,7 +2,6 @@
 
 
 <f:section name="Main">
-	<f:debug>{_all}</f:debug>
 	<link rel="stylesheet" href="{css}" type="text/css"/>
 	<div class="row">
 		<div class="col-xs-12 col-md-3">
@@ -211,8 +210,7 @@
 
 							<f:if condition="{c.calendar.directBooking}">
 								<f:then>
-
-									<f:for each="{c.monthView.}"
+									
 									<div class="form-group">
 										<label>Start time</label> <input type="text" class="form-control" id="datetimepicker1"/>
 									</div>
