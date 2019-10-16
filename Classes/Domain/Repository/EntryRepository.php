@@ -33,8 +33,8 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->logicalAnd([
                 $query->equals('calendar', $calendar),
-                $query->greaterThanOrEqual('startDate', $dateConf->start),
-                $query->lessThanOrEqual('startDate', $dateConf->end),
+                $query->greaterThanOrEqual('startDate', $dateConf->start->getTimestamp()),
+                $query->lessThanOrEqual('startDate', $dateConf->end->getTimestamp()),
             ])
         );
         $query->setOrderings(

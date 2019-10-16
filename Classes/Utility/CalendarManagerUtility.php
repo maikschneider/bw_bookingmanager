@@ -89,7 +89,7 @@ class CalendarManagerUtility
      */
     private function buildConfiguration(DateConf $dateConf)
     {
-        $entries = $this->entryRepository->findInRange($this->calendar, $dateConf)->toArray();
+        $entries = $this->entryRepository->findInRange($this->calendar, $dateConf, false)->toArray();
         $timeslots = $this->timeslotRepository->findInRange($this->calendar, $dateConf);
 
         /** @var \Blueways\BwBookingmanager\Helper\RenderConfiguration $calendarConfiguration */
