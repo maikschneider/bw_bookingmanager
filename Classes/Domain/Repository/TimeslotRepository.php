@@ -63,7 +63,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     $query->lessThan('startDate', $endDate->getTimestamp()),
                     $query->logicalOr([
                         $query->equals('repeatEnd', 0),
-                        $query->lessThanOrEqual('repeatEnd', $startDate->getTimestamp())
+                        $query->greaterThanOrEqual('repeatEnd', $startDate->getTimestamp())
                     ])
                 ]),
             ])

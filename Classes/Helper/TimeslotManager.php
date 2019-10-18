@@ -391,7 +391,8 @@ class TimeslotManager
         $timeslots = [];
         $repeatDays = $timeslot->getRepeatDaysSelectedWeekDays();
         $startWeekDay = (int)$timeslot->getStartDate()->format('w');
-        $daysToCrawl = $this->endDate->diff($timeslot->getStartDate())->days;
+        $endDate = $timeslot->getRepeatEnd() && $timeslot->getRepeatEnd() < $this->endDate ? $timeslot->getRepeatEnd() : $this->endDate;
+        $daysToCrawl = $endDate->diff($timeslot->getStartDate())->days;
 
         $isDst = $timeslot->getStartDate()->format('I');
         $startEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
