@@ -162,7 +162,7 @@ class EntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     private function getLanguageService()
     {
-        return $GLOBALS['LANG'];
+        return $GLOBALS['TSFE'];
     }
 
     public function initializeAction()
