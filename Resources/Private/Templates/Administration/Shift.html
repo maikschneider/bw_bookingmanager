@@ -83,22 +83,16 @@
 
 						</f:for>
 
-						<f:comment>
-							<div class="calendar_navigation">
-								<f:be.link class="calendar_navigation__link"
-													 route="view_shift"
-													 parameters="{calendar: c.calendar.uid, day: c.configuration.prev.day, month: c.configuration.prev.month, year: c.configuration.prev.year}">
+						<div class="calendar_navigation">
+								<a class="calendar_navigation__link" href="{c.configuration.prev.link}">
 									zurück
-								</f:be.link>
+								</a>
 
-								<f:be.link class="calendar_navigation__link"
-													 route="view_shift"
-													 parameters="{calendar: c.calendar.uid, day: c.configuration.next.day, month: c.configuration.next.month, year: c.configuration.next.year}">
+								<a class="calendar_navigation__link" href="{c.configuration.next.link}">
 									weiter
-								</f:be.link>
+								</a>
 
 							</div>
-						</f:comment>
 
 					</div>
 

@@ -21,8 +21,6 @@ use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
-use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -216,11 +214,26 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
             $configuration = $calendarManager->getConfiguration($dateConf);
 
+            // inject entries to display contact info of bookins
             $entries = [];
             $timeslotEntries = $calendar->getTimeslotEntries();
             foreach ($timeslotEntries as $entry) {
                 $entries[$entry->getUid()] = $entry;
             }
+
+            // override next/prev links for backend routes
+            $configuration['next']['link'] = $this->getHref('Administration', 'shift', [
+                'calendar' => $calendar->getUid(),
+                'day' => $configuration['next']['day'],
+                'month' => $configuration['next']['month'],
+                'year' => $configuration['next']['year']
+            ]);
+            $configuration['prev']['link'] = $this->getHref('Administration', 'shift', [
+                'calendar' => $calendar->getUid(),
+                'day' => $configuration['prev']['day'],
+                'month' => $configuration['prev']['month'],
+                'year' => $configuration['prev']['year']
+            ]);
 
             $calendarsConf[] = [
                 'configuration' => $configuration,
@@ -230,6 +243,21 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         }
 
         $this->view->assign('calendars', $calendarsConf);
+    }
+
+    /**
+     * Creates the URI for a backend action
+     *
+     * @param string $controller
+     * @param string $action
+     * @param array $parameters
+     * @return string
+     */
+    protected function getHref($controller, $action, $parameters = [])
+    {
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+        return $uriBuilder->reset()->uriFor($action, $parameters, $controller);
     }
 
     /**
@@ -358,21 +386,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     protected function getLanguageService()
     {
         return $GLOBALS['LANG'];
-    }
-
-    /**
-     * Creates the URI for a backend action
-     *
-     * @param string $controller
-     * @param string $action
-     * @param array $parameters
-     * @return string
-     */
-    protected function getHref($controller, $action, $parameters = [])
-    {
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
-        return $uriBuilder->reset()->uriFor($action, $parameters, $controller);
     }
 
     /**
