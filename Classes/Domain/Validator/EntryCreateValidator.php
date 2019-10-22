@@ -82,6 +82,14 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         if (!$this->entry->getEmail()) {
             $this->addError('No email given', 1526170536);
         }
+
+        if (!$this->entry->getStartDate()) {
+            $this->addError('No start date given', 1571761489);
+        }
+
+        if (!$this->entry->getEndDate()) {
+            $this->addError('No end date given', 1571761514);
+        }
     }
 
     /**
@@ -91,6 +99,11 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
     {
         // skip if direct booking is not enabled
         if (!$this->entry->getCalendar()->isDirectBooking()) {
+            return;
+        }
+
+        // skip if no start or end date
+        if (!$this->entry->getStartDate() || !$this->entry->getEndDate()) {
             return;
         }
 
