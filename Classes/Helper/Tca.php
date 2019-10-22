@@ -4,6 +4,7 @@ namespace Blueways\BwBookingmanager\Helper;
 
 class Tca
 {
+
     public function getTimeslotLabel(&$params, $parentObject)
     {
         $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
@@ -74,8 +75,11 @@ class Tca
         $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
         $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
 
-        $newTitle .= $startDate->format('d.m.y, H:i') . '-';
-        $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : 'd.m.y, H:i';
+        // remove time if booked from 00:00 to 00:00 (= direct booking)
+        $fullDateFormat = $startDate->format('H:i') === '00:00' && $endDate->format('H:i') === '00:00' ? 'd.m.y' : 'd.m.y, H:i';
+
+        $newTitle .= $startDate->format($fullDateFormat) . ' - ';
+        $endDateFormat = $startDate->diff($endDate)->days == 0 ? 'H:i' : $fullDateFormat;
         $newTitle .= $endDate->format($endDateFormat);
 
         $params['title'] = $newTitle;
