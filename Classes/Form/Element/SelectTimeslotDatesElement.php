@@ -5,7 +5,9 @@ namespace Blueways\BwBookingmanager\Form\Element;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class SelectTimeslotDatesElement extends AbstractFormElement
@@ -132,13 +134,19 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             $pid = $row['pid'];
         }
 
+        $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+        $typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $typoscriptService = GeneralUtility::makeInstance(TypoScriptService::class);
+        $settings = $typoscriptService->convertTypoScriptArrayToPlainArray($typoscript['plugin.']['tx_bwbookingmanager.']['settings.']);
+
         $savedData = [
             'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
             'startDate' => $startDate,
             'endDate' => $endDate,
             'now' => $now,
-            'pid' => $pid
+            'pid' => $pid,
+            'settings' => $settings
         ];
 
         return $savedData;

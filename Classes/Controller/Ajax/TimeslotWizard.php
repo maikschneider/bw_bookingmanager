@@ -102,6 +102,7 @@ class TimeslotWizard extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 'currentTimeslot' => $queryParams['timeslot'],
                 'currentStartDate' => $queryParams['startDate'],
                 'currentEndDate' => $queryParams['endDate'],
+                'settings' => $queryParams['settings'],
                 'currentStartEndTimestamp' => $queryParams['startDate'] . $queryParams['endDate'],
                 'calendars' => $this->getCalendarsConfiguration($date),
                 'css' => '/typo3conf/ext/bw_bookingmanager/Resources/Public/Css/TimeslotWizard.css'
