@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-week-view</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="12" height="12"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-week-view">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <g id="Rectangle"></g>
+            <rect id="Rectangle" fill="#ADCA84" mask="url(#mask-2)" x="0" y="3" width="1.5" height="8.99907325"></rect>
+            <rect id="Rectangle-Copy-3" fill="#ADCA84" mask="url(#mask-2)" x="5.25451038" y="3" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-4" fill="#D1695B" mask="url(#mask-2)" x="2.62725519" y="3" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-6" fill="#D1695B" mask="url(#mask-2)" x="7.88176557" y="3" width="1.5" height="5.65046338"></rect>
+            <rect id="Rectangle-Copy-6" fill="#D1695B" mask="url(#mask-2)" x="10.5090208" y="3" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-3" fill="#D1695B" mask="url(#mask-2)" x="5.25451038" y="6.34953662" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-5" fill="#ADCA84" mask="url(#mask-2)" x="2.62725519" y="6.34953662" width="1.5" height="5.65046338"></rect>
+            <rect id="Rectangle-Copy-6" fill="#ADCA84" mask="url(#mask-2)" x="10.5090208" y="6.34953662" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-3" fill="#ADCA84" mask="url(#mask-2)" x="5.25451038" y="9.69907325" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-7" fill="#ADCA84" mask="url(#mask-2)" x="7.88176557" y="9.65046338" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle-Copy-6" fill="#D1695B" mask="url(#mask-2)" x="10.5090208" y="9.69907325" width="1.5" height="2.3"></rect>
+            <rect id="Rectangle" fill="#868686" mask="url(#mask-2)" x="0" y="0" width="12" height="2"></rect>
+        </g>
+    </g>
+</svg>

@@ -424,6 +424,43 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
             $buttonBar->addButton($printButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
         }
 
+        if ($this->request->getControllerActionName() === 'shift') {
+            $listViewButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setClasses('active')
+                ->setDataAttributes([
+                    'togglelink' => '1',
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                ])
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.listView.buttonTitle'))
+                ->setIcon($this->iconFactory->getIcon('icon-list-view', Icon::SIZE_SMALL));
+
+            $weekViewButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setDataAttributes([
+                    'togglelink' => '1',
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                ])
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.weekView.buttonTitle'))
+                ->setIcon($this->iconFactory->getIcon('icon-week-view', Icon::SIZE_SMALL));
+
+            $monthViewButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setDataAttributes([
+                    'togglelink' => '1',
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                ])
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.monthView.buttonTitle'))
+                ->setIcon($this->iconFactory->getIcon('icon-month-view', Icon::SIZE_SMALL));
+
+            $buttonBar->addButton($listViewButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
+            $buttonBar->addButton($weekViewButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
+            $buttonBar->addButton($monthViewButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
+        }
+
         // New Entry Button
         $buttons = [
             [

@@ -159,6 +159,15 @@
             <trans-unit id="administration.filter.buttonTitle">
 				<source>Show/hide filter</source>
 			</trans-unit>
+			<trans-unit id="administration.listView.buttonTitle">
+				<source>List view</source>
+			</trans-unit>
+			<trans-unit id="administration.weekView.buttonTitle">
+				<source>Week view</source>
+			</trans-unit>
+			<trans-unit id="administration.monthView.buttonTitle">
+				<source>Month view</source>
+			</trans-unit>
 			<trans-unit id="administration.print.buttonTitle">
 				<source>Print current page</source>
 			</trans-unit>

@@ -192,6 +192,15 @@
             <trans-unit id="administration.filter.buttonTitle">
             	<target>Filter anzeigen/verstecken</target>
 			</trans-unit>
+			<trans-unit id="administration.listView.buttonTitle">
+				<target>Listenansicht</target>
+			</trans-unit>
+			<trans-unit id="administration.weekView.buttonTitle">
+				<target>Wochenansicht</target>
+			</trans-unit>
+			<trans-unit id="administration.monthView.buttonTitle">
+				<target>Monatsansicht</target>
+			</trans-unit>
 			<trans-unit id="administration.print.buttonTitle">
 				<target>Seite drucken</target>
 			</trans-unit>
