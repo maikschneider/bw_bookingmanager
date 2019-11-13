@@ -179,6 +179,37 @@
 							<f:if condition="{day.timeslots->f:count()}==0">
 								<f:variable name="hasNoSlot" value="bw_bookingmanager__day--isInPast"/>
 							</f:if>
+							<f:if condition="{currentStartDate}=={day.date} || {currentEndDate}=={day.date}">
+								<f:variable name="isSelected" value="active"/>
+							</f:if>
+
+							<f:if condition="{c.calendar.directBooking}">
+
+								<f:then>
+
+									<f:if condition="{day.isBookable} || {isSelected}">
+										<f:then>
+											<a href="#"
+												 class="bw_bookingmanager__day bw_bookingmanager__day--list bw_bookingmanager__day--link direct-booking {isCurrentDay} {isInThisDay} {isSelected}"
+												 data-date="{day.date}"
+												 data-display-date="{f:format.date(date:day.date, format:'d.m.Y')}"
+												 data-calendar="{c.calendar.uid}">
+												{f:format.date(date:day.date, format:'j.')}
+												{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:day.date,
+												format:\'n\')}')} {f:format.date(date:day.date, format:'Y')}
+											</a>
+										</f:then>
+										<f:else>
+											<div class="bw_bookingmanager__day bw_bookingmanager__day--list bw_bookingmanager__day--full {isCurrentDay} {isInPast} {isInThisDay} {isSelected}">
+												{f:format.date(date:day.date, format:'j.')}
+												{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.monthNames.{f:format.date(date:day.date,
+												format:\'n\')}')} {f:format.date(date:day.date, format:'Y')}
+											</div>
+										</f:else>
+									</f:if>
+
+								</f:then>
+								<f:else>
 
 
 							<f:if condition="{day.isBookable}">
@@ -201,6 +232,8 @@
 								</f:else>
 							</f:if>
 
+								</f:else>
+							</f:if>
 
 						</f:for>
 
