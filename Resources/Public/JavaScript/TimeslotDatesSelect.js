@@ -27,6 +27,8 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
             this.directBookingLinks.on('click', this.onDirectBookingLinkClick.bind(this));
             this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
+            this.directBookingStartTimeField.on('blur', this.onDirectBookingTimeFieldChange.bind(this));
+            this.directBookingEndTimeField.on('blur', this.onDirectBookingTimeFieldChange.bind(this));
             if (this.savedLink)
                 this.savedLink.on('click', this.onSavedLinkClick.bind(this));
         };
@@ -155,6 +157,41 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 this.directBookingLinks.removeClass('active');
                 this.onDirectBookingLinkClick(e);
                 return;
+            }
+        };
+        TimeslotDatesSelect.prototype.onDirectBookingTimeFieldChange = function (e) {
+            var _this = this;
+            e.preventDefault();
+            var textValue = $(e.currentTarget).val();
+            // @ts-ignore
+            var dateParts = textValue.split('.');
+            var date = Date.parse(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]) / 1000;
+            if ($(e.currentTarget).attr('id') === 'directBookingEndTime') {
+                if (date) {
+                    this.hiddenEndDateField.val(date);
+                }
+                else {
+                    this.hiddenEndDateField.val('');
+                }
+            }
+            if ($(e.currentTarget).attr('id') === 'directBookingStartTime') {
+                if (date) {
+                    this.hiddenStartDateField.val(date);
+                }
+                else {
+                    this.hiddenStartDateField.val('');
+                }
+            }
+            // mark links in that range
+            if (this.hiddenStartDateField.val() && this.hiddenEndDateField.val()) {
+                this.directBookingLinks.removeClass('active');
+                this.directBookingLinks.each(function (i, day) {
+                    var dayDate = parseInt($(day).attr('data-date'));
+                    // @ts-ignore
+                    if (parseInt(_this.hiddenStartDateField.val()) <= dayDate && dayDate <= parseInt(_this.hiddenEndDateField.val())) {
+                        $(day).addClass('active');
+                    }
+                });
             }
         };
         TimeslotDatesSelect.prototype.onViewButtonClick = function (e) {

@@ -11,9 +11,6 @@ declare global {
 }
 
 
-
-
-
 /**
  * Module: TYPO3/CMS/BwBookingmanager/TimeslotDatesSelect
  *
@@ -66,6 +63,8 @@ class TimeslotDatesSelect {
     this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
     this.directBookingLinks.on('click', this.onDirectBookingLinkClick.bind(this));
     this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
+    this.directBookingStartTimeField.on('blur', this.onDirectBookingTimeFieldChange.bind(this));
+    this.directBookingEndTimeField.on('blur', this.onDirectBookingTimeFieldChange.bind(this));
     if (this.savedLink) this.savedLink.on('click', this.onSavedLinkClick.bind(this));
   }
 
@@ -181,7 +180,7 @@ class TimeslotDatesSelect {
     this.isDirectBooked = $(e.currentTarget).attr('data-calendar');
 
     // set first date (first click)
-    if(!this.hiddenStartDateField.val()){
+    if (!this.hiddenStartDateField.val()) {
       this.hiddenStartDateField.val(timestamp);
       this.directBookingStartTimeField.val(displayDate);
       this.directBookingLinks.removeClass('active');
@@ -200,7 +199,7 @@ class TimeslotDatesSelect {
       this.directBookingLinks.each((i, day) => {
         const dayDate = parseInt($(day).attr('data-date'));
         // @ts-ignore
-        if(parseInt(this.hiddenStartDateField.val()) < dayDate && dayDate < parseInt(this.hiddenEndDateField.val())) {
+        if (parseInt(this.hiddenStartDateField.val()) < dayDate && dayDate < parseInt(this.hiddenEndDateField.val())) {
           $(day).addClass('active');
         }
       });
@@ -208,7 +207,7 @@ class TimeslotDatesSelect {
     }
 
     // reset and trigger again if both values already set (third click)
-    if(this.hiddenStartDateField.val() && this.hiddenEndDateField.val()) {
+    if (this.hiddenStartDateField.val() && this.hiddenEndDateField.val()) {
       this.hiddenStartDateField.val('');
       this.hiddenEndDateField.val('');
       this.directBookingStartTimeField.val('');
@@ -216,6 +215,45 @@ class TimeslotDatesSelect {
       this.directBookingLinks.removeClass('active');
       this.onDirectBookingLinkClick(e);
       return;
+    }
+
+  }
+
+  private onDirectBookingTimeFieldChange(e: JQueryEventObject) {
+    e.preventDefault();
+
+    const textValue = $(e.currentTarget).val();
+
+    // @ts-ignore
+    const dateParts = textValue.split('.');
+    const date = Date.parse(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]) / 1000;
+
+    if ($(e.currentTarget).attr('id') === 'directBookingEndTime') {
+      if (date) {
+        this.hiddenEndDateField.val(date);
+      } else {
+        this.hiddenEndDateField.val('');
+      }
+    }
+
+    if ($(e.currentTarget).attr('id') === 'directBookingStartTime') {
+      if (date) {
+        this.hiddenStartDateField.val(date);
+      } else {
+        this.hiddenStartDateField.val('');
+      }
+    }
+
+    // mark links in that range
+    if (this.hiddenStartDateField.val() && this.hiddenEndDateField.val()) {
+      this.directBookingLinks.removeClass('active');
+      this.directBookingLinks.each((i, day) => {
+        const dayDate = parseInt($(day).attr('data-date'));
+        // @ts-ignore
+        if (parseInt(this.hiddenStartDateField.val()) <= dayDate && dayDate <= parseInt(this.hiddenEndDateField.val())) {
+          $(day).addClass('active');
+        }
+      });
     }
 
   }
@@ -331,7 +369,7 @@ class TimeslotDatesSelect {
     }
 
     // hidden fields were already set
-    if(this.isDirectBooked) {
+    if (this.isDirectBooked) {
       this.hiddenTimeslotField.val(0);
       this.calendarSelectField.val(this.isDirectBooked);
       this.startDateText.html('' + this.directBookingStartTimeField.val());
