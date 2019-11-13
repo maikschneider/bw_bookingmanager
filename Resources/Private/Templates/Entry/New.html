@@ -22,7 +22,9 @@
 
 		<f:form.hidden property="calendar" value="{newEntry.calendar}"/>
 		<f:form.hidden property="timeslot" value="{newEntry.timeslot}"/>
-		<f:form.hidden property="feUser" value="{newEntry.feUser}"/>
+		<f:if condition="{newEntry.feUser}">
+			<f:form.hidden property="feUser" value="{newEntry.feUser}"/>
+		</f:if>
 
 		<f:render partial="Entry/Field/StartDate" arguments="{_all}"/>
 		<br/>
