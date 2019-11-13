@@ -249,7 +249,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             }
             // hidden fields were already set
             if (this.isDirectBooked) {
-                this.hiddenTimeslotField.val('');
+                this.hiddenTimeslotField.val(0);
                 this.calendarSelectField.val(this.isDirectBooked);
                 this.startDateText.html('' + this.directBookingStartTimeField.val());
                 this.endDateText.html('' + this.directBookingEndTimeField.val());

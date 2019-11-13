@@ -85,6 +85,7 @@
 										<f:variable name="isInThisDay" value=""/>
 										<f:variable name="isCurrentDay" value=""/>
 										<f:variable name="isInPast" value=""/>
+										<f:variable name="isSelected" value=""/>
 
 										<f:for each="{day.timeslots}" as="timeslot">
 											<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
@@ -98,31 +99,36 @@
 										<f:if condition="{day.isInPast}">
 											<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
 										</f:if>
-
-										<f:if condition="{day.timeslots->f:count()}==0 && !{day.isDirectBookable}">
-											<div class="cell grid-x align-middle align-center bw_bookingmanager__day {isCurrentDay} {f:if(condition:day.isNotInMonth, then:'bw_bookingmanager__day--notInMonth')} {isInPast}">
-												{f:format.date(date:day.date, format:'j')}
-											</div>
+										<f:if condition="{currentStartDate}=={day.date} || {currentEndDate}=={day.date}">
+											<f:variable name="isSelected" value="active"/>
 										</f:if>
 
-										<f:if condition="{day.isDirectBookable}">
+										<f:if condition="{c.calendar.directBooking}">
+
 											<f:then>
-												<f:if condition="{day.isBookable}">
+												<f:if condition="{day.isBookable} || {isSelected}">
 													<f:then>
 														<a href="#"
-															 class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link direct-booking {isCurrentDay} {isInThisDay}"
+															 class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--link direct-booking {isCurrentDay} {isInThisDay} {isSelected}"
 															 data-date="{day.date}" data-display-date="{f:format.date(date:day.date, format:'d.m.Y')}" data-calendar="{c.calendar.uid}">
 															{f:format.date(date:day.date, format:'j')}
 														</a>
 													</f:then>
 													<f:else>
-														<div class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast} {isInThisDay}">
+														<div class="cell grid-x align-middle align-center bw_bookingmanager__day bw_bookingmanager__day--full {isCurrentDay} {isInPast} {isInThisDay} {isSelected}">
 															{f:format.date(date:day.date, format:'j')}
 														</div>
 													</f:else>
 												</f:if>
 											</f:then>
 											<f:else>
+
+												<f:if condition="{day.timeslots->f:count()}==0 &&">
+													<div class="cell grid-x align-middle align-center bw_bookingmanager__day {isCurrentDay} {f:if(condition:day.isNotInMonth, then:'bw_bookingmanager__day--notInMonth')} {isInPast}">
+														{f:format.date(date:day.date, format:'j')}
+													</div>
+												</f:if>
+
 												<f:if condition="{day.isBookable}">
 													<f:then>
 														<a href="#"
@@ -275,15 +281,17 @@
 					<f:if condition="{c.calendar.directBooking}">
 						<div class="form-group">
 							<label>Start time</label> <input type="text"
-																							 placeholder="dd.mm.yyyy HH:mm"
+																							 placeholder="dd.mm.yyyy"
 																							 data-default-start-time="{settings.directBooking.defaultStartTime}"
 																							 class="form-control"
+																							 value="{f:format.date(date:currentStartDate, format:'d.m.Y')}"
 																							 id="directBookingStartTime"/>
 						</div>
 						<div class="form-group">
 							<label>End time</label> <input type="text"
-																						 placeholder="dd.mm.yyyy HH:mm"
+																						 placeholder="dd.mm.yyyy"
 																						 data-default-end-time="{settings.directBooking.defaultEndTime}"
+																						 value="{f:format.date(date:currentEndDate, format:'d.m.Y')}"
 																						 class="form-control"
 																						 id="directBookingEndTime"/>
 						</div>
