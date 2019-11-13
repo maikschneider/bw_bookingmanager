@@ -4,12 +4,14 @@ import Icons = require('TYPO3/CMS/Backend/Icons');
 import 'jquery-ui/draggable';
 import 'jquery-ui/resizable';
 
-
 declare global {
   interface Window {
     TYPO3: any;
   }
 }
+
+
+
 
 
 /**
@@ -36,11 +38,14 @@ class TimeslotDatesSelect {
   private modalReloadLinks: JQuery;
   private currentCalendarViewUid: any;
   private feUserInput: JQuery;
+  private directBookingLinks: JQuery;
+  private directBookingStartTimeField: JQuery;
+  private directBookingEndTimeField: JQuery;
 
   private calendarDataLinks: JQuery;
   private savedLink: JQuery;
   private newDataLink: JQuery;
-
+  private isDirectBooked: string = '';
 
   /**
    * @method init
@@ -59,6 +64,7 @@ class TimeslotDatesSelect {
     this.dayDetailLinks.on('click', this.onDayDetailLinkClick.bind(this));
     this.dayDetailLinks.on('mouseenter', this.onDayDetailLinkMouseenter.bind(this));
     this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
+    this.directBookingLinks.on('click', this.onDirectBookingLinkClick.bind(this));
     this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
     if (this.savedLink) this.savedLink.on('click', this.onSavedLinkClick.bind(this));
   }
@@ -131,6 +137,7 @@ class TimeslotDatesSelect {
 
     e.preventDefault();
     const link = $(e.currentTarget);
+    this.isDirectBooked = '';
 
 
     this.dayDetailDivs.removeClass('daydetail--selected');
@@ -161,6 +168,46 @@ class TimeslotDatesSelect {
       this.calendarDataLinks.removeClass('active');
       link.addClass('active');
       if (this.savedLink) this.savedLink.addClass('old');
+    }
+
+  }
+
+  private onDirectBookingLinkClick(e: JQueryEventObject) {
+    e.preventDefault();
+
+    const timestamp = $(e.currentTarget).attr('data-date');
+    const displayDate = $(e.currentTarget).attr('data-display-date');
+    this.newDataLink = null;
+    this.isDirectBooked = $(e.currentTarget).attr('data-calendar');
+
+    // set first date (first click)
+    if(!this.hiddenStartDateField.val()){
+      this.hiddenStartDateField.val(timestamp);
+      this.directBookingStartTimeField.val(displayDate);
+      this.directBookingLinks.removeClass('active');
+      $(e.currentTarget).addClass('active');
+      // @ts-ignore
+      this.newDataLink = $(e.currentTarget);
+      return;
+    }
+
+    // set end date (second click)
+    if (this.hiddenStartDateField.val() && !this.hiddenEndDateField.val()) {
+      this.hiddenEndDateField.val(timestamp);
+      this.directBookingEndTimeField.val(displayDate);
+      $(e.currentTarget).addClass('active');
+      return;
+    }
+
+    // reset and trigger again if both values already set (third click)
+    if(this.hiddenStartDateField.val() && this.hiddenEndDateField.val()) {
+      this.hiddenStartDateField.val('');
+      this.hiddenEndDateField.val('');
+      this.directBookingStartTimeField.val('');
+      this.directBookingEndTimeField.val('');
+      this.directBookingLinks.removeClass('active');
+      this.onDirectBookingLinkClick(e);
+      return;
     }
 
   }
@@ -198,6 +245,9 @@ class TimeslotDatesSelect {
     this.dayDetailLinks = this.currentModal.find('[data-day-detail]');
     this.dayDetailDivs = this.currentModal.find('.daydetail');
     this.modalReloadLinks = this.currentModal.find('.modal-reload');
+    this.directBookingLinks = this.currentModal.find('.direct-booking');
+    this.directBookingStartTimeField = this.currentModal.find('#directBookingStartTime');
+    this.directBookingEndTimeField = this.currentModal.find('#directBookingEndTime');
     if (!this.savedLink.length) this.savedLink = null;
   }
 
@@ -271,6 +321,15 @@ class TimeslotDatesSelect {
       this.startDateText.html(this.newDataLink.data('start-date-text'));
       this.endDateText.html(this.newDataLink.data('end-date-text'));
     }
+
+    // hidden fields were already set
+    if(this.isDirectBooked) {
+      this.hiddenTimeslotField.val('');
+      this.calendarSelectField.val(this.isDirectBooked);
+      this.startDateText.html('' + this.directBookingStartTimeField.val());
+      this.endDateText.html('' + this.directBookingEndTimeField.val());
+    }
+
     Modal.currentModal.trigger('modal-dismiss');
   }
 

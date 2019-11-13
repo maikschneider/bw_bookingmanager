@@ -7,6 +7,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
      */
     var TimeslotDatesSelect = /** @class */ (function () {
         function TimeslotDatesSelect() {
+            this.isDirectBooked = '';
         }
         /**
          * @method init
@@ -24,6 +25,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             this.dayDetailLinks.on('click', this.onDayDetailLinkClick.bind(this));
             this.dayDetailLinks.on('mouseenter', this.onDayDetailLinkMouseenter.bind(this));
             this.dayDetailLinks.on('mouseleave', this.onDayDetailLinkMouseleave.bind(this));
+            this.directBookingLinks.on('click', this.onDirectBookingLinkClick.bind(this));
             this.modalReloadLinks.on('click', this.onReloadModalLinkClick.bind(this));
             if (this.savedLink)
                 this.savedLink.on('click', this.onSavedLinkClick.bind(this));
@@ -85,6 +87,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
         TimeslotDatesSelect.prototype.onDataLinkClick = function (e) {
             e.preventDefault();
             var link = $(e.currentTarget);
+            this.isDirectBooked = '';
             this.dayDetailDivs.removeClass('daydetail--selected');
             this.dayDetailLinks.removeClass('active');
             var daylink = this.dayDetailLinks.filter('[data-day-detail="' + link.data('day-link') + '"]');
@@ -109,6 +112,40 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 link.addClass('active');
                 if (this.savedLink)
                     this.savedLink.addClass('old');
+            }
+        };
+        TimeslotDatesSelect.prototype.onDirectBookingLinkClick = function (e) {
+            e.preventDefault();
+            var timestamp = $(e.currentTarget).attr('data-date');
+            var displayDate = $(e.currentTarget).attr('data-display-date');
+            this.newDataLink = null;
+            this.isDirectBooked = $(e.currentTarget).attr('data-calendar');
+            // set first date (first click)
+            if (!this.hiddenStartDateField.val()) {
+                this.hiddenStartDateField.val(timestamp);
+                this.directBookingStartTimeField.val(displayDate);
+                this.directBookingLinks.removeClass('active');
+                $(e.currentTarget).addClass('active');
+                // @ts-ignore
+                this.newDataLink = $(e.currentTarget);
+                return;
+            }
+            // set end date (second click)
+            if (this.hiddenStartDateField.val() && !this.hiddenEndDateField.val()) {
+                this.hiddenEndDateField.val(timestamp);
+                this.directBookingEndTimeField.val(displayDate);
+                $(e.currentTarget).addClass('active');
+                return;
+            }
+            // reset and trigger again if both values already set (third click)
+            if (this.hiddenStartDateField.val() && this.hiddenEndDateField.val()) {
+                this.hiddenStartDateField.val('');
+                this.hiddenEndDateField.val('');
+                this.directBookingStartTimeField.val('');
+                this.directBookingEndTimeField.val('');
+                this.directBookingLinks.removeClass('active');
+                this.onDirectBookingLinkClick(e);
+                return;
             }
         };
         TimeslotDatesSelect.prototype.onViewButtonClick = function (e) {
@@ -139,6 +176,9 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             this.dayDetailLinks = this.currentModal.find('[data-day-detail]');
             this.dayDetailDivs = this.currentModal.find('.daydetail');
             this.modalReloadLinks = this.currentModal.find('.modal-reload');
+            this.directBookingLinks = this.currentModal.find('.direct-booking');
+            this.directBookingStartTimeField = this.currentModal.find('#directBookingStartTime');
+            this.directBookingEndTimeField = this.currentModal.find('#directBookingEndTime');
             if (!this.savedLink.length)
                 this.savedLink = null;
         };
@@ -206,6 +246,13 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 this.hiddenTimeslotField.val(this.newDataLink.data('timeslot'));
                 this.startDateText.html(this.newDataLink.data('start-date-text'));
                 this.endDateText.html(this.newDataLink.data('end-date-text'));
+            }
+            // hidden fields were already set
+            if (this.isDirectBooked) {
+                this.hiddenTimeslotField.val('');
+                this.calendarSelectField.val(this.isDirectBooked);
+                this.startDateText.html('' + this.directBookingStartTimeField.val());
+                this.endDateText.html('' + this.directBookingEndTimeField.val());
             }
             Modal.currentModal.trigger('modal-dismiss');
         };
