@@ -196,6 +196,14 @@ class TimeslotDatesSelect {
       this.hiddenEndDateField.val(timestamp);
       this.directBookingEndTimeField.val(displayDate);
       $(e.currentTarget).addClass('active');
+      // mark days between as active
+      this.directBookingLinks.each((i, day) => {
+        const dayDate = parseInt($(day).attr('data-date'));
+        // @ts-ignore
+        if(parseInt(this.hiddenStartDateField.val()) < dayDate && dayDate < parseInt(this.hiddenEndDateField.val())) {
+          $(day).addClass('active');
+        }
+      });
       return;
     }
 

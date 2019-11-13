@@ -115,6 +115,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
             }
         };
         TimeslotDatesSelect.prototype.onDirectBookingLinkClick = function (e) {
+            var _this = this;
             e.preventDefault();
             var timestamp = $(e.currentTarget).attr('data-date');
             var displayDate = $(e.currentTarget).attr('data-display-date');
@@ -135,6 +136,14 @@ define(["require", "exports", "TYPO3/CMS/Backend/Modal", "jquery", "TYPO3/CMS/Ba
                 this.hiddenEndDateField.val(timestamp);
                 this.directBookingEndTimeField.val(displayDate);
                 $(e.currentTarget).addClass('active');
+                // mark days between as active
+                this.directBookingLinks.each(function (i, day) {
+                    var dayDate = parseInt($(day).attr('data-date'));
+                    // @ts-ignore
+                    if (parseInt(_this.hiddenStartDateField.val()) < dayDate && dayDate < parseInt(_this.hiddenEndDateField.val())) {
+                        $(day).addClass('active');
+                    }
+                });
                 return;
             }
             // reset and trigger again if both values already set (third click)
