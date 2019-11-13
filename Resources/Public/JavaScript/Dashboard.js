@@ -41,7 +41,7 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/BwBookingman
             });
         };
         Dashboard.prototype.handleChartClick = function (e) {
-            var calendarId = $(e.toElement).attr('data-calendar');
+            var calendarId = $(e.currentTarget).attr('data-calendar');
             var chart = this.chart1s[calendarId];
             var chartElement = chart.getElementAtEvent(e);
             console.log(chartElement);

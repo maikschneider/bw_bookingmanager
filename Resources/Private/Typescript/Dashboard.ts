@@ -67,7 +67,7 @@ class Dashboard {
 
 	public handleChartClick(e: MouseEvent)
 	{
-		const calendarId  = $(e.toElement).attr('data-calendar');
+		const calendarId  = $(e.currentTarget).attr('data-calendar');
 
 		const chart = this.chart1s[calendarId];
 		const chartElement = chart.getElementAtEvent(e);
