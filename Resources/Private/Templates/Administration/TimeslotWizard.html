@@ -85,7 +85,7 @@
 										<f:variable name="isInThisDay" value=""/>
 										<f:variable name="isCurrentDay" value=""/>
 										<f:variable name="isInPast" value=""/>
-										<f:variable name="isSelected" value=""/>
+										<f:variable name="isSelected" value="active"/>
 
 										<f:for each="{day.timeslots}" as="timeslot">
 											<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
@@ -99,8 +99,8 @@
 										<f:if condition="{day.isInPast}">
 											<f:variable name="isInPast" value="bw_bookingmanager__day--isInPast"/>
 										</f:if>
-										<f:if condition="{currentStartDate}=={day.date} || {currentEndDate}=={day.date}">
-											<f:variable name="isSelected" value="active"/>
+										<f:if condition="{currentStartDate}>{day.date} || {day.date}>{currentEndDate}">
+											<f:variable name="isSelected" value=""/>
 										</f:if>
 
 										<f:if condition="{c.calendar.directBooking}">
@@ -163,6 +163,7 @@
 							<f:variable name="isCurrentDay" value=""/>
 							<f:variable name="isInPast" value=""/>
 							<f:variable name="hasNoSlot" value=""/>
+							<f:variable name="isSelected" value="active"/>
 
 							<f:for each="{day.timeslots}" as="timeslot">
 								<f:variable name="timeslot">{c.monthView.timeslots.{timeslot}}</f:variable>
@@ -179,8 +180,8 @@
 							<f:if condition="{day.timeslots->f:count()}==0">
 								<f:variable name="hasNoSlot" value="bw_bookingmanager__day--isInPast"/>
 							</f:if>
-							<f:if condition="{currentStartDate}=={day.date} || {currentEndDate}=={day.date}">
-								<f:variable name="isSelected" value="active"/>
+							<f:if condition="{currentStartDate}>{day.date} || {day.date}>{currentEndDate}">
+								<f:variable name="isSelected" value=""/>
 							</f:if>
 
 							<f:if condition="{c.calendar.directBooking}">
