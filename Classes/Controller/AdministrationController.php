@@ -427,31 +427,36 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         if ($this->request->getControllerActionName() === 'shift') {
             $listViewButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
-                ->setClasses('active')
+                ->setClasses('active view-button')
                 ->setDataAttributes([
                     'togglelink' => '1',
                     'toggle' => 'tooltip',
                     'placement' => 'bottom',
+                    'view' => 'calendar--list'
                 ])
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.listView.buttonTitle'))
                 ->setIcon($this->iconFactory->getIcon('icon-list-view', Icon::SIZE_SMALL));
 
             $weekViewButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
+                ->setClasses('view-button')
                 ->setDataAttributes([
                     'togglelink' => '1',
                     'toggle' => 'tooltip',
                     'placement' => 'bottom',
+                    'view' => 'calendar--week'
                 ])
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.weekView.buttonTitle'))
                 ->setIcon($this->iconFactory->getIcon('icon-week-view', Icon::SIZE_SMALL));
 
             $monthViewButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
+                ->setClasses('view-button')
                 ->setDataAttributes([
                     'togglelink' => '1',
                     'toggle' => 'tooltip',
                     'placement' => 'bottom',
+                    'view' => 'calendar--month'
                 ])
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.monthView.buttonTitle'))
                 ->setIcon($this->iconFactory->getIcon('icon-month-view', Icon::SIZE_SMALL));

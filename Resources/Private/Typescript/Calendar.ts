@@ -16,11 +16,11 @@ declare global {
  */
 class Calendar {
   private $calendarWrapper: JQuery;
+  private $viewButtons: JQuery;
   private calendarUids: number[];
   private feUser: number;
 
-  public init()
-  {
+  public init() {
     this.cacheDom();
     this.bindEvents();
     this.bindListener();
@@ -29,10 +29,11 @@ class Calendar {
 
   private cacheDom() {
     this.$calendarWrapper = $('.bookingmanager-show-calendar');
+    this.$viewButtons = $('.view-button');
   }
 
   private bindEvents() {
-
+    this.$viewButtons.on('click', this.onViewButtonClick.bind(this));
   }
 
   private bindListener() {
@@ -62,13 +63,19 @@ class Calendar {
     });
 
     for (let i = 0; i < this.calendarUids.length; i++) {
-      this.loadCalendar(urls[i], this.buildCalendarMarkup.bind(this));
+      //this.loadCalendar(urls[i], this.buildCalendarMarkup.bind(this));
     }
 
   }
 
-  private loadCalendar(url, callback)
-  {
+  private onViewButtonClick(e: JQuery.TriggeredEvent) {
+    e.preventDefault();
+    this.$viewButtons.removeClass('active');
+    $('.calendar').removeClass('calendar--list').removeClass('calendar--week').removeClass('calendar--month').addClass($(e.currentTarget).attr('data-view'));
+    $(e.currentTarget).addClass('active');
+  }
+
+  private loadCalendar(url, callback) {
     Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
       this.$calendarWrapper.html(icon);
       $.get(
@@ -79,8 +86,7 @@ class Calendar {
     });
   }
 
-  private buildCalendarMarkup(data)
-  {
+  private buildCalendarMarkup(data) {
     console.log(data);
   }
 }

@@ -16,8 +16,10 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/Icons"], function (re
         };
         Calendar.prototype.cacheDom = function () {
             this.$calendarWrapper = $('.bookingmanager-show-calendar');
+            this.$viewButtons = $('.view-button');
         };
         Calendar.prototype.bindEvents = function () {
+            this.$viewButtons.on('click', this.onViewButtonClick.bind(this));
         };
         Calendar.prototype.bindListener = function () {
         };
@@ -39,8 +41,14 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/Icons"], function (re
                 return item;
             });
             for (var i = 0; i < this.calendarUids.length; i++) {
-                this.loadCalendar(urls[i], this.buildCalendarMarkup.bind(this));
+                //this.loadCalendar(urls[i], this.buildCalendarMarkup.bind(this));
             }
+        };
+        Calendar.prototype.onViewButtonClick = function (e) {
+            e.preventDefault();
+            this.$viewButtons.removeClass('active');
+            $('.calendar').removeClass('calendar--list').removeClass('calendar--week').removeClass('calendar--month').addClass($(e.currentTarget).attr('data-view'));
+            $(e.currentTarget).addClass('active');
         };
         Calendar.prototype.loadCalendar = function (url, callback) {
             var _this = this;

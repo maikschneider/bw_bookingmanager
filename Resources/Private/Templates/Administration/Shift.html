@@ -7,7 +7,7 @@
 {namespace be=TYPO3\CMS\Backend\ViewHelpers}
 
 <div class="row">
-	<div class="col-md-12 calendar">
+	<div class="col-md-12">
 		<h1>Schichten</h1>
 
 		<f:for each="{calendars}" as="c">
@@ -16,7 +16,7 @@
 
 			<div class="calendar calendar--list">
 
-				<div class="bookingmanager-show-calendar" data-calendar-uids="{c.calendar.uid}" data-fe-user="{feUser.uid}">
+				<div class="bookingmanager-show-calendar" data-calendar-uids="{c.calendar.uid}" data-calendar-urls="" data-fe-user="{feUser.uid}">
 
 					<div class="calendar__container calendar__container--{c.configuration.weeks->f:count()}-weeks">
 
