@@ -25,8 +25,8 @@ class SendMailButtonElement extends \TYPO3\CMS\Backend\Form\Element\AbstractForm
         $modalSendButtonText = 'Send';
 
         $html = '';
-        $html .= '<div class="formengine-field-item t3js-formengine-field-item" style="margin-top: -20px;">';
-        $html .= '<label class="t3js-formengine-label" for="sendmailButton">Confirmation mail</label>';
+        $html .= '<div class="formengine-field-item t3js-formengine-field-item">';
+        //$html .= '<label class="t3js-formengine-label" for="sendmailButton">Confirmation mail</label>';
         $html .= '<div class="form-wizards-wrap">';
         $html .= '<div class="form-wizards-element">';
         $html .= '<div class="form-control-wrap">';
