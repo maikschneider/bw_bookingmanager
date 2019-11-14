@@ -3,6 +3,9 @@
 namespace Blueways\BwBookingmanager\Hooks;
 
 use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface
 {
@@ -12,8 +15,8 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
      */
     private function loadAllTypoScriptSettings()
     {
-        $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
-        $typoscript = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+        $typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
         return $typoscript['module.']['tx_bwbookingmanager.']['settings.'];
     }
@@ -40,13 +43,12 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
     public function makeControl($table, $row, $cells, &$parentObject)
     {
         if ($table === 'tx_bwbookingmanager_domain_model_entry') {
-
             // remove edit, hide, delete button (no idea why there added twice)
             $cells['primary'] = [];
 
             $settings = $this->loadAllTypoScriptSettings();
 
-            if($settings['showDeleteButton'] === '0'){
+            if ($settings['showDeleteButton'] === '0') {
                 unset($cells['delete']);
             }
 
@@ -70,9 +72,8 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
                 unset($cells['edit']);
             }
 
-            if($settings['showConfirmButton']=='1') {
-
-                $iconFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            if ($settings['showConfirmButton']=='1') {
+                $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
                 $languageService = $GLOBALS['LANG'];
 
                 if ($row['confirmed']) {
@@ -82,7 +83,7 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
                         . ' data-toggle="tooltip"'
                         . ' data-toggle-title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.confirm') . '"'
                         . ' title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.unconfirm') . '">'
-                        . $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() . '</a>';
+                        . $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render() . '</a>';
                 } else {
                     $params = 'data[' . $table . '][' . $row['uid'] . '][confirmed]=1';
                     $cells['primary']['confirmed'] = '<a class="btn btn-default t3js-record-confirm" data-confirmed="no" href="#"'
@@ -90,7 +91,7 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
                         . ' data-toggle="tooltip"'
                         . ' data-toggle-title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.unconfirm') . '"'
                         . ' title="' . $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.recordlist.button.confirm') . '">'
-                        . $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render() . '</a>';
+                        . $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() . '</a>';
                 }
             }
         }
@@ -120,5 +121,4 @@ class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordList
     {
         return $cells;
     }
-
 }
