@@ -286,6 +286,62 @@
             <trans-unit id="administration.recordlist.button.unconfirm">
                 <target>Bestätigung aufheben</target>
             </trans-unit>
+			<trans-unit id="administration.sendmailWizard.sendNewEmail">
+				<source>Send new E-Mail</source>
+				<target>Neue E-Mail…</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.emailPreview">
+				<source>E-Mail Preview</source>
+				<target>E-Mail-Voransicht</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.cancel">
+				<source>Cancel</source>
+				<target>Abbrechen</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.send">
+				<source>Send</source>
+				<target>Senden</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.settings">
+				<source>Settings</source>
+				<target>Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.emailTemplate">
+				<source>E-Mail template</source>
+				<target>E-Mail-Vorlage</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.recipientSettings">
+				<source>Recipient settings</source>
+				<target>Empfänger-Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.recipientName">
+				<source>Recipient name</source>
+				<target>Empfänger-Name</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.recipientAddress">
+				<source>Recipient address</source>
+				<target>Empfänger-Adresse</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.emailSubject">
+				<source>E-Mail subject</source>
+				<target>E-Mail-Betreff</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.senderSettings">
+				<source>Sender settings</source>
+				<target>Absender-Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.senderName">
+				<source>Sender name</source>
+				<target>Absender name</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.senderAddress">
+				<source>Sender address</source>
+				<target>Absender-Adresse</target>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.replyToAddress">
+				<source>Reply-to address</source>
+				<target>Antwort-Adresse</target>
+			</trans-unit>
         </body>
     </file>
 </xliff>

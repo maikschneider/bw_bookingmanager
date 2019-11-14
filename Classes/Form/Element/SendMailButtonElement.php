@@ -19,25 +19,28 @@ class SendMailButtonElement extends \TYPO3\CMS\Backend\Form\Element\AbstractForm
         ];
 
         $wizardUri = $this->getWizardUri();
+        $ll = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:';
 
-        $modalTitle = 'E-Mail Preview';
-        $modalCancelButtonText = 'Cancel';
-        $modalSendButtonText = 'Send';
+        $modalTitle = $this->getLanguageService()->sL($ll . 'administration.sendmailWizard.emailPreview');
+        $modalCancelButtonText = $this->getLanguageService()->sL($ll . 'administration.sendmailWizard.cancel');
+        $modalSendButtonText = $this->getLanguageService()->sL($ll . 'administration.sendmailWizard.send');
 
         $html = '';
-        $html .= '<div class="formengine-field-item t3js-formengine-field-item" style="margin-top: -20px;">';
-        $html .= '<label class="t3js-formengine-label" for="sendmailButton">Confirmation mail</label>';
+        $html .= '<div class="formengine-field-item t3js-formengine-field-item">';
+        //$html .= '<label class="t3js-formengine-label" for="sendmailButton">Confirmation mail</label>';
         $html .= '<div class="form-wizards-wrap">';
         $html .= '<div class="form-wizards-element">';
         $html .= '<div class="form-control-wrap">';
-        $html .= '<button 
+        $html .= '<button
             id="sendMailButton"
             class="btn btn-default t3js-sendmail-trigger"
-            data-wizard-uri="' . $wizardUri . '" 
-            data-modal-title="' . $modalTitle . '" 
-            data-modal-send-button-text="' . $modalSendButtonText . '" 
+            data-wizard-uri="' . $wizardUri . '"
+            data-modal-title="' . $modalTitle . '"
+            data-modal-send-button-text="' . $modalSendButtonText . '"
             data-modal-cancel-button-text="' . $modalCancelButtonText . '">
-			  <span class="t3-icon fa fa-envelope-o"></span> Send new E-Mail</button>';
+			  <span class="t3-icon fa fa-envelope-o"></span>' .
+                 $this->getLanguageService()->sL($ll . 'administration.sendmailWizard.sendNewEmail')
+                 . '</button>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
@@ -63,5 +66,4 @@ class SendMailButtonElement extends \TYPO3\CMS\Backend\Form\Element\AbstractForm
 
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
     }
-
 }
