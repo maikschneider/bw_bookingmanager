@@ -61,7 +61,6 @@ class BetterRecordList{
 	 * @param {JQuery} $rowElement
 	 */
 	private toggleRow($rowElement: JQuery<Element>): void {
-		console.log('toggle console');
 
 		const $anchorElement = $rowElement.find(Identifiers.confirm);
 		const table = $anchorElement.closest('table[data-table]').data('table');
@@ -73,12 +72,12 @@ class BetterRecordList{
 		if ($anchorElement.data('confirmed') === 'no') {
 			nextState = 'yes';
 			nextParams = params.replace('=1', '=0');
-			iconName = 'actions-edit-unhide';
+			iconName = 'actions-edit-hide';
 			$rowElement.removeClass('not-confirmed');
 		} else {
 			nextState = 'no';
 			nextParams = params.replace('=0', '=1');
-			iconName = 'actions-edit-hide';
+			iconName = 'actions-edit-unhide';
 			$rowElement.addClass('not-confirmed');
 		}
 		$anchorElement.data('confirmed', nextState).data('params', nextParams);
@@ -86,7 +85,7 @@ class BetterRecordList{
 		const newTitle = $anchorElement.attr('data-toggle-title');
 		$anchorElement.attr('data-toggle-title', $anchorElement.attr('data-original-title'));
 		$anchorElement.attr('data-original-title', newTitle);
-		$anchorElement.tooltip('hide')
+		$anchorElement.tooltip('hide');
 
 		const $iconElement = $anchorElement.find(Identifiers.icon);
 		Icons.getIcon(iconName, Icons.sizes.small).done((icon: string): void => {
