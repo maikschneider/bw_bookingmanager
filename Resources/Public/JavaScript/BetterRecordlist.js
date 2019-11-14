@@ -49,7 +49,6 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/Backend/Noti
          * @param {JQuery} $rowElement
          */
         BetterRecordList.prototype.toggleRow = function ($rowElement) {
-            console.log('toggle console');
             var $anchorElement = $rowElement.find(Identifiers.confirm);
             var table = $anchorElement.closest('table[data-table]').data('table');
             var params = $anchorElement.data('params');
@@ -59,13 +58,13 @@ define(["require", "exports", "TYPO3/CMS/Backend/Icons", "TYPO3/CMS/Backend/Noti
             if ($anchorElement.data('confirmed') === 'no') {
                 nextState = 'yes';
                 nextParams = params.replace('=1', '=0');
-                iconName = 'actions-edit-unhide';
+                iconName = 'actions-edit-hide';
                 $rowElement.removeClass('not-confirmed');
             }
             else {
                 nextState = 'no';
                 nextParams = params.replace('=0', '=1');
-                iconName = 'actions-edit-hide';
+                iconName = 'actions-edit-unhide';
                 $rowElement.addClass('not-confirmed');
             }
             $anchorElement.data('confirmed', nextState).data('params', nextParams);
