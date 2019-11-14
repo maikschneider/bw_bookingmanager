@@ -113,7 +113,7 @@ $not-bookable: #d1695b;
         }
 
         &__container {
-            display: none;
+            display: grid;
             width: 400%;
             grid-template-columns: repeat(35, 1fr);
             transition: transform 0.5s ease;
@@ -239,7 +239,7 @@ $not-bookable: #d1695b;
         }
 
         &__container {
-            display: none;
+            display: grid;
             grid-template-columns: repeat(7, 1fr);
             //@include breakpoint(large) {
                 grid-template-columns: repeat(7, 1fr) 7fr;

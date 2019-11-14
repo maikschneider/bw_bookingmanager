@@ -16,7 +16,10 @@
 
 			<div class="calendar calendar--list">
 
-				<div class="bookingmanager-show-calendar" data-calendar-uids="{c.calendar.uid}" data-calendar-urls="" data-fe-user="{feUser.uid}">
+				<div class="bookingmanager-show-calendar"
+						 data-calendar-uids="{c.calendar.uid}"
+						 data-calendar-urls=""
+						 data-fe-user="{feUser.uid}">
 
 					<div class="calendar__container calendar__container--{c.configuration.weeks->f:count()}-weeks">
 
@@ -54,9 +57,12 @@
 												<f:link.action action="newEntry"
 																			 class="calendar__item calendar__timeslot {bookable}"
 																			 arguments="{calendar: c.calendar.uid, timeslot: timeslot.uid, startDate: timeslot.startDate, endDate: timeslot.endDate}">
-
-													{timeslot.startDate->f:format.date(format: 'H:m')} - {timeslot.endDate->f:format.date(format:
-													'H:m')}
+													<div>
+														<span class="calendar__timeslot--date">{timeslot.startDate->f:format.date(format: 'H:m')} -
+															{timeslot.endDate->f:format.date(format: 'H:m')}
+														</span>
+														<span class="calendar__timeslot--place">Place</span>
+													</div>
 												</f:link.action>
 
 											</f:then>
@@ -81,18 +87,22 @@
 
 							</div>
 
+							<div class="calendar__day-month calendar__day-month--{bookable} calendar__day-month--{inPast} calendar__day-month--{notInMonth} calendar__day-month--{day.date->f:format.date(format:'N')}">
+								{day.date->f:format.date(format:'j')}
+							</div>
+
 						</f:for>
 
 						<div class="calendar_navigation">
-								<a class="calendar_navigation__link" href="{c.configuration.prev.link}">
-									zurück
-								</a>
+							<a class="calendar_navigation__link" href="{c.configuration.prev.link}">
+								zurück
+							</a>
 
-								<a class="calendar_navigation__link" href="{c.configuration.next.link}">
-									weiter
-								</a>
+							<a class="calendar_navigation__link" href="{c.configuration.next.link}">
+								weiter
+							</a>
 
-							</div>
+						</div>
 
 					</div>
 
