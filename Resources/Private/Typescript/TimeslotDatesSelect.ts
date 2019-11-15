@@ -368,13 +368,16 @@ class TimeslotDatesSelect {
       this.endDateText.html(this.newDataLink.data('end-date-text'));
     }
 
-    // hidden fields were already set
     if (this.isDirectBooked) {
+      // hidden fields for start and end were already set
       this.hiddenTimeslotField.val(0);
       this.calendarSelectField.val(this.isDirectBooked);
       this.startDateText.html('' + this.directBookingStartTimeField.val());
       this.endDateText.html('' + this.directBookingEndTimeField.val());
     }
+
+    // mark field as changed to trigger confirmation modal
+    this.trigger.closest('.t3js-formengine-palette-field').addClass('has-change');
 
     Modal.currentModal.trigger('modal-dismiss');
   }
