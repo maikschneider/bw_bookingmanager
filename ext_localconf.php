@@ -54,12 +54,6 @@ call_user_func(
             'priority' => '70',
             'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslotDatesElement::class,
         ];
-        // register custom TCA node field
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1533721567] = [
-            'nodeName' => 'sendMailButton',
-            'priority' => '70',
-            'class' => \Blueways\BwBookingmanager\Form\Element\SendMailButtonElement::class,
-        ];
 
         // register recycler task
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Blueways\BwBookingmanager\Task\RecycleEntriesTask::class] = [

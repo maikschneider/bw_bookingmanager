@@ -251,9 +251,10 @@ return [
         'send_mail_button' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.sendMail.button',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'sendMailButton'
-            ]
+                'type' => 'sendMailButton',
+                'recipientAddress' => 'FIELD:email',
+                'recipientName' => 'FIELD:name',
+            ],
         ],
         'crdate' => [
             'config' => [
