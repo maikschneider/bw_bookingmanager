@@ -2,13 +2,15 @@ plugin.tx_bwbookingmanager {
   persistence {
     storagePid =
   }
+
   view {
     templateRootPath =
     partialRootPath =
     layoutRootPath =
   }
+
   settings {
-  cancelTime = 1440
+    cancelTime = 1440
     mail {
       senderAddress = noreply@example.com
       senderName = Example sender name
@@ -18,6 +20,7 @@ plugin.tx_bwbookingmanager {
       showUid =
       doSendConfirmation = 0
     }
+
     directBooking {
       defaultStartTime =
       defaultEndTime =
@@ -33,5 +36,16 @@ plugin.tx_bwbookingmanager_pi1 {
     calendarPid =
     entryPid =
     backPid =
+  }
+}
+
+plugin.tx_bwemail {
+  settings {
+    senderAddress < plugin.tx_bwbookingmanager.settings.mail.senderAddress
+    senderName < plugin.tx_bwbookingmanager.settings.mail.senderName
+    replytoAddress < plugin.tx_bwbookingmanager.settings.mail.replytoAddress
+    subject < plugin.tx_bwbookingmanager.settings.mail.subject
+    template < plugin.tx_bwbookingmanager.settings.mail.template
+    showUid < plugin.tx_bwbookingmanager.settings.mail.showUid
   }
 }

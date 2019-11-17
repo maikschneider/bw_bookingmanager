@@ -1,4 +1,5 @@
 <h1>Reservierungsbestätigung</h1>
-<p>Start: <strong>{f:format.date(date:entry.startDate, format:'d.m.Y H:i')}</strong>
-<p>Ende: <strong>{f:format.date(date:entry.endDate, format:'d.m.Y H:i')}</strong>
-<p>Name: <strong>{entry.name}</strong></p>
+<p>Kalender: <strong>{calendars.0.name}</strong></p>
+<p>Start: <strong>{f:format.date(date:record.startDate, format:'d.m.Y H:i')}</strong>
+<p>Ende: <strong>{f:format.date(date:record.endDate, format:'d.m.Y H:i')}</strong>
+<p>Name: <strong>{record.name}</strong></p>

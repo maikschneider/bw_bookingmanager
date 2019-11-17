@@ -1,0 +1,36 @@
+#################################
+### EMAIL EXTENSION OVERRIDES ###
+#################################
+plugin.tx_bwemail {
+  view {
+    templateRootPaths {
+      3 = EXT:bw_bookingmanager/Resources/Private/Templates/Email
+      4 = {$plugin.tx_bwbookingmanager.view.templateRootPath}/Email
+    }
+
+    partialRootPaths {
+      3 = EXT:bw_bookingmanager/Resources/Private/Templates/Email
+      4 = {$plugin.tx_bwbookingmanager.view.partialRootPath}/Email
+    }
+
+    layoutRootPaths {
+      3 = EXT:bw_bookingmanager/Resources/Private/Templates/Email
+      4 = {$plugin.tx_bwbookingmanager.view.layoutRootPath}/Email
+    }
+  }
+
+  settings {
+    typoscriptSelects {
+      tx_bwbookingmanager_domain_model_entry {
+        calendars {
+          table = tx_bwbookingmanager_domain_model_calendar
+          select {
+            uidInList = FIELD:calendar
+          }
+        }
+      }
+    }
+  }
+
+
+}

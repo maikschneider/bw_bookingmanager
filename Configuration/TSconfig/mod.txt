@@ -22,7 +22,7 @@ mod {
 	web_layout {
 		EmailLayouts >
 		EmailLayouts {
-			bw_email_default {
+			default {
 				title = Default
 				config {
 					backend_layout {

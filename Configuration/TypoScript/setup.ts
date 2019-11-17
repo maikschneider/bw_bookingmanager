@@ -32,6 +32,7 @@ plugin.tx_bwbookingmanager {
       showUid = {$plugin.tx_bwbookingmanager.settings.mail.showUid}
       doSendConfirmation = {$plugin.tx_bwbookingmanager.settings.mail.doSendConfirmation}
     }
+
     directBooking {
       defaultStartTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultStartTime}
       defaultEndTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultEndTime}
@@ -117,4 +118,5 @@ module.tx_bwbookingmanager {
 }
 
 @import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/config.typoscript'
+@import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/ext.bw_email.typoscript'
 @import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/ddev.typoscript'
