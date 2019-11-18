@@ -103,7 +103,8 @@ class NotificationManager
         $emailView->setTemplateRootPaths($this->extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->getRenderingContext()->setControllerName('Email');
         $emailView->setTemplate($templateName);
-        $emailView->assign('entry', $this->entry);
+        $emailView->assign('record', $this->entry);
+        $emailView->assign('calendars', [0 => $this->entry->getCalendar()]);
 
         $emailBody = $emailView->render();
 
