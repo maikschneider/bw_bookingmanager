@@ -41,11 +41,11 @@ plugin.tx_bwbookingmanager_pi1 {
 
 plugin.tx_bwemail {
   settings {
-    senderAddress < plugin.tx_bwbookingmanager.settings.mail.senderAddress
-    senderName < plugin.tx_bwbookingmanager.settings.mail.senderName
-    replytoAddress < plugin.tx_bwbookingmanager.settings.mail.replytoAddress
-    subject < plugin.tx_bwbookingmanager.settings.mail.subject
-    template < plugin.tx_bwbookingmanager.settings.mail.template
-    showUid < plugin.tx_bwbookingmanager.settings.mail.showUid
+    senderAddress = {$plugin.tx_bwbookingmanager.settings.mail.senderAddress}
+    senderName = {$plugin.tx_bwbookingmanager.settings.mail.senderName}
+    replytoAddress = {$plugin.tx_bwbookingmanager.settings.mail.replytoAddress}
+    subject = {$plugin.tx_bwbookingmanager.settings.mail.subject}
+    template = {$plugin.tx_bwbookingmanager.settings.mail.template}
+    showUid = {$plugin.tx_bwbookingmanager.settings.mail.showUid}
   }
 }
