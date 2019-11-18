@@ -252,10 +252,7 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.sendMail.button',
             'config' => [
                 'renderType' => 'sendMailButton',
-                'type' => 'passthrough',
-                'recipientAddress' => 'FIELD:email',
-                'recipientName' => 'FIELD:prename FIELD:name',
-                'subject' => 'New booking in FIELD:calendar.name'
+                'type' => 'passthrough'
             ],
         ],
         'crdate' => [
