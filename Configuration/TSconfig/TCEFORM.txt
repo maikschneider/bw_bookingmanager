@@ -12,7 +12,7 @@ TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.email{
    	}
 }
 
-# Register Email Templates
+# Register View Templates
 TCEFORM.tt_content.pi_flexform.bwbookingmanager_pi1.template{
 	settings\.template\.calendar\.list.addItems{
    		list = LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_email.template.default
