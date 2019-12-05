@@ -94,17 +94,13 @@ class NotificationManager
 
     private function getMailBody($templateName)
     {
-        $emailView = GeneralUtility::makeInstance('TYPO3\CMS\Fluid\View\StandaloneView');
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('bw_email')) {
-            $emailView = GeneralUtility::makeInstance('Blueways\BwEmail\View\EmailView');
-        }
+        $emailView = GeneralUtility::makeInstance('Blueways\BwEmail\View\EmailView');
         $emailView->setLayoutRootPaths($this->extbaseFrameworkConfiguration['view']['layoutRootPaths']);
         $emailView->setPartialRootPaths($this->extbaseFrameworkConfiguration['view']['partialRootPaths']);
         $emailView->setTemplateRootPaths($this->extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->getRenderingContext()->setControllerName('Email');
         $emailView->setTemplate($templateName);
         $emailView->assign('record', $this->entry);
-        $emailView->assign('calendars', [0 => $this->entry->getCalendar()]);
 
         $emailBody = $emailView->render();
 
