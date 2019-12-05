@@ -14,6 +14,7 @@ namespace Blueways\BwBookingmanager\Helper;
  */
 
 use Blueways\BwBookingmanager\Domain\Model\Notification;
+use Blueways\BwEmail\Utility\SenderUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -41,6 +42,11 @@ class NotificationManager
     protected $extbaseFrameworkConfiguration;
 
     /**
+     * @var \Blueways\BwEmail\Utility\SenderUtility
+     */
+    protected $senderUtility;
+
+    /**
      * NotificationManager constructor.
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
@@ -52,6 +58,7 @@ class NotificationManager
         $this->notifications = $entry->getCalendar()->getNotifications();
         $this->configurationManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Configuration\ConfigurationManager');
         $this->extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $this->senderUtility = GeneralUtility::makeInstance(SenderUtility::class);
     }
 
     /**
@@ -68,11 +75,6 @@ class NotificationManager
     {
         $this->sendConfirmation();
         $this->sendNotifications(Notification::EVENT_CREATION);
-    }
-
-    public function notifyDeletion()
-    {
-        $this->sendNotifications(Notification::EVENT_DELETION);
     }
 
     private function sendConfirmation()
@@ -156,6 +158,11 @@ class NotificationManager
         $replyTo = $this->entry->getEmail();
 
         $this->sendMail($from, $to, $subject, $body, $replyTo);
+    }
+
+    public function notifyDeletion()
+    {
+        $this->sendNotifications(Notification::EVENT_DELETION);
     }
 
     public function getEntry()
