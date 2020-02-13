@@ -59,9 +59,19 @@ class ApiController extends ActionController
     protected $entryRepository;
 
     /**
+     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+     */
+    protected $frontendUserRepository;
+
+    /**
      * @var UriBuilder
      */
     protected $uriBuilder;
+
+    /**
+     * @var \Blueways\BwBookingmanager\Service\AccessControlService
+     */
+    protected $accessControlService;
 
     public function calendarListAction()
     {
@@ -87,13 +97,18 @@ class ApiController extends ActionController
         $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
         $configuration = $calendarManager->getConfiguration($dateConf);
 
+        if ($user = $this->accessControlService->getFrontendUserUid()) {
+            $user = $this->frontendUserRepository->findByIdentifier($user);
+        }
+
         $this->view->assignMultiple([
             'configuration' => $configuration,
-            'calendar' => $calendar
+            'calendar' => $calendar,
+            'user' => $user,
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar'));
+        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user'));
     }
 
     /**
@@ -112,13 +127,18 @@ class ApiController extends ActionController
         $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
         $configuration = $calendarManager->getConfiguration($dateConf);
 
+        if ($user = $this->accessControlService->getFrontendUserUid()) {
+            $user = $this->frontendUserRepository->findByIdentifier($user);
+        }
+
         $this->view->assignMultiple([
             'configuration' => $configuration,
-            'calendar' => $calendar
+            'calendar' => $calendar,
+            'user' => $user,
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar'));
+        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user'));
     }
 
     public function initializeEntryCreateAction()
@@ -200,6 +220,12 @@ class ApiController extends ActionController
         return $entryFields;
     }
 
+    public function injectAccessControlService(
+        \Blueways\BwBookingmanager\Service\AccessControlService $accessControlService
+    ) {
+        $this->accessControlService = $accessControlService;
+    }
+
     public function injectCalendarRepository(
         \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
     ) {
@@ -209,6 +235,12 @@ class ApiController extends ActionController
     public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
     {
         $this->entryRepository = $entryRepository;
+    }
+
+    public function injectFrontendUserRepository(
+        \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository $frontendUserRepository
+    ) {
+        $this->frontendUserRepository = $frontendUserRepository;
     }
 
     public function injectTimeslotRepository(
