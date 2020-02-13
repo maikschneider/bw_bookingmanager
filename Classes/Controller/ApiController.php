@@ -130,9 +130,11 @@ class ApiController extends ActionController
 
         // allow creation of Entry
         $propertyMappingConfiguration = $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration();
-        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
+        $propertyMappingConfiguration->setTypeConverterOption(
+            PersistentObjectConverter::class,
             PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
-            true);
+            true
+        );
 
         // set Entry class name from calendar constant
         /** @var array $newEntry */
@@ -143,15 +145,20 @@ class ApiController extends ActionController
             $this->throwStatus(406, 'Validation failed', json_encode($content));
         }
         $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
-        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
-            PersistentObjectConverter::CONFIGURATION_TARGET_TYPE, $entityClass);
+        $propertyMappingConfiguration->setTypeConverterOption(
+            PersistentObjectConverter::class,
+            PersistentObjectConverter::CONFIGURATION_TARGET_TYPE,
+            $entityClass
+        );
 
         // convert timestamps
-        $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(DateTimeConverter::class,
+        $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(
+            DateTimeConverter::class,
             DateTimeConverter::CONFIGURATION_DATE_FORMAT,
             'U'
         );
-        $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(DateTimeConverter::class,
+        $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(
+            DateTimeConverter::class,
             DateTimeConverter::CONFIGURATION_DATE_FORMAT,
             'U'
         );
