@@ -278,6 +278,11 @@ class ApiController extends ActionController
         $this->view->setVariablesToRender(array('newEntry'));
     }
 
+    /**
+     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
     public function loginAction()
     {
         $loginData = [
@@ -286,7 +291,7 @@ class ApiController extends ActionController
         ];
 
         if (!$loginData['uname'] || !$loginData['uident_text']) {
-            $this->throwStatus(403, 'Login failed');
+            $this->throwStatus(403, 'Login failed', json_encode([]));
         }
 
         $GLOBALS['TSFE']->fe_user->checkPid = 0;
@@ -297,7 +302,7 @@ class ApiController extends ActionController
         $user = $userAuth->fetchUserRecord($info['db_user'], $loginData['uname']);
 
         if (!$user) {
-            $this->throwStatus(404, 'User not found');
+            $this->throwStatus(404, 'User not found', json_encode([]));
         }
 
         $passwordHashFactory = $this->objectManager->get(
@@ -307,7 +312,7 @@ class ApiController extends ActionController
         $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user['password']);
 
         if (!$isValidLoginData) {
-            $this->throwStatus(403, 'Login failed');
+            $this->throwStatus(403, 'Login failed', json_encode([]));
         }
 
         $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
@@ -319,6 +324,19 @@ class ApiController extends ActionController
         $this->view->assign('user', $user);
         $this->view->setConfiguration($this->configuration);
         $this->view->setVariablesToRender(array('user'));
+    }
+
+    /**
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
+    public function logoutAction()
+    {
+        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+        $userAuth->removeCookie('fe_typo_user');
+        $GLOBALS['TSFE']->fe_user->loginUser = 0;
+
+        $this->throwStatus(200, 'Logout successful', json_encode([]));
     }
 
     /**

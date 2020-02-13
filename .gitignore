@@ -6,8 +6,7 @@ vendor
 public
 !Resources/Public
 var
-config
 bin
 .php_cs.cache
 yarn.lock
-composer.lock
+.ddev
