@@ -13,6 +13,7 @@ use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ApiController extends ActionController
 {
@@ -37,23 +38,23 @@ class ApiController extends ActionController
                 'displayEndDate' => [],
             ],
         ],
+        'user' => [
+            '_exclude' => ['password']
+        ]
     ];
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
-     *
      */
     protected $calendarRepository;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     *
      */
     protected $timeslotRepository;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     *
      */
     protected $entryRepository;
 
@@ -167,23 +168,6 @@ class ApiController extends ActionController
         $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
     }
 
-    public function injectCalendarRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
-    ) {
-        $this->calendarRepository = $calendarRepository;
-    }
-
-    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
-    {
-        $this->entryRepository = $entryRepository;
-    }
-
-    public function injectTimeslotRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
-    ) {
-        $this->timeslotRepository = $timeslotRepository;
-    }
-
     private function getAllowedEntryFields($entityClass)
     {
         $reflectionClass = $this->objectManager->get(ReflectionClass::class, $entityClass);
@@ -207,6 +191,23 @@ class ApiController extends ActionController
         }, $entryFields);
 
         return $entryFields;
+    }
+
+    public function injectCalendarRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
+    ) {
+        $this->calendarRepository = $calendarRepository;
+    }
+
+    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
+    {
+        $this->entryRepository = $entryRepository;
+    }
+
+    public function injectTimeslotRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+    ) {
+        $this->timeslotRepository = $timeslotRepository;
     }
 
     /**
@@ -236,6 +237,49 @@ class ApiController extends ActionController
         $this->view->setConfiguration($this->configuration);
         $this->view->assign('newEntry', $newEntry);
         $this->view->setVariablesToRender(array('newEntry'));
+    }
+
+    public function loginAction()
+    {
+        $loginData = [
+            'uname' => GeneralUtility::_POST('username'),
+            'uident_text' => GeneralUtility::_POST('password'),
+        ];
+
+        if (!$loginData['uname'] || !$loginData['uident_text']) {
+            $this->throwStatus(403, 'Login failed');
+        }
+
+        $GLOBALS['TSFE']->fe_user->checkPid = 0;
+        $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
+        /** @var FrontendUserAuthentication $userAuth */
+        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+        $userAuth->checkPid = false;
+        $user = $userAuth->fetchUserRecord($info['db_user'], $loginData['uname']);
+
+        if (!$user) {
+            $this->throwStatus(404, 'User not found');
+        }
+
+        $passwordHashFactory = $this->objectManager->get(
+            \TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory::class
+        );
+        $passwordHash = $passwordHashFactory->getDefaultHashInstance('FE');
+        $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user['password']);
+
+        if (!$isValidLoginData) {
+            $this->throwStatus(403, 'Login failed');
+        }
+
+        $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
+        $GLOBALS['TSFE']->fe_user->dontSetCookie = false;
+        $GLOBALS['TSFE']->fe_user->start();
+        $GLOBALS['TSFE']->fe_user->createUserSession($user);
+        $GLOBALS['TSFE']->fe_user->loginUser = 1;
+
+        $this->view->assign('user', $user);
+        $this->view->setConfiguration($this->configuration);
+        $this->view->setVariablesToRender(array('user'));
     }
 
     /**

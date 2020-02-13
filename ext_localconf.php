@@ -22,7 +22,7 @@ call_user_func(
             'Blueways.BwBookingmanager',
             'Api',
             [
-                'Api' => 'calendarList, calendarShow, calendarShowDate, entryCreate'
+                'Api' => 'calendarList, calendarShow, calendarShowDate, entryCreate, login'
             ],
             // non-cacheable actions
             []
