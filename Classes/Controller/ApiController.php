@@ -36,6 +36,9 @@ class ApiController extends ActionController
                 'startDate' => [],
                 'displayStartDate' => [],
                 'displayEndDate' => [],
+                'feUser' => [
+                    '_exclude' => ['password']
+                ]
             ],
         ],
         'user' => [
@@ -264,6 +267,16 @@ class ApiController extends ActionController
         // override PID (just in case the storage PID differs from current calendar)
         $newEntry->setPid($newEntry->getCalendar()->getPid());
         $this->entryRepository->add($newEntry);
+
+        // add / create fe_user
+        $userId = $this->accessControlService->getFrontendUserUid();
+        if ($userId) {
+            /** @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user */
+            $user = $this->frontendUserRepository->findByIdentifier($userId);
+            if ($user) {
+                $newEntry->setFeUser($user);
+            }
+        }
 
         // persist by hand to get uid field and make redirect possible
         $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
