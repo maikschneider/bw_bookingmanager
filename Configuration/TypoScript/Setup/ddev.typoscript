@@ -13,5 +13,7 @@
     concatenateCss = 0
   }
 
+  plugin.tx_bwbookingmanager.settings.userStoragePid = 3
+
 [GLOBAL]
 

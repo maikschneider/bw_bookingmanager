@@ -23,6 +23,7 @@ plugin.tx_bwbookingmanager {
 
   settings {
     cancelTime = {$plugin.tx_bwbookingmanager.settings.cancelTime}
+    userStoragePid = {$plugin.tx_bwbookingmanager.settings.userStoragePid}
     mail {
       senderAddress = {$plugin.tx_bwbookingmanager.settings.mail.senderAddress}
       senderName = {$plugin.tx_bwbookingmanager.settings.mail.senderName}

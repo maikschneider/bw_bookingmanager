@@ -21,6 +21,8 @@ plugin.tx_bwbookingmanager {
       doSendConfirmation = 0
     }
 
+    userStoragePid =
+
     directBooking {
       defaultStartTime =
       defaultEndTime =
