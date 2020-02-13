@@ -102,13 +102,15 @@ class ApiController extends ActionController
         }
 
         $this->view->assignMultiple([
+            'title' => $calendar->getName(),
+            'message' => 'Calendar listing from ' . $dateConf->start->format('d.m.Y') . ' to ' . $dateConf->end->format('d.m.Y'),
             'configuration' => $configuration,
             'calendar' => $calendar,
             'user' => $user,
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user'));
+        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
     }
 
     /**
@@ -132,13 +134,15 @@ class ApiController extends ActionController
         }
 
         $this->view->assignMultiple([
+            'title' => $calendar->getName(),
+            'message' => 'Calendar listing from ' . $dateConf->start->format('d.m.Y') . ' to ' . $dateConf->end->format('d.m.Y'),
             'configuration' => $configuration,
             'calendar' => $calendar,
             'user' => $user,
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user'));
+        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
     }
 
     public function initializeEntryCreateAction()
@@ -285,13 +289,21 @@ class ApiController extends ActionController
      */
     public function loginAction()
     {
+        if ($this->accessControlService->hasLoggedInFrontendUser()) {
+            $this->performLogout();
+        }
+
         $loginData = [
             'uname' => GeneralUtility::_POST('username'),
             'uident_text' => GeneralUtility::_POST('password'),
         ];
 
         if (!$loginData['uname'] || !$loginData['uident_text']) {
-            $this->throwStatus(403, 'Login failed', json_encode([]));
+            $this->throwStatus(
+                403,
+                'Login failed',
+                json_encode(['errors' => ['username' => 'no username or password given']])
+            );
         }
 
         $GLOBALS['TSFE']->fe_user->checkPid = 0;
@@ -302,7 +314,7 @@ class ApiController extends ActionController
         $user = $userAuth->fetchUserRecord($info['db_user'], $loginData['uname']);
 
         if (!$user) {
-            $this->throwStatus(404, 'User not found', json_encode([]));
+            $this->throwStatus(404, 'User not found', json_encode(['errors' => ['username' => 'user not found']]));
         }
 
         $passwordHashFactory = $this->objectManager->get(
@@ -312,7 +324,7 @@ class ApiController extends ActionController
         $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user['password']);
 
         if (!$isValidLoginData) {
-            $this->throwStatus(403, 'Login failed', json_encode([]));
+            $this->throwStatus(403, 'Login failed', json_encode(['errors' => ['password' => 'wrong password']]));
         }
 
         $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
@@ -326,17 +338,25 @@ class ApiController extends ActionController
         $this->view->setVariablesToRender(array('user'));
     }
 
+    protected function performLogout()
+    {
+        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+        $userAuth->removeCookie('fe_typo_user');
+        $GLOBALS['TSFE']->fe_user->loginUser = 0;
+    }
+
     /**
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function logoutAction()
     {
-        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
-        $userAuth->removeCookie('fe_typo_user');
-        $GLOBALS['TSFE']->fe_user->loginUser = 0;
-
-        $this->throwStatus(200, 'Logout successful', json_encode([]));
+        $this->performLogout();
+        $this->throwStatus(
+            200,
+            'Logout successful',
+            json_encode(['title' => 'Logout successful', 'message' => 'You have been successfully logged out.'])
+        );
     }
 
     /**
