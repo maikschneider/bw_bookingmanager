@@ -223,6 +223,7 @@ class ApiController extends ActionController
             $newEntry = $this->request->getArgument('newEntry');
 
             $feUser = [];
+            $feUser['pid'] = (int)$this->settings['userStoragePid'];
             $feUser['username'] = $newEntry['email'];
             $feUser['email'] = $newEntry['email'];
             $feUser['firstName'] = $newEntry['prename'];
@@ -261,7 +262,6 @@ class ApiController extends ActionController
             $validatorConjunction->addValidator($userValidator);
             $this->arguments->getArgument('user')->setValidator($validatorConjunction);
         }
-
     }
 
     private function getAllowedEntryFields($entityClass)
@@ -270,7 +270,6 @@ class ApiController extends ActionController
         $entryFields = $reflectionClass->getProperties();
         $entryFields = array_filter($entryFields, function ($obj) {
             $excludeFields = [
-                'pid',
                 'uid',
                 '_localizedUid',
                 '_languageUid',
@@ -338,6 +337,23 @@ class ApiController extends ActionController
         // persist by hand to get uid field and make redirect possible
         $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
+
+        // login the newly created user
+        if ($user && !$user->getLastlogin()) {
+
+            $GLOBALS['TSFE']->fe_user->checkPid = 0;
+            $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
+            /** @var FrontendUserAuthentication $userAuth */
+            $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+            $userAuth->checkPid = false;
+            $tempUser = $userAuth->fetchUserRecord($info['db_user'], $user->getUsername());
+
+            $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
+            $GLOBALS['TSFE']->fe_user->dontSetCookie = false;
+            $GLOBALS['TSFE']->fe_user->start();
+            $GLOBALS['TSFE']->fe_user->createUserSession($tempUser);
+            $GLOBALS['TSFE']->fe_user->loginUser = 1;
+        }
 
         // delete calendar cache
         $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
