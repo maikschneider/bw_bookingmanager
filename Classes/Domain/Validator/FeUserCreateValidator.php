@@ -12,7 +12,6 @@ class FeUserCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abst
 
     /**
      * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
-     *
      */
     protected $frontendUserRepository;
 
@@ -22,9 +21,15 @@ class FeUserCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abst
      */
     public function isValid($user)
     {
+        // check for password
+        if (!$user->getPassword()) {
+            $this->addError('Password required', 1581677979);
+        }
+
+        // check for unique username
         $users = $this->frontendUserRepository->findByUsername($user->getUsername());
         if (count($users)) {
-            $this->addError('User already exists', 1581619398, [], 'title');
+            $this->addError('User already exists', 1581619398);
         }
 
         if (sizeof($this->result->getErrors())) {

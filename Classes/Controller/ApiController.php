@@ -217,25 +217,28 @@ class ApiController extends ActionController
         }
 
         // create fe_user from entry
-        $createUser = GeneralUtility::_POST('createUserAccount');
-        $userPassword = GeneralUtility::_POST('createUserAccountPassword');
-        if ($createUser && $userPassword && (int)$this->settings['userStoragePid']) {
-            // generate hashed password
-            $passwordHashFactory = $this->objectManager->get(PasswordHashFactory::class);
-            $passwordHashInstance = $passwordHashFactory->getDefaultHashInstance('FE');
-            $password = $passwordHashInstance->getHashedPassword($userPassword);
+        $createUser = (int)GeneralUtility::_POST('createUserAccount');
+        if ($createUser === 1 && (int)$this->settings['userStoragePid']) {
 
             $newEntry = $this->request->getArgument('newEntry');
 
             $feUser = [];
             $feUser['username'] = $newEntry['email'];
-            $feUser['password'] = $password;
             $feUser['email'] = $newEntry['email'];
             $feUser['firstName'] = $newEntry['prename'];
             $feUser['lastName'] = $newEntry['name'];
             $feUser['address'] = $newEntry['street'];
             $feUser['zip'] = $newEntry['zip'];
             $feUser['telephone'] = $newEntry['phone'];
+
+            // generate hashed password
+            $userPassword = GeneralUtility::_POST('createUserAccountPassword');
+            if ($userPassword) {
+                $passwordHashFactory = $this->objectManager->get(PasswordHashFactory::class);
+                $passwordHashInstance = $passwordHashFactory->getDefaultHashInstance('FE');
+                $password = $passwordHashInstance->getHashedPassword($userPassword);
+                $feUser['password'] = $password;
+            }
 
             // set the user parameter with newly created feUer
             $this->arguments->addNewArgument('user', FrontendUser::class);
