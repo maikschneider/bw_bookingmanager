@@ -211,7 +211,6 @@ class ApiController extends ActionController
         // add fe_user if logged in
         $userId = $this->accessControlService->getFrontendUserUid();
         if ($userId) {
-            $feUser = $this->frontendUserRepository->findByIdentifier($userId);
             $this->arguments->addNewArgument('user', FrontendUser::class);
             $this->request->setArgument('user', (string)$userId);
         }
