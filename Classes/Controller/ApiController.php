@@ -216,8 +216,8 @@ class ApiController extends ActionController
         }
 
         // create fe_user from entry
-        $createUser = (int)GeneralUtility::_POST('createUserAccount');
-        if ($createUser === 1 && (int)$this->settings['userStoragePid']) {
+        $doCreateUser = (int)GeneralUtility::_POST('createUserAccount') === 1 || GeneralUtility::_POST('createUserAccount') === 'on';
+        if ($doCreateUser && (int)$this->settings['userStoragePid']) {
 
             $newEntry = $this->request->getArgument('newEntry');
 
