@@ -97,9 +97,6 @@ class NotificationManager
     private function getMailBody($templateName)
     {
         $emailView = GeneralUtility::makeInstance('Blueways\BwEmail\View\EmailView');
-        $emailView->setLayoutRootPaths($this->extbaseFrameworkConfiguration['view']['layoutRootPaths']);
-        $emailView->setPartialRootPaths($this->extbaseFrameworkConfiguration['view']['partialRootPaths']);
-        $emailView->setTemplateRootPaths($this->extbaseFrameworkConfiguration['view']['templateRootPaths']);
         $emailView->getRenderingContext()->setControllerName('Email');
         $emailView->setTemplate($templateName);
         $emailView->assign('record', $this->entry);
