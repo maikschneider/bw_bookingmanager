@@ -26,7 +26,7 @@ plugin.tx_bwbookingmanager {
     directBooking {
       defaultStartTime =
       defaultEndTime =
-      timeBetween =
+      minOffset =
       minLength =
     }
   }

@@ -37,7 +37,7 @@ plugin.tx_bwbookingmanager {
     directBooking {
       defaultStartTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultStartTime}
       defaultEndTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultEndTime}
-      timeBetween = {$plugin.tx_bwbookingmanager.settings.directBooking.timeBetween}
+      minOffset = {$plugin.tx_bwbookingmanager.settings.directBooking.minOffset}
       minLength = {$plugin.tx_bwbookingmanager.settings.directBooking.minLength}
     }
   }
