@@ -42,6 +42,12 @@ plugin.tx_bwbookingmanager_pi1 {
 }
 
 plugin.tx_bwemail {
+  view {
+    templateRootPath = EXT:bw_bookingmanager/Resources/Private/Templates/Email
+    partialRootPath = EXT:bw_bookingmanager/Resources/Private/Templates/Email
+    layoutRootPath = EXT:bw_bookingmanager/Resources/Private/Templates/Email
+  }
+
   settings {
     senderAddress = {$plugin.tx_bwbookingmanager.settings.mail.senderAddress}
     senderName = {$plugin.tx_bwbookingmanager.settings.mail.senderName}
