@@ -21,7 +21,7 @@ BOOKINGMANAGER.TIMESELECT = {
   initEvents: function () {
     var self = this;
 
-    $(self.timeslotLinks).on('click', function (e) {
+    $(self.timeslotLinks).off('click').on('click', function (e) {
       e.preventDefault();
       self.onTimeslotLinkClick(this);
     });
@@ -96,17 +96,22 @@ BOOKINGMANAGER.AJAX = {
 
     // actual request
     $.get(url, self.onAjaxSucces.bind(self))
-      .fail(self.onAjaxFail.bind(self))
-      .done(self.afterAjaxCall.bind(self));
+      .fail(self.onAjaxFail.bind(self));
   },
 
   onAjaxSucces: function (data) {
+    var self = this;
     var replacedHtml = this.container.replaceWith(data);
     if (Foundation) $(document).foundation();
     this.handleReplacedHtml(replacedHtml);
-    $(this.loadingContainer).removeClass('loading').removeClass('error');
-    this.ajaxLinks.removeClass('active');
-    this.link.addClass('active');
+
+    this.afterAjaxCall();
+
+    setTimeout(function () {
+      self.ajaxLinks.removeClass('active');
+      self.link.addClass('active');
+      $(self.loadingContainer).removeClass('loading').removeClass('error');
+    }, 1000);
   },
 
   onAjaxFail: function () {
@@ -120,8 +125,8 @@ BOOKINGMANAGER.AJAX = {
     if (BOOKINGMANAGER.LOAD_FIRST_TIMESLOT) {
       BOOKINGMANAGER.TIMESELECT.init();
     }
-    if(BOOKINGMANAGER.afterAjaxCallHooks.length){
-      for(var i=0; i< BOOKINGMANAGER.afterAjaxCallHooks.length; i++){
+    if (BOOKINGMANAGER.afterAjaxCallHooks.length) {
+      for (var i = 0; i < BOOKINGMANAGER.afterAjaxCallHooks.length; i++) {
         BOOKINGMANAGER.afterAjaxCallHooks[i]();
       }
     }
@@ -168,7 +173,8 @@ BOOKINGMANAGER.AJAX = {
       var ctrl = $('[name="' + data.name + '"]', frm);
       ctrl = ctrl.length > 1 ? $(ctrl[1]) : ctrl;
       switch (ctrl.prop("type")) {
-        case "radio": case "checkbox":
+        case "radio":
+        case "checkbox":
           ctrl.each(function () {
             if ($(this).attr('value') == data.value) $(this).attr("checked", data.value);
           });
@@ -186,7 +192,7 @@ $(function () {
   BOOKINGMANAGER.TIMESELECT.init();
 
   // disable submit button after submit to prevent double bookings
-  $(document).on('formvalid.zf.abide', function(){
+  $(document).on('formvalid.zf.abide', function () {
     $('#bw_bookingmanager__newEntry button[type="submit"]').attr('disabled', 'disabled');
   });
 
