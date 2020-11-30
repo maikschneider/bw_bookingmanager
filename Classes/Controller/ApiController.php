@@ -230,6 +230,7 @@ class ApiController extends ActionController
             $feUser['address'] = $newEntry['street'];
             $feUser['zip'] = $newEntry['zip'];
             $feUser['telephone'] = $newEntry['phone'];
+            $feUser['city'] = $newEntry['city'];
 
             // generate hashed password
             $userPassword = GeneralUtility::_POST('createUserAccountPassword');
