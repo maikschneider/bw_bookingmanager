@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z"
+		  product-name="bw_bookingmanager">
+		<header/>
+		<body>
+			<trans-unit id="ics">
+				<source>Ics Feed</source>
+			</trans-unit>
+			<trans-unit id="hidden">
+				<source>Deactivated</source>
+			</trans-unit>
+			<trans-unit id="name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="options">
+				<source>Options</source>
+			</trans-unit>
+			<trans-unit id="options.0">
+				<source>Show free Timeslots</source>
+			</trans-unit>
+			<trans-unit id="options.1">
+				<source>Show full Timeslots</source>
+			</trans-unit>
+			<trans-unit id="options.2">
+				<source>Show confirmed Entries</source>
+			</trans-unit>
+			<trans-unit id="options.3">
+				<source>Show non-confirmed Entries</source>
+			</trans-unit>
+			<trans-unit id="options.4">
+				<source>Show Blockslots</source>
+			</trans-unit>
+			<trans-unit id="calendars">
+				<source>Calendars</source>
+			</trans-unit>
+			<trans-unit id="palette.general">
+				<source>General</source>
+			</trans-unit>
+			<trans-unit id="palette.entry">
+				<source>Entry template</source>
+			</trans-unit>
+			<trans-unit id="palette.timeslot">
+				<source>Timeslot template</source>
+			</trans-unit>
+			<trans-unit id="palette.blockslot">
+				<source>Blockslot template</source>
+			</trans-unit>
+			<trans-unit id="templates">
+				<source>Templates</source>
+			</trans-unit>
+			<trans-unit id="template.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="template.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="template.location">
+				<source>Location</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

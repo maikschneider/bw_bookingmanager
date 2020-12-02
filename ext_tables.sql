@@ -14,6 +14,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_calendar (
 	notifications int(11) unsigned DEFAULT '0' NOT NULL,
 	direct_booking smallint(5) unsigned DEFAULT '0' NOT NULL,
 	entries int(11) unsigned DEFAULT '0' NOT NULL,
+	icss int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -223,4 +224,42 @@ CREATE TABLE fe_users (
 
 CREATE TABLE tt_content (
     calendar int(11) unsigned DEFAULT '0' NOT NULL,
+);
+
+CREATE TABLE tx_bwbookingmanager_domain_model_ics (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+
+	calendars int(11) unsigned DEFAULT '0' NOT NULL,
+	name varchar(255) DEFAULT '' NOT NULL,
+	options int(11) DEFAULT '0' NOT NULL,
+
+	entry_title varchar(255) DEFAULT '' NOT NULL,
+	entry_location varchar(255) DEFAULT '' NOT NULL,
+	entry_description varchar(255) DEFAULT '' NOT NULL,
+	timeslot_title varchar(255) DEFAULT '' NOT NULL,
+	timeslot_location varchar(255) DEFAULT '' NOT NULL,
+	timeslot_description varchar(255) DEFAULT '' NOT NULL,
+	blockslot_title varchar(255) DEFAULT '' NOT NULL,
+	blockslot_location varchar(255) DEFAULT '' NOT NULL,
+	blockslot_description varchar(255) DEFAULT '' NOT NULL,
+
+	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
+	crdate int(11) unsigned DEFAULT '0' NOT NULL,
+	cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
+	deleted smallint(5) unsigned DEFAULT '0' NOT NULL,
+	hidden smallint(5) unsigned DEFAULT '0' NOT NULL,
+
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+CREATE TABLE tx_bwbookingmanager_calendar_ics_mm (
+	uid_local int(11) unsigned DEFAULT '0' NOT NULL,
+	uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
+	sorting int(11) DEFAULT '0' NOT NULL,
+    sorting_foreign int(11) DEFAULT '0' NOT NULL,
+
+    KEY uid_local (uid_local),
+    KEY uid_foreign (uid_foreign)
 );
