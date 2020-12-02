@@ -52,7 +52,7 @@ $temporaryColumns = array(
     'after:linkToTop'
 );
 
-// B4. Show palette
+// B4. Add calendar input to new palette
 $GLOBALS['TCA']['tt_content']['palettes']['calendar_selection'] = [
     'showitem' => 'calendar'
 ];
