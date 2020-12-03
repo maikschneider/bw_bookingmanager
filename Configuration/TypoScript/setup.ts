@@ -95,6 +95,24 @@ BOOKINGMANAGER {
   }
 }
 
+##################
+### ICS PLUGIN ###
+##################
+plugin.tx_bwbookingmanager_ics {
+  features.requireCHashArgumentForActionArguments = 0
+}
+
+################
+### ICS PAGE ###
+################
+BOOKINGMANAGERICS < BOOKINGMANAGER
+BOOKINGMANAGERICS {
+  typeNum = 1556190330
+  10 {
+    pluginName = Ics
+  }
+}
+
 ######################
 ### BACKEND MODULE ###
 ######################

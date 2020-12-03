@@ -82,7 +82,7 @@ return [
             ],
         ],
         'options' => [
-            'exclude' => false,
+            'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options',
             'config' => [
                 'type' => 'check',
@@ -108,7 +108,8 @@ return [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.4',
                         ''
                     ],
-                ]
+                ],
+                'default' => 31
             ]
         ],
         'entry_title' => [
@@ -117,7 +118,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => 'FIELD:prename FIELD:name'
             ],
         ],
         'entry_location' => [
@@ -126,7 +128,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => 'FIELD:calendar.name'
             ],
         ],
         'entry_description' => [
@@ -136,7 +139,8 @@ return [
                 'type' => 'text',
                 'size' => 30,
                 'max' => 254,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => ''
             ],
         ],
         'timeslot_title' => [
@@ -145,7 +149,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => 'FUNC:bookedWeight/FIELD:max_weight'
             ],
         ],
         'timeslot_location' => [
@@ -154,7 +159,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => ''
             ],
         ],
         'timeslot_description' => [
@@ -164,7 +170,8 @@ return [
                 'type' => 'text',
                 'size' => 30,
                 'max' => 254,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => ''
             ],
         ],
         'blockslot_title' => [
@@ -173,7 +180,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => 'FIELD:reason'
             ],
         ],
         'blockslot_location' => [
@@ -182,7 +190,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => ''
             ],
         ],
         'blockslot_description' => [
@@ -192,7 +201,8 @@ return [
                 'type' => 'text',
                 'size' => 30,
                 'max' => 254,
-                'eval' => 'trim'
+                'eval' => 'trim',
+                'default' => ''
             ],
         ],
     ]
