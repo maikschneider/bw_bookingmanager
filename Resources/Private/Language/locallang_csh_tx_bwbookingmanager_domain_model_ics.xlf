@@ -58,6 +58,30 @@
 			<trans-unit id="template.location">
 				<source>Location</source>
 			</trans-unit>
+			<trans-unit id="startDate">
+				<source>Start date</source>
+			</trans-unit>
+			<trans-unit id="startDate.0">
+				<source>Today</source>
+			</trans-unit>
+			<trans-unit id="startDate.1">
+				<source>Last month</source>
+			</trans-unit>
+			<trans-unit id="startDate.2">
+				<source>This year</source>
+			</trans-unit>
+			<trans-unit id="startDate.3">
+				<source>100 days in past</source>
+			</trans-unit>
+			<trans-unit id="endDate.0">
+				<source>6 months</source>
+			</trans-unit>
+			<trans-unit id="endDate.1">
+				<source>1 year</source>
+			</trans-unit>
+			<trans-unit id="endDate.2">
+				<source>2 years</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

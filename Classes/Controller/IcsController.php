@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Ics;
+use Blueways\BwBookingmanager\Utility\IcsUtility;
 
 class IcsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -13,6 +14,9 @@ class IcsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      */
     public function showAction(Ics $ics)
     {
-        return 'hello';
+        $icsUtil = $this->objectManager->get(IcsUtility::class);
+        $feed = $icsUtil->getIcsFile($ics);
+
+        return $feed;
     }
 }

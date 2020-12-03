@@ -233,6 +233,8 @@ CREATE TABLE tx_bwbookingmanager_domain_model_ics (
 	calendars int(11) unsigned DEFAULT '0' NOT NULL,
 	name varchar(255) DEFAULT '' NOT NULL,
 	options int(11) DEFAULT '0' NOT NULL,
+	start_date int(11) DEFAULT '0' NOT NULL,
+	end_date int(11) DEFAULT '0' NOT NULL,
 
 	entry_title varchar(255) DEFAULT '' NOT NULL,
 	entry_location varchar(255) DEFAULT '' NOT NULL,
