@@ -111,6 +111,10 @@ BOOKINGMANAGERICS {
   10 {
     pluginName = Ics
   }
+
+
+  config.additionalHeaders.10.header = Content-Type: text/calendar; charset=utf-8
+  config.additionalHeaders.20.header = Content-Disposition: attachment; filename="3.ics"
 }
 
 ######################

@@ -73,6 +73,9 @@
 			<trans-unit id="startDate.3">
 				<source>100 days in past</source>
 			</trans-unit>
+			<trans-unit id="endDate">
+				<source>End date</source>
+			</trans-unit>
 			<trans-unit id="endDate.0">
 				<source>6 months</source>
 			</trans-unit>

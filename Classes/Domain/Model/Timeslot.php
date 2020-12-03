@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use DateTime;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -513,6 +515,25 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getFreeWeight()
     {
         return $this->maxWeight - $this->getBookedWeight();
+    }
+
+    public function getIcsOutput($ics)
+    {
+        $now = new DateTime();
+
+        $icsText = "BEGIN:VEVENT
+            DTSTART:" . date('Ymd\THis\Z', $this->getDisplayStartDate()->getTimestamp()) . "
+            DTEND:" . date('Ymd\THis\Z', $this->getDisplayEndDate()->getTimestamp()) . "
+            DTSTAMP:" . date('Ymd\THis\Z', $now->getTimestamp()) . "
+            SUMMARY:" . utf8_decode('summary') . "
+            DESCRIPTION:" . utf8_decode('description') . "
+            UID:" . md5('ee' . random_int(1, 999)) . "
+            STATUS:" . strtoupper('CONFIRMED') . "
+            LAST-MODIFIED:" . date('Ymd\THis\Z', $this->getDisplayEndDate()->getTimestamp()) . "
+            LOCATION:" . utf8_decode('location') . "
+            END:VEVENT\n";
+
+        return $icsText;
     }
 
 }

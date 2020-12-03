@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -76,24 +78,38 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $blockslotDescription;
 
     /**
-     * @var \DateTime
+     * @var int
      */
     protected $startDate;
+
+    /**
+     * @var int
+     */
+    protected $endDate;
+
+    /**
+     * Ics constructor.
+     */
+    public function __construct()
+    {
+        $this->calendars = new ObjectStorage();
+    }
 
     /**
      * @return \DateTime
      */
     public function getStartDate(): \DateTime
     {
-        return $this->startDate;
-    }
+        $date = new \DateTime();
 
-    /**
-     * @param \DateTime $startDate
-     */
-    public function setStartDate(\DateTime $startDate)
-    {
-        $this->startDate = $startDate;
+        if ($this->startDate) {
+            $timeTransformations = ['', 'first day of previous month', 'first day of january this year', '-100 days'];
+            $date->setTimestamp(strtotime($timeTransformations[$this->startDate]));
+        }
+
+        $date->setTime(0, 0, 0);
+
+        return $date;
     }
 
     /**
@@ -101,21 +117,15 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getEndDate(): \DateTime
     {
-        return $this->endDate;
-    }
+        $date = new \DateTime();
 
-    /**
-     * @param \DateTime $endDate
-     */
-    public function setEndDate(\DateTime $endDate)
-    {
-        $this->endDate = $endDate;
-    }
+        $timeTransformations = ['+6 months', '+1 year', '+2 years'];
+        $date->setTimestamp(strtotime($timeTransformations[$this->endDate]));
 
-    /**
-     * @var \DateTime
-     */
-    protected $endDate;
+        $date->setTime(0, 0, 0);
+
+        return $date;
+    }
 
     /**
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
@@ -294,21 +304,13 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * e.g. 73 => [1,0,0,1,0,0,1] => [0,3,6] (Su, We, Sa)
+     * e.g. 73 => [1,0,0,1,0,0,1]
      *
-     * @return array
+     * @return int[]
      */
-    public function getOptionsArray()
+    public function getOptionsArray(): array
     {
-        $selectedDays = [];
-
-        foreach (array_reverse(str_split(decbin($this->getOptions()))) as $key => $value) {
-            if ($value === '1') {
-                $selectedDays[] = $key;
-            }
-        }
-
-        return $selectedDays;
+        return array_map('intval', str_split(decbin($this->getOptions())));
     }
 
     /**
