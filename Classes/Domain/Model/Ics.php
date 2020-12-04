@@ -310,7 +310,7 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getOptionsArray(): array
     {
-        return array_map('intval', str_split(decbin($this->getOptions())));
+        return array_reverse(array_map('intval', str_split(decbin($this->getOptions()))));
     }
 
     /**
