@@ -373,28 +373,34 @@ class TimeslotUtility
      */
     private function createFilterCritera()
     {
-        $this->filterCriteria = [
-            'in' => [
-                [$this->startDate, $this->endDate]
-            ],
-            'inAny' => [
+        $filterCriteria = array_flip($this->getCalendarUids());
 
-            ],
-            'notIn' => [
+        $filterCriteria = array_map(function() {
+            return [
+                'in' => [
+                    [$this->startDate, $this->endDate]
+                ],
+                'inAny' => [
 
-            ],
-            'holidays' => [
+                ],
+                'notIn' => [
 
-            ]
-        ];
+                ],
+                'holidays' => [
 
-        // creteria for Blockslots
+                ]
+            ];
+        }, $filterCriteria);
+
+
+        // criteria for Blockslots
         foreach ($this->blockslots as $blockslot) {
-            $blockStartDate = $blockslot->getStartDate();
-            $blockEndDate = $blockslot->getEndDate();
-
-            $this->filterCriteria['notIn'][] = [$blockStartDate, $blockEndDate];
+            foreach($blockslot->getCalendars() as $calendar) {
+                $filterCriteria[$calendar->getUid()]['notIn'][] = [$blockslot->getStartDate(), $blockslot->getEndDate()];
+            }
         }
+
+        $this->filterCriteria = $filterCriteria;
 
         // start+end dates for Holidays
         /*
@@ -419,23 +425,27 @@ class TimeslotUtility
      */
     private function filterTimeslots()
     {
-        foreach ($this->timeslots as $timeslot) {
+        foreach (clone $this->timeslots as $timeslot) {
+
+            // @TODO: switch from m:n of timeslot <-> calendar to 1:n
+            // we are using the first calendar in timeslot, in hope there are not any more
+            $calendarUid = $timeslot->getCalendars()[0]->getUid();
 
             // check timeslot if holidays should move to 'in' or 'out' critera array
             if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING) {
-                foreach ($this->filterCriteria['holidays'] as $range) {
+                foreach ($this->filterCriteria[$calendarUid]['holidays'] as $range) {
                     if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
                         continue;
                     }
                     $this->timeslots->detach($timeslot);
-                    continue;
+                    continue 2;
                 }
             }
 
             // filter timeslots for holiday setting to be within
             if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_ONLY_DURING) {
                 $notInAny = true;
-                foreach ($this->filterCriteria['holidays'] as $range) {
+                foreach ($this->filterCriteria[$calendarUid]['holidays'] as $range) {
                     if ($timeslot->getStartDate() >= $range[0] && $timeslot->getEndDate() <= $range[1]) {
                         $notInAny = false;
                     }
@@ -448,24 +458,22 @@ class TimeslotUtility
 
             // check for date range to be within
             // it is allowed that events start in the past, as long as they end in the given range or even alter
-            foreach ($this->filterCriteria['in'] as $range) {
-                if (($timeslot->getStartDate() < $range[0] && $timeslot->getEndDate() < $range[0])
-                    || ($timeslot->getStartDate() > $range[1])
-                ) {
+            foreach ($this->filterCriteria[$calendarUid]['in'] as $range) {
+                if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
                     $this->timeslots->detach($timeslot);
-                    continue;
+                    continue 2;
                 }
             }
 
             // check for date range to be not within
             // only this is valid: [slot] |blocked| [slot]
             // this is not valid   [ slot |] blocked [| slot ]
-            foreach ($this->filterCriteria['notIn'] as $range) {
+            foreach ($this->filterCriteria[$calendarUid]['notIn'] as $range) {
                 if ($timeslot->getEndDate() < $range[0] || $timeslot->getStartDate() > $range[1]) {
                     continue;
                 }
                 $this->timeslots->detach($timeslot);
-                continue;
+                continue 2;
             }
         }
     }

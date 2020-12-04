@@ -24,10 +24,6 @@ class IcsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $feed .= $icsUtil->getIcsFile($ics);
 
         $feed .= "END:VCALENDAR";
-
-        header('Content-type: text/calendar; charset=utf-8');
-        header('Content-Disposition: attachment; filename="cal.ics"');
-
         $feed = str_replace('  ', '', $feed);
 
         return $feed;

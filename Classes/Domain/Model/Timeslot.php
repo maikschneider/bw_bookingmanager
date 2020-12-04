@@ -522,12 +522,12 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $now = new DateTime();
 
         $icsText = "BEGIN:VEVENT
-            DTSTART:" . date('Ymd\THis\Z', $this->getDisplayStartDate()->getTimestamp()) . "
+            DTSTART:" . date('Ymd\THis\Z', $this->getStartDate()->getTimestamp()) . "
             DTEND:" . date('Ymd\THis\Z', $this->getDisplayEndDate()->getTimestamp()) . "
             DTSTAMP:" . date('Ymd\THis\Z', $now->getTimestamp()) . "
-            SUMMARY:" . utf8_decode('summary') . "
+            SUMMARY:" . utf8_decode('summary2') . "
             DESCRIPTION:" . utf8_decode('description') . "
-            UID:" . md5('ee' . random_int(1, 999)) . "
+            UID:" . md5('ee' . random_int(1, 9999999)) . "
             STATUS:" . strtoupper('CONFIRMED') . "
             LAST-MODIFIED:" . date('Ymd\THis\Z', $this->getDisplayEndDate()->getTimestamp()) . "
             LOCATION:" . utf8_decode('location') . "

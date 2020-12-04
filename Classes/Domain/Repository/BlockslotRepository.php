@@ -10,7 +10,7 @@ class BlockslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd([
-                $query->contains('calendars', $calendarUids),
+                $query->in('calendars.uid', $calendarUids),
                 $query->logicalNot(
                     $query->logicalOr([
                         $query->lessThanOrEqual('endDate', $startDate->getTimestamp()),

@@ -49,7 +49,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->logicalOr([
                 // no repeatable events starting during date range
                 $query->logicalAnd([
-                    $query->contains('calendars', $calendars),
+                    $query->in('calendars.uid', $calendars),
                     $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
                     $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
                     $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
@@ -57,7 +57,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 // repeating events that end during or after date range
                 // these events can be in the past and occur in range after repeat function
                 $query->logicalAnd([
-                    $query->contains('calendars', $calendars),
+                    $query->in('calendars.uid', $calendars),
                     $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
                     $query->lessThan('startDate', $endDate->getTimestamp()),
                     $query->logicalOr([
