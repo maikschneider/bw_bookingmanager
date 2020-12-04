@@ -11,7 +11,6 @@ class IcsUtility
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     *
      */
     protected $entryRepository;
 
@@ -30,15 +29,17 @@ class IcsUtility
 
         $feed = '';
 
-        if ($options[2] || $options[3]) {
+        if ($options[0] || $options[1]) {
             $timeslotUtil = $objectManager->get(TimeslotUtility::class);
             $timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
+
             /** @var \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot */
             foreach ($timeslots as $timeslot) {
-                $feed .= $timeslot->getIcsOutput($ics);
+                if (($options[0] && $timeslot->getIsBookable()) || ($options[1] && !$timeslot->getIsBookable())) {
+                    $feed .= $timeslot->getIcsOutput($ics);
+                }
             }
         }
-
 
         return $feed;
     }
@@ -47,7 +48,5 @@ class IcsUtility
     {
         $this->entryRepository = $entryRepository;
     }
-
-
 
 }

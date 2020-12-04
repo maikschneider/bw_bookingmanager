@@ -17,10 +17,10 @@
 				<source>Options</source>
 			</trans-unit>
 			<trans-unit id="options.0">
-				<source>Show free Timeslots</source>
+				<source>Show bookable Timeslots</source>
 			</trans-unit>
 			<trans-unit id="options.1">
-				<source>Show full Timeslots</source>
+				<source>Show non-bookable Timeslots</source>
 			</trans-unit>
 			<trans-unit id="options.2">
 				<source>Show confirmed Entries</source>
