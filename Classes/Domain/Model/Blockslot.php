@@ -1,15 +1,14 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use DateTime;
+
 /***
- *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
  ***/
 
 /**
@@ -17,6 +16,7 @@ namespace Blueways\BwBookingmanager\Domain\Model;
  */
 class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+
     /**
      * startDate
      *
@@ -45,48 +45,6 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @lazy
      */
     protected $calendars = null;
-
-    /**
-     * Returns the startDate
-     *
-     * @return \DateTime $startDate
-     */
-    public function getStartDate()
-    {
-        return $this->startDate;
-    }
-
-    /**
-     * Sets the startDate
-     *
-     * @param \DateTime $startDate
-     * @return void
-     */
-    public function setStartDate(\DateTime $startDate)
-    {
-        $this->startDate = $startDate;
-    }
-
-    /**
-     * Returns the endDate
-     *
-     * @return \DateTime $endDate
-     */
-    public function getEndDate()
-    {
-        return $this->endDate;
-    }
-
-    /**
-     * Sets the endDate
-     *
-     * @param \DateTime $endDate
-     * @return void
-     */
-    public function setEndDate(\DateTime $endDate)
-    {
-        $this->endDate = $endDate;
-    }
 
     /**
      * Returns the reason
@@ -150,5 +108,66 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
+    }
+
+    public function getIcsOutput($ics)
+    {
+        $now = new DateTime();
+
+        $icsText = "BEGIN:VEVENT
+            DTSTART;VALUE=DATE:" . $this->startDate->format('Ymd') . "
+            DTEND;VALUE=DATE:" . $this->endDate->format('Ymd') . "
+            DTSTAMP:" . date('Ymd\THis\Z', $now->getTimestamp()) . "
+            SUMMARY:" . utf8_decode($this->getReason()) . "
+            DESCRIPTION:" . utf8_decode('description') . "
+            UID:" . md5('ee' . random_int(1, 9999999)) . "
+            STATUS:" . strtoupper('CONFIRMED') . "
+            LAST-MODIFIED:" . date('Ymd\THis\Z', $this->getEndDate()->getTimestamp()) . "
+            LOCATION:" . utf8_decode('location') . "
+            END:VEVENT\n";
+
+        return $icsText;
+    }
+
+    /**
+     * Returns the startDate
+     *
+     * @return \DateTime $startDate
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * Sets the startDate
+     *
+     * @param \DateTime $startDate
+     * @return void
+     */
+    public function setStartDate(\DateTime $startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * Returns the endDate
+     *
+     * @return \DateTime $endDate
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * Sets the endDate
+     *
+     * @param \DateTime $endDate
+     * @return void
+     */
+    public function setEndDate(\DateTime $endDate)
+    {
+        $this->endDate = $endDate;
     }
 }

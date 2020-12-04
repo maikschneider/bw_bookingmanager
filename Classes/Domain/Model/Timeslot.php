@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
 
 /***
@@ -517,20 +518,22 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->maxWeight - $this->getBookedWeight();
     }
 
-    public function getIcsOutput($ics)
+    public function getIcsOutput(Ics $ics)
     {
         $now = new DateTime();
 
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
         $icsText = "BEGIN:VEVENT
-            DTSTART:" . date('Ymd\THis\Z', $this->getStartDate()->getTimestamp()) . "
-            DTEND:" . date('Ymd\THis\Z', $this->getDisplayEndDate()->getTimestamp()) . "
-            DTSTAMP:" . date('Ymd\THis\Z', $now->getTimestamp()) . "
-            SUMMARY:" . utf8_decode('summary2') . "
-            DESCRIPTION:" . utf8_decode('description') . "
-            UID:" . md5('ee' . random_int(1, 9999999)) . "
-            STATUS:" . strtoupper('CONFIRMED') . "
-            LAST-MODIFIED:" . date('Ymd\THis\Z', $this->getDisplayEndDate()->getTimestamp()) . "
-            LOCATION:" . utf8_decode('location') . "
+            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
+            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this) . "
+            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this) . "
+            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
+            STATUS:CONFIRMED
+            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LOCATION:" . IcsUtility::compileTemplate($ics->getTimeslotLocation(), $this) . "
             END:VEVENT\n";
 
         return $icsText;
