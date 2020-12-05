@@ -30,6 +30,10 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.blockslot',
             'showitem' => 'blockslot_title, --linebreak--,blockslot_location, --linebreak--,blockslot_description'
         ],
+        'holiday' => [
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.holiday',
+            'showitem' => 'holiday_title, --linebreak--,holiday_location, --linebreak--,holiday_description'
+        ],
     ],
     'interface' => [
         'showRecordFieldList' => 'hidden, name, calendars',
@@ -42,7 +46,8 @@ return [
                 --div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:templates,
                     --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.entry;entry,
                     --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.timeslot;timeslot,
-                    --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.blockslot;blockslot
+                    --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.blockslot;blockslot,
+                    --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.holiday;holiday
             '
         ],
     ],
@@ -199,6 +204,37 @@ return [
             ],
         ],
         'blockslot_description' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:template.description',
+            'config' => [
+                'type' => 'text',
+                'size' => 30,
+                'max' => 254,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+        'holiday_title' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:template.title',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => 'FIELD:name'
+            ],
+        ],
+        'holiday_location' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:template.location',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+                'default' => ''
+            ],
+        ],
+        'holiday_description' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:template.description',
             'config' => [

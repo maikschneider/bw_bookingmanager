@@ -245,6 +245,9 @@ CREATE TABLE tx_bwbookingmanager_domain_model_ics (
 	blockslot_title varchar(255) DEFAULT '' NOT NULL,
 	blockslot_location varchar(255) DEFAULT '' NOT NULL,
 	blockslot_description varchar(255) DEFAULT '' NOT NULL,
+	holiday_title varchar(255) DEFAULT '' NOT NULL,
+	holiday_location varchar(255) DEFAULT '' NOT NULL,
+	holiday_description varchar(255) DEFAULT '' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

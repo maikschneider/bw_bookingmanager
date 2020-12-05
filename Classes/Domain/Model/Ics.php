@@ -78,6 +78,69 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $blockslotDescription;
 
     /**
+     * @var string
+     */
+    protected $holidayTitle;
+
+    /**
+     * @return string
+     */
+    public function getHolidayTitle(): string
+    {
+        return $this->holidayTitle;
+    }
+
+    /**
+     * @param string $holidayTitle
+     */
+    public function setHolidayTitle(string $holidayTitle)
+    {
+        $this->holidayTitle = $holidayTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHolidayLocation(): string
+    {
+        return $this->holidayLocation;
+    }
+
+    /**
+     * @param string $holidayLocation
+     */
+    public function setHolidayLocation(string $holidayLocation)
+    {
+        $this->holidayLocation = $holidayLocation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHolidayDescription(): string
+    {
+        return $this->holidayDescription;
+    }
+
+    /**
+     * @param string $holidayDescription
+     */
+    public function setHolidayDescription(string $holidayDescription)
+    {
+        $this->holidayDescription = $holidayDescription;
+    }
+
+    /**
+     * @var string
+     */
+    protected $holidayLocation;
+
+    /**
+     * @var string
+     */
+    protected $holidayDescription;
+
+    /**
      * @var int
      */
     protected $startDate;

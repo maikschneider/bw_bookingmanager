@@ -49,6 +49,9 @@
 			<trans-unit id="palette.blockslot">
 				<source>Blockslot template</source>
 			</trans-unit>
+			<trans-unit id="palette.holiday">
+				<source>Holiday template</source>
+			</trans-unit>
 			<trans-unit id="templates">
 				<source>Templates</source>
 			</trans-unit>
