@@ -31,6 +31,9 @@
 			<trans-unit id="options.4">
 				<source>Show Blockslots</source>
 			</trans-unit>
+			<trans-unit id="options.5">
+				<source>Show Holidays</source>
+			</trans-unit>
 			<trans-unit id="calendars">
 				<source>Calendars</source>
 			</trans-unit>

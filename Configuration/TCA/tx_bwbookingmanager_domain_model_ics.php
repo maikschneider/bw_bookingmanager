@@ -108,8 +108,12 @@ return [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.4',
                         ''
                     ],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.5',
+                        ''
+                    ],
                 ],
-                'default' => 31
+                'default' => 63
             ]
         ],
         'entry_title' => [
