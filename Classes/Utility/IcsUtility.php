@@ -3,10 +3,13 @@
 namespace Blueways\BwBookingmanager\Utility;
 
 use Blueways\BwBookingmanager\Domain\Model\Blockslot;
+use Blueways\BwBookingmanager\Domain\Model\Holiday;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\HolidayRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -83,6 +86,7 @@ class IcsUtility
 
         $feed = '';
 
+        // Ics for Timeslots
         if ($options[0] || $options[1]) {
             $timeslotUtil = $objectManager->get(TimeslotUtility::class);
             $timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
@@ -96,6 +100,12 @@ class IcsUtility
             }
         }
 
+        // Ics for Entries
+        if ($options[2] || $options[3]) {
+            $entryRepository = $objectManager->get(EntryRepository::class);
+
+        }
+
         // Ics for Blockslots
         if ($options[4]) {
 
@@ -106,6 +116,18 @@ class IcsUtility
             /** @var \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot */
             foreach ($blockslots as $blockslot) {
                 $feed .= $blockslot->getIcsOutput($ics, $classSchema);
+            }
+        }
+
+        // Ics for Holidays
+        if ($options[5]) {
+            $holidayRepository = $objectManager->get(HolidayRepository::class);
+            $holidays = $holidayRepository->findInCalendars($calendarUids, $startDate, $endDate)->toArray();
+            $classSchema = $reflectionService->getClassSchema(Holiday::class);
+
+            /** @var Holiday $holiday */
+            foreach($holidays as $holiday) {
+                $feed .= $holiday->getIcsOutput($ics, $classSchema);
             }
         }
 

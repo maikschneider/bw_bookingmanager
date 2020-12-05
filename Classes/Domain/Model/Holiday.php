@@ -2,6 +2,10 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use Blueways\BwBookingmanager\Utility\IcsUtility;
+use DateTime;
+use TYPO3\CMS\Extbase\Reflection\ClassSchema;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -148,5 +152,26 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
+    }
+
+    public function getIcsOutput(Ics $ics, ClassSchema $classSchema): string
+    {
+        $now = new DateTime();
+
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
+        $icsText = "BEGIN:VEVENT
+            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
+            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            SUMMARY:" . IcsUtility::compileTemplate($ics->getHolidayTitle(), $this, $classSchema) . "
+            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getHolidayDescription(), $this, $classSchema) . "
+            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
+            STATUS:CONFIRMED
+            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LOCATION:" . IcsUtility::compileTemplate($ics->getHolidayLocation(), $this, $classSchema) . "
+            END:VEVENT\n";
+
+        return $icsText;
     }
 }
