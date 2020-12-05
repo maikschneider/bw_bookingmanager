@@ -2,7 +2,9 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
+use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -110,20 +112,22 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->calendars = $calendars;
     }
 
-    public function getIcsOutput($ics)
+    public function getIcsOutput(Ics $ics, ClassSchema $classSchema): string
     {
         $now = new DateTime();
 
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
         $icsText = "BEGIN:VEVENT
-            DTSTART;VALUE=DATE:" . $this->startDate->format('Ymd') . "
-            DTEND;VALUE=DATE:" . $this->endDate->format('Ymd') . "
-            DTSTAMP:" . date('Ymd\THis\Z', $now->getTimestamp()) . "
-            SUMMARY:" . utf8_decode($this->getReason()) . "
-            DESCRIPTION:" . utf8_decode('description') . "
-            UID:" . md5('ee' . random_int(1, 9999999)) . "
-            STATUS:" . strtoupper('CONFIRMED') . "
-            LAST-MODIFIED:" . date('Ymd\THis\Z', $this->getEndDate()->getTimestamp()) . "
-            LOCATION:" . utf8_decode('location') . "
+            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
+            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            SUMMARY:" . IcsUtility::compileTemplate($ics->getBlockslotTitle(), $this, $classSchema) . "
+            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getBlockslotDescription(), $this, $classSchema) . "
+            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
+            STATUS:CONFIRMED
+            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LOCATION:" . IcsUtility::compileTemplate($ics->getBlockslotLocation(), $this, $classSchema) . "
             END:VEVENT\n";
 
         return $icsText;

@@ -2,17 +2,51 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
+use Blueways\BwBookingmanager\Domain\Model\Blockslot;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Reflection\ClassSchema;
+use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 class IcsUtility
 {
-    public static function compileTemplate(string $templateString, AbstractEntity $object)
+
+    public static function compileTemplate(string $templateString, AbstractEntity $object, ClassSchema $classSchema)
     {
+        // look for FIELD:point
+        // @TODO: look for relations
+        preg_match_all('/(FIELD:)(\w+)((?:\.)(\w+))?/', $templateString, $fieldStatements);
+
+        if (sizeof($fieldStatements[0])) {
+            foreach ($fieldStatements[0] as $key => $fieldStatement) {
+                $propertyName = $fieldStatements[2][$key];
+                if ($object->_hasProperty($propertyName)) {
+                    $replaceWith = $object->_getProperty($propertyName);
+                    $templateString = str_replace($fieldStatement, $replaceWith, $templateString);
+                }
+            }
+        }
+
+        preg_match_all('/(FUNC:)(\w+)((?:\.)(\w+))?/', $templateString, $fieldStatements);
+
+        // look for FUNC:getBookedWeight
+        if (sizeof($fieldStatements[0])) {
+
+
+            foreach ($fieldStatements[0] as $key => $fieldStatement) {
+                $functionName = $fieldStatements[2][$key];
+                if ($classSchema->hasMethod($functionName)) {
+                    $replaceWith = (string)$object->$functionName();
+                    $templateString = str_replace($fieldStatement, $replaceWith, $templateString);
+                }
+            }
+        }
+
         return utf8_decode($templateString);
     }
 
@@ -45,17 +79,19 @@ class IcsUtility
         $endDate = $ics->getEndDate();
 
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $reflectionService = $objectManager->get(ReflectionService::class);
 
         $feed = '';
 
         if ($options[0] || $options[1]) {
             $timeslotUtil = $objectManager->get(TimeslotUtility::class);
             $timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
+            $classSchema = $reflectionService->getClassSchema(Timeslot::class);
 
             /** @var \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot */
             foreach ($timeslots as $timeslot) {
                 if (($options[0] && $timeslot->getIsBookable()) || ($options[1] && !$timeslot->getIsBookable())) {
-                    $feed .= $timeslot->getIcsOutput($ics);
+                    $feed .= $timeslot->getIcsOutput($ics, $classSchema);
                 }
             }
         }
@@ -65,9 +101,11 @@ class IcsUtility
 
             $blockslotRepository = $objectManager->get(BlockslotRepository::class);
             $blockslots = $blockslotRepository->findAllInRange($calendarUids, $startDate, $endDate)->toArray();
+            $classSchema = $reflectionService->getClassSchema(Blockslot::class);
 
+            /** @var \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot */
             foreach ($blockslots as $blockslot) {
-                $feed .= $blockslot->getIcsOutput($ics);
+                $feed .= $blockslot->getIcsOutput($ics, $classSchema);
             }
         }
 

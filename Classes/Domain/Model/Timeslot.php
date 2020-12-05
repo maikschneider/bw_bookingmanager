@@ -4,6 +4,8 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
+use TYPO3\CMS\Extbase\Reflection\ClassSchema;
+use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -518,7 +520,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->maxWeight - $this->getBookedWeight();
     }
 
-    public function getIcsOutput(Ics $ics)
+    public function getIcsOutput(Ics $ics, ClassSchema $classSchema)
     {
         $now = new DateTime();
 
@@ -528,12 +530,12 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $icsText = "BEGIN:VEVENT
             " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
             DTSTAMP:" . $now->format('Ymd\THis\Z') . "
-            SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this) . "
-            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this) . "
+            SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this, $classSchema) . "
+            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this, $classSchema) . "
             UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
             STATUS:CONFIRMED
             LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
-            LOCATION:" . IcsUtility::compileTemplate($ics->getTimeslotLocation(), $this) . "
+            LOCATION:" . IcsUtility::compileTemplate($ics->getTimeslotLocation(), $this, $classSchema) . "
             END:VEVENT\n";
 
         return $icsText;
