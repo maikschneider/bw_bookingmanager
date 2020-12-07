@@ -3,13 +3,4 @@ version: '3.6'
 services:
   web:
     environment:
-      - TYPO3_CONTEXT=Development
-    links:
-      - blackfire:$DDEV_HOSTNAME
-  blackfire:
-    container_name: ddev-${DDEV_SITENAME}-blackfire
-    image: blackfire/blackfire
-    ports: ['8707']
-    environment:
-      BLACKFIRE_SERVER_ID: 3817d031-a9be-4bbf-bcc1-5d1562e281aa
-      BLACKFIRE_SERVER_TOKEN: 3a9399bb41950385ff2288bfeed9fc8eca9a1308f877eedce8272183b791ec19
+      - TYPO3_CONTEXT=Development/Local
