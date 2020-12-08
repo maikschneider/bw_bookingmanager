@@ -486,21 +486,18 @@ class TimeslotUtility
         $this->filterCriteria = $filterCriteria;
 
         // start+end dates for Holidays
-        /*
-        $holidays = $this->calendar->getHolidays();
-        if ($holidays) {
-            foreach ($holidays as $holiday) {
+        foreach ($this->holidays as $holiday) {
+            foreach ($holiday->getCalendars() as $calendar) {
                 $holiStartDate = $holiday->getStartDate()->setTime(0, 0, 0);
                 $holiEndDate = $holiday->getEndDate()->setTime(23, 59, 59);
 
                 // check if block is inside date range
                 // so add its dates to filterCriteria
                 if (!($holiEndDate < $this->startDate || $holiStartDate > $this->endDate)) {
-                    $this->filterCriteria['holidays'][] = [$holiStartDate, $holiEndDate];
+                    $this->filterCriteria[$calendar->getUid()]['holidays'][] = [$holiStartDate, $holiEndDate];
                 }
             }
         }
-        */
     }
 
     /**
