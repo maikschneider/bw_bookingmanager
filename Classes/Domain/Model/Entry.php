@@ -2,6 +2,9 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use Blueways\BwBookingmanager\Utility\IcsUtility;
+use DateTime;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -672,5 +675,26 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if ($feUser->getTelephone()) {
             $this->setPhone($feUser->getTelephone());
         }
+    }
+
+    public function IcsOutput(Ics $ics, \TYPO3\CMS\Extbase\Reflection\ClassSchema $classSchema)
+    {
+        $now = new DateTime();
+
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
+        $icsText = "BEGIN:VEVENT
+            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
+            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            SUMMARY:" . IcsUtility::compileTemplate($ics->getEntryTitle(), $this, $classSchema) . "
+            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getEntryDescription(), $this, $classSchema) . "
+            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
+            STATUS:CONFIRMED
+            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LOCATION:" . IcsUtility::compileTemplate($ics->getEntryLocation(), $this, $classSchema) . "
+            END:VEVENT\n";
+
+        return $icsText;
     }
 }

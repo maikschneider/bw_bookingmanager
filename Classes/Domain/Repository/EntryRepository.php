@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use DateTime;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -16,6 +17,20 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
  */
 class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    public function findInCalendars(array $calendarUids, DateTime $startDate, \DateTime $endDate)
+    {
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd([
+                $query->in('calendar.uid', $calendarUids),
+                $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
+                $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
+            ])
+        );
+        $query->getQuerySettings()->setRespectStoragePage(false);
+
+        return $query->execute();
+    }
 
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar

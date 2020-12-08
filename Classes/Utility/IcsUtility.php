@@ -30,7 +30,7 @@ class IcsUtility
                 $propertyName = $fieldStatements[2][$key];
                 if ($object->_hasProperty($propertyName)) {
                     $replaceWith = $object->_getProperty($propertyName);
-                    $templateString = str_replace($fieldStatement, $replaceWith, $templateString);
+                    $templateString = (string)str_replace($fieldStatement, $replaceWith, $templateString);
                 }
             }
         }
@@ -40,12 +40,11 @@ class IcsUtility
         // look for FUNC:getBookedWeight
         if (sizeof($fieldStatements[0])) {
 
-
             foreach ($fieldStatements[0] as $key => $fieldStatement) {
                 $functionName = $fieldStatements[2][$key];
                 if ($classSchema->hasMethod($functionName)) {
                     $replaceWith = (string)$object->$functionName();
-                    $templateString = str_replace($fieldStatement, $replaceWith, $templateString);
+                    $templateString = (string)str_replace($fieldStatement, $replaceWith, $templateString);
                 }
             }
         }
@@ -60,8 +59,8 @@ class IcsUtility
                     DTEND;VALUE=DATE:" . $endDate->format('Ymd') . "";
         }
 
-        return "DTSTART:" . $startDate->format('Ymd\THis\Z') . "
-                DTEND:" . $endDate->format('Ymd\THis\Z') . "";
+        return "DTSTART:" . $startDate->format('Ymd\THis') . "
+                DTEND:" . $endDate->format('Ymd\THis') . "";
     }
 
     public static function isFullDay(\DateTime $startDate, \DateTime $endDate): bool
@@ -103,7 +102,13 @@ class IcsUtility
         // Ics for Entries
         if ($options[2] || $options[3]) {
             $entryRepository = $objectManager->get(EntryRepository::class);
+            $entries = $entryRepository->findInCalendars($calendarUids, $startDate, $endDate)->toArray();
+            $classSchema = $reflectionService->getClassSchema(Blockslot::class);
 
+            /** @var \Blueways\BwBookingmanager\Domain\Model\Entry $entry */
+            foreach ($entries as $entry) {
+                $feed .= $entry->IcsOutput($ics, $classSchema);
+            }
         }
 
         // Ics for Blockslots
@@ -126,7 +131,7 @@ class IcsUtility
             $classSchema = $reflectionService->getClassSchema(Holiday::class);
 
             /** @var Holiday $holiday */
-            foreach($holidays as $holiday) {
+            foreach ($holidays as $holiday) {
                 $feed .= $holiday->getIcsOutput($ics, $classSchema);
             }
         }

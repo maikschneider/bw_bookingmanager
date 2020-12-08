@@ -313,6 +313,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getStartDate()
     {
+        $now = new \DateTime();
+        $this->startDate->setTimezone($now->getTimezone());
         return $this->startDate;
     }
 
@@ -334,6 +336,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getEndDate()
     {
+        $now = new \DateTime();
+        $this->endDate->setTimezone($now->getTimezone());
         return $this->endDate;
     }
 
@@ -528,7 +532,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->endDate->setTimezone($now->getTimezone());
 
         $icsText = "BEGIN:VEVENT
-            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
+            " . IcsUtility::getIcsDates($this->getStartDate(), $this->getEndDate()) . "
             DTSTAMP:" . $now->format('Ymd\THis\Z') . "
             SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this, $classSchema) . "
             DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this, $classSchema) . "

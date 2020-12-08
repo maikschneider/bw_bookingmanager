@@ -3,7 +3,10 @@
 namespace Blueways\BwBookingmanager\Utility;
 
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use Blueways\BwBookingmanager\Domain\Repository\HolidayRepository;
 use DateTime;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class TimeslotUtility
@@ -11,14 +14,23 @@ class TimeslotUtility
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     * @inject
      */
-    protected $timeslotRepository;
+    protected \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository;
 
     /**
      * @var \Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository
      */
     protected $blockslotRepositorty;
+
+    /**
+     * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
+     */
+    protected $entryRepository;
+
+    /**
+     * @var \Blueways\BwBookingmanager\Domain\Repository\HolidayRepository
+     */
+    protected HolidayRepository $holidayRepository;
 
     /**
      * @var ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot>
@@ -41,6 +53,11 @@ class TimeslotUtility
     protected $timeslots;
 
     /**
+     * @var ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
+     */
+    protected $entries;
+
+    /**
      * @var DateTime
      */
     protected $startDate;
@@ -55,15 +72,21 @@ class TimeslotUtility
      */
     protected $filterCriteria;
 
+    protected $objectManager;
+
     /**
      * TimeslotUtility constructor.
      */
     public function __construct()
     {
-        $this->timeslots = new ObjectStorage();
-        $this->blockslots = new ObjectStorage();
-        $this->calendars = new ObjectStorage();
-        $this->holidays = new ObjectStorage();
+        /** @var ObjectManager objectManager */
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+        $this->timeslots = $this->objectManager->get(ObjectStorage::class);
+        $this->blockslots = $this->objectManager->get(ObjectStorage::class);
+        $this->calendars = $this->objectManager->get(ObjectStorage::class);
+        $this->holidays = $this->objectManager->get(ObjectStorage::class);
+        $this->entries = $this->objectManager->get(ObjectStorage::class);
     }
 
     public function injectTimeslotRepository(
@@ -87,20 +110,26 @@ class TimeslotUtility
         $this->setTimeslotsFromRepository();
         $this->setBlockslotsFromRepository();
         $this->setHolidaysFromRepository();
+        $this->setEntriesFromRepository();
 
         $this->repeatTimeslots();
         $this->createFilterCritera();
         $this->filterTimeslots();
+        $this->filterEntries();
 
         return $this->timeslots;
     }
 
     protected function setTimeslotsFromRepository()
     {
+        $this->timeslots = $this->objectManager->get(ObjectStorage::class);
         $calendarUids = $this->getCalendarUids();
 
-        $queryResult = $this->timeslotRepository->findAllPossibleByDateRange($calendarUids, $this->startDate,
-            $this->endDate);
+        $queryResult = $this->timeslotRepository->findAllPossibleByDateRange(
+            $calendarUids,
+            $this->startDate,
+            $this->endDate
+        );
 
         if (null !== $queryResult) {
             foreach ($queryResult as $object) {
@@ -128,8 +157,11 @@ class TimeslotUtility
     {
         $calendarUids = $this->getCalendarUids();
 
-        $queryResult = $this->blockslotRepositorty->findAllInRange($calendarUids, $this->startDate,
-            $this->endDate);
+        $queryResult = $this->blockslotRepositorty->findAllInRange(
+            $calendarUids,
+            $this->startDate,
+            $this->endDate
+        );
 
         if (null !== $queryResult) {
             foreach ($queryResult as $object) {
@@ -140,12 +172,41 @@ class TimeslotUtility
 
     protected function setHolidaysFromRepository()
     {
+        $calendarUids = $this->getCalendarUids();
 
+        $queryResult = $this->holidayRepository->findInCalendars(
+            $calendarUids,
+            $this->startDate,
+            $this->endDate
+        );
+
+        if (null !== $queryResult) {
+            foreach ($queryResult as $object) {
+                $this->holidays->attach($object);
+            }
+        }
+    }
+
+    protected function setEntriesFromRepository()
+    {
+        $calendarUids = $this->getCalendarUids();
+
+        $queryResult = $this->entryRepository->findInCalendars(
+            $calendarUids,
+            $this->startDate,
+            $this->endDate
+        );
+
+        if (null !== $queryResult) {
+            foreach ($queryResult as $object) {
+                $this->entries->attach($object);
+            }
+        }
     }
 
     protected function repeatTimeslots()
     {
-        $newTimeslots = new ObjectStorage();
+        $newTimeslots = $this->objectManager->get(ObjectStorage::class);
         /** @var Timeslot $timeslot */
         foreach ($this->timeslots as $timeslot) {
             $repeatType = $timeslot->getRepeatType();
@@ -174,7 +235,7 @@ class TimeslotUtility
      */
     private function repeatDailyTimeslot($timeslot): ObjectStorage
     {
-        $newTimeslots = new ObjectStorage();
+        $newTimeslots = $this->objectManager->get(ObjectStorage::class);
 
         // default fill the whole date range with that timeslot
         $daysToFillTimeslots = $this->endDate->diff($this->startDate)->days + 1;
@@ -235,7 +296,7 @@ class TimeslotUtility
      */
     private function repeatWeeklyTimeslot($timeslot)
     {
-        $newTimeslots = new ObjectStorage();
+        $newTimeslots = $this->objectManager->get(ObjectStorage::class);
 
         // default fill the all mondays (or tuesdays..) of date range
         $daysToFillTimeslots = self::dayCount(
@@ -321,7 +382,7 @@ class TimeslotUtility
 
     private function repeatMonthlyTimeslot($timeslot): ObjectStorage
     {
-        return new ObjectStorage();
+        return $this->objectManager->get(ObjectStorage::class);
     }
 
     /**
@@ -330,42 +391,62 @@ class TimeslotUtility
      */
     private function repeatMultipleWeeklyTimeslot($timeslot)
     {
-        $timeslots = new ObjectStorage();
+        $timeslots = $this->objectManager->get(ObjectStorage::class);
         $repeatDays = $timeslot->getRepeatDaysSelectedWeekDays();
         $startWeekDay = (int)$timeslot->getStartDate()->format('w');
         $endDate = $timeslot->getRepeatEnd() && $timeslot->getRepeatEnd() < $this->endDate ? $timeslot->getRepeatEnd() : $this->endDate;
         $daysToCrawl = $endDate->diff($timeslot->getStartDate())->days;
 
         $isDst = $timeslot->getStartDate()->format('I');
-        $startEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         for ($i = 1; $i <= $daysToCrawl; $i++) {
             $currentWeekDay = ($i + $startWeekDay) % 7;
             if (in_array($currentWeekDay, $repeatDays)) {
-
-                $newTimeslot = clone $timeslot;
-                $newStartDate = clone $timeslot->getStartDate();
-                $newStartDate->modify('+ ' . $i . ' days');
+                $startDate = clone $timeslot->getStartDate();
+                $endDate = clone $timeslot->getEndDate();
 
                 // DST fix
-                if ($isDst && !$newStartDate->format('I')) {
-                    $newStartDate->modify('+1 hour');
+                if ($isDst && !$startDate->format('I')) {
+                    $startDate->modify('+1 hour');
                 }
-                if (!$isDst && $newStartDate->format('I')) {
-                    $newStartDate->modify('-1 hour');
+                if (!$isDst && $endDate->format('I')) {
+                    $endDate->modify('-1 hour');
                 }
 
-                // set new start end times
-                $newTimeslot->setStartDate($newStartDate);
-                $newEndDate = clone $newStartDate;
-                $newEndDate->add($startEndDiff);
-                $newTimeslot->setEndDate($newEndDate);
+                $newTimeslot = $this->copyTimeslot($timeslot);
+                $newTimeslot->setStartDate($startDate->modify('+ ' . $i . ' days'));
+                $newTimeslot->setEndDate($endDate->modify('+ ' . $i . ' days'));
 
                 $timeslots->attach($newTimeslot);
             }
         }
 
         return $timeslots;
+    }
+
+    public function copyTimeslot(Timeslot $object): Timeslot
+    {
+        /** @var Timeslot $clone */
+        $clone = $this->objectManager->get(Timeslot::class);
+        $properties = \TYPO3\CMS\Extbase\Reflection\ObjectAccess::getGettableProperties($object);
+        foreach ($properties as $propertyName => $propertyValue) {
+            if ($propertyValue instanceof ObjectStorage) {
+
+                // new empty storage
+                $value = $this->objectManager->get(ObjectStorage::class);
+
+                // add calendars to storage
+                if ($propertyName === 'calendars') {
+                    $value->addAll($object->getCalendars());
+                }
+            } else {
+                $value = $propertyValue;
+            }
+            if ($value !== null) {
+                \TYPO3\CMS\Extbase\Reflection\ObjectAccess::setProperty($clone, $propertyName, $value);
+            }
+        }
+        return $clone;
     }
 
     /**
@@ -375,7 +456,7 @@ class TimeslotUtility
     {
         $filterCriteria = array_flip($this->getCalendarUids());
 
-        $filterCriteria = array_map(function() {
+        $filterCriteria = array_map(function () {
             return [
                 'in' => [
                     [$this->startDate, $this->endDate]
@@ -392,11 +473,13 @@ class TimeslotUtility
             ];
         }, $filterCriteria);
 
-
         // criteria for Blockslots
         foreach ($this->blockslots as $blockslot) {
-            foreach($blockslot->getCalendars() as $calendar) {
-                $filterCriteria[$calendar->getUid()]['notIn'][] = [$blockslot->getStartDate(), $blockslot->getEndDate()];
+            foreach ($blockslot->getCalendars() as $calendar) {
+                $filterCriteria[$calendar->getUid()]['notIn'][] = [
+                    $blockslot->getStartDate(),
+                    $blockslot->getEndDate()
+                ];
             }
         }
 
@@ -425,6 +508,7 @@ class TimeslotUtility
      */
     private function filterTimeslots()
     {
+        /** @var Timeslot $timeslot */
         foreach (clone $this->timeslots as $timeslot) {
 
             // @TODO: switch from m:n of timeslot <-> calendar to 1:n
@@ -478,9 +562,37 @@ class TimeslotUtility
         }
     }
 
+    protected function filterEntries()
+    {
+        /** @var Timeslot $timeslot */
+        foreach ($this->timeslots as $timeslot) {
+            /** @var \Blueways\BwBookingmanager\Domain\Model\Entry $entry */
+            foreach ($this->entries as $entry) {
+                if ($timeslot->getStartDate()->getTimestamp() === $entry->getStartDate()->getTimestamp() && $timeslot->getEndDate()->getTimestamp() === $entry->getEndDate()->getTimestamp()) {
+                    $timeslot->addEntry($entry);
+                } else {
+                    $timeslot->removeEntry($entry);
+                }
+            }
+        }
+    }
+
     public function injectBlockslotRepositorty(
         \Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository $blockslotRepositorty
     ) {
         $this->blockslotRepositorty = $blockslotRepositorty;
     }
+
+    public function injectEntryRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository
+    ) {
+        $this->entryRepository = $entryRepository;
+    }
+
+    public function injectHolidayRepository(
+        \Blueways\BwBookingmanager\Domain\Repository\HolidayRepository $holidayRepository
+    ) {
+        $this->holidayRepository = $holidayRepository;
+    }
+
 }
