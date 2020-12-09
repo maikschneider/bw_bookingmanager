@@ -58,6 +58,11 @@ call_user_func(
             'priority' => '70',
             'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslotDatesElement::class,
         ];
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1607520481] = [
+            'nodeName' => 'icsSecret',
+            'priority' => '70',
+            'class' => \Blueways\BwBookingmanager\Form\Element\IcsSecret::class
+        ];
 
         // register recycler task
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\Blueways\BwBookingmanager\Task\RecycleEntriesTask::class] = [

@@ -91,6 +91,9 @@
 			<trans-unit id="endDate.2">
 				<source>2 years</source>
 			</trans-unit>
+			<trans-unit id="secret">
+				<source>Feed Url</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
