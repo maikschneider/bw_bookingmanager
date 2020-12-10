@@ -94,6 +94,12 @@
 			<trans-unit id="secret">
 				<source>Feed Url</source>
 			</trans-unit>
+			<trans-unit id="button.refresh">
+				<source>Generate New</source>
+			</trans-unit>
+			<trans-unit id="button.copy">
+				<source>Copy Url</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
