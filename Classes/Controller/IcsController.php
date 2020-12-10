@@ -12,14 +12,18 @@ class IcsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @param \Blueways\BwBookingmanager\Domain\Model\Ics $ics
      * @return string
      */
-    public function showAction(Ics $ics)
+    public function showAction(Ics $ics, string $secret = '')
     {
+        if ($ics->getSecret() !== $secret) {
+            $this->throwStatus(403, 'Incorrect secret');
+        }
+
         $icsUtil = $this->objectManager->get(IcsUtility::class);
 
         $feed = "BEGIN:VCALENDAR
         VERSION:2.0
         METHOD:PUBLISH
-        PRODID:-//Maik Schneider//BwBookingManager Events//EN\n";
+        PRODID:-//blueways//BwBookingManager Events//EN\n";
 
         $feed .= $icsUtil->getIcsFile($ics);
 

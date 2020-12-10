@@ -1,8 +1,9 @@
-rootPageId: 1
-base: /
+base: 'https://bw-bookingmanager.ddev.site'
 baseVariants: {  }
+errorHandling: {  }
 languages:
-  - title: English
+  -
+    title: English
     enabled: true
     languageId: '0'
     base: /
@@ -13,47 +14,67 @@ languages:
     hreflang: ''
     direction: ''
     flag: global
-errorHandling: {  }
-routes: {  }
+rootPageId: 1
 routeEnhancers:
   PageTypeSuffix:
     type: PageType
     default: ''
     map:
-      '.json': 1556190329
-      '.ics': 1556190330
+      .json: 1556190329
+      .ics: 1556190330
   BookingManagerIcs:
     type: Extbase
     extension: BwBookingmanager
     plugin: Ics
     routes:
-      - routePath: '/ics/{ics}'
+      -
+        routePath: '/ics/{ics}'
         _controller: 'Ics::show'
         _arguments:
-          - ics: ics
+          -
+            ics: ics
+      -
+        routePath: '/ics/{ics}/{secret}'
+        _controller: 'Ics::show'
+        _arguments:
+          -
+            ics: ics
+          -
+            secret: secret
   BookingManagerApi:
     type: Extbase
     extension: BwBookingmanager
     plugin: Api
     routes:
-      - routePath: '/api/calendar'
+      -
+        routePath: /api/calendar
         _controller: 'Api::calendarList'
-      - routePath: '/api/calendar/{calendar}'
+      -
+        routePath: '/api/calendar/{calendar}'
         _controller: 'Api::calendarShow'
         _arguments:
-          - calendar: calendar
-      - routePath: '/api/calendar/{calendar}/{day}-{month}-{year}'
+          -
+            calendar: calendar
+      -
+        routePath: '/api/calendar/{calendar}/{day}-{month}-{year}'
         _controller: 'Api::calendarShowDate'
         _arguments:
-          - calendar: calendar
-          - day: day
-          - month: month
-          - year: year
-      - routePath: '/api/booking'
+          -
+            calendar: calendar
+          -
+            day: day
+          -
+            month: month
+          -
+            year: year
+      -
+        routePath: /api/booking
         _controller: 'Api::entryCreate'
-      - routePath: '/api/login'
+      -
+        routePath: /api/login
         _controller: 'Api::login'
-      - routePath: '/api/logout'
+      -
+        routePath: /api/logout
         _controller: 'Api::logout'
     requirements:
       ics: \d+
@@ -61,3 +82,4 @@ routeEnhancers:
       day: \d+
       month: \d+
       year: \d+
+routes: {  }

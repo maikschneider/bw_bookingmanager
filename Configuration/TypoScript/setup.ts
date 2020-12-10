@@ -114,7 +114,7 @@ BOOKINGMANAGERICS {
 
 
   config.additionalHeaders.10.header = Content-Type: text/calendar; charset=utf-8
-  config.additionalHeaders.20.header = Content-Disposition: attachment; filename="3.ics"
+  config.additionalHeaders.20.header = Content-Disposition: attachment; filename="CalendarFeed.ics"
 }
 
 ######################

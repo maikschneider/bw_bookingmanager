@@ -85,6 +85,19 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * @return string
      */
+    public function getSecret(): string
+    {
+        return $this->secret;
+    }
+
+    /**
+     * @var string
+     */
+    protected $secret;
+
+    /**
+     * @return string
+     */
     public function getHolidayTitle(): string
     {
         return $this->holidayTitle;

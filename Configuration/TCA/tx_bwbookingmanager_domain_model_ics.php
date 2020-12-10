@@ -16,7 +16,7 @@ return [
     'palettes' => [
         'general' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.general',
-            'showitem' => 'name,hidden,--linebreak--,options,--linebreak--,calendars,--linebreak--,start_date, end_date, --linebreak--, secret'
+            'showitem' => 'name,hidden,--linebreak--,start_date, end_date, --linebreak--, secret, --linebreak--, options,--linebreak--,calendars'
         ],
         'entry' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.entry',
@@ -70,7 +70,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim,required'
             ],
         ],
         'calendars' => [

@@ -31,7 +31,7 @@ class IcsSecret extends AbstractFormElement
         $result['html'] = '
             <div class="formengine-field-item t3js-formengine-field-item">
                 <div class="form-control-wrap" id="t3js-form-field-secret">
-                <div style="display: grid; grid-template-columns: 1fr 1fr">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 3rem;">
 
                 <div class="input-group" style="display: grid; grid-template-columns: auto min-content">
 
@@ -48,7 +48,7 @@ class IcsSecret extends AbstractFormElement
 
                 </div>
 
-                <div class="input-group" style="display: grid; grid-template-columns: auto min-content; padding-left: 20px;">
+                <div class="input-group" style="display: grid; grid-template-columns: auto min-content;">
 
                     <div class="form-control-clearable">
                         <input class="form-control t3js-form-field" id="inputSecret" value="' . $value . '" name="' . $name . '">
