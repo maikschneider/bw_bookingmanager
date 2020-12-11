@@ -195,54 +195,13 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         $this->view->assign('calendars', $calendars);
     }
 
-    public function shiftAction(Calendar $calendar = null, int $day = 0, int $month = 0, int $year = 0)
+    public function shiftAction()
     {
-        if ($calendar && $day && $month && $year) {
-            $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
-        } else {
-            $startDate = new \DateTime('now');
-            $startDate->setTime(0, 0, 0);
-        }
+        $events = [];
+        $events['extraParams'] = [];
+        $events['extraParams']['pid'] = $this->pageUid;
 
-        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
-
-        $calendars = $this->calendarRepository->findAll();
-
-        $calendarsConf = [];
-
-        foreach ($calendars as $calendar) {
-            $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
-            $configuration = $calendarManager->getConfiguration($dateConf);
-
-            // inject entries to display contact info of bookins
-            $entries = [];
-            $timeslotEntries = $calendar->getTimeslotEntries();
-            foreach ($timeslotEntries as $entry) {
-                $entries[$entry->getUid()] = $entry;
-            }
-
-            // override next/prev links for backend routes
-            $configuration['next']['link'] = $this->getHref('Administration', 'shift', [
-                'calendar' => $calendar->getUid(),
-                'day' => $configuration['next']['day'],
-                'month' => $configuration['next']['month'],
-                'year' => $configuration['next']['year']
-            ]);
-            $configuration['prev']['link'] = $this->getHref('Administration', 'shift', [
-                'calendar' => $calendar->getUid(),
-                'day' => $configuration['prev']['day'],
-                'month' => $configuration['prev']['month'],
-                'year' => $configuration['prev']['year']
-            ]);
-
-            $calendarsConf[] = [
-                'configuration' => $configuration,
-                'calendar' => $calendar,
-                'entries' => $entries
-            ];
-        }
-
-        $this->view->assign('calendars', $calendarsConf);
+        $this->view->assign('events', json_encode($events, JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -422,48 +381,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
             $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
             $buttonBar->addButton($printButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
-        }
-
-        if ($this->request->getControllerActionName() === 'shift') {
-            $listViewButton = $buttonBar->makeLinkButton()
-                ->setHref('#')
-                ->setClasses('active view-button')
-                ->setDataAttributes([
-                    'togglelink' => '1',
-                    'toggle' => 'tooltip',
-                    'placement' => 'bottom',
-                    'view' => 'calendar--list'
-                ])
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.listView.buttonTitle'))
-                ->setIcon($this->iconFactory->getIcon('icon-list-view', Icon::SIZE_SMALL));
-
-            $weekViewButton = $buttonBar->makeLinkButton()
-                ->setHref('#')
-                ->setClasses('view-button')
-                ->setDataAttributes([
-                    'togglelink' => '1',
-                    'toggle' => 'tooltip',
-                    'placement' => 'bottom',
-                    'view' => 'calendar--week'
-                ])
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.weekView.buttonTitle'))
-                ->setIcon($this->iconFactory->getIcon('icon-week-view', Icon::SIZE_SMALL));
-
-            $monthViewButton = $buttonBar->makeLinkButton()
-                ->setHref('#')
-                ->setClasses('view-button')
-                ->setDataAttributes([
-                    'togglelink' => '1',
-                    'toggle' => 'tooltip',
-                    'placement' => 'bottom',
-                    'view' => 'calendar--month'
-                ])
-                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.monthView.buttonTitle'))
-                ->setIcon($this->iconFactory->getIcon('icon-month-view', Icon::SIZE_SMALL));
-
-            $buttonBar->addButton($listViewButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
-            $buttonBar->addButton($weekViewButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
-            $buttonBar->addButton($monthViewButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
         }
 
         // New Entry Button

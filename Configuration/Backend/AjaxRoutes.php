@@ -26,7 +26,7 @@ return [
     ],
     'api_calendar_show' => [
         'path' => '/api/calendar/show',
-        'target' => \Blueways\BwBookingmanager\Controller\ApiController::class . '::calendarShowAction'
+        'target' => \Blueways\BwBookingmanager\Controller\Ajax\ApiController::class . '::calendarShowAction'
     ],
     'api_feuser_get' => [
         'path' => '/api/feuser',

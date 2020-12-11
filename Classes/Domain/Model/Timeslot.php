@@ -5,7 +5,6 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
 use TYPO3\CMS\Extbase\Reflection\ClassSchema;
-use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -158,27 +157,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setRepeatType($repeatType)
     {
         $this->repeatType = $repeatType;
-    }
-
-    /**
-     * Returns the maxWeight
-     *
-     * @return int $maxWeight
-     */
-    public function getMaxWeight()
-    {
-        return $this->maxWeight;
-    }
-
-    /**
-     * Sets the maxWeight
-     *
-     * @param int $maxWeight
-     * @return void
-     */
-    public function setMaxWeight($maxWeight)
-    {
-        $this->maxWeight = $maxWeight;
     }
 
     /**
@@ -543,6 +521,46 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             END:VEVENT\n";
 
         return $icsText;
+    }
+
+    public function getFullCalendarEvent()
+    {
+        $now = new DateTime();
+
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
+        $title = $this->getMaxWeight() === 1 ? '' : $this->getBookedWeight() . '/' . $this->getMaxWeight();
+        $color = $this->getIsBookable() ? 'green' : 'red';
+
+        return [
+            'title' => $title,
+            'start' => $this->startDate->format(DateTime::ATOM),
+            'end' => $this->endDate->format(DateTime::ATOM),
+            'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
+            'color' => $color
+        ];
+    }
+
+    /**
+     * Returns the maxWeight
+     *
+     * @return int $maxWeight
+     */
+    public function getMaxWeight()
+    {
+        return $this->maxWeight;
+    }
+
+    /**
+     * Sets the maxWeight
+     *
+     * @param int $maxWeight
+     * @return void
+     */
+    public function setMaxWeight($maxWeight)
+    {
+        $this->maxWeight = $maxWeight;
     }
 
 }

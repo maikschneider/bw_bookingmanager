@@ -6,10 +6,12 @@ namespace Blueways\BwBookingmanager\Controller\Ajax;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
+use Blueways\BwBookingmanager\Utility\FullCalendarUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class ApiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -44,29 +46,16 @@ class ApiController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         ]
     ];
 
-    /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \Exception
-     */
-    public function calendarShowAction(Calendar $calendar)
+    public function calendarShowAction(ServerRequestInterface $request, \TYPO3\CMS\Core\Http\Response $response)
     {
-        $startDate = new \DateTime('now');
-        $startDate->setTime(0, 0, 0);
+        $params = $request->getQueryParams();
 
-        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $calendarUtil = $objectManager->get(FullCalendarUtility::class);
+        $events = $calendarUtil->getEvents($params['pid'], $params['start'], $params['end']);
 
-        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
-        $configuration = $calendarManager->getConfiguration($dateConf);
-
-        $this->view->assignMultiple([
-            'configuration' => $configuration,
-            'calendar' => $calendar
-        ]);
-
-        $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar'));
+        $response->getBody()->write(json_encode($events, JSON_THROW_ON_ERROR));
+        return $response;
     }
 
     public function injectCalendarRepository(

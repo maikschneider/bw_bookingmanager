@@ -9,7 +9,7 @@
 		"moduleResolution": "node",
 		"alwaysStrict": true,
 		"downlevelIteration": true,
-		"experimentalDecorators": true
+		"experimentalDecorators": true,
 		"paths": {
 			"TYPO3/CMS/BwBookingmanager/*": [
 				"Resources/Private/TypeScript/*",
