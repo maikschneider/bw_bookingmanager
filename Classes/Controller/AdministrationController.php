@@ -197,11 +197,14 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
 
     public function shiftAction()
     {
+        $calendars = $this->calendarRepository->findAll();
+
         $events = [];
         $events['extraParams'] = [];
         $events['extraParams']['pid'] = $this->pageUid;
 
         $this->view->assign('events', json_encode($events, JSON_THROW_ON_ERROR));
+        $this->view->assign('calendars', $calendars);
     }
 
     /**

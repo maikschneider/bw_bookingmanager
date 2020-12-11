@@ -538,7 +538,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'start' => $this->startDate->format(DateTime::ATOM),
             'end' => $this->endDate->format(DateTime::ATOM),
             'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
-            'color' => $color
+            'color' => $color,
+            'display' => 'block'
         ];
     }
 

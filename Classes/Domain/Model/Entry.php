@@ -697,4 +697,21 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
         return $icsText;
     }
+
+    public function getFullCalendarEvent()
+    {
+        $now = new DateTime();
+
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
+        $title = $this->prename . ' ' . $this->name;
+
+        return [
+            'title' => $title,
+            'start' => $this->startDate->format(DateTime::ATOM),
+            'end' => $this->endDate->format(DateTime::ATOM),
+            'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
+        ];
+    }
 }

@@ -174,4 +174,21 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->endDate = $endDate;
     }
+
+    public function getFullCalendarEvent()
+    {
+        $now = new DateTime();
+
+        $this->startDate->setTimezone($now->getTimezone());
+        $this->endDate->setTimezone($now->getTimezone());
+
+        return [
+            'title' => $this->reason,
+            'start' => $this->startDate->format(DateTime::ATOM),
+            'end' => $this->endDate->format(DateTime::ATOM),
+            'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
+            'display' => 'background',
+            'color' => 'rgba(255,0,0,0.5)'
+        ];
+    }
 }

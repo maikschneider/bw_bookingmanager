@@ -4,7 +4,9 @@
 
 {namespace be=TYPO3\CMS\Backend\ViewHelpers}
 
-<div id="calendar" data-events="{events}" class="backendCalendar"></div>
+<f:if condition="{calendars->f:count()}">
+	<div id="calendar" data-events="{events}" class="backendCalendar"></div>
+</f:if>
 
 
 

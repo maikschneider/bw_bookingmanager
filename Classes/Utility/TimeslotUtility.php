@@ -96,6 +96,30 @@ class TimeslotUtility
     }
 
     /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getBlockslots()
+    {
+        return $this->blockslots;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getHolidays()
+    {
+        return $this->holidays;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+    /**
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
      * @param \DateTime $startDate
      * @param \DateTime $endDate
