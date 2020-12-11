@@ -18,6 +18,7 @@ use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 class IcsUtility
 {
+
     public static function compileTemplate(string $templateString, AbstractEntity $object, ClassSchema $classSchema)
     {
         // look for FIELD:point
@@ -68,15 +69,13 @@ class IcsUtility
 
     public function getFromIcs(Ics $ics): string
     {
-        $feed = "BEGIN:VCALENDAR
-                VERSION:2.0
-                METHOD:PUBLISH
-                PRODID:-//Maik Schneider//BwBookingManager Events//EN\n";
+        $feed = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nMETHOD:PUBLISH\r\nPRODID:-//Maik Schneider//BwBookingManager Events//EN\r\n";
 
         $feed .= $this->getIcsFeed($ics);
 
         $feed .= "END:VCALENDAR";
         $feed = str_replace('  ', '', $feed);
+        $feed = preg_replace('~\R~u', "\r\n", $feed);
 
         return $feed;
     }
