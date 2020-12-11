@@ -18,7 +18,6 @@ use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 class IcsUtility
 {
-
     public static function compileTemplate(string $templateString, AbstractEntity $object, ClassSchema $classSchema)
     {
         // look for FIELD:point
@@ -39,7 +38,6 @@ class IcsUtility
 
         // look for FUNC:getBookedWeight
         if (sizeof($fieldStatements[0])) {
-
             foreach ($fieldStatements[0] as $key => $fieldStatement) {
                 $functionName = $fieldStatements[2][$key];
                 if ($classSchema->hasMethod($functionName)) {
@@ -68,11 +66,26 @@ class IcsUtility
         return $startDate->format('H') === '00' && (int)$endDate->format('H') >= 23;
     }
 
+    public function getFromIcs(Ics $ics): string
+    {
+        $feed = "BEGIN:VCALENDAR
+                VERSION:2.0
+                METHOD:PUBLISH
+                PRODID:-//Maik Schneider//BwBookingManager Events//EN\n";
+
+        $feed .= $this->getIcsFeed($ics);
+
+        $feed .= "END:VCALENDAR";
+        $feed = str_replace('  ', '', $feed);
+
+        return $feed;
+    }
+
     /**
      * @param \Blueways\BwBookingmanager\Domain\Model\Ics $ics
      * @return string
      */
-    public function getIcsFile(Ics $ics): string
+    public function getIcsFeed(Ics $ics): string
     {
         $options = $ics->getOptionsArray();
         $calendars = $ics->getCalendars();
@@ -113,7 +126,6 @@ class IcsUtility
 
         // Ics for Blockslots
         if ($options[4]) {
-
             $blockslotRepository = $objectManager->get(BlockslotRepository::class);
             $blockslots = $blockslotRepository->findAllInRange($calendarUids, $startDate, $endDate)->toArray();
             $classSchema = $reflectionService->getClassSchema(Blockslot::class);
@@ -138,5 +150,4 @@ class IcsUtility
 
         return $feed;
     }
-
 }
