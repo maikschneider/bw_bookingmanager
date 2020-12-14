@@ -238,27 +238,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the calendars
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     */
-    public function getCalendars()
-    {
-        return $this->calendars;
-    }
-
-    /**
-     * Sets the calendars
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     * @return void
-     */
-    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
-    {
-        $this->calendars = $calendars;
-    }
-
-    /**
      * Returns the repeatEnd
      *
      * @return \DateTime $repeatEnd
@@ -533,13 +512,30 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $title = $this->getMaxWeight() === 1 ? '' : $this->getBookedWeight() . '/' . $this->getMaxWeight();
         $color = $this->getIsBookable() ? 'green' : 'red';
 
+        $calendar = $this->getCalendars() ? $this->getCalendars()[0]->getUid() : '';
+
         return [
             'title' => $title,
             'start' => $this->startDate->format(DateTime::ATOM),
             'end' => $this->endDate->format(DateTime::ATOM),
             'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
             'color' => $color,
-            'display' => 'block'
+            'display' => 'block',
+            'backendUrl' => [
+                'edit' => [
+                    'tx_bwbookingmanager_domain_model_entry' => [
+                        $this->pid => 'new'
+                    ]
+                ],
+                'defVals' => [
+                    'tx_bwbookingmanager_domain_model_entry' => [
+                        'calendar' => $calendar,
+                        'startDate' => $this->startDate->getTimestamp(),
+                        'endDate' => $this->endDate->getTimestamp()
+                    ]
+                ],
+                //'returnUrl' => ''
+            ]
         ];
     }
 
@@ -562,6 +558,27 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setMaxWeight($maxWeight)
     {
         $this->maxWeight = $maxWeight;
+    }
+
+    /**
+     * Returns the calendars
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     */
+    public function getCalendars()
+    {
+        return $this->calendars;
+    }
+
+    /**
+     * Sets the calendars
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @return void
+     */
+    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
+    {
+        $this->calendars = $calendars;
     }
 
 }

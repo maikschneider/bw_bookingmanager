@@ -1,6 +1,8 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
+  watch: true,
   entry: './Resources/Private/TypeScript/BackendCalendar.ts',
   output: {
     filename: 'Resources/Public/JavaScript/BackendCalendar.js',

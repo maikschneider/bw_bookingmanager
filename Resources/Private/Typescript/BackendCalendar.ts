@@ -1,3 +1,4 @@
+import $ = require('jquery');
 import {Calendar} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -35,6 +36,11 @@ class BackendCalendar {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
       },
+      loading: (isLoading) => {
+        const display = isLoading ? 'grid' : 'none';
+        $('#loading').css('display', display);
+      },
+      weekNumbers: true,
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
       navLinks: true,
       nowIndicator: true,

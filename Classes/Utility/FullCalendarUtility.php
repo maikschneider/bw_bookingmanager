@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Utility;
 
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -32,10 +33,16 @@ class FullCalendarUtility
         $blockslots = $timeslotUtil->getBlockslots();
         $holidays = $timeslotUtil->getHolidays();
         $entries = $timeslotUtil->getEntries();
+        /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+        $uriBuilder = $objectManager->get(UriBuilder::class);
 
         /** @var \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot */
         foreach ($timeslots as $timeslot) {
-            $events[] = $timeslot->getFullCalendarEvent();
+            if ($timeslot->getIsBookable()) {
+                $event = $timeslot->getFullCalendarEvent();
+                $event['url'] = $uriBuilder->buildUriFromRoute('record_edit', $event['backendUrl'])->__toString();
+                $events[] = $event;
+            }
         }
 
         foreach ($blockslots as $blockslot) {
@@ -47,7 +54,9 @@ class FullCalendarUtility
         }
 
         foreach ($entries as $entry) {
-            $events[] = $entry->getFullCalendarEvent();
+            $event = $entry->getFullCalendarEvent();
+            $event['url'] = $uriBuilder->buildUriFromRoute('record_edit', $event['backendUrl'])->__toString();
+            $events[] = $event;
         }
 
         return $events;

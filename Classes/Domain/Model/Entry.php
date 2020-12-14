@@ -712,6 +712,14 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'start' => $this->startDate->format(DateTime::ATOM),
             'end' => $this->endDate->format(DateTime::ATOM),
             'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
+            'backendUrl' => [
+                'edit' => [
+                    'tx_bwbookingmanager_domain_model_entry' => [
+                        $this->getUid() => 'edit'
+                    ]
+                ]
+                //'returnUrl' => ''
+            ]
         ];
     }
 }
