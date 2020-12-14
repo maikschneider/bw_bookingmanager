@@ -15,7 +15,7 @@ use DateTime;
 /**
  * Entry
  */
-class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements CalendarEventInterface
 {
 
     /**
@@ -698,7 +698,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $icsText;
     }
 
-    public function getFullCalendarEvent()
+    public function getFullCalendarEvent(): array
     {
         $now = new DateTime();
 

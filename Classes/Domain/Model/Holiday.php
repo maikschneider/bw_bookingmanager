@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 /**
  * Blockslot
  */
-class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements CalendarEventInterface
 {
 
     /**
@@ -175,7 +175,7 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $icsText;
     }
 
-    public function getFullCalendarEvent()
+    public function getFullCalendarEvent(): array
     {
         $now = new DateTime();
 

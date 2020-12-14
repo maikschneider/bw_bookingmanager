@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 /**
  * Timeslot
  */
-class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements CalendarEventInterface
 {
 
     const REPEAT_NO = 0;
@@ -502,14 +502,16 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $icsText;
     }
 
-    public function getFullCalendarEvent()
+    public function getFullCalendarEvent(): array
     {
         $now = new DateTime();
 
         $this->startDate->setTimezone($now->getTimezone());
         $this->endDate->setTimezone($now->getTimezone());
 
-        $title = $this->getMaxWeight() === 1 ? '' : $this->getBookedWeight() . '/' . $this->getMaxWeight();
+        $title = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_timeslot.xlf:';
+        $title .= $this->getIsBookable() ? 'free' : 'booked';
+        $title .= $this->getMaxWeight() === 1 ? '' : $this->getBookedWeight() . '/' . $this->getMaxWeight();
         $color = $this->getIsBookable() ? 'green' : 'red';
 
         $calendar = $this->getCalendars() ? $this->getCalendars()[0]->getUid() : '';
