@@ -74,14 +74,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $entries = null;
 
     /**
-     * calendars
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
-     * @lazy
-     */
-    protected $calendars = null;
-
-    /**
      * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
      */
     protected $calendar;
@@ -141,7 +133,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected function initStorageObjects()
     {
         $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->calendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -256,49 +247,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function removeEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove)
     {
         $this->entries->detach($entryToRemove);
-    }
-
-    /**
-     * Adds a Calendar
-     *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @return void
-     */
-    public function addCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
-    {
-        $this->calendars->attach($calendar);
-    }
-
-    /**
-     * Removes a Calendar
-     *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove The Calendar to be removed
-     * @return void
-     */
-    public function removeCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove)
-    {
-        $this->calendars->detach($calendarToRemove);
-    }
-
-    /**
-     * Returns the calendars
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     */
-    public function getCalendars()
-    {
-        return $this->calendars;
-    }
-
-    /**
-     * Sets the calendars
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     * @return void
-     */
-    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
-    {
-        $this->calendars = $calendars;
     }
 
     /**
