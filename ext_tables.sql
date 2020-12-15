@@ -43,6 +43,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_timeslot (
 	holiday_setting int(11) DEFAULT '0' NOT NULL,
 	entries int(11) unsigned DEFAULT '0' NOT NULL,
 	calendars int(11) unsigned DEFAULT '0' NOT NULL,
+	calendar int(11) unsigned DEFAULT '0' NOT NULL,
 	repeat_end int(11) DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,

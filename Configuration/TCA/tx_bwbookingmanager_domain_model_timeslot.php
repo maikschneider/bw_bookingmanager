@@ -15,12 +15,12 @@ return [
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.svg'
     ],
     'interface' => [
-        'showRecordFieldList' => 'hidden, start_date, end_date, repeat_type, holiday_setting, repeat_end, max_weight, entries, is_bookable_hooks, calendars',
+        'showRecordFieldList' => 'hidden, start_date, end_date, repeat_type, holiday_setting, repeat_end, max_weight, entries, is_bookable_hooks, calendars, calendar',
     ],
     'types' => [
         '1' => [
             'showitem' => 'hidden,
-            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette, max_weight, is_bookable_hooks, calendars'],
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette, max_weight, is_bookable_hooks, calendars, calendar'],
     ],
     'palettes' => [
         'datesPalette' => [
@@ -163,6 +163,18 @@ return [
                 'size' => 10,
                 'minitems' => 1,
                 'maxitems' => 9999,
+            ],
+        ],
+        'calendar' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.calendar',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
+                'items' => [
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.noCalendar', 0]
+                ],
             ],
         ],
         'repeat_end' => [

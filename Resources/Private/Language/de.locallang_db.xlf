@@ -106,6 +106,14 @@
 				<source>Calendars</source>
 				<target>Kalender</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendar">
+				<source>Calendar</source>
+				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.noCalendar">
+				<source>No calendar</source>
+				<target>Kein Kalender</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
 				<source>Repeat End</source>
 				<target>Wiederholung Ende</target>

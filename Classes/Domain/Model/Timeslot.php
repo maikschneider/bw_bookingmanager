@@ -82,6 +82,27 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $calendars = null;
 
     /**
+     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     */
+    protected $calendar;
+
+    /**
+     * @return \Blueways\BwBookingmanager\Domain\Model\Calendar
+     */
+    public function getCalendar(): Calendar
+    {
+        return $this->calendar;
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     */
+    public function setCalendar(Calendar $calendar): void
+    {
+        $this->calendar = $calendar;
+    }
+
+    /**
      * repeatEnd
      *
      * @var \DateTime
