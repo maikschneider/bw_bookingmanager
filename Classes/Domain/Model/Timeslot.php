@@ -4,6 +4,8 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
@@ -347,6 +349,159 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'feUsers' => $feUsers,
             'entries' => $entries
         ];
+    }
+
+    public static function getConsecutiveRepeatingDaysString(int $repeatDays)
+    {
+        $llService = GeneralUtility::makeInstance(LanguageService::class);
+        $llPrefix = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.';
+        $repeatingArray = self::getConsecutiveRepeatingDaysArray($repeatDays);
+
+        $repeatingArray = array_map(function ($repeatingEntry) use ($llPrefix, $llService){
+            if(is_array($repeatingEntry)) {
+                return $llService->sL($llPrefix. $repeatingEntry[0]) . '-' . $llService->sL($llPrefix . $repeatingEntry[1]);
+            }
+            return $llService->sL($llPrefix . $repeatingEntry);
+        }, $repeatingArray);
+
+
+        return implode(', ', $repeatingArray);
+    }
+
+    public static function getConsecutiveRepeatingDaysArray(int $repeatDays)
+    {
+        $repeatMapping = [
+            127 => [[1, 0]],
+            126 => [[1, 6]],
+            125 => [[2, 0]],
+            124 => [[2, 6]],
+            123 => [1, [3, 0]],
+            122 => [1, [3, 6]],
+            121 => [[3, 0]],
+            120 => [[3, 6]],
+            119 => [1, 2, [4, 0]],
+            118 => [1, 2, [4, 6]],
+            117 => [2, [4, 0]],
+            116 => [2, [4, 6]],
+            115 => [1, [4, 0]],
+            114 => [1, [4, 6]],
+            113 => [[4, 0]],
+            112 => [[4, 6]],
+            111 => [[1, 3], [5, 0]],
+            110 => [[1, 3], 5, 6],
+            109 => [2, 3, [5, 0]],
+            108 => [2, 3, 5, 6],
+            107 => [1, 3, [5, 0]],
+            106 => [1, 3, 5, 6],
+            105 => [3, [5, 0]],
+            104 => [3, 5, 6],
+            103 => [1, 2, [5, 0]],
+            102 => [1, 2, 5, 6],
+            101 => [2, [5, 0]],
+            100 => [2, 5, 6],
+            99 => [1, [5, 0]],
+            98 => [1, 5, 6],
+            97 => [[5, 0]],
+            96 => [5, 6],
+            95 => [[1, 4], 6, 0],
+            94 => [[1, 4], 6],
+            93 => [[2, 4], 6, 0],
+            92 => [[2, 4], 6],
+            91 => [1, 3, 4, 6, 0],
+            90 => [1, 3, 4, 6],
+            89 => [3, 4, 6, 0],
+            88 => [3, 4, 6],
+            87 => [1, 2, 4, 6, 0],
+            86 => [1, 2, 4, 6],
+            85 => [2, 4, 6, 0],
+            84 => [2, 4, 6],
+            83 => [1, 4, 6, 0],
+            82 => [1, 4, 6],
+            81 => [4, 6, 0],
+            80 => [4, 6],
+            79 => [[1, 3], 6, 0],
+            78 => [[1, 3], 6],
+            77 => [2, 3, 6, 0],
+            76 => [2, 3, 6],
+            75 => [1, 3, 6, 0],
+            74 => [1, 3, 6],
+            73 => [3, 6, 0],
+            72 => [3, 6],
+            71 => [1, 2, 6],
+            70 => [1, 2, 6],
+            69 => [2, 6, 0],
+            68 => [2, 6],
+            67 => [1, 6, 0],
+            66 => [1, 6],
+            65 => [[6, 0]],
+            64 => [6],
+            63 => [[1, 5], 0],
+            62 => [[1, 5]],
+            61 => [[2, 5], 0],
+            60 => [[2, 5]],
+            59 => [1, [3, 5], 0],
+            58 => [1, [3, 5]],
+            57 => [[3, 5], 0],
+            56 => [[3, 5]],
+            55 => [1, 2, 4, 5, 0],
+            54 => [1, 2, 4, 5],
+            53 => [2, 4, 5, 0],
+            52 => [2, 4, 5],
+            51 => [1, 4, 5, 0],
+            50 => [1, 4, 5],
+            49 => [4, 5, 0],
+            48 => [4, 5],
+            47 => [[1, 3], 5, 0],
+            46 => [[1, 3], 5],
+            45 => [2, 3, 5, 0],
+            44 => [2, 3, 5],
+            43 => [1, 3, 5, 0],
+            42 => [1, 3, 5],
+            41 => [3, 5, 0],
+            40 => [3, 5],
+            39 => [1, 2, 5, 0],
+            38 => [1, 2, 5],
+            37 => [2, 5, 0],
+            36 => [2, 5],
+            35 => [1, 5, 0],
+            34 => [1, 5],
+            33 => [5, 0],
+            32 => [5],
+            31 => [[1, 4], 0],
+            30 => [[1, 4]],
+            29 => [[2, 4], 0],
+            28 => [[2, 4]],
+            27 => [1, 3, 4, 0],
+            26 => [1, 3, 4],
+            25 => [3, 4, 0],
+            24 => [3, 4],
+            23 => [1, 2, 4, 0],
+            22 => [1, 2, 4],
+            21 => [2, 4, 0],
+            20 => [2, 4],
+            19 => [1, 4, 0],
+            18 => [1, 4],
+            17 => [4, 0],
+            16 => [4],
+            15 => [[1, 3], 0],
+            14 => [[1, 3]],
+            13 => [2, 3, 0],
+            12 => [2, 3],
+            11 => [1, 3, 0],
+            10 => [1, 3],
+            9 => [3, 0],
+            8 => [3],
+            7 => [1, 2, 0],
+            6 => [1, 2],
+            5 => [2, 0],
+            4 => [2],
+            3 => [1, 0],
+            2 => [1],
+            1 => [0],
+            0 => []
+        ];
+
+        return isset($repeatMapping[$repeatDays]) ? $repeatMapping[$repeatDays] : [];
     }
 
     /**
