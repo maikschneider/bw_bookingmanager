@@ -64,13 +64,13 @@ class TimeslotUpdateCommand extends Command
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
 
         $io->writeln('Checking relations table..');
-        $updateQuery4 = 'select COUNT(*) from tx_bwbookingmanager_calendar_timeslot_mm';
+        $updateQuery4 = "select COUNT(*) from tx_bwbookingmanager_calendar_timeslot_mm";
         $result = $connection->executeQuery($updateQuery4);
 
-        $numberOfMigrations = $result->fetchNumeric()[0];
+        $numberOfMigrations = array_shift($result->fetchAll()[0]);
 
         // abort if no relation
-        if ((int)$numberOfMigrations === 0) {
+        if ($numberOfMigrations === 0) {
             $io->note('There are no relations to update, skipping migration');
             return;
         }
@@ -161,21 +161,20 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
             }
         }
 
-
         // create and execute the queries
         if ($entryConditions !== "") {
             $entryUpdateQuery = "update tx_bwbookingmanager_domain_model_entry set timeslot = case" . $entryConditions . " else timeslot end;";
             $connection->executeQuery($entryUpdateQuery);
         }
 
-        if(count($timeslotListforRepeatType4)) {
+        if (count($timeslotListforRepeatType4)) {
             // concat the lists for in(|) query
             $timeslotListforRepeatType4 = implode(',', $timeslotListforRepeatType4);
             $timeslotUpdateQuery = "update tx_bwbookingmanager_domain_model_timeslot set repeat_type = case when uid in (" . $timeslotListforRepeatType4 . ") then 4 else repeat_type end, repeat_days = case" . $timeslotRepeatDaysConditions . " else repeat_days end;";
             $connection->executeQuery($timeslotUpdateQuery);
         }
 
-        if(count($timeslotListToDelete)) {
+        if (count($timeslotListToDelete)) {
             // concat the lists for in(|) query
             $timeslotListToDelete = implode(',', $timeslotListToDelete);
             $timeslotDeleteQuery = "delete from tx_bwbookingmanager_domain_model_timeslot where uid in (" . $timeslotListToDelete . ");";
