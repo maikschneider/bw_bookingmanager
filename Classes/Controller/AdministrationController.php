@@ -73,7 +73,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      *
      * @var BackendTemplateView
      */
-    protected $defaultViewObjectName = BackendTemplateView::class;
+    protected string $defaultViewObjectName = BackendTemplateView::class;
 
     /**
      * @param ViewInterface $view
