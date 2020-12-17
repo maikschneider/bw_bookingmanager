@@ -23,7 +23,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
     {
-        $timeslots = $this->findAllPossibleByDateRange($calendar->getUid(), $dateConf->start, $dateConf->end);
+        $timeslots = $this->findAllPossibleByDateRange([$calendar->getUid()], $dateConf->start, $dateConf->end);
         $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
             $dateConf->start,
             $dateConf->end);
@@ -40,7 +40,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function findAllPossibleByDateRange(
-        int $calendar,
+        array $calendars,
         \DateTime $startDate,
         \DateTime $endDate
     ) {
@@ -49,7 +49,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             $query->logicalOr([
                 // no repeatable events starting during date range
                 $query->logicalAnd([
-                    $query->equals('calendar', $calendar),
+                    $query->in('calendar', $calendars),
                     $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
                     $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
                     $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
@@ -57,7 +57,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 // repeating events that end during or after date range
                 // these events can be in the past and occur in range after repeat function
                 $query->logicalAnd([
-                    $query->equals('calendar', $calendar),
+                    $query->in('calendar', $calendars),
                     $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
                     $query->lessThan('startDate', $endDate->getTimestamp()),
                     $query->logicalOr([

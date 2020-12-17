@@ -434,11 +434,7 @@ class TimeslotUtility
 
                 // new empty storage
                 $value = $this->objectManager->get(ObjectStorage::class);
-
-                // add calendars to storage
-                if ($propertyName === 'calendars') {
-                    $value->addAll($object->getCalendars());
-                }
+                
             } else {
                 $value = $propertyValue;
             }
@@ -510,7 +506,7 @@ class TimeslotUtility
 
             // @TODO: switch from m:n of timeslot <-> calendar to 1:n
             // we are using the first calendar in timeslot, in hope there are not any more
-            $calendarUid = $timeslot->getCalendars()[0]->getUid();
+            $calendarUid = $timeslot->getCalendar()->getUid();
 
             // check timeslot if holidays should move to 'in' or 'out' critera array
             if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING) {
