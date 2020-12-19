@@ -163,12 +163,12 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
         $icsText = "BEGIN:VEVENT
             " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
-            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            DTSTAMP:" . $now->format('Ymd\THis') . "
             SUMMARY:" . IcsUtility::compileTemplate($ics->getHolidayTitle(), $this, $classSchema) . "
             DESCRIPTION:" . IcsUtility::compileTemplate($ics->getHolidayDescription(), $this, $classSchema) . "
             UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
             STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
             LOCATION:" . IcsUtility::compileTemplate($ics->getHolidayLocation(), $this, $classSchema) . "
             END:VEVENT\n";
 
