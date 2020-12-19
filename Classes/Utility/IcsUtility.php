@@ -10,6 +10,7 @@ use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\HolidayRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -99,8 +100,8 @@ class IcsUtility
 
         // Ics for Timeslots
         if ($options[0] || $options[1]) {
-            $timeslotUtil = $objectManager->get(TimeslotUtility::class);
-            $timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
+            $timeslotRepository = $objectManager->get(TimeslotRepository::class);
+            $timeslots = $timeslotRepository->getTimeslotsForCalendars($calendars, $startDate, $endDate);
             $classSchema = $reflectionService->getClassSchema(Timeslot::class);
 
             /** @var \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot */
