@@ -78,13 +78,14 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getTimeslotsInCalendar(int $calendarUid, \DateTime $startDate, \DateTime $endDate)
     {
         $sql = "select 	uid,
-		UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as t_start_date,
-		UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.end_date)))) as t_end_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as t_start_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.end_date)))) as UNSIGNED) as t_end_date,
         t.*,
 #		dates.date,
 #		TIME(FROM_UNIXTIME(t.start_date)) as start,
 #		TIME(FROM_UNIXTIME(t.end_date)) as end,
-		group_concat(entry_uid) as entries
+#		group_concat(entry_uid) as entries
+        COUNT(entry_uid) as entries
 
 from tx_bwbookingmanager_domain_model_timeslot as t
 
@@ -167,9 +168,8 @@ order by dates.date;";
         $dataMap = $dataMapper->getDataMap($this->objectType);
 
         $timeslots = array_map(function($timeslot){
-           $timeslot['start_date'] = (int)$timeslot['t_start_date'];
-           $timeslot['end_date'] = (int)$timeslot['t_end_date'];
-           $timeslot['entries'] = $timeslot['entries'] ? count(explode(',', $timeslot['entries'])) : 0;
+           $timeslot['start_date'] = $timeslot['t_start_date'];
+           $timeslot['end_date'] = $timeslot['t_end_date'];
            return $timeslot;
         }, $timeslots);
 
