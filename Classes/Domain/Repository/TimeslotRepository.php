@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /***
@@ -26,9 +27,12 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
     {
         $timeslots = $this->findAllPossibleByDateRange([$calendar->getUid()], $dateConf->start, $dateConf->end);
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager($timeslots, $calendar,
+        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager(
+            $timeslots,
+            $calendar,
             $dateConf->start,
-            $dateConf->end);
+            $dateConf->end
+        );
         $timeslots = $timeslotManager->getTimeslots();
 
         return $timeslots;
@@ -75,12 +79,27 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
+    public function getTimeslotsForCalendars($calendars, \DateTime $startDate, \DateTime $endDate)
+    {
+        $timeslotResults = [];
+        foreach ($calendars as $calendar) {
+            $timeslotResults[] = $this->getTimeslotsInCalendar($calendar->getUid(), $startDate, $endDate);
+        }
+        $timeslots = array_merge([], ...$timeslotResults);
+        $timeslots = $this->mapTimeslotResultToObjects($timeslots);
+        return $timeslots;
+    }
+
     public function getTimeslotsInCalendar(int $calendarUid, \DateTime $startDate, \DateTime $endDate)
     {
         $sql = "select 	uid,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as t_start_date,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.end_date)))) as UNSIGNED) as t_end_date,
+        CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as start_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.end_date)))) as UNSIGNED) as end_date,
         t.*,
+        CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as start_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.end_date)))) as UNSIGNED) as end_date,
 #		dates.date,
 #		TIME(FROM_UNIXTIME(t.start_date)) as start,
 #		TIME(FROM_UNIXTIME(t.end_date)) as end,
@@ -148,30 +167,12 @@ order by dates.date;";
         $query->statement($sql);
 
         return $query->execute(true);
-
-    }
-
-    public function getTimeslotsForCalendars($calendars, \DateTime $startDate, \DateTime $endDate)
-    {
-        $timeslotResults = [];
-        foreach ($calendars as $calendar) {
-            $timeslotResults[] = $this->getTimeslotsInCalendar($calendar->getUid(), $startDate, $endDate);
-        }
-        $timeslots = array_merge([], ...$timeslotResults);
-        $timeslots = $this->mapTimeslotResultToObjects($timeslots);
-        return $timeslots;
     }
 
     public function mapTimeslotResultToObjects(array $timeslots)
     {
         $dataMapper = $this->objectManager->get(DataMapper::class);
         $dataMap = $dataMapper->getDataMap($this->objectType);
-
-        $timeslots = array_map(function($timeslot){
-           $timeslot['start_date'] = $timeslot['t_start_date'];
-           $timeslot['end_date'] = $timeslot['t_end_date'];
-           return $timeslot;
-        }, $timeslots);
 
         return $dataMapper->map(
             $dataMap->getClassName(),
