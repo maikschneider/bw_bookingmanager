@@ -4,7 +4,10 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ClassSchema;
+use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -16,7 +19,7 @@ use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 /**
  * Timeslot
  */
-class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements CalendarEventInterface
+class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     const REPEAT_NO = 0;
@@ -73,12 +76,25 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements
     protected $entries = null;
 
     /**
-     * calendars
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
-     * @lazy
+     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
      */
-    protected $calendars = null;
+    protected $calendar;
+
+    /**
+     * @return \Blueways\BwBookingmanager\Domain\Model\Calendar
+     */
+    public function getCalendar(): Calendar
+    {
+        return $this->calendar;
+    }
+
+    /**
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     */
+    public function setCalendar(Calendar $calendar): void
+    {
+        $this->calendar = $calendar;
+    }
 
     /**
      * repeatEnd
@@ -119,7 +135,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements
     protected function initStorageObjects()
     {
         $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->calendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
     }
 
     /**
@@ -157,6 +172,27 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements
     public function setRepeatType($repeatType)
     {
         $this->repeatType = $repeatType;
+    }
+
+    /**
+     * Returns the maxWeight
+     *
+     * @return int $maxWeight
+     */
+    public function getMaxWeight()
+    {
+        return $this->maxWeight;
+    }
+
+    /**
+     * Sets the maxWeight
+     *
+     * @param int $maxWeight
+     * @return void
+     */
+    public function setMaxWeight($maxWeight)
+    {
+        $this->maxWeight = $maxWeight;
     }
 
     /**
@@ -213,28 +249,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements
     public function removeEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove)
     {
         $this->entries->detach($entryToRemove);
-    }
-
-    /**
-     * Adds a Calendar
-     *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @return void
-     */
-    public function addCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
-    {
-        $this->calendars->attach($calendar);
-    }
-
-    /**
-     * Removes a Calendar
-     *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove The Calendar to be removed
-     * @return void
-     */
-    public function removeCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove)
-    {
-        $this->calendars->detach($calendarToRemove);
     }
 
     /**
@@ -335,6 +349,159 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements
             'feUsers' => $feUsers,
             'entries' => $entries
         ];
+    }
+
+    public static function getConsecutiveRepeatingDaysString(int $repeatDays)
+    {
+        $llService = GeneralUtility::makeInstance(LanguageService::class);
+        $llPrefix = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.';
+        $repeatingArray = self::getConsecutiveRepeatingDaysArray($repeatDays);
+
+        $repeatingArray = array_map(function ($repeatingEntry) use ($llPrefix, $llService){
+            if(is_array($repeatingEntry)) {
+                return $llService->sL($llPrefix. $repeatingEntry[0]) . '-' . $llService->sL($llPrefix . $repeatingEntry[1]);
+            }
+            return $llService->sL($llPrefix . $repeatingEntry);
+        }, $repeatingArray);
+
+
+        return implode(', ', $repeatingArray);
+    }
+
+    public static function getConsecutiveRepeatingDaysArray(int $repeatDays)
+    {
+        $repeatMapping = [
+            127 => [[1, 0]],
+            126 => [[1, 6]],
+            125 => [[2, 0]],
+            124 => [[2, 6]],
+            123 => [1, [3, 0]],
+            122 => [1, [3, 6]],
+            121 => [[3, 0]],
+            120 => [[3, 6]],
+            119 => [1, 2, [4, 0]],
+            118 => [1, 2, [4, 6]],
+            117 => [2, [4, 0]],
+            116 => [2, [4, 6]],
+            115 => [1, [4, 0]],
+            114 => [1, [4, 6]],
+            113 => [[4, 0]],
+            112 => [[4, 6]],
+            111 => [[1, 3], [5, 0]],
+            110 => [[1, 3], 5, 6],
+            109 => [2, 3, [5, 0]],
+            108 => [2, 3, 5, 6],
+            107 => [1, 3, [5, 0]],
+            106 => [1, 3, 5, 6],
+            105 => [3, [5, 0]],
+            104 => [3, 5, 6],
+            103 => [1, 2, [5, 0]],
+            102 => [1, 2, 5, 6],
+            101 => [2, [5, 0]],
+            100 => [2, 5, 6],
+            99 => [1, [5, 0]],
+            98 => [1, 5, 6],
+            97 => [[5, 0]],
+            96 => [5, 6],
+            95 => [[1, 4], 6, 0],
+            94 => [[1, 4], 6],
+            93 => [[2, 4], 6, 0],
+            92 => [[2, 4], 6],
+            91 => [1, 3, 4, 6, 0],
+            90 => [1, 3, 4, 6],
+            89 => [3, 4, 6, 0],
+            88 => [3, 4, 6],
+            87 => [1, 2, 4, 6, 0],
+            86 => [1, 2, 4, 6],
+            85 => [2, 4, 6, 0],
+            84 => [2, 4, 6],
+            83 => [1, 4, 6, 0],
+            82 => [1, 4, 6],
+            81 => [4, 6, 0],
+            80 => [4, 6],
+            79 => [[1, 3], 6, 0],
+            78 => [[1, 3], 6],
+            77 => [2, 3, 6, 0],
+            76 => [2, 3, 6],
+            75 => [1, 3, 6, 0],
+            74 => [1, 3, 6],
+            73 => [3, 6, 0],
+            72 => [3, 6],
+            71 => [1, 2, 6],
+            70 => [1, 2, 6],
+            69 => [2, 6, 0],
+            68 => [2, 6],
+            67 => [1, 6, 0],
+            66 => [1, 6],
+            65 => [[6, 0]],
+            64 => [6],
+            63 => [[1, 5], 0],
+            62 => [[1, 5]],
+            61 => [[2, 5], 0],
+            60 => [[2, 5]],
+            59 => [1, [3, 5], 0],
+            58 => [1, [3, 5]],
+            57 => [[3, 5], 0],
+            56 => [[3, 5]],
+            55 => [1, 2, 4, 5, 0],
+            54 => [1, 2, 4, 5],
+            53 => [2, 4, 5, 0],
+            52 => [2, 4, 5],
+            51 => [1, 4, 5, 0],
+            50 => [1, 4, 5],
+            49 => [4, 5, 0],
+            48 => [4, 5],
+            47 => [[1, 3], 5, 0],
+            46 => [[1, 3], 5],
+            45 => [2, 3, 5, 0],
+            44 => [2, 3, 5],
+            43 => [1, 3, 5, 0],
+            42 => [1, 3, 5],
+            41 => [3, 5, 0],
+            40 => [3, 5],
+            39 => [1, 2, 5, 0],
+            38 => [1, 2, 5],
+            37 => [2, 5, 0],
+            36 => [2, 5],
+            35 => [1, 5, 0],
+            34 => [1, 5],
+            33 => [5, 0],
+            32 => [5],
+            31 => [[1, 4], 0],
+            30 => [[1, 4]],
+            29 => [[2, 4], 0],
+            28 => [[2, 4]],
+            27 => [1, 3, 4, 0],
+            26 => [1, 3, 4],
+            25 => [3, 4, 0],
+            24 => [3, 4],
+            23 => [1, 2, 4, 0],
+            22 => [1, 2, 4],
+            21 => [2, 4, 0],
+            20 => [2, 4],
+            19 => [1, 4, 0],
+            18 => [1, 4],
+            17 => [4, 0],
+            16 => [4],
+            15 => [[1, 3], 0],
+            14 => [[1, 3]],
+            13 => [2, 3, 0],
+            12 => [2, 3],
+            11 => [1, 3, 0],
+            10 => [1, 3],
+            9 => [3, 0],
+            8 => [3],
+            7 => [1, 2, 0],
+            6 => [1, 2],
+            5 => [2, 0],
+            4 => [2],
+            3 => [1, 0],
+            2 => [1],
+            1 => [0],
+            0 => []
+        ];
+
+        return isset($repeatMapping[$repeatDays]) ? $repeatMapping[$repeatDays] : [];
     }
 
     /**
@@ -490,97 +657,16 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements
 
         $icsText = "BEGIN:VEVENT
             " . IcsUtility::getIcsDates($this->getStartDate(), $this->getEndDate()) . "
-            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            DTSTAMP:" . $now->format('Ymd\THis') . "
             SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this, $classSchema) . "
             DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this, $classSchema) . "
             UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
             STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
             LOCATION:" . IcsUtility::compileTemplate($ics->getTimeslotLocation(), $this, $classSchema) . "
             END:VEVENT\n";
 
         return $icsText;
-    }
-
-    public function getFullCalendarEvent(): array
-    {
-        $now = new DateTime();
-
-        $this->startDate->setTimezone($now->getTimezone());
-        $this->endDate->setTimezone($now->getTimezone());
-
-        $title = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_timeslot.xlf:';
-        $title .= $this->getIsBookable() ? 'free' : 'booked';
-        $title .= $this->getMaxWeight() === 1 ? '' : $this->getBookedWeight() . '/' . $this->getMaxWeight();
-        $color = $this->getIsBookable() ? 'green' : 'red';
-
-        $calendar = $this->getCalendars() ? $this->getCalendars()[0]->getUid() : '';
-
-        return [
-            'title' => $title,
-            'start' => $this->startDate->format(DateTime::ATOM),
-            'end' => $this->endDate->format(DateTime::ATOM),
-            'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
-            'color' => $color,
-            'display' => 'block',
-            'backendUrl' => [
-                'edit' => [
-                    'tx_bwbookingmanager_domain_model_entry' => [
-                        $this->pid => 'new'
-                    ]
-                ],
-                'defVals' => [
-                    'tx_bwbookingmanager_domain_model_entry' => [
-                        'calendar' => $calendar,
-                        'startDate' => $this->startDate->getTimestamp(),
-                        'endDate' => $this->endDate->getTimestamp()
-                    ]
-                ],
-                //'returnUrl' => ''
-            ]
-        ];
-    }
-
-    /**
-     * Returns the maxWeight
-     *
-     * @return int $maxWeight
-     */
-    public function getMaxWeight()
-    {
-        return $this->maxWeight;
-    }
-
-    /**
-     * Sets the maxWeight
-     *
-     * @param int $maxWeight
-     * @return void
-     */
-    public function setMaxWeight($maxWeight)
-    {
-        $this->maxWeight = $maxWeight;
-    }
-
-    /**
-     * Returns the calendars
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     */
-    public function getCalendars()
-    {
-        return $this->calendars;
-    }
-
-    /**
-     * Sets the calendars
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     * @return void
-     */
-    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
-    {
-        $this->calendars = $calendars;
     }
 
 }

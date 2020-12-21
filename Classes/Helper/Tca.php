@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+
 class Tca
 {
 
@@ -28,6 +30,11 @@ class Tca
                 $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
                 $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
                 $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
+                break;
+
+            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_MULTIPLE_WEEKLY:
+                $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
+                $newTitle .= ' (' . Timeslot::getConsecutiveRepeatingDaysString($record['repeat_days']) . ')';
                 break;
 
             default:

@@ -16,12 +16,13 @@ class IcsSecret extends AbstractFormElement
         $value = $this->data['databaseRow']['secret'];
         /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
         $site = $this->data['site'];
-        $url = $site->getBase();
+        $baseUrl = strlen($site->getBase()->__toString()) > 1 ? $site->getBase() : '';
+        $url = $baseUrl;
         $url .= '/ics/' . $this->data['vanillaUid'];
         $url .= $this->data['databaseRow']['secret'] ? '/' : '';
         $url .= $this->data['databaseRow']['secret'] . '.ics';
 
-        $urlStart = $site->getBase() . '/ics/' . $this->data['vanillaUid'];
+        $urlStart = $baseUrl . '/ics/' . $this->data['vanillaUid'];
 
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $languageService = $objectManager->get(LanguageService::class);

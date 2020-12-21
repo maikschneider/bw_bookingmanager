@@ -686,12 +686,12 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements Ca
 
         $icsText = "BEGIN:VEVENT
             " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
-            DTSTAMP:" . $now->format('Ymd\THis\Z') . "
+            DTSTAMP:" . $now->format('Ymd\THis') . "
             SUMMARY:" . IcsUtility::compileTemplate($ics->getEntryTitle(), $this, $classSchema) . "
             DESCRIPTION:" . IcsUtility::compileTemplate($ics->getEntryDescription(), $this, $classSchema) . "
             UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
             STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis\Z') . "
+            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
             LOCATION:" . IcsUtility::compileTemplate($ics->getEntryLocation(), $this, $classSchema) . "
             END:VEVENT\n";
 
