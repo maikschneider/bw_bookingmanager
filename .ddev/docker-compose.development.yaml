@@ -4,3 +4,4 @@ services:
   web:
     environment:
       - TYPO3_CONTEXT=Development/Local
+      - PHP_IDE_CONFIG=serverName=bw-bookingmanager.ddev.site
