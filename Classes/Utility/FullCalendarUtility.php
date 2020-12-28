@@ -6,6 +6,7 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
 use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\HolidayRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -38,6 +39,7 @@ class FullCalendarUtility
         $calendarRepository = $objectManager->get(CalendarRepository::class);
         $timeslotRepository = $objectManager->get(TimeslotRepository::class);
         $blockslotRepository = $objectManager->get(BlockslotRepository::class);
+        $holidayRepository = $objectManager->get(HolidayRepository::class);
         $entryRepository = $objectManager->get(EntryRepository::class);
         $calendars = $objectManager->get(ObjectStorage::class);
         $queryResult = $calendarRepository->findAllByPid($pid);
@@ -49,7 +51,7 @@ class FullCalendarUtility
         //$timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
         $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
-        $holidays = $timeslotUtil->getHolidays();
+        $holidayEvents = $holidayRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $entries = $entryRepository->findInCalendars(
             CalendarRepository::getUidsFromObjectStorage($calendars),
             $startDate,
@@ -57,7 +59,7 @@ class FullCalendarUtility
         );
 
 
-        $events = array_merge([], $timeslotEvents, $blockslotEvents);
+        $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents);
 
         $events = $this->getOutputForBackendModule($events);
 

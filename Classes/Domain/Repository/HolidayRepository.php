@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\HolidayCalendarEvent;
 use DateTime;
 
 /***
@@ -17,12 +18,27 @@ use DateTime;
 class HolidayRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
-    public function findInCalendars(array $calendarUids, DateTime $startDate, \DateTime $endDate)
+    public function getCalendarEventsInCalendar($calendars, \DateTime $startDate, \DateTime $endDate): array
+    {
+        $events = [];
+        $holidays = $this->findInCalendars($calendars, $startDate, $endDate);
+
+        if (!$holidays->count()) {
+            return [];
+        }
+
+        foreach ($holidays as $holiday) {
+            $events[] = HolidayCalendarEvent::createFromEntity($holiday);
+        }
+        return $events;
+    }
+
+    public function findInCalendars($calendars, DateTime $startDate, \DateTime $endDate)
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd([
-                $query->in('calendars.uid', $calendarUids),
+                $query->in('calendars.uid', $calendars),
                 $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
                 $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
             ])
