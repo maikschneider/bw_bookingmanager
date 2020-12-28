@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
+use Blueways\BwBookingmanager\Domain\Model\Ics;
+
 class TimeslotCalendarEvent extends CalendarEvent
 {
     protected int $maxWeight = 0;
@@ -59,4 +61,18 @@ class TimeslotCalendarEvent extends CalendarEvent
         return $this->getIsBookable() ? 'green' : 'red';
     }
 
+    public function getIcsTitle(Ics $ics): string
+    {
+        return $ics->getTimeslotTitle();
+    }
+
+    public function getIcsDescription(Ics $ics): string
+    {
+        return $ics->getTimeslotDescription();
+    }
+
+    public function getIcsLocation(Ics $ics): string
+    {
+        return $ics->getTimeslotLocation();
+    }
 }

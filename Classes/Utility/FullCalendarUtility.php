@@ -69,7 +69,7 @@ class FullCalendarUtility
         return $fullCalendarEvents;
     }
 
-    public function injectLlService(\TYPO3\CMS\Lang\LanguageService $llService)
+    public function injectLlService(\TYPO3\CMS\Core\Localization\LanguageService $llService)
     {
         $this->llService = $llService;
     }

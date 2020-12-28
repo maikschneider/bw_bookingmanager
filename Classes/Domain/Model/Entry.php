@@ -2,9 +2,6 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
-use Blueways\BwBookingmanager\Utility\IcsUtility;
-use DateTime;
-
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -412,21 +409,21 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the boolean state of newsletter
-     *
-     * @return bool
-     */
-    public function isNewsletter()
-    {
-        return $this->newsletter;
-    }
-
-    /**
      * Returns the newsletter
      *
      * @return bool $newsletter
      */
     public function getNewsletter()
+    {
+        return $this->newsletter;
+    }
+
+    /**
+     * Returns the boolean state of newsletter
+     *
+     * @return bool
+     */
+    public function isNewsletter()
     {
         return $this->newsletter;
     }
@@ -443,21 +440,21 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the confirmed
-     *
-     * @return bool $confirmed
-     */
-    public function getConfirmed()
-    {
-        return $this->confirmed;
-    }
-
-    /**
      * Returns the boolean state of confirmed
      *
      * @return bool
      */
     public function isConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * Returns the confirmed
+     *
+     * @return bool $confirmed
+     */
+    public function getConfirmed()
     {
         return $this->confirmed;
     }
@@ -675,51 +672,5 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         if ($feUser->getTelephone()) {
             $this->setPhone($feUser->getTelephone());
         }
-    }
-
-    public function IcsOutput(Ics $ics, \TYPO3\CMS\Extbase\Reflection\ClassSchema $classSchema)
-    {
-        $now = new DateTime();
-
-        $this->startDate->setTimezone($now->getTimezone());
-        $this->endDate->setTimezone($now->getTimezone());
-
-        $icsText = "BEGIN:VEVENT
-            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
-            DTSTAMP:" . $now->format('Ymd\THis') . "
-            SUMMARY:" . IcsUtility::compileTemplate($ics->getEntryTitle(), $this, $classSchema) . "
-            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getEntryDescription(), $this, $classSchema) . "
-            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
-            STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
-            LOCATION:" . IcsUtility::compileTemplate($ics->getEntryLocation(), $this, $classSchema) . "
-            END:VEVENT\n";
-
-        return $icsText;
-    }
-
-    public function getFullCalendarEvent(): array
-    {
-        $now = new DateTime();
-
-        $this->startDate->setTimezone($now->getTimezone());
-        $this->endDate->setTimezone($now->getTimezone());
-
-        $title = $this->prename . ' ' . $this->name;
-
-        return [
-            'title' => $title,
-            'start' => $this->startDate->format(DateTime::ATOM),
-            'end' => $this->endDate->format(DateTime::ATOM),
-            'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
-            'backendUrl' => [
-                'edit' => [
-                    'tx_bwbookingmanager_domain_model_entry' => [
-                        $this->getUid() => 'edit'
-                    ]
-                ]
-                //'returnUrl' => ''
-            ]
-        ];
     }
 }

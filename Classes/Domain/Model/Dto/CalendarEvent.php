@@ -6,6 +6,7 @@ use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 
 class CalendarEvent
@@ -29,6 +30,13 @@ class CalendarEvent
     {
         $this->start = new DateTime();
         $this->end = new DateTime();
+    }
+
+    public function __get(string $name)
+    {
+        if (property_exists($this, $name)) {
+            return $this->$name;
+        }
     }
 
     /**
@@ -112,7 +120,7 @@ class CalendarEvent
         $this->setTitle(implode(' ', $titleParts));
     }
 
-    public function getIcsOutput(Ics $ics, ClassSchema $classSchema)
+    public function getIcsOutput(Ics $ics)
     {
         $now = new DateTime();
 
@@ -122,15 +130,30 @@ class CalendarEvent
         $icsText = "BEGIN:VEVENT
             " . IcsUtility::getIcsDates($this->start, $this->end) . "
             DTSTAMP:" . $now->format('Ymd\THis') . "
-            SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this, $classSchema) . "
-            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this, $classSchema) . "
+            SUMMARY:" . IcsUtility::compileTemplate($this->getIcsTitle($ics), $this) . "
+            DESCRIPTION:" . IcsUtility::compileTemplate($this->getIcsDescription($ics), $this) . "
             UID:randomId-" . random_int(1, 9999999) . "
             STATUS:CONFIRMED
             LAST-MODIFIED:" . $now->format('Ymd\THis') . "
-            LOCATION:" . IcsUtility::compileTemplate($ics->getTimeslotLocation(), $this, $classSchema) . "
+            LOCATION:" . IcsUtility::compileTemplate($this->getIcsLocation($ics), $this) . "
             END:VEVENT\n";
 
         return $icsText;
+    }
+
+    public function getIcsTitle(Ics $ics): string
+    {
+        return '';
+    }
+
+    public function getIcsDescription(Ics $ics): string
+    {
+        return '';
+    }
+
+    public function getIcsLocation(Ics $ics): string
+    {
+        return '';
     }
 
     /**
@@ -148,5 +171,4 @@ class CalendarEvent
     {
         $this->end = $end;
     }
-
 }

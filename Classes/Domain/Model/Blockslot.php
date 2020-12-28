@@ -2,10 +2,6 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
-use Blueways\BwBookingmanager\Utility\IcsUtility;
-use DateTime;
-use TYPO3\CMS\Extbase\Reflection\ClassSchema;
-
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -112,27 +108,6 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->calendars = $calendars;
     }
 
-    public function getIcsOutput(Ics $ics, ClassSchema $classSchema): string
-    {
-        $now = new DateTime();
-
-        $this->startDate->setTimezone($now->getTimezone());
-        $this->endDate->setTimezone($now->getTimezone());
-
-        $icsText = "BEGIN:VEVENT
-            " . IcsUtility::getIcsDates($this->startDate, $this->endDate) . "
-            DTSTAMP:" . $now->format('Ymd\THis') . "
-            SUMMARY:" . IcsUtility::compileTemplate($ics->getBlockslotTitle(), $this, $classSchema) . "
-            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getBlockslotDescription(), $this, $classSchema) . "
-            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
-            STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
-            LOCATION:" . IcsUtility::compileTemplate($ics->getBlockslotLocation(), $this, $classSchema) . "
-            END:VEVENT\n";
-
-        return $icsText;
-    }
-
     /**
      * Returns the startDate
      *
@@ -173,22 +148,5 @@ class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setEndDate(\DateTime $endDate)
     {
         $this->endDate = $endDate;
-    }
-
-    public function getFullCalendarEvent(): array
-    {
-        $now = new DateTime();
-
-        $this->startDate->setTimezone($now->getTimezone());
-        $this->endDate->setTimezone($now->getTimezone());
-
-        return [
-            'title' => $this->reason,
-            'start' => $this->startDate->format(DateTime::ATOM),
-            'end' => $this->endDate->format(DateTime::ATOM),
-            'allDay' => IcsUtility::isFullDay($this->startDate, $this->endDate),
-            'display' => 'background',
-            'color' => 'rgba(255,0,0,0.5)'
-        ];
     }
 }

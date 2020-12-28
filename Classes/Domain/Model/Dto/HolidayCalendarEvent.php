@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use Blueways\BwBookingmanager\Domain\Model\Holiday;
+use Blueways\BwBookingmanager\Domain\Model\Ics;
 
 class HolidayCalendarEvent extends CalendarEvent
 {
@@ -19,5 +20,10 @@ class HolidayCalendarEvent extends CalendarEvent
         $event->setEnd($holiday->getEndDate());
 
         return $event;
+    }
+
+    public function getIcsTitle(Ics $ics): string
+    {
+        return $ics->getHolidayTitle();
     }
 }

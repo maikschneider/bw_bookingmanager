@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use Blueways\BwBookingmanager\Domain\Model\Blockslot;
+use Blueways\BwBookingmanager\Domain\Model\Ics;
 
 class BlockslotCalendarEvent extends CalendarEvent
 {
@@ -18,5 +19,10 @@ class BlockslotCalendarEvent extends CalendarEvent
         $event->setEnd($blockslot->getEndDate());
 
         return $event;
+    }
+
+    public function getIcsTitle(Ics $ics): string
+    {
+        return $ics->getBlockslotTitle();
     }
 }
