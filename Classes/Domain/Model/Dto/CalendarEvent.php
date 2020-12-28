@@ -6,8 +6,6 @@ use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 
 class CalendarEvent
 {
@@ -26,10 +24,48 @@ class CalendarEvent
 
     protected int $calendar = 0;
 
+    protected string $url = '';
+
+    protected int $uid = 0;
+
+    protected int $pid = 0;
+
     public function __construct()
     {
         $this->start = new DateTime();
         $this->end = new DateTime();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUid(): int
+    {
+        return $this->uid;
+    }
+
+    /**
+     * @param int $uid
+     */
+    public function setUid(int $uid): void
+    {
+        $this->uid = $uid;
     }
 
     public function __get(string $name)
@@ -39,32 +75,6 @@ class CalendarEvent
         }
     }
 
-    /**
-     * @return int
-     */
-    public function getCalendar(): int
-    {
-        return $this->calendar;
-    }
-
-    /**
-     * @param int $calendar
-     */
-    public function setCalendar(int $calendar): void
-    {
-        $this->calendar = $calendar;
-    }
-
-    public function setStartFromUnixTimestamp(int $timestamp): void
-    {
-        $this->start->setTimestamp($timestamp);
-    }
-
-    public function setEndFromUnixTimestamp(int $timestamp): void
-    {
-        $this->end->setTimestamp($timestamp);
-    }
-
     public function getFullCalendarOutput(): array
     {
         // @TODO: check if necessary
@@ -72,7 +82,7 @@ class CalendarEvent
 //        $this->start->setTimezone($now->getTimezone());
 //        $this->end->setTimezone($now->getTimezone());
 
-        return [
+        $fullCalendarConfig = [
             'title' => $this->getTitle(),
             'start' => $this->start->format(DateTime::ATOM),
             'end' => $this->end->format(DateTime::ATOM),
@@ -80,6 +90,12 @@ class CalendarEvent
             'color' => $this->getColor(),
             'display' => $this->getDisplay()
         ];
+
+        if ($this->url !== '') {
+            $fullCalendarConfig['url'] = $this->url;
+        }
+
+        return $fullCalendarConfig;
     }
 
     /**
@@ -170,5 +186,9 @@ class CalendarEvent
     public function setEnd(DateTime $end): void
     {
         $this->end = $end;
+    }
+
+    public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
+    {
     }
 }

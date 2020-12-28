@@ -63,6 +63,7 @@ class FullCalendarUtility
         foreach ($events as $event) {
 
             $event->translateTitle($this->llService);
+            $event->addBackendEditActionLink($this->uriBuilder);
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
         }
 

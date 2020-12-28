@@ -157,7 +157,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute(true);
     }
 
-    public function getCalendarEventsInCalendar($calendars, \DateTime $startDate, \DateTime $endDate)
+    public function getCalendarEventsInCalendar($calendars, \DateTime $startDate, \DateTime $endDate): array
     {
         $timeslotResults = [];
         foreach ($calendars as $calendar) {
@@ -168,7 +168,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $timeslots;
     }
 
-    private function mapTimeslotResultToCalendarEvent(array $timeslots)
+    private function mapTimeslotResultToCalendarEvent(array $timeslots): array
     {
         if (!count($timeslots)) {
             return [];
@@ -176,14 +176,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         $calendarEvents = [];
         foreach ($timeslots as $timeslot) {
-            $event = new TimeslotCalendarEvent();
-            $event->setStartFromUnixTimestamp($timeslot['t_start_date']);
-            $event->setEndFromUnixTimestamp($timeslot['t_end_date']);
-            $event->setMaxWeight($timeslot['max_weight']);
-            $event->setBookedWeight($timeslot['booked_weight']);
-            $event->setCalendar($timeslot['calendar']);
-
-            $calendarEvents[] = $event;
+            $calendarEvents[] = TimeslotCalendarEvent::createFromRawSql($timeslot);
         }
         return $calendarEvents;
     }

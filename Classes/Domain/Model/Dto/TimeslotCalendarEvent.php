@@ -6,9 +6,24 @@ use Blueways\BwBookingmanager\Domain\Model\Ics;
 
 class TimeslotCalendarEvent extends CalendarEvent
 {
+
     protected int $maxWeight = 0;
 
     protected int $bookedWeight = 0;
+
+    public static function createFromRawSql(array $timeslot): TimeslotCalendarEvent
+    {
+        $event = new self();
+        $event->uid = $timeslot['uid'];
+        $event->pid = $timeslot['pid'];
+        $event->start->setTimestamp($timeslot['t_start_date']);
+        $event->end->setTimestamp($timeslot['t_end_date']);
+        $event->maxWeight = $timeslot['max_weight'];
+        $event->bookedWeight = $timeslot['booked_weight'];
+        $event->calendar = $timeslot['calendar'];
+
+        return $event;
+    }
 
     public function getTitle(): string
     {
@@ -40,20 +55,29 @@ class TimeslotCalendarEvent extends CalendarEvent
         return true;
     }
 
-    /**
-     * @param int $maxWeight
-     */
-    public function setMaxWeight(int $maxWeight): void
+    public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
     {
-        $this->maxWeight = $maxWeight;
-    }
+        if (!$this->getIsBookable()) {
+            return;
+        }
 
-    /**
-     * @param int $bookedWeight
-     */
-    public function setBookedWeight(int $bookedWeight): void
-    {
-        $this->bookedWeight = $bookedWeight;
+        $urlParams = [
+            'edit' => [
+                'tx_bwbookingmanager_domain_model_entry' => [
+                    $this->pid => 'new'
+                ]
+            ],
+            'defVals' => [
+                'tx_bwbookingmanager_domain_model_entry' => [
+                    'calendar' => $this->calendar,
+                    'startDate' => $this->start->getTimestamp(),
+                    'endDate' => $this->end->getTimestamp()
+                ]
+            ],
+
+        ];
+
+        $this->url = $uriBuilder->buildUriFromRoute('record_edit', $urlParams)->__toString();
     }
 
     public function getColor(): string
