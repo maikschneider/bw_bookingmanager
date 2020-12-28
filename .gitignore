@@ -10,3 +10,4 @@ bin
 .php_cs.cache
 yarn.lock
 .ddev
+.env

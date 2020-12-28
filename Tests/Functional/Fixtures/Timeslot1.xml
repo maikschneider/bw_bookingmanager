@@ -1,0 +1,27 @@
+<dataset>
+	<!--
+	Start: 09:20 30-11-2020
+	End: 10:50 30-11-2020
+	Repeats: Mo-Fr
+	Repeat end: 00:00 23-12-2020
+	-->
+	<tx_bwbookingmanager_domain_model_timeslot>
+		<uid>1</uid>
+		<pid>2</pid>
+		<tstamp>1608796674</tstamp>
+		<crdate>1606928746</crdate>
+		<cruser_id>1</cruser_id>
+		<deleted>0</deleted>
+		<hidden>0</hidden>
+		<start_date>1606728000</start_date>
+		<end_date>1606733400</end_date>
+		<repeat_type>4</repeat_type>
+		<repeat_days>62</repeat_days>
+		<max_weight>3</max_weight>
+		<is_bookable_hooks>0</is_bookable_hooks>
+		<holiday_setting>1</holiday_setting>
+		<entries>0</entries>
+		<repeat_end>1608681600</repeat_end>
+		<calendar>1</calendar>
+	</tx_bwbookingmanager_domain_model_timeslot>
+</dataset>
