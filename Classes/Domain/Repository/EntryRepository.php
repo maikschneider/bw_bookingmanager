@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
 use DateTime;
 
 /***
@@ -17,12 +18,12 @@ use DateTime;
  */
 class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-    public function findInCalendars(array $calendarUids, DateTime $startDate, \DateTime $endDate)
+    public function findInCalendars($calendars, DateTime $startDate, \DateTime $endDate)
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd([
-                $query->in('calendar.uid', $calendarUids),
+                $query->in('calendar.uid', $calendars),
                 $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
                 $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
             ])
@@ -61,6 +62,21 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->getQuerySettings()->setRespectStoragePage($respectStoragePage);
 
         return $query->execute();
+    }
+
+    public function getCalendarEventsInCalendar($calendars, DateTime $startDate, DateTime $endDate): array
+    {
+        $events = [];
+        $holidays = $this->findInCalendars($calendars, $startDate, $endDate);
+
+        if (!$holidays->count()) {
+            return [];
+        }
+
+        foreach ($holidays as $holiday) {
+            $events[] = EntryCalendarEvent::createFromEntity($holiday);
+        }
+        return $events;
     }
 
     /**

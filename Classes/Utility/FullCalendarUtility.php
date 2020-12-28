@@ -8,7 +8,6 @@ use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\HolidayRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
-use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -31,8 +30,6 @@ class FullCalendarUtility
     public function getEvents($pid, $start, $end): array
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \Blueways\BwBookingmanager\Utility\TimeslotUtility $timeslotUtil */
-        $timeslotUtil = $objectManager->get(TimeslotUtility::class);
         $startDate = new \DateTime($start);
         $endDate = new \DateTime($end);
 
@@ -41,39 +38,18 @@ class FullCalendarUtility
         $blockslotRepository = $objectManager->get(BlockslotRepository::class);
         $holidayRepository = $objectManager->get(HolidayRepository::class);
         $entryRepository = $objectManager->get(EntryRepository::class);
-        $calendars = $objectManager->get(ObjectStorage::class);
-        $queryResult = $calendarRepository->findAllByPid($pid);
-        if (null !== $queryResult) {
-            foreach ($queryResult as $object) {
-                $calendars->attach($object);
-            }
-        }
-        //$timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
+        $calendars = $calendarRepository->findAllByPid($pid);
+
         $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $holidayEvents = $holidayRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
-        $entries = $entryRepository->findInCalendars(
-            CalendarRepository::getUidsFromObjectStorage($calendars),
-            $startDate,
-            $endDate
-        );
+        $entryEvents = $entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
 
-
-        $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents);
+        $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents);
 
         $events = $this->getOutputForBackendModule($events);
 
         return $events;
-    }
-
-    public function injectLlService(\TYPO3\CMS\Lang\LanguageService $llService)
-    {
-        $this->llService = $llService;
-    }
-
-    public function injectUriBuilder(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
-    {
-        $this->uriBuilder = $uriBuilder;
     }
 
     /**
@@ -91,5 +67,15 @@ class FullCalendarUtility
         }
 
         return $fullCalendarEvents;
+    }
+
+    public function injectLlService(\TYPO3\CMS\Lang\LanguageService $llService)
+    {
+        $this->llService = $llService;
+    }
+
+    public function injectUriBuilder(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
+    {
+        $this->uriBuilder = $uriBuilder;
     }
 }
