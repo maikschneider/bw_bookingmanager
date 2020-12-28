@@ -16,7 +16,7 @@ use TYPO3\CMS\Extbase\Reflection\ClassSchema;
 /**
  * Blockslot
  */
-class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements CalendarEventInterface
+class Blockslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**

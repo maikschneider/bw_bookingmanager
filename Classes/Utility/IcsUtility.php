@@ -101,13 +101,13 @@ class IcsUtility
         // Ics for Timeslots
         if ($options[0] || $options[1]) {
             $timeslotRepository = $objectManager->get(TimeslotRepository::class);
-            $timeslots = $timeslotRepository->getTimeslotsForCalendars($calendars, $startDate, $endDate);
+            $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
             $classSchema = $reflectionService->getClassSchema(Timeslot::class);
 
-            /** @var \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot */
-            foreach ($timeslots as $timeslot) {
-                if (($options[0] && $timeslot->getIsBookable()) || ($options[1] && !$timeslot->getIsBookable())) {
-                    $feed .= $timeslot->getIcsOutput($ics, $classSchema);
+            /** @var \Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent $timeslotEvent */
+            foreach ($timeslotEvents as $timeslotEvent) {
+                if (($options[0] && $timeslotEvent->getIsBookable()) || ($options[1] && !$timeslotEvent->getIsBookable())) {
+                    $feed .= $timeslotEvent->getIcsOutput($ics, $classSchema);
                 }
             }
         }

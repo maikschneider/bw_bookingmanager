@@ -15,7 +15,7 @@ use DateTime;
 /**
  * Entry
  */
-class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements CalendarEventInterface
+class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**

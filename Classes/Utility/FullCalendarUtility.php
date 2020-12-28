@@ -2,11 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
-use Blueways\BwBookingmanager\Domain\Model\CalendarEventInterface;
+use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
+use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Lang\LanguageService;
@@ -26,8 +29,6 @@ class FullCalendarUtility
 
     public function getEvents($pid, $start, $end): array
     {
-        $events = [];
-
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \Blueways\BwBookingmanager\Utility\TimeslotUtility $timeslotUtil */
         $timeslotUtil = $objectManager->get(TimeslotUtility::class);
@@ -35,6 +36,9 @@ class FullCalendarUtility
         $endDate = new \DateTime($end);
 
         $calendarRepository = $objectManager->get(CalendarRepository::class);
+        $timeslotRepository = $objectManager->get(TimeslotRepository::class);
+        $blockslotRepository = $objectManager->get(BlockslotRepository::class);
+        $entryRepository = $objectManager->get(EntryRepository::class);
         $calendars = $objectManager->get(ObjectStorage::class);
         $queryResult = $calendarRepository->findAllByPid($pid);
         if (null !== $queryResult) {
@@ -42,30 +46,20 @@ class FullCalendarUtility
                 $calendars->attach($object);
             }
         }
-        $timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
-        $blockslots = $timeslotUtil->getBlockslots();
+        //$timeslots = $timeslotUtil->getTimeslots($calendars, $startDate, $endDate);
+        $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+        $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $holidays = $timeslotUtil->getHolidays();
-        $entries = $timeslotUtil->getEntries();
+        $entries = $entryRepository->findInCalendars(
+            CalendarRepository::getUidsFromObjectStorage($calendars),
+            $startDate,
+            $endDate
+        );
 
-        /** @var \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot */
-        foreach ($timeslots as $timeslot) {
-            if ($timeslot->getIsBookable()) {
-                $events[] = $this->getEventConfiguration($timeslot);
-            }
-        }
 
-        foreach ($blockslots as $blockslot) {
-            $events[] = $blockslot->getFullCalendarEvent();
-        }
+        $events = array_merge([], $timeslotEvents, $blockslotEvents);
 
-        foreach ($holidays as $holiday) {
-            $events[] = $holiday->getFullCalendarEvent();
-        }
-
-        /** @var \Blueways\BwBookingmanager\Domain\Model\Entry $entry */
-        foreach ($entries as $entry) {
-            $events[] = $this->getEventConfiguration($entry);
-        }
+        $events = $this->getOutputForBackendModule($events);
 
         return $events;
     }
@@ -80,12 +74,20 @@ class FullCalendarUtility
         $this->uriBuilder = $uriBuilder;
     }
 
-    private function getEventConfiguration(CalendarEventInterface $entity)
+    /**
+     * @param CalendarEvent[] $events
+     * @return array
+     */
+    private function getOutputForBackendModule(array $events): array
     {
-        $event = $entity->getFullCalendarEvent();
-        $event['url'] = $this->uriBuilder->buildUriFromRoute('record_edit', $event['backendUrl'])->__toString();
-        $event['title'] = $this->llService->sL($event['title']);
+        $fullCalendarEvents = [];
 
-        return $event;
+        foreach ($events as $event) {
+
+            $event->translateTitle($this->llService);
+            $fullCalendarEvents[] = $event->getFullCalendarOutput();
+        }
+
+        return $fullCalendarEvents;
     }
 }

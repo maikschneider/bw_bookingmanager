@@ -2,15 +2,32 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\BlockslotCalendarEvent;
+
 class BlockslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
 
-    public function findAllInRange(array $calendarUids, \DateTime $startDate, \DateTime $endDate)
+    public function getCalendarEventsInCalendar($calendars, \DateTime $startDate, \DateTime $endDate): array
+    {
+        $events = [];
+        $blockslots = $this->findAllInRange($calendars, $startDate, $endDate);
+
+        if (!$blockslots->count()) {
+            return [];
+        }
+
+        foreach ($blockslots as $blockslot) {
+            $events[] = BlockslotCalendarEvent::createFromEntity($blockslot);
+        }
+        return $events;
+    }
+
+    public function findAllInRange($calendars, \DateTime $startDate, \DateTime $endDate)
     {
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd([
-                $query->in('calendars.uid', $calendarUids),
+                $query->in('calendars.uid', $calendars),
                 $query->logicalNot(
                     $query->logicalOr([
                         $query->lessThanOrEqual('endDate', $startDate->getTimestamp()),

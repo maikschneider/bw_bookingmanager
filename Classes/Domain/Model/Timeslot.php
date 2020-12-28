@@ -21,7 +21,6 @@ use TYPO3\CMS\Extbase\Reflection\ReflectionService;
  */
 class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
-
     const REPEAT_NO = 0;
     const REPEAT_DAILY = 1;
     const REPEAT_WEEKLY = 2;
@@ -71,7 +70,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * entries
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
-     * @lazy
      */
     protected $entries = null;
 
@@ -357,8 +355,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $llPrefix = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.';
         $repeatingArray = self::getConsecutiveRepeatingDaysArray($repeatDays);
 
-        $repeatingArray = array_map(function ($repeatingEntry) use ($llPrefix, $llService){
-            if(is_array($repeatingEntry)) {
+        $repeatingArray = array_map(function ($repeatingEntry) use ($llPrefix, $llService) {
+            if (is_array($repeatingEntry)) {
                 return $llService->sL($llPrefix. $repeatingEntry[0]) . '-' . $llService->sL($llPrefix . $repeatingEntry[1]);
             }
             return $llService->sL($llPrefix . $repeatingEntry);
@@ -575,8 +573,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getBookedWeight()
     {
         $weight = 0;
-        foreach ($this->entries as $entry) {
-            $weight += $entry->getWeight();
+        if ($this->entries && $this->entries->count()) {
+            foreach ($this->entries as $entry) {
+                $weight += $entry->getWeight();
+            }
         }
         return $weight;
     }
@@ -606,7 +606,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * converts number of $isBookableHooks to array of activated hooks
      * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
      *
-     * @return Array
+     * @return array
      */
     public function getIsBookableHooksArray()
     {
@@ -647,26 +647,4 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->maxWeight - $this->getBookedWeight();
     }
-
-    public function getIcsOutput(Ics $ics, ClassSchema $classSchema)
-    {
-        $now = new DateTime();
-
-        $this->startDate->setTimezone($now->getTimezone());
-        $this->endDate->setTimezone($now->getTimezone());
-
-        $icsText = "BEGIN:VEVENT
-            " . IcsUtility::getIcsDates($this->getStartDate(), $this->getEndDate()) . "
-            DTSTAMP:" . $now->format('Ymd\THis') . "
-            SUMMARY:" . IcsUtility::compileTemplate($ics->getTimeslotTitle(), $this, $classSchema) . "
-            DESCRIPTION:" . IcsUtility::compileTemplate($ics->getTimeslotDescription(), $this, $classSchema) . "
-            UID:timeslot-" . $this->getUid() . "-" . random_int(1, 9999999) . "
-            STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
-            LOCATION:" . IcsUtility::compileTemplate($ics->getTimeslotLocation(), $this, $classSchema) . "
-            END:VEVENT\n";
-
-        return $icsText;
-    }
-
 }
