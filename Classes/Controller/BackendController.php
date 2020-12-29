@@ -4,8 +4,10 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -19,16 +21,15 @@ class BackendController
      *
      * @var ModuleTemplate
      */
-    protected $moduleTemplate;
+    protected ModuleTemplate $moduleTemplate;
 
     /**
      * @var ViewInterface
      */
-    protected $view;
+    protected ViewInterface $view;
 
     public function calendarAction(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
     {
-        $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplate::class);
         $this->initializeView('calendar');
 
         $params = $request->getQueryParams();
@@ -54,12 +55,52 @@ class BackendController
      *
      * @param string $templateName
      */
-    protected function initializeView(string $templateName)
+    protected function initializeView(string $templateName): void
     {
+        $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplate::class);
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
         $this->view->setTemplate($templateName);
         $this->view->setTemplateRootPaths(['EXT:bw_bookingmanager/Resources/Private/Templates/Backend']);
         $this->view->setPartialRootPaths(['EXT:bw_bookingmanager/Resources/Private/Partials/Backend']);
         $this->view->setLayoutRootPaths(['EXT:bw_bookingmanager/Resources/Private/Layouts/Backend']);
+
+        $this->generateMenu($templateName);
+    }
+
+    protected function generateMenu($currentTemplate)
+    {
+        $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('bw_bookingmanager');
+        $llPrefix = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:module.';
+
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+
+        $actions = [
+            ['action' => 'calendar', 'label' => 'shift', 'route' => 'bookingmanager_calendar'],
+            ['action' => 'entryList', 'label' => 'entryListing', 'route' => 'bookingmanager_entry_list'],
+        ];
+
+        foreach ($actions as $action) {
+            $item = $menu->makeMenuItem()
+                ->setTitle($this->getLanguageService()->sL($llPrefix . $action['label']))
+                ->setHref($uriBuilder->buildUriFromRoute($action['route']))
+                ->setActive($currentTemplate === $action['action']);
+            $menu->addMenuItem($item);
+        }
+
+        $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+    }
+
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    public function entryListAction(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
+    {
+        $this->initializeView('entryList');
+
+        $this->moduleTemplate->setContent($this->view->render());
+        return new HtmlResponse($this->moduleTemplate->renderContent());
     }
 }

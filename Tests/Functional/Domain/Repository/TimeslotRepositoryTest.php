@@ -2,10 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Tests\Functional\Domain\Repository;
 
-use Blueways\BwBookingmanager\Domain\Model\Calendar;
-use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
-use DateTime;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
