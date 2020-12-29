@@ -18,7 +18,10 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
@@ -73,7 +76,7 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
      *
      * @var BackendTemplateView
      */
-    protected string $defaultViewObjectName = BackendTemplateView::class;
+    protected $defaultViewObjectName = BackendTemplateView::class;
 
     /**
      * @param ViewInterface $view
@@ -196,18 +199,6 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
     public function timeslotAction()
     {
         $calendars = $this->calendarRepository->findAll();
-        $this->view->assign('calendars', $calendars);
-    }
-
-    public function shiftAction()
-    {
-        $calendars = $this->calendarRepository->findAll();
-
-        $events = [];
-        $events['extraParams'] = [];
-        $events['extraParams']['pid'] = $this->pageUid;
-
-        $this->view->assign('events', json_encode($events, JSON_THROW_ON_ERROR));
         $this->view->assign('calendars', $calendars);
     }
 
@@ -407,9 +398,9 @@ class AdministrationController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionC
         ];
         foreach ($buttons as $key => $tableConfiguration) {
             if ($this->getBackendUser()->isAdmin() || GeneralUtility::inList(
-                    $this->getBackendUser()->groupData['tables_modify'],
-                    $tableConfiguration['table']
-                )
+                $this->getBackendUser()->groupData['tables_modify'],
+                $tableConfiguration['table']
+            )
             ) {
                 // @TODO repair translation
                 //$title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);

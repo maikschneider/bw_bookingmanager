@@ -6,10 +6,11 @@ use Blueways\BwBookingmanager\Domain\Model\Ics;
 
 class TimeslotCalendarEvent extends CalendarEvent
 {
-
     protected int $maxWeight = 0;
 
     protected int $bookedWeight = 0;
+
+    protected int $isBookableHooks = 0;
 
     public static function createFromRawSql(array $timeslot): TimeslotCalendarEvent
     {
@@ -21,6 +22,7 @@ class TimeslotCalendarEvent extends CalendarEvent
         $event->maxWeight = $timeslot['max_weight'];
         $event->bookedWeight = $timeslot['booked_weight'];
         $event->calendar = $timeslot['calendar'];
+        $event->isBookableHooks = $timeslot['is_bookable_hooks'];
 
         return $event;
     }
@@ -31,26 +33,45 @@ class TimeslotCalendarEvent extends CalendarEvent
             return $this->title;
         }
         $title = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_timeslot.xlf:';
-        $title .= $this->getIsBookable() ? 'free' : 'booked';
+        if ($this->isInPast() || !$this->getIsBookableByHooks()) {
+            $title .= 'notBookable';
+        } elseif ($this->isBookedUp()) {
+            $title .= 'booked';
+        } else {
+            $title .= 'free';
+        }
         $title .= $this->maxWeight === 1 ? '' : ' ' . $this->bookedWeight . '/' . $this->maxWeight;
 
         return $title;
     }
 
+    public function isInPast()
+    {
+        $now = new \DateTime('now');
+        return $this->start < $now;
+    }
+
+    public function isBookedUp()
+    {
+        return $this->bookedWeight >= $this->maxWeight;
+    }
+
     public function getIsBookable(): bool
     {
         // check date (only if in future)
-        $now = new \DateTime('now');
-        if ($this->start < $now) {
+        if ($this->isInPast()) {
             return false;
         }
 
         // check weight
-        if ($this->bookedWeight >= $this->maxWeight) {
+        if ($this->isBookedUp()) {
             return false;
         }
 
-        // @TODO: check Hooks
+        // check activated hooks hooks
+        if (!$this->getIsBookableByHooks()) {
+            return false;
+        }
 
         return true;
     }
@@ -77,11 +98,20 @@ class TimeslotCalendarEvent extends CalendarEvent
 
         ];
 
-        $this->url = $uriBuilder->buildUriFromRoute('record_edit', $urlParams)->__toString();
+        $returnParams = [
+            'id' => $this->pid
+        ];
+
+        $this->url = $uriBuilder->buildUriFromRoute('bookingmanager_calendar', $returnParams)->__toString();
+//        $this->url = $uriBuilder->buildUriFromRoute('record_edit', $urlParams)->__toString();
     }
 
     public function getColor(): string
     {
+        $now = new \DateTime('now');
+        if ($this->start < $now) {
+            return '#848484';
+        }
         return $this->getIsBookable() ? 'green' : 'red';
     }
 
@@ -98,5 +128,43 @@ class TimeslotCalendarEvent extends CalendarEvent
     public function getIcsLocation(Ics $ics): string
     {
         return $ics->getTimeslotLocation();
+    }
+
+    private function getIsBookableByHooks()
+    {
+        $activeHooks = $this->getIsBookableHooksArray();
+
+        foreach ($activeHooks as $key => $isActiveHook) {
+            // dont call hook if not checked via TCA
+            if (!$isActiveHook) {
+                continue;
+            }
+
+            // get the hook from offset of global registed hooks array, make instance and call it
+            $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
+            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
+            if (!$_procObj->isBookable($this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getIsBookableHooksArray()
+    {
+        $isBookableHooks = $this->isBookableHooks;
+
+        return array_map(
+            function ($value) {
+                return $value === '1';
+            },
+            array_reverse(str_split(decbin($isBookableHooks)))
+        );
+    }
+
+    public function getStartDate()
+    {
+        return $this->start;
     }
 }

@@ -27,13 +27,27 @@ call_user_func(
                 'tx_bookingmanager_m1',
                 '',
                 array(
-                    'Administration' => 'index, timeslot, newEntry, blockslot, newBlockslot, dashboard, shift',
+                    'Administration' => 'index, timeslot, newEntry, blockslot, newBlockslot, dashboard',
                 ),
                 array(
                     'access' => 'user,group',
                     'icon' => 'EXT:bw_bookingmanager/Resources/Public/Icons/module_administration.svg',
                     'labels' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_m1.xlf',
                 )
+            );
+
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
+                'web',
+                'bwbookingmanager',
+                'bottom',
+                null,
+                [
+                    'routeTarget' => \Blueways\BwBookingmanager\Controller\BackendController::class . '::calendarAction',
+                    'access' => 'user,group',
+                    'name' => 'web_bwbookingmanager',
+                    'icon' => 'EXT:bw_bookingmanager/Resources/Public/Icons/module_administration.svg',
+                    'labels' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_m1.xlf'
+                ]
             );
 
             // icons

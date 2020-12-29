@@ -36,6 +36,9 @@
 			<trans-unit id="booked">
 				<source>Booked</source>
 			</trans-unit>
+			<trans-unit id="notBookable">
+				<source>Not bookable</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
