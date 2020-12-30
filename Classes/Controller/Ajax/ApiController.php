@@ -25,4 +25,16 @@ class ApiController extends ActionController
         return $response;
     }
 
+    public function userSettingAction(ServerRequestInterface $request, Response $response): Response
+    {
+        $body = $request->getParsedBody();
+
+        if (isset($body['viewState'])) {
+            $moduleDataIdentifier = 'bwbookingmanager/calendarViewState-' . $body['viewState']['pid'];
+            $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, $body['viewState']);
+        }
+
+        return $response;
+    }
+
 }

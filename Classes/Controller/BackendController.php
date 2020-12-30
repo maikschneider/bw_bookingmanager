@@ -50,8 +50,9 @@ class BackendController
         $this->request = $request;
         $pid = $this->getCurrentPid();
 
-        $params = $request->getQueryParams();
-        $startDate = $params['startDate'] ?? '';
+        $viewState = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?: [];
+        $startDate = $viewState ? $viewState['start'] : '';
+        $startView = $viewState ? $viewState['calendarView'] : '';
 
         $this->initializeView('calendar');
 
@@ -67,6 +68,7 @@ class BackendController
         $this->view->assign('calendars', $calendars);
         $this->view->assign('language', $language);
         $this->view->assign('startDate', $startDate);
+        $this->view->assign('startView', $startView);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());

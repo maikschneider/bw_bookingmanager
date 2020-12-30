@@ -30,6 +30,16 @@ class BackendCalendar {
   public bindEvents() {
   }
 
+  public saveViewState(pid, args) {
+    $.post(TYPO3.settings.ajaxUrls['api_user_setting'], {
+      viewState: {
+        pid: pid,
+        calendarView: args.view.type,
+        start: args.startStr
+      }
+    });
+  }
+
   public renderCalendar() {
     const calendarEl = document.getElementById('calendar');
 
@@ -39,15 +49,21 @@ class BackendCalendar {
     // onload date
     const startDate = calendarEl.hasAttribute('data-start-date') && calendarEl.getAttribute('data-start-date') ? calendarEl.getAttribute('data-start-date') : new Date();
 
+    // startView
+    const startView = calendarEl.hasAttribute('data-start-view') && calendarEl.getAttribute('data-start-view') ? calendarEl.getAttribute('data-start-view') : 'dayGridMonth';
+
     // construct ajax url endpoints
     const events = JSON.parse(calendarEl.getAttribute('data-events'));
     events.url = TYPO3.settings.ajaxUrls['api_calendar_show'];
+
+    const pid = events.extraParams.pid;
 
     this.calendar = new Calendar(calendarEl, {
       locales: [deLocale],
       initialDate: startDate,
       timeZone: 'Europe/Berlin',
       locale: language,
+      initialView: startView,
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
@@ -62,7 +78,10 @@ class BackendCalendar {
       navLinks: true,
       nowIndicator: true,
       dayMaxEvents: true,
-      events: events
+      events: events,
+      datesSet: (args) => {
+        this.saveViewState(pid, args);
+      }
     });
 
     this.calendar.render();

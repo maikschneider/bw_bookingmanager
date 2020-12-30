@@ -193,8 +193,7 @@ class CalendarEvent
     public function getBackendReturnUrl(UriBuilder $uriBuilder)
     {
         $params = [
-            'id' => $this->pid,
-            'startDate' => $this->start->format('Y-m-d')
+            'id' => $this->pid
         ];
 
         return (string)$uriBuilder->buildUriFromRoute('bookingmanager_calendar', $params);
