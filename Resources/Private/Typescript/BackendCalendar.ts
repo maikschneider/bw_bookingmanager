@@ -30,12 +30,12 @@ class BackendCalendar {
   public bindEvents() {
   }
 
-  public saveViewState(pid, args) {
+  public saveViewState(pid) {
     $.post(TYPO3.settings.ajaxUrls['api_user_setting'], {
       viewState: {
         pid: pid,
-        calendarView: args.view.type,
-        start: args.startStr
+        calendarView: this.calendar.view.type,
+        start: this.calendar.currentData.currentDate.toISOString()
       }
     });
   }
@@ -81,8 +81,8 @@ class BackendCalendar {
       nowIndicator: true,
       dayMaxEvents: true,
       events: events,
-      datesSet: (args) => {
-        this.saveViewState(pid, args);
+      datesSet: () => {
+        this.saveViewState(pid);
       }
     });
 
