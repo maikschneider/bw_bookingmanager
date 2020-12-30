@@ -38,22 +38,6 @@ class CalendarEvent
     }
 
     /**
-     * @return string
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     */
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
-    }
-
-    /**
      * @return int
      */
     public function getUid(): int
@@ -89,12 +73,9 @@ class CalendarEvent
             'end' => $this->end->format(DateTime::ATOM),
             'allDay' => static::isFullDay($this->start, $this->end),
             'color' => $this->getColor(),
-            'display' => $this->getDisplay()
+            'display' => $this->getDisplay(),
+            'url' => $this->getUrl()
         ];
-
-        if ($this->url !== '') {
-            $fullCalendarConfig['url'] = $this->url;
-        }
 
         return $fullCalendarConfig;
     }
@@ -125,6 +106,22 @@ class CalendarEvent
     public function getDisplay(): string
     {
         return $this->display;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 
     public function translateTitle(LanguageService $llService): void
