@@ -168,6 +168,18 @@
 				<source>This entry could not be deleted, it's too late.</source>
 				<target>Der Eintrag kann nicht gelöscht werden.</target>
 			</trans-unit>
+			<trans-unit id="free">
+				<source>Free</source>
+				<target>Frei</target>
+			</trans-unit>
+			<trans-unit id="booked">
+				<source>Booked</source>
+				<target>Gebucht</target>
+			</trans-unit>
+			<trans-unit id="notBookable">
+				<source>Not bookable</source>
+				<target>Nicht buchbar</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

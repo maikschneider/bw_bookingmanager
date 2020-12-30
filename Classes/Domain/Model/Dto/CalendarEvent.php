@@ -31,6 +31,8 @@ class CalendarEvent
 
     protected int $pid = 0;
 
+    protected string $tooltip = '';
+
     public function __construct()
     {
         $this->start = new DateTime();
@@ -74,7 +76,8 @@ class CalendarEvent
             'allDay' => static::isFullDay($this->start, $this->end),
             'color' => $this->getColor(),
             'display' => $this->getDisplay(),
-            'url' => $this->getUrl()
+            'url' => $this->getUrl(),
+            'tooltip' => $this->tooltip
         ];
 
         return $fullCalendarConfig;
@@ -197,5 +200,9 @@ class CalendarEvent
         ];
 
         return (string)$uriBuilder->buildUriFromRoute('bookingmanager_calendar', $params);
+    }
+
+    public function addBackendModuleToolTip()
+    {
     }
 }

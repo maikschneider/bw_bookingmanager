@@ -5,6 +5,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import deLocale from '@fullcalendar/core/locales/de';
 import '../Scss/backendCalendar.scss';
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
 
 declare global {
   interface Window {
@@ -83,6 +85,12 @@ class BackendCalendar {
       events: events,
       datesSet: () => {
         this.saveViewState(pid);
+      },
+      eventDidMount: (info) => {
+        if (!info.event.extendedProps.tooltip) {
+          return;
+        }
+        const tooltip = tippy(info.el, {content: info.event.extendedProps.tooltip});
       }
     });
 

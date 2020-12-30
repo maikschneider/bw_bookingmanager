@@ -3,9 +3,11 @@
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use Blueways\BwBookingmanager\Domain\Model\Ics;
+use TYPO3\CMS\Core\Localization\LanguageService;
 
 class TimeslotCalendarEvent extends CalendarEvent
 {
+
     protected int $maxWeight = 0;
 
     protected int $bookedWeight = 0;
@@ -32,7 +34,7 @@ class TimeslotCalendarEvent extends CalendarEvent
         if ($this->title !== '') {
             return $this->title;
         }
-        $title = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_timeslot.xlf:';
+        $title = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:';
         if ($this->isInPast() || !$this->getIsBookableByHooks()) {
             $title .= 'notBookable';
         } elseif ($this->isBookedUp()) {
@@ -40,6 +42,7 @@ class TimeslotCalendarEvent extends CalendarEvent
         } else {
             $title .= 'free';
         }
+        $title = $this->getLanguageService()->sL($title);
         $title .= $this->maxWeight === 1 ? '' : ' ' . $this->bookedWeight . '/' . $this->maxWeight;
 
         return $title;
@@ -49,80 +52,6 @@ class TimeslotCalendarEvent extends CalendarEvent
     {
         $now = new \DateTime('now');
         return $this->start < $now;
-    }
-
-    public function isBookedUp()
-    {
-        return $this->bookedWeight >= $this->maxWeight;
-    }
-
-    public function getIsBookable(): bool
-    {
-        // check date (only if in future)
-        if ($this->isInPast()) {
-            return false;
-        }
-
-        // check weight
-        if ($this->isBookedUp()) {
-            return false;
-        }
-
-        // check activated hooks hooks
-        if (!$this->getIsBookableByHooks()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
-    {
-        if (!$this->getIsBookable()) {
-            return;
-        }
-
-        $urlParams = [
-            'edit' => [
-                'tx_bwbookingmanager_domain_model_entry' => [
-                    $this->pid => 'new'
-                ]
-            ],
-            'defVals' => [
-                'tx_bwbookingmanager_domain_model_entry' => [
-                    'calendar' => $this->calendar,
-                    'startDate' => $this->start->getTimestamp(),
-                    'endDate' => $this->end->getTimestamp()
-                ]
-            ],
-            'returnUrl' => $this->getBackendReturnUrl($uriBuilder)
-        ];
-
-        $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);
-    }
-
-    public function getColor(): string
-    {
-        $now = new \DateTime('now');
-        if ($this->start < $now) {
-            return '#848484';
-        }
-        return $this->getIsBookable() ? 'green' : 'red';
-    }
-
-    public function getIcsTitle(Ics $ics): string
-    {
-        return $ics->getTimeslotTitle();
-    }
-
-    public function getIcsDescription(Ics $ics): string
-    {
-        return $ics->getTimeslotDescription();
-    }
-
-    public function getIcsLocation(Ics $ics): string
-    {
-        return $ics->getTimeslotLocation();
     }
 
     private function getIsBookableByHooks()
@@ -158,8 +87,96 @@ class TimeslotCalendarEvent extends CalendarEvent
         );
     }
 
+    public function isBookedUp()
+    {
+        return $this->bookedWeight >= $this->maxWeight;
+    }
+
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
+    {
+        if (!$this->getIsBookable()) {
+            return;
+        }
+
+        $urlParams = [
+            'edit' => [
+                'tx_bwbookingmanager_domain_model_entry' => [
+                    $this->pid => 'new'
+                ]
+            ],
+            'defVals' => [
+                'tx_bwbookingmanager_domain_model_entry' => [
+                    'calendar' => $this->calendar,
+                    'startDate' => $this->start->getTimestamp(),
+                    'endDate' => $this->end->getTimestamp()
+                ]
+            ],
+            'returnUrl' => $this->getBackendReturnUrl($uriBuilder)
+        ];
+
+        $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);
+    }
+
+    public function getIsBookable(): bool
+    {
+        // check date (only if in future)
+        if ($this->isInPast()) {
+            return false;
+        }
+
+        // check weight
+        if ($this->isBookedUp()) {
+            return false;
+        }
+
+        // check activated hooks hooks
+        if (!$this->getIsBookableByHooks()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getColor(): string
+    {
+        $now = new \DateTime('now');
+        if ($this->start < $now) {
+            return '#848484';
+        }
+        return $this->getIsBookable() ? 'green' : 'red';
+    }
+
+    public function getIcsTitle(Ics $ics): string
+    {
+        return $ics->getTimeslotTitle();
+    }
+
+    public function getIcsDescription(Ics $ics): string
+    {
+        return $ics->getTimeslotDescription();
+    }
+
+    public function getIcsLocation(Ics $ics): string
+    {
+        return $ics->getTimeslotLocation();
+    }
+
     public function getStartDate()
     {
         return $this->start;
+    }
+
+    public function addBackendModuleToolTip()
+    {
+        if (!$this->getIsBookable()) {
+            return;
+        }
+
+        $this->tooltip = '+ ' . $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new');
     }
 }

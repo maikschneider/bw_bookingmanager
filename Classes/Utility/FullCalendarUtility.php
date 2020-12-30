@@ -62,17 +62,13 @@ class FullCalendarUtility
 
         foreach ($events as $event) {
 
-            $event->translateTitle($this->llService);
+            //$event->translateTitle($this->llService);
             $event->addBackendEditActionLink($this->uriBuilder);
+            $event->addBackendModuleToolTip();
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
         }
 
         return $fullCalendarEvents;
-    }
-
-    public function injectLlService(\TYPO3\CMS\Core\Localization\LanguageService $llService)
-    {
-        $this->llService = $llService;
     }
 
     public function injectUriBuilder(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)

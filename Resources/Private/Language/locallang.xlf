@@ -147,6 +147,15 @@
 			<trans-unit id="flashmessage.delete.toolate.message">
 				<source>This entry could not be deleted, it's too late.</source>
 			</trans-unit>
+			<trans-unit id="free">
+				<source>Free</source>
+			</trans-unit>
+			<trans-unit id="booked">
+				<source>Booked</source>
+			</trans-unit>
+			<trans-unit id="notBookable">
+				<source>Not bookable</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -30,15 +30,6 @@
 			<trans-unit id="validation_hooks.description">
 				<source>validation hooks</source>
 			</trans-unit>
-			<trans-unit id="free">
-				<source>Free</source>
-			</trans-unit>
-			<trans-unit id="booked">
-				<source>Booked</source>
-			</trans-unit>
-			<trans-unit id="notBookable">
-				<source>Not bookable</source>
-			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -28,7 +28,7 @@
     "style-loader": "^2.0.0",
     "sass-loader": "^10.1.0",
     "@fullcalendar/adaptive": "^5.4.0",
-    "@popperjs/core": "^2.5.4"
+    "tippy.js": "^6.2.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
