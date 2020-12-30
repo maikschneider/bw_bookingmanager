@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Localization\LanguageService;
 
 class CalendarEvent
@@ -190,5 +191,15 @@ class CalendarEvent
 
     public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
     {
+    }
+
+    public function getBackendReturnUrl(UriBuilder $uriBuilder)
+    {
+        $params = [
+            'id' => $this->pid,
+            'startDate' => $this->start->format('Y-m-d')
+        ];
+
+        return (string)$uriBuilder->buildUriFromRoute('bookingmanager_calendar', $params);
     }
 }

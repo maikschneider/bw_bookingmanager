@@ -95,15 +95,10 @@ class TimeslotCalendarEvent extends CalendarEvent
                     'endDate' => $this->end->getTimestamp()
                 ]
             ],
-
+            'returnUrl' => $this->getBackendReturnUrl($uriBuilder)
         ];
 
-        $returnParams = [
-            'id' => $this->pid
-        ];
-
-        $this->url = $uriBuilder->buildUriFromRoute('bookingmanager_calendar', $returnParams)->__toString();
-//        $this->url = $uriBuilder->buildUriFromRoute('record_edit', $urlParams)->__toString();
+        $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);
     }
 
     public function getColor(): string

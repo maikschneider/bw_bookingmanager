@@ -43,6 +43,10 @@
 				<source>New blockslot</source>
 				<target>Neuer Blockslot</target>
 			</trans-unit>
+			<trans-unit id="flexforms_general.mode.holiday_new">
+				<source>New holiday</source>
+				<target>Neue Ferien</target>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
                 <target>Kalender</target>

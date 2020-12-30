@@ -20,18 +20,32 @@ declare global {
  */
 class BackendCalendar {
 
+  public calendar: Calendar;
+
   public init() {
+    this.renderCalendar();
+    this.bindEvents();
+  }
+
+  public bindEvents() {
+  }
+
+  public renderCalendar() {
     const calendarEl = document.getElementById('calendar');
 
     // language
     const language = calendarEl.hasAttribute('data-language') && calendarEl.getAttribute('data-language') !== 'default' ? calendarEl.getAttribute('data-language') : 'en';
 
+    // onload date
+    const startDate = calendarEl.hasAttribute('data-start-date') && calendarEl.getAttribute('data-start-date') ? calendarEl.getAttribute('data-start-date') : new Date();
+
     // construct ajax url endpoints
     const events = JSON.parse(calendarEl.getAttribute('data-events'));
     events.url = TYPO3.settings.ajaxUrls['api_calendar_show'];
 
-    let calendar = new Calendar(calendarEl, {
+    this.calendar = new Calendar(calendarEl, {
       locales: [deLocale],
+      initialDate: startDate,
       timeZone: 'Europe/Berlin',
       locale: language,
       headerToolbar: {
@@ -51,7 +65,7 @@ class BackendCalendar {
       events: events
     });
 
-    calendar.render();
+    this.calendar.render();
   }
 }
 

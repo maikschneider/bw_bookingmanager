@@ -4,9 +4,13 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -28,15 +32,31 @@ class BackendController
      */
     protected ViewInterface $view;
 
-    public function calendarAction(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
+    protected ServerRequestInterface $request;
+
+    protected ObjectManager $objectManager;
+
+    protected $returnUrl;
+
+    public function __construct()
     {
-        $this->initializeView('calendar');
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $this->returnUrl = $uriBuilder->buildUriFromRoute('bookingmanager_calendar', []);
+    }
+
+    public function calendarAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $this->request = $request;
+        $pid = $this->getCurrentPid();
 
         $params = $request->getQueryParams();
-        $pid = (int)$params['id'];
+        $startDate = $params['startDate'] ?? '';
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $calendarRepository = $objectManager->get(CalendarRepository::class);
+        $this->initializeView('calendar');
+
+        $calendarRepository = $this->objectManager->get(CalendarRepository::class);
+        $language = $this->getLanguageService()->lang;
         $calendars = $calendarRepository->findAllByPid($pid);
 
         $events = [];
@@ -45,9 +65,18 @@ class BackendController
 
         $this->view->assign('events', json_encode($events, JSON_THROW_ON_ERROR));
         $this->view->assign('calendars', $calendars);
+        $this->view->assign('language', $language);
+        $this->view->assign('startDate', $startDate);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
+    }
+
+    protected function getCurrentPid(): int
+    {
+        $params = $this->request->getQueryParams();
+        $pid = (int)$params['id'];
+        return $pid ?: 0;
     }
 
     /**
@@ -65,6 +94,7 @@ class BackendController
         $this->view->setLayoutRootPaths(['EXT:bw_bookingmanager/Resources/Private/Layouts/Backend']);
 
         $this->generateMenu($templateName);
+        $this->createButtons($templateName);
     }
 
     protected function generateMenu($currentTemplate)
@@ -96,11 +126,119 @@ class BackendController
         return $GLOBALS['LANG'];
     }
 
+    protected function createButtons(string $currentTemplate)
+    {
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $currentPid = $this->getCurrentPid();
+
+        // Filter and print Buttons
+//        if ($this->request->getControllerActionName() === 'index') {
+//            $toggleButton = $buttonBar->makeLinkButton()
+//                ->setHref('#')
+//                ->setDataAttributes([
+//                    'togglelink' => '1',
+//                    'toggle' => 'tooltip',
+//                    'placement' => 'bottom',
+//                ])
+//                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.buttonTitle'))
+//                ->setIcon($this->iconFactory->getIcon('actions-filter', Icon::SIZE_SMALL));
+//
+//            $printButton = $buttonBar->makeLinkButton()
+//                ->setHref('#')
+//                ->setDataAttributes([
+//                    'toggle' => 'tooltip',
+//                    'placement' => 'bottom',
+//                ])
+//                ->setOnClick('window.print()')
+//                ->setTitle($this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.print.buttonTitle'))
+//                ->setIcon($this->iconFactory->getIcon('actions-file-csv', Icon::SIZE_SMALL));
+//
+//            $buttonBar->addButton($toggleButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+//            $buttonBar->addButton($printButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+//        }
+
+        // New Entry Button
+        $buttons = [
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_entry',
+                'label' => 'flexforms_general.mode.entry_new',
+                'icon' => 'ext-bwbookingmanager-type-entry'
+            ],
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_blockslot',
+                'label' => 'flexforms_general.mode.blockslot_new',
+                'icon' => 'ext-bwbookingmanager-type-blockslot'
+            ],
+            [
+                'table' => 'tx_bwbookingmanager_domain_model_holiday',
+                'label' => 'flexforms_general.mode.holiday_new',
+                'icon' => 'ext-bwbookingmanager-type-holiday'
+            ]
+        ];
+        foreach ($buttons as $key => $tableConfiguration) {
+
+            // check persmissions
+            $isAdmin = $this->getBackendUser()->isAdmin();
+            $allowedToEditTable = $this->getBackendUser()->check(
+                'tables_modify',
+                $tableConfiguration['table']
+            );
+
+            if (!$isAdmin && !$allowedToEditTable) {
+                continue;
+            }
+
+            $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+            $uri = $uriBuilder->buildUriFromRoute('record_edit', [
+                'edit' => [
+                    $tableConfiguration['table'] => [
+                        $currentPid => 'new'
+                    ]
+                ],
+            ]);
+
+            $viewButton = $buttonBar->makeLinkButton()
+                ->setHref($uri)
+                ->setDataAttributes([
+                    'toggle' => 'tooltip',
+                    'placement' => 'bottom',
+                    'title' => $title
+                ])
+                ->setTitle($title)
+                ->setIcon($iconFactory->getIcon(
+                    $tableConfiguration['icon'],
+                    Icon::SIZE_SMALL,
+                    'overlay-new'
+                ));
+            $buttonBar->addButton($viewButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
+        }
+
+        // Refresh
+        $refreshButton = $buttonBar->makeLinkButton()
+            ->setHref(GeneralUtility::getIndpEnv('REQUEST_URI'))
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.reload'))
+            ->setIcon($iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
+        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
+    }
+
+    private function getBackendUser()
+    {
+        return $GLOBALS['BE_USER'];
+    }
+
     public function entryListAction(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
     {
         $this->initializeView('entryList');
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
+    }
+
+    protected function getReturnUrl(): string
+    {
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+//        return (string)$uriBuilder->buildUriFromRoute()
     }
 }
