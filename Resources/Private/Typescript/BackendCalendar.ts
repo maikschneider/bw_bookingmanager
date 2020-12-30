@@ -23,6 +23,10 @@ class BackendCalendar {
   public init() {
     const calendarEl = document.getElementById('calendar');
 
+    // language
+    let language = calendarEl.hasAttribute('data-language') ? calendarEl.getAttribute('data-language') : '';
+    language = language === 'default' ? 'en' : language;
+
     // construct ajax url endpoints
     const events = JSON.parse(calendarEl.getAttribute('data-events'));
     events.url = TYPO3.settings.ajaxUrls['api_calendar_show'];
@@ -30,7 +34,7 @@ class BackendCalendar {
     let calendar = new Calendar(calendarEl, {
       locales: [deLocale],
       timeZone: 'Europe/Berlin',
-      locale: 'de',
+      locale: language,
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
