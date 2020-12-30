@@ -71,6 +71,8 @@ class BackendCalendar {
       },
       loading: (isLoading) => {
         const display = isLoading ? 'grid' : 'none';
+        const opacity = isLoading ? '0.5' : '1';
+        $(calendarEl).css('opacity', opacity);
         $('#loading').css('display', display);
       },
       weekNumbers: true,
