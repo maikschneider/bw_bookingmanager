@@ -24,8 +24,7 @@ class BackendCalendar {
     const calendarEl = document.getElementById('calendar');
 
     // language
-    let language = calendarEl.hasAttribute('data-language') ? calendarEl.getAttribute('data-language') : '';
-    language = language === 'default' ? 'en' : language;
+    const language = calendarEl.hasAttribute('data-language') && calendarEl.getAttribute('data-language') !== 'default' ? calendarEl.getAttribute('data-language') : 'en';
 
     // construct ajax url endpoints
     const events = JSON.parse(calendarEl.getAttribute('data-events'));
