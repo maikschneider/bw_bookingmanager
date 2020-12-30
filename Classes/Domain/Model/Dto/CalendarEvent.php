@@ -205,4 +205,9 @@ class CalendarEvent
     public function addBackendModuleToolTip()
     {
     }
+
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
+    }
 }

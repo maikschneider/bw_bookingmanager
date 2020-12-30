@@ -49,4 +49,9 @@ class EntryCalendarEvent extends CalendarEvent
 
         $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);
     }
+
+    public function addBackendModuleToolTip()
+    {
+        $this->tooltip = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:showEntry') . ' →';
+    }
 }

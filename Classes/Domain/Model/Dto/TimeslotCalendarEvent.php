@@ -92,11 +92,6 @@ class TimeslotCalendarEvent extends CalendarEvent
         return $this->bookedWeight >= $this->maxWeight;
     }
 
-    protected function getLanguageService(): LanguageService
-    {
-        return $GLOBALS['LANG'];
-    }
-
     public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
     {
         if (!$this->getIsBookable()) {

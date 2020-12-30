@@ -180,6 +180,10 @@
 				<source>Not bookable</source>
 				<target>Nicht buchbar</target>
 			</trans-unit>
+			<trans-unit id="showEntry">
+				<source>Show entry</source>
+				<target>Eintrag anzeigen</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

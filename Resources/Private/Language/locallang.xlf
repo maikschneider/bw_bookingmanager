@@ -156,6 +156,9 @@
 			<trans-unit id="notBookable">
 				<source>Not bookable</source>
 			</trans-unit>
+			<trans-unit id="showEntry">
+				<source>Show entry</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
