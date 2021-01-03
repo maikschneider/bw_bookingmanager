@@ -153,6 +153,9 @@
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
             </trans-unit>
+			<trans-unit id="administration.nocalendar">
+				<source>No calendar</source>
+			</trans-unit>
             <trans-unit id="administration.entryListing.headline">
                 <source>Booked entries</source>
             </trans-unit>
