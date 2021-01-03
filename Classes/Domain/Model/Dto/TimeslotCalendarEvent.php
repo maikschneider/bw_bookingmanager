@@ -102,6 +102,8 @@ class TimeslotCalendarEvent extends CalendarEvent
             'defVals' => [
                 'tx_bwbookingmanager_domain_model_entry' => [
                     'calendar' => $this->calendar,
+                    'timeslot' => $this->uid,
+                    'confirmed' => 1,
                     'startDate' => $this->start->getTimestamp(),
                     'endDate' => $this->end->getTimestamp()
                 ]
