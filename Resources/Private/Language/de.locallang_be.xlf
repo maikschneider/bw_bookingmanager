@@ -47,6 +47,18 @@
 				<source>New holiday</source>
 				<target>Neue Ferien</target>
 			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_timeslots">
+				<source>Show past timeslots</source>
+				<target>Zeige vergangene Timeslots</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_not_bookable_timeslots">
+				<source>Show not bookable timeslots</source>
+				<target>Zeige nicht-buchbare Timeslots</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_entries">
+				<source>Show past entries</source>
+				<target>Zeige vergangene Einträge</target>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
                 <target>Kalender</target>

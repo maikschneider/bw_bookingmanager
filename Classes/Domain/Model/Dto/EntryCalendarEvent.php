@@ -9,6 +9,8 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 class EntryCalendarEvent extends CalendarEvent
 {
 
+    public const MODEL = 'Entry';
+
     protected string $color = '';
 
     protected string $prename = '';

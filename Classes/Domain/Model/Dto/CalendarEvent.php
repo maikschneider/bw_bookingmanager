@@ -11,6 +11,8 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 class CalendarEvent
 {
 
+    public const MODEL = '';
+
     protected string $title = '';
 
     protected DateTime $start;
@@ -64,11 +66,6 @@ class CalendarEvent
 
     public function getFullCalendarOutput(): array
     {
-        // @TODO: check if necessary
-//        $now = new DateTime();
-//        $this->start->setTimezone($now->getTimezone());
-//        $this->end->setTimezone($now->getTimezone());
-
         $fullCalendarConfig = [
             'title' => $this->getTitle(),
             'start' => $this->start->format(DateTime::ATOM),
@@ -77,7 +74,10 @@ class CalendarEvent
             'color' => $this->getColor(),
             'display' => $this->getDisplay(),
             'url' => $this->getUrl(),
-            'tooltip' => $this->tooltip
+            'tooltip' => $this->tooltip,
+            //'groupId' => $this->uid,
+            'extendedProps' => $this->getExtendedProps(),
+            'classNames' => $this->getClassNames()
         ];
 
         return $fullCalendarConfig;
@@ -125,6 +125,32 @@ class CalendarEvent
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    public function getExtendedProps(): array
+    {
+        return [
+            'isInPast' => $this->isInPast(),
+            'model' => static::MODEL
+        ];
+    }
+
+    public function isInPast(): bool
+    {
+        $now = new \DateTime('now');
+        return $this->start < $now;
+    }
+
+    public function getClassNames(): array
+    {
+        return array_map(static function ($key, $value) {
+            if (is_bool($value) && $value) {
+                return $key;
+            }
+            if (is_string($value) && $value !== '') {
+                return $key . '-' . $value;
+            }
+        }, array_keys($this->getExtendedProps()), $this->getExtendedProps());
     }
 
     public function translateTitle(LanguageService $llService): void
@@ -193,7 +219,7 @@ class CalendarEvent
     {
     }
 
-    public function getBackendReturnUrl(UriBuilder $uriBuilder)
+    public function getBackendReturnUrl(UriBuilder $uriBuilder): string
     {
         $params = [
             'id' => $this->pid

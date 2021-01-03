@@ -30,6 +30,15 @@
 			<trans-unit id="flexforms_general.mode.holiday_new">
 				<source>New holiday</source>
 			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_timeslots">
+				<source>Show past timeslots</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_not_bookable_timeslots">
+				<source>Show not bookable timeslots</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_entries">
+				<source>Show past entries</source>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
             </trans-unit>

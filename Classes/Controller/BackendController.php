@@ -50,7 +50,7 @@ class BackendController
         $this->request = $request;
         $pid = $this->getCurrentPid();
 
-        $viewState = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?: [];
+        $viewState = $this->getCalendarViewState();
         $startDate = $viewState ? $viewState['start'] : '';
         $startView = $viewState ? $viewState['calendarView'] : '';
 
@@ -67,6 +67,7 @@ class BackendController
         $this->view->assign('events', json_encode($events, JSON_THROW_ON_ERROR));
         $this->view->assign('calendars', $calendars);
         $this->view->assign('language', $language);
+        $this->view->assign('viewState', $viewState);
         $this->view->assign('startDate', $startDate);
         $this->view->assign('startView', $startView);
 
@@ -79,6 +80,12 @@ class BackendController
         $params = $this->request->getQueryParams();
         $pid = (int)$params['id'];
         return $pid ?: 0;
+    }
+
+    protected function getCalendarViewState(): array
+    {
+        $pid = $this->getCurrentPid();
+        return $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?: [];
     }
 
     /**
@@ -166,55 +173,110 @@ class BackendController
             [
                 'table' => 'tx_bwbookingmanager_domain_model_entry',
                 'label' => 'flexforms_general.mode.entry_new',
-                'icon' => 'ext-bwbookingmanager-type-entry'
+                'icon' => 'ext-bwbookingmanager-type-entry',
+                'overlay' => 'overlay-new',
+                'position' => ButtonBar::BUTTON_POSITION_LEFT,
+                'group' => 2
             ],
             [
                 'table' => 'tx_bwbookingmanager_domain_model_blockslot',
                 'label' => 'flexforms_general.mode.blockslot_new',
-                'icon' => 'ext-bwbookingmanager-type-blockslot'
+                'icon' => 'ext-bwbookingmanager-type-blockslot',
+                'overlay' => 'overlay-new',
+                'position' => ButtonBar::BUTTON_POSITION_LEFT,
+                'group' => 2
             ],
             [
                 'table' => 'tx_bwbookingmanager_domain_model_holiday',
                 'label' => 'flexforms_general.mode.holiday_new',
-                'icon' => 'ext-bwbookingmanager-type-holiday'
+                'icon' => 'ext-bwbookingmanager-type-holiday',
+                'overlay' => 'overlay-new',
+                'position' => ButtonBar::BUTTON_POSITION_LEFT,
+                'group' => 2
             ]
         ];
-        foreach ($buttons as $key => $tableConfiguration) {
 
-            // check persmissions
-            $isAdmin = $this->getBackendUser()->isAdmin();
-            $allowedToEditTable = $this->getBackendUser()->check(
-                'tables_modify',
-                $tableConfiguration['table']
-            );
-
-            if (!$isAdmin && !$allowedToEditTable) {
-                continue;
-            }
-
-            $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
-            $uri = $uriBuilder->buildUriFromRoute('record_edit', [
-                'edit' => [
-                    $tableConfiguration['table'] => [
-                        $currentPid => 'new'
-                    ]
+        if ($currentTemplate === 'calendar') {
+            $viewState = $this->getCalendarViewState();
+            $buttons = array_merge($buttons, [
+                [
+                    'label' => 'flexforms_general.mode.show_past_timeslots',
+                    'icon' => 'ext-bwbookingmanager-type-timeslot',
+                    'overlay' => 'overlay-endtime',
+                    'position' => ButtonBar::BUTTON_POSITION_RIGHT,
+                    'group' => 3,
+                    'data-attrs' => [
+                        'changeViewState' => 'pastTimeslots'
+                    ],
+                    'classes' => $viewState['pastTimeslots'] === 'true' ? 'active' : ''
+                ],
+                [
+                    'label' => 'flexforms_general.mode.show_not_bookable_timeslots',
+                    'icon' => 'ext-bwbookingmanager-type-timeslot',
+                    'overlay' => 'overlay-readonly',
+                    'position' => ButtonBar::BUTTON_POSITION_RIGHT,
+                    'group' => 3,
+                    'data-attrs' => [
+                        'changeViewState' => 'notBookableTimeslots'
+                    ],
+                    'classes' => $viewState['notBookableTimeslots'] === 'true' ? 'active' : ''
+                ],
+                [
+                    'label' => 'flexforms_general.mode.show_past_entries',
+                    'icon' => 'ext-bwbookingmanager-type-entry',
+                    'overlay' => 'overlay-endtime',
+                    'position' => ButtonBar::BUTTON_POSITION_RIGHT,
+                    'group' => 3,
+                    'data-attrs' => [
+                        'changeViewState' => 'pastEntries'
+                    ],
+                    'classes' => $viewState['pastEntries'] === 'true' ? 'active' : ''
                 ],
             ]);
+        }
+
+        foreach ($buttons as $tableConfiguration) {
+
+            $uri = '#';
+            $title = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:' . $tableConfiguration['label']);
+            $dataAttrs = $tableConfiguration['data-attrs'] ?? [];
+            $dataAttrs['toggle'] = 'tooltip';
+            $dataAttrs['placement'] = 'bottom';
+            $dataAttrs['title'] = $title;
+
+            if (isset($tableConfiguration['table'])) {
+
+                // check persmissions
+                $isAdmin = $this->getBackendUser()->isAdmin();
+                $allowedToEditTable = $this->getBackendUser()->check(
+                    'tables_modify',
+                    $tableConfiguration['table']
+                );
+
+                if (!$isAdmin && !$allowedToEditTable) {
+                    continue;
+                }
+
+                $uri = $uriBuilder->buildUriFromRoute('record_edit', [
+                    'edit' => [
+                        $tableConfiguration['table'] => [
+                            $currentPid => 'new'
+                        ]
+                    ],
+                ]);
+            }
 
             $viewButton = $buttonBar->makeLinkButton()
                 ->setHref($uri)
-                ->setDataAttributes([
-                    'toggle' => 'tooltip',
-                    'placement' => 'bottom',
-                    'title' => $title
-                ])
+                ->setDataAttributes($dataAttrs)
                 ->setTitle($title)
+                ->setClasses($tableConfiguration['classes'] ?? '')
                 ->setIcon($iconFactory->getIcon(
                     $tableConfiguration['icon'],
                     Icon::SIZE_SMALL,
-                    'overlay-new'
+                    $tableConfiguration['overlay']
                 ));
-            $buttonBar->addButton($viewButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
+            $buttonBar->addButton($viewButton, $tableConfiguration['position'], $tableConfiguration['group']);
         }
 
         // Refresh
@@ -222,7 +284,7 @@ class BackendController
             ->setHref(GeneralUtility::getIndpEnv('REQUEST_URI'))
             ->setTitle($this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.reload'))
             ->setIcon($iconFactory->getIcon('actions-refresh', Icon::SIZE_SMALL));
-        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT);
+        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT, 4);
     }
 
     private function getBackendUser()

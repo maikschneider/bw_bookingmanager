@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 
 class TimeslotCalendarEvent extends CalendarEvent
 {
+    public const MODEL = 'Timeslot';
 
     protected int $maxWeight = 0;
 
@@ -46,12 +47,6 @@ class TimeslotCalendarEvent extends CalendarEvent
         $title .= $this->maxWeight === 1 ? '' : ' ' . $this->bookedWeight . '/' . $this->maxWeight;
 
         return $title;
-    }
-
-    public function isInPast()
-    {
-        $now = new \DateTime('now');
-        return $this->start < $now;
     }
 
     private function getIsBookableByHooks()
@@ -166,12 +161,21 @@ class TimeslotCalendarEvent extends CalendarEvent
         return $this->start;
     }
 
-    public function addBackendModuleToolTip()
+    public function addBackendModuleToolTip(): void
     {
         if (!$this->getIsBookable()) {
             return;
         }
 
         $this->tooltip = '+ ' . $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:flexforms_general.mode.entry_new');
+    }
+
+    public function getExtendedProps(): array
+    {
+        $props = parent::getExtendedProps();
+
+        $props['isBookable'] = $this->getIsBookable();
+
+        return $props;
     }
 }
