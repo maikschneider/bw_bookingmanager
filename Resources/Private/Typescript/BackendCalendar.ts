@@ -85,6 +85,10 @@ class BackendCalendar {
   public renderCalendar() {
     const calendarEl = document.getElementById('calendar');
 
+    if (!calendarEl) {
+      return;
+    }
+
     this.viewState = new CalenderViewState(calendarEl);
 
     this.calendar = new Calendar(calendarEl, {
