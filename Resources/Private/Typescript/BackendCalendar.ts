@@ -79,7 +79,6 @@ class BackendCalendar {
       this.saveRequest.abort();
     }
     this.saveRequest = $.post(TYPO3.settings.ajaxUrls['api_user_setting'], {viewState: this.viewState});
-    console.log({viewState: this.viewState});
   }
 
   public renderCalendar() {
