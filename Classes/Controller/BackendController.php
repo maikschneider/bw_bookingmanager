@@ -46,26 +46,18 @@ class BackendController
         $this->request = $request;
         $pid = $this->getCurrentPid();
 
-        $viewState = $this->getCalendarViewState();
-        $startDate = $viewState ? $viewState['start'] : '';
-        $startView = $viewState ? $viewState['calendarView'] : '';
-
         $this->initializeView('calendar');
 
         $calendarRepository = $this->objectManager->get(CalendarRepository::class);
         $language = $this->getLanguageService()->lang;
         $calendars = $calendarRepository->findAllByPid($pid);
 
-        $events = [];
-        $events['extraParams'] = [];
-        $events['extraParams']['pid'] = $pid;
+        $viewState = $this->getCalendarViewState();
+        $viewState['pid'] = $pid;
+        $viewState['language'] = $language;
 
-        $this->view->assign('events', json_encode($events, JSON_THROW_ON_ERROR));
         $this->view->assign('calendars', $calendars);
-        $this->view->assign('language', $language);
-        $this->view->assign('viewState', $viewState);
-        $this->view->assign('startDate', $startDate);
-        $this->view->assign('startView', $startView);
+        $this->view->assign('viewState', json_encode($viewState, JSON_THROW_ON_ERROR));
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());

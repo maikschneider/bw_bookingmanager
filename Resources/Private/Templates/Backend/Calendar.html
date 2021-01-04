@@ -12,8 +12,7 @@
 </f:if>
 
 <f:if condition="{calendars->f:count()}">
-	<div id="calendar" data-events="{events}" data-language="{language}" data-start-date="{startDate}" data-start-view="{startView}" class="backendCalendar" data-past-entries="{viewState.pastEntries}"
-			 data-past-timeslots="{viewState.pastTimeslots}" data-not-bookable-timeslots="{viewState.notBookableTimeslots}"></div>
+	<div id="calendar" data-view-state="{viewState}" class="backendCalendar"></div>
 	<div id="loading" style="display: none">
 		<span class="icon icon-size-default icon-state-default icon-spin">
 			<span class="icon-markup">

@@ -25,20 +25,22 @@ class CalenderViewState {
   public events: any;
 
   public constructor(el: HTMLElement) {
-    this.language = el.hasAttribute('data-language') && el.getAttribute('data-language') !== 'default' ? el.getAttribute('data-language') : 'en';
 
-    this.start = el.hasAttribute('data-start-date') && el.getAttribute('data-start-date') ? el.getAttribute('data-start-date') : new Date();
+    const viewState = JSON.parse(el.getAttribute('data-view-state'));
 
-    this.calendarView = el.hasAttribute('data-start-view') && el.getAttribute('data-start-view') ? el.getAttribute('data-start-view') : 'dayGridMonth';
-
-    this.events = JSON.parse(el.getAttribute('data-events'));
-    this.events.url = TYPO3.settings.ajaxUrls['api_calendar_show'];
-
-    this.pid = this.events.extraParams.pid;
-
-    this.pastEntries = el.hasAttribute('data-past-entries') && el.getAttribute('data-past-entries') === 'true';
-    this.pastTimeslots = el.hasAttribute('data-past-timeslots') && el.getAttribute('data-past-timeslots') === 'true';
-    this.notBookableTimeslots = el.hasAttribute('data-not-bookable-timeslots') && el.getAttribute('data-not-bookable-timeslots') === 'true';
+    this.pid = viewState.pid;
+    this.events = {
+      'url': TYPO3.settings.ajaxUrls['api_calendar_show'],
+      'extraParams': {
+        'pid': viewState.pid
+      }
+    };
+    this.language = 'language' in viewState && viewState.language !== 'default' ? viewState.language : 'en';
+    this.start = 'start' in viewState ? viewState.start : new Date();
+    this.calendarView = 'calendarView' in viewState ? viewState.calendarView : 'dayGridMonth';
+    this.pastEntries = 'pastEntries' in viewState && viewState.pastEntries === 'true';
+    this.pastTimeslots = 'pastTimeslots' in viewState && viewState.pastTimeslots === 'true';
+    this.notBookableTimeslots = 'notBookableTimeslots' in viewState && viewState.notBookableTimeslots === 'true';
   }
 
 }
