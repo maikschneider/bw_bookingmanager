@@ -28,7 +28,9 @@
     "style-loader": "^2.0.0",
     "sass-loader": "^10.1.0",
     "@fullcalendar/adaptive": "^5.4.0",
-    "tippy.js": "^6.2.7"
+    "tippy.js": "^6.2.7",
+    "bootstrap": "4.5.3",
+    "mini-css-extract-plugin": "^1.3.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

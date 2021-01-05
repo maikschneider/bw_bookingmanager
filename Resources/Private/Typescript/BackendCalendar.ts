@@ -1,4 +1,6 @@
 import $ = require('jquery');
+import Modal = require('TYPO3/CMS/Backend/Modal');
+import Icons = require('TYPO3/CMS/Backend/Icons');
 import {Calendar} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -57,15 +59,46 @@ class BackendCalendar {
 
   public viewState: CalenderViewState;
 
+  public doSaveViewState: boolean = true;
+
   private saveRequest: any;
 
   public init() {
-    this.renderCalendar();
+    this.initCalendar();
     this.bindEvents();
   }
 
   public bindEvents() {
     $('a[data-changeviewstate]').on('click', this.onViewStateChangeClick.bind(this));
+    $('#entry-date-select-button').on('click', this.onEntryDateSelectButtonClick.bind(this));
+  }
+
+  public onEntryDateSelectButtonClick(e) {
+    e.preventDefault();
+
+    const button = document.getElementById('entry-date-select-button');
+
+    const html = $('<div />').attr('id', 'calendar').addClass('modalCalendar');
+
+    this.viewState = new CalenderViewState(button);
+    this.doSaveViewState = false;
+
+    Modal.advanced({
+      title: button.getAttribute('data-modal-title'),
+      content: html,
+      size: Modal.sizes.large,
+      callback: (modal) => {
+        const calendarEl = modal.find('#calendar').get(0);
+        this.renderCalendar(calendarEl);
+      },
+      buttons: [
+        {
+          name: 'entry',
+          text: 'Entries',
+          icon: 'ext-bwbookingmanager-type-entry'
+        }
+      ]
+    })
   }
 
   public onViewStateChangeClick(e) {
@@ -77,13 +110,16 @@ class BackendCalendar {
   }
 
   public saveViewState() {
+    if (!this.doSaveViewState) {
+      return;
+    }
     if (this.saveRequest) {
       this.saveRequest.abort();
     }
     this.saveRequest = $.post(TYPO3.settings.ajaxUrls['api_user_setting'], {viewState: this.viewState});
   }
 
-  public renderCalendar() {
+  public initCalendar() {
     const calendarEl = document.getElementById('calendar');
 
     if (!calendarEl) {
@@ -92,54 +128,66 @@ class BackendCalendar {
 
     this.viewState = new CalenderViewState(calendarEl);
 
-    this.calendar = new Calendar(calendarEl, {
-      locales: [deLocale],
-      initialDate: this.viewState.start,
-      timeZone: 'Europe/Berlin',
-      locale: this.viewState.language,
-      initialView: this.viewState.calendarView,
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-      },
-      loading: (isLoading) => {
-        const display = isLoading ? 'grid' : 'none';
-        const opacity = isLoading ? '0.5' : '1';
-        $(calendarEl).css('opacity', opacity);
-        $('#loading').css('display', display);
-      },
-      weekNumbers: true,
-      plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
-      navLinks: true,
-      nowIndicator: true,
-      dayMaxEvents: true,
-      events: this.viewState.events,
-      datesSet: () => {
-        this.viewState.calendarView = this.calendar.view.type;
-        this.viewState.start = this.calendar.currentData.currentDate.toISOString();
-        this.saveViewState();
-      },
-      eventDidMount: (info) => {
-        if (info.event.extendedProps.tooltip) {
-          tippy(info.el, {content: info.event.extendedProps.tooltip});
-        }
+    this.renderCalendar(calendarEl)
+  }
 
-        if (!this.viewState.pastTimeslots && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isInPast) {
-          info.event.setProp('display', 'none');
-        }
+  public renderCalendar(calendarEl) {
 
-        if (!this.viewState.pastEntries && info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isInPast) {
-          info.event.setProp('display', 'none');
-        }
+    Icons.getIcon('spinner-circle', Icons.sizes.default).done((spinner) => {
+      const $spinner = $('<div>').attr('id', 'loading').html(spinner);
+      $(calendarEl).after($spinner);
 
-        if (!this.viewState.notBookableTimeslots && info.event.extendedProps.model === 'Timeslot' && !info.event.extendedProps.isInPast && !info.event.extendedProps.isBookable) {
-          info.event.setProp('display', 'none');
+      this.calendar = new Calendar(calendarEl, {
+        locales: [deLocale],
+        initialDate: this.viewState.start,
+        timeZone: 'Europe/Berlin',
+        locale: this.viewState.language,
+        initialView: this.viewState.calendarView,
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        },
+        loading: (isLoading) => {
+          const display = isLoading ? 'grid' : 'none';
+          const opacity = isLoading ? '0.5' : '1';
+          $(calendarEl).css('opacity', opacity);
+          $(calendarEl).next().css('display', display);
+        },
+        weekNumbers: true,
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+        navLinks: true,
+        nowIndicator: true,
+        dayMaxEvents: true,
+        events: this.viewState.events,
+        datesSet: () => {
+          this.viewState.calendarView = this.calendar.view.type;
+          this.viewState.start = this.calendar.currentData.currentDate.toISOString();
+          this.saveViewState();
+        },
+        eventDidMount: (info) => {
+          if (info.event.extendedProps.tooltip) {
+            tippy(info.el, {content: info.event.extendedProps.tooltip});
+          }
+
+          if (!this.viewState.pastTimeslots && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isInPast) {
+            info.event.setProp('display', 'none');
+          }
+
+          if (!this.viewState.pastEntries && info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isInPast) {
+            info.event.setProp('display', 'none');
+          }
+
+          if (!this.viewState.notBookableTimeslots && info.event.extendedProps.model === 'Timeslot' && !info.event.extendedProps.isInPast && !info.event.extendedProps.isBookable) {
+            info.event.setProp('display', 'none');
+          }
         }
-      }
+      });
+
+      this.calendar.render();
     });
 
-    this.calendar.render();
+
   }
 }
 

@@ -17,7 +17,6 @@
 			],
 			"TYPO3/CMS/Backend/*": [
 				"public/typo3/sysext/backend/Resources/Private/TypeScript/*",
-				"public/typo3/sysext/backend/Resources/Public/JavaScript/*"
 			],
 			"TYPO3/CMS/Core/*": [
 				"public/typo3/sysext/core/Resources/Private/TypeScript/*"
@@ -33,7 +32,6 @@
 	],
 	"exclude": [
 		"node_modules",
-		"Configuration",
-		"public"
+		"Configuration"
 	]
 }

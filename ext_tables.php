@@ -79,5 +79,12 @@ call_user_func(
                 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:wiz_crMany'
             );
         }
+
+        // register backend stylesheet
+        $GLOBALS['TBE_STYLES']['skins']['bw_bookingmanager'] = array();
+        $GLOBALS['TBE_STYLES']['skins']['bw_bookingmanager']['name'] = 'Booking Manager Styles';
+        $GLOBALS['TBE_STYLES']['skins']['bw_bookingmanager']['stylesheetDirectories'] = array(
+            'visual' => 'EXT:bw_bookingmanager/Resources/Public/Css/backend'
+        );
     }
 );
