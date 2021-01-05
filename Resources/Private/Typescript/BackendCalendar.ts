@@ -167,7 +167,7 @@ class BackendCalendar {
         },
         eventDidMount: (info) => {
           if (info.event.extendedProps.tooltip) {
-            tippy(info.el, {content: info.event.extendedProps.tooltip});
+            tippy(info.el, {content: info.event.extendedProps.tooltip, appendTo: $(calendarEl).closest('body').get(0)});
           }
 
           if (!this.viewState.pastTimeslots && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isInPast) {
