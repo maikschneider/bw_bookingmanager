@@ -51,11 +51,11 @@ class CalenderViewState {
 
 
 /**
- * Module: TYPO3/CMS/BwBookingmanager/BackendCalendar
+ * Module: TYPO3/CMS/BwBookingmanager/BackendModalCalendar
  *
- * @exports TYPO3/CMS/BwBookingmanager/BackendCalendar
+ * @exports TYPO3/CMS/BwBookingmanager/BackendModalCalendar
  */
-class BackendCalendar {
+class BackendModalCalendar {
 
   public calendar: Calendar;
 
@@ -160,7 +160,7 @@ class BackendCalendar {
       info.jsEvent.preventDefault();
 
       // adjust style for previous clicked event
-      if(this.selectedEvent) {
+      if (this.selectedEvent) {
         this.selectedEvent.setProp('color', 'green');
       }
       this.selectedEvent = info.event;
@@ -266,4 +266,4 @@ class BackendCalendar {
   }
 }
 
-export = new BackendCalendar().init();
+export = new BackendModalCalendar().init();

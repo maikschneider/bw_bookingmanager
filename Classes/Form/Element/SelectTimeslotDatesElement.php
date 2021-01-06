@@ -40,7 +40,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
     public function render()
     {
         $resultArray = [];
-        $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/BackendCalendar';
+        $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/BackendModalCalendar';
 
         $savedData = $this->getSavedData();
         $language = $this->getLanguageService()->lang;

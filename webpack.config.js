@@ -3,13 +3,16 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   plugins: [new MiniCssExtractPlugin({
-    filename: 'Resources/Public/Css/backend/fullCalendar.css',
+    filename: 'Resources/Public/Css/backend/BackendCalendar.css',
   })],
   mode: 'development',
   watch: true,
-  entry: './Resources/Private/TypeScript/BackendCalendar.ts',
+  entry: {
+    BackendModuleCalendar: './Resources/Private/TypeScript/BackendModuleCalendar.ts',
+    BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts'
+  },
   output: {
-    filename: 'Resources/Public/JavaScript/BackendCalendar.js',
+    filename: 'Resources/Public/JavaScript/[name].js',
     path: path.resolve(__dirname, '.'),
   },
   module: {
