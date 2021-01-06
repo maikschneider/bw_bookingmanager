@@ -11,7 +11,6 @@ use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Lang\LanguageService;
 
 class FullCalendarUtility
@@ -27,7 +26,7 @@ class FullCalendarUtility
      */
     protected $llService;
 
-    public function getEvents($pid, $start, $end): array
+    public function getEvents($pid, $start, $end, $entryUid): array
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $startDate = new \DateTime($start);
@@ -47,9 +46,10 @@ class FullCalendarUtility
 
         $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents);
 
-        $events = $this->getOutputForBackendModule($events);
-
-        return $events;
+        if($entryUid) {
+            return $this->getOutputForBackendModal($events, $entryUid);
+        }
+        return $this->getOutputForBackendModule($events);
     }
 
     /**
@@ -61,8 +61,6 @@ class FullCalendarUtility
         $fullCalendarEvents = [];
 
         foreach ($events as $event) {
-
-            //$event->translateTitle($this->llService);
             $event->addBackendEditActionLink($this->uriBuilder);
             $event->addBackendModuleToolTip();
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
@@ -74,5 +72,18 @@ class FullCalendarUtility
     public function injectUriBuilder(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
     {
         $this->uriBuilder = $uriBuilder;
+    }
+
+    private function getOutputForBackendModal(array $events, $entryUid)
+    {
+        $fullCalendarEvents = [];
+
+        /** @var CalendarEvent $event */
+        foreach ($events as $event) {
+            $event->addBackendModalLink($this->uriBuilder);
+            $fullCalendarEvents[] = $event->getFullCalendarOutput();
+        }
+
+        return $fullCalendarEvents;
     }
 }

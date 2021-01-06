@@ -131,7 +131,9 @@ class CalendarEvent
     {
         return [
             'isInPast' => $this->isInPast(),
-            'model' => static::MODEL
+            'model' => static::MODEL,
+            'uid' => $this->uid,
+            'calendar' => $this->calendar
         ];
     }
 
@@ -235,5 +237,9 @@ class CalendarEvent
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    public function addBackendModalLink(UriBuilder $uriBuilder): void
+    {
     }
 }

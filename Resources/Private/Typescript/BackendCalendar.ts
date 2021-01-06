@@ -1,7 +1,7 @@
 import $ = require('jquery');
 import Modal = require('TYPO3/CMS/Backend/Modal');
 import Icons = require('TYPO3/CMS/Backend/Icons');
-import {Calendar} from '@fullcalendar/core';
+import {Calendar, EventApi} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -23,6 +23,7 @@ class CalenderViewState {
   public pastTimeslots: boolean;
   public notBookableTimeslots: boolean;
   public pastEntries: boolean;
+  public futureEntries: boolean;
   public language: string;
   public events: any;
 
@@ -43,6 +44,7 @@ class CalenderViewState {
     this.pastEntries = 'pastEntries' in viewState && viewState.pastEntries === 'true';
     this.pastTimeslots = 'pastTimeslots' in viewState && viewState.pastTimeslots === 'true';
     this.notBookableTimeslots = 'notBookableTimeslots' in viewState && viewState.notBookableTimeslots === 'true';
+    this.futureEntries = 'futureEntries' in viewState && viewState.futureEntries === 'true';
   }
 
 }
@@ -59,7 +61,9 @@ class BackendCalendar {
 
   public viewState: CalenderViewState;
 
-  public doSaveViewState: boolean = true;
+  public isModalView: boolean = false;
+
+  public selectedEvent: EventApi;
 
   private saveRequest: any;
 
@@ -81,7 +85,11 @@ class BackendCalendar {
     const html = $('<div />').attr('id', 'calendar').addClass('modalCalendar');
 
     this.viewState = new CalenderViewState(button);
-    this.doSaveViewState = false;
+    this.viewState.events.extraParams['entryUid'] = button.getAttribute('data-entry-uid');
+    this.isModalView = true;
+
+    const buttonCancelText = button.getAttribute('data-modal-cancel-button-text');
+    const buttonSaveText = button.getAttribute('data-modal-save-button-text');
 
     Modal.advanced({
       title: button.getAttribute('data-modal-title'),
@@ -91,14 +99,74 @@ class BackendCalendar {
         const calendarEl = modal.find('#calendar').get(0);
         this.renderCalendar(calendarEl);
       },
+
       buttons: [
         {
-          name: 'entry',
-          text: 'Entries',
-          icon: 'ext-bwbookingmanager-type-entry'
+          name: 'cancel',
+          text: buttonCancelText,
+          icon: 'actions-close',
+          btnClass: 'btn-danger',
+          trigger: () => {
+            Modal.currentModal.trigger('modal-dismiss')
+          }
+        },
+        {
+          name: 'save',
+          text: buttonSaveText,
+          icon: 'actions-document-save',
+          btnClass: 'btn-primary',
+          trigger: this.onModalSaveClick.bind(this)
         }
       ]
     })
+  }
+
+  public onModalSaveClick(e) {
+    e.preventDefault();
+
+    const event = this.selectedEvent;
+
+    // save to new form
+    const entryUid = this.viewState.events.extraParams.entryUid;
+    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][timeslot]"]').val(event.extendedProps.uid);
+    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][start_date]"]').val(event.start.getTime() / 1000);
+    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][end_date]"]').val(event.end.getTime() / 1000);
+    $('select[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][calendar]"]').val(event.extendedProps.calendar);
+
+    // update date label
+    const format = {
+      weekday: 'short',
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'UTC'
+    };
+    const start = Intl.DateTimeFormat(this.viewState.language, format).format(event.start);
+    const end = Intl.DateTimeFormat(this.viewState.language, format).format(event.end);
+    $('#savedStartDate').html(start);
+    $('#savedEndDate').html(end);
+
+    // repaint newly selected event
+
+
+    // close
+    Modal.currentModal.trigger('modal-dismiss');
+  }
+
+  public onEventClick(info) {
+    if (this.isModalView && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable) {
+      info.jsEvent.preventDefault();
+
+      // adjust style for previous clicked event
+      if(this.selectedEvent) {
+        this.selectedEvent.setProp('color', 'green');
+      }
+      this.selectedEvent = info.event;
+      this.selectedEvent.setProp('color', 'orange');
+
+    }
   }
 
   public onViewStateChangeClick(e) {
@@ -110,7 +178,7 @@ class BackendCalendar {
   }
 
   public saveViewState() {
-    if (!this.doSaveViewState) {
+    if (this.isModalView) {
       return;
     }
     if (this.saveRequest) {
@@ -160,6 +228,7 @@ class BackendCalendar {
         nowIndicator: true,
         dayMaxEvents: true,
         events: this.viewState.events,
+        eventClick: this.onEventClick.bind(this),
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();
@@ -181,6 +250,12 @@ class BackendCalendar {
           if (!this.viewState.notBookableTimeslots && info.event.extendedProps.model === 'Timeslot' && !info.event.extendedProps.isInPast && !info.event.extendedProps.isBookable) {
             info.event.setProp('display', 'none');
           }
+
+          // if (!this.viewState.futureEntries && info.event.extendedProps.model === 'Entry' && this.viewState.events.extraParams.entryUid === info.event.extendedProps.uid) {
+          //   info.event.setProp('display', 'none');
+          // }
+
+
         }
       });
 

@@ -49,7 +49,9 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $viewState = [
             'pid' => $savedData['pid'],
             'language' => $language,
-            'start' => $start->format(DateTime::ATOM)
+            'start' => $start->format(DateTime::ATOM),
+            'notBookableTimeslots' => 'true',
+            'futureEntries' => 'false'
         ];
 
         $this->templateView->assign('savedData', $savedData);
@@ -72,7 +74,6 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $startDate = null;
         $endDate = null;
         $pid = 0;
-        $now = new \DateTime('now');
 
         if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']) && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate']) && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'])) {
             $startDate = $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate'];
@@ -91,6 +92,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         }
 
         $savedData = [
+            'entryUid' => $row['uid'],
             'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
             'startDate' => $startDate,

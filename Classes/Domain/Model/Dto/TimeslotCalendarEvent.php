@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use Blueways\BwBookingmanager\Domain\Model\Ics;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Localization\LanguageService;
 
 class TimeslotCalendarEvent extends CalendarEvent
@@ -179,5 +180,10 @@ class TimeslotCalendarEvent extends CalendarEvent
         $props['isBookable'] = $this->getIsBookable();
 
         return $props;
+    }
+
+    public function addBackendModalLink(UriBuilder $uriBuilder): void
+    {
+        $this->setUrl('#');
     }
 }
