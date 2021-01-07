@@ -9,44 +9,12 @@ import deLocale from '@fullcalendar/core/locales/de';
 import '../Scss/backendCalendar.scss';
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
+import {BackendCalendarViewState} from "./BackendCalendarViewState";
 
 declare global {
   interface Window {
     TYPO3: any;
   }
-}
-
-class CalenderViewState {
-  public pid: number;
-  public calendarView: string;
-  public start: any;
-  public pastTimeslots: boolean;
-  public notBookableTimeslots: boolean;
-  public pastEntries: boolean;
-  public futureEntries: boolean;
-  public language: string;
-  public events: any;
-
-  public constructor(el: HTMLElement) {
-
-    const viewState = JSON.parse(el.getAttribute('data-view-state'));
-
-    this.pid = viewState.pid;
-    this.events = {
-      'url': TYPO3.settings.ajaxUrls['api_calendar_show'],
-      'extraParams': {
-        'pid': viewState.pid
-      }
-    };
-    this.language = 'language' in viewState && viewState.language !== 'default' ? viewState.language : 'en';
-    this.start = 'start' in viewState ? viewState.start : new Date();
-    this.calendarView = 'calendarView' in viewState ? viewState.calendarView : 'dayGridMonth';
-    this.pastEntries = 'pastEntries' in viewState && viewState.pastEntries === 'true';
-    this.pastTimeslots = 'pastTimeslots' in viewState && viewState.pastTimeslots === 'true';
-    this.notBookableTimeslots = 'notBookableTimeslots' in viewState && viewState.notBookableTimeslots === 'true';
-    this.futureEntries = 'futureEntries' in viewState && viewState.futureEntries === 'true';
-  }
-
 }
 
 
@@ -59,35 +27,34 @@ class BackendModalCalendar {
 
   public calendar: Calendar;
 
-  public viewState: CalenderViewState;
-
-  public isModalView: boolean = false;
+  public viewState: BackendCalendarViewState;
 
   public selectedEvent: EventApi;
 
   private saveRequest: any;
 
   public init() {
-    this.initCalendar();
+    this.initViewState();
     this.bindEvents();
   }
 
+  public initViewState() {
+    const button = document.getElementById('entry-date-select-button');
+
+    this.viewState = new BackendCalendarViewState(button);
+
+    console.log(this.viewState);
+  }
+
   public bindEvents() {
-    $('a[data-changeviewstate]').on('click', this.onViewStateChangeClick.bind(this));
     $('#entry-date-select-button').on('click', this.onEntryDateSelectButtonClick.bind(this));
   }
 
   public onEntryDateSelectButtonClick(e) {
     e.preventDefault();
 
-    const button = document.getElementById('entry-date-select-button');
-
     const html = $('<div />').attr('id', 'calendar').addClass('modalCalendar');
-
-    this.viewState = new CalenderViewState(button);
-    this.viewState.events.extraParams['entryUid'] = button.getAttribute('data-entry-uid');
-    this.isModalView = true;
-
+    const button = document.getElementById('entry-date-select-button');
     const buttonCancelText = button.getAttribute('data-modal-cancel-button-text');
     const buttonSaveText = button.getAttribute('data-modal-save-button-text');
 
@@ -156,7 +123,12 @@ class BackendModalCalendar {
   }
 
   public onEventClick(info) {
-    if (this.isModalView && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable) {
+
+    const events = this.calendar.getEvents();
+    console.log(events);
+    info.event.setExtendedProp('isSelected', true);
+
+    if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable) {
       info.jsEvent.preventDefault();
 
       // adjust style for previous clicked event
@@ -169,37 +141,11 @@ class BackendModalCalendar {
     }
   }
 
-  public onViewStateChangeClick(e) {
-    const btn = $(e.currentTarget);
-    btn.hasClass('active') ? btn.removeClass('active') : btn.addClass('active');
-    this.viewState[btn.attr('data-changeviewstate')] = btn.hasClass('active');
-    this.calendar.refetchEvents();
-    this.saveViewState();
-  }
-
-  public saveViewState() {
-    if (this.isModalView) {
-      return;
-    }
-    if (this.saveRequest) {
-      this.saveRequest.abort();
-    }
-    this.saveRequest = $.post(TYPO3.settings.ajaxUrls['api_user_setting'], {viewState: this.viewState});
-  }
-
-  public initCalendar() {
-    const calendarEl = document.getElementById('calendar');
+  public renderCalendar(calendarEl) {
 
     if (!calendarEl) {
       return;
     }
-
-    this.viewState = new CalenderViewState(calendarEl);
-
-    this.renderCalendar(calendarEl)
-  }
-
-  public renderCalendar(calendarEl) {
 
     Icons.getIcon('spinner-circle', Icons.sizes.default).done((spinner) => {
       const $spinner = $('<div>').attr('id', 'loading').html(spinner);
@@ -229,10 +175,15 @@ class BackendModalCalendar {
         dayMaxEvents: true,
         events: this.viewState.events,
         eventClick: this.onEventClick.bind(this),
+        eventClassNames: (arg) => {
+          if (arg.event.extendedProps.isSelected) {
+            return ['active'];
+          }
+          return arg.event.classNames;
+        },
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();
-          this.saveViewState();
         },
         eventDidMount: (info) => {
           if (info.event.extendedProps.tooltip) {
@@ -251,10 +202,19 @@ class BackendModalCalendar {
             info.event.setProp('display', 'none');
           }
 
-          // if (!this.viewState.futureEntries && info.event.extendedProps.model === 'Entry' && this.viewState.events.extraParams.entryUid === info.event.extendedProps.uid) {
-          //   info.event.setProp('display', 'none');
-          // }
+          if (!this.viewState.futureEntries && info.event.extendedProps.model === 'Entry' && !info.event.extendedProps.isInPast) {
+            info.event.setProp('display', 'none');
+          }
 
+          // unhide current entry
+          if (this.viewState.entryUid === info.event.extendedProps.uid) {
+            info.event.setProp('display', 'auto');
+          }
+
+          // hide timeslot of current Entry if its weight is 1
+          if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isSelectedEntryTimeslot && info.event.extendedProps.maxWeight === 1) {
+            info.event.setProp('display', 'none');
+          }
 
         }
       });

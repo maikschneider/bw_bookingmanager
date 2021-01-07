@@ -46,7 +46,7 @@ class FullCalendarUtility
 
         $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents);
 
-        if($entryUid) {
+        if ($entryUid) {
             return $this->getOutputForBackendModal($events, $entryUid);
         }
         return $this->getOutputForBackendModule($events);
@@ -81,6 +81,7 @@ class FullCalendarUtility
         /** @var CalendarEvent $event */
         foreach ($events as $event) {
             $event->addBackendModalLink($this->uriBuilder);
+            $event->addBackendModalIsSelectedEntryTimeslot($entryUid);
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
         }
 

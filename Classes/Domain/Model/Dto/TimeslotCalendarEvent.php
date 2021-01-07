@@ -16,6 +16,10 @@ class TimeslotCalendarEvent extends CalendarEvent
 
     protected int $isBookableHooks = 0;
 
+    protected array $entries = [];
+
+    private bool $isSelectedEntryTimeslot = false;
+
     public static function createFromRawSql(array $timeslot): TimeslotCalendarEvent
     {
         $event = new self();
@@ -27,6 +31,7 @@ class TimeslotCalendarEvent extends CalendarEvent
         $event->bookedWeight = $timeslot['booked_weight'];
         $event->calendar = $timeslot['calendar'];
         $event->isBookableHooks = $timeslot['is_bookable_hooks'];
+        $event->entries = $timeslot['entries'] ? array_map('intval', explode(',', $timeslot['entries'])) : [];
 
         return $event;
     }
@@ -178,8 +183,19 @@ class TimeslotCalendarEvent extends CalendarEvent
         $props = parent::getExtendedProps();
 
         $props['isBookable'] = $this->getIsBookable();
+        $props['entries'] = $this->entries;
+        $props['maxWeight'] = $this->maxWeight;
+        $props['isSelectedEntryTimeslot'] = $this->isSelectedEntryTimeslot;
 
         return $props;
+    }
+
+    public function addBackendModalIsSelectedEntryTimeslot($entryUid): void
+    {
+        // check if this is the timeslot of the selected entry
+        if (in_array((int)$entryUid, $this->entries, true)) {
+            $this->isSelectedEntryTimeslot = true;
+        }
     }
 
     public function addBackendModalLink(UriBuilder $uriBuilder): void

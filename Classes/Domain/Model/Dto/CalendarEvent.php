@@ -133,7 +133,8 @@ class CalendarEvent
             'isInPast' => $this->isInPast(),
             'model' => static::MODEL,
             'uid' => $this->uid,
-            'calendar' => $this->calendar
+            'calendar' => $this->calendar,
+            'isSelected' => false,
         ];
     }
 
@@ -231,6 +232,10 @@ class CalendarEvent
     }
 
     public function addBackendModuleToolTip()
+    {
+    }
+
+    public function addBackendModalIsSelectedEntryTimeslot($entryUid)
     {
     }
 

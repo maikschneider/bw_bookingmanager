@@ -46,12 +46,18 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $language = $this->getLanguageService()->lang;
         $start = new \DateTime();
         $start->setTimestamp($savedData['startDate']);
+        $end = new \DateTime();
+        $end->setTimestamp($savedData['endDate']);
         $viewState = [
             'pid' => $savedData['pid'],
             'language' => $language,
             'start' => $start->format(DateTime::ATOM),
+            'end' => $end->format(DateTime::ATOM),
+            'timeslot' => $savedData['timeslot'],
+            'calendar' => $savedData['calendar'],
+            'entryUid' => $savedData['entryUid'],
             'notBookableTimeslots' => 'true',
-            'futureEntries' => 'false'
+            'futureEntries' => 'false',
         ];
 
         $this->templateView->assign('savedData', $savedData);
@@ -93,7 +99,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
 
         $savedData = [
             'entryUid' => $row['uid'],
-            'calendar' => !empty($row['calendar']) ? $row['calendar'][0] : null,
+            'calendar' => !empty($row['calendar']) ? (int)$row['calendar'][0] : null,
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
             'startDate' => $startDate,
             'endDate' => $endDate,

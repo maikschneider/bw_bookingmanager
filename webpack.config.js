@@ -6,6 +6,7 @@ module.exports = {
     filename: 'Resources/Public/Css/backend/BackendCalendar.css',
   })],
   mode: 'development',
+  devtool: 'source-map',
   watch: true,
   entry: {
     BackendModuleCalendar: './Resources/Private/TypeScript/BackendModuleCalendar.ts',
