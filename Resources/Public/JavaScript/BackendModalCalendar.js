@@ -223,7 +223,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _vdom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./vdom.js */ "./node_modules/@fullcalendar/common/vdom.js");
 /*!
-FullCalendar v5.3.2
+FullCalendar v5.5.0
 Docs & License: https://fullcalendar.io/
 (c) 2020 Adam Shaw
 */
@@ -260,9 +260,15 @@ var EventSourceApi = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(EventSourceApi.prototype, "url", {
-        // only relevant to json-feed event sources
         get: function () {
             return this.internalEventSource.meta.url;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(EventSourceApi.prototype, "format", {
+        get: function () {
+            return this.internalEventSource.meta.format; // TODO: bad. not guaranteed
         },
         enumerable: false,
         configurable: true
@@ -2849,6 +2855,7 @@ var EVENT_SOURCE_REFINERS = {
     id: String,
     defaultAllDay: Boolean,
     url: String,
+    format: String,
     events: identity,
     eventDataTransform: identity,
     // for any network-related sources
@@ -3496,8 +3503,8 @@ var EventApi = /** @class */ (function () {
         if (instance) {
             var def = this._def;
             var context_1 = this._context;
-            var eventStore = context_1.getCurrentData().eventStore;
-            var relevantEvents_1 = getRelevantEvents(eventStore, instance.instanceId);
+            var eventStore_1 = context_1.getCurrentData().eventStore;
+            var relevantEvents = getRelevantEvents(eventStore_1, instance.instanceId);
             var eventConfigBase = {
                 '': {
                     display: '',
@@ -3512,22 +3519,22 @@ var EventApi = /** @class */ (function () {
                     classNames: [],
                 },
             };
-            relevantEvents_1 = applyMutationToEventStore(relevantEvents_1, eventConfigBase, mutation, context_1);
+            relevantEvents = applyMutationToEventStore(relevantEvents, eventConfigBase, mutation, context_1);
             var oldEvent = new EventApi(context_1, def, instance); // snapshot
-            this._def = relevantEvents_1.defs[def.defId];
-            this._instance = relevantEvents_1.instances[instance.instanceId];
+            this._def = relevantEvents.defs[def.defId];
+            this._instance = relevantEvents.instances[instance.instanceId];
             context_1.dispatch({
                 type: 'MERGE_EVENTS',
-                eventStore: relevantEvents_1,
+                eventStore: relevantEvents,
             });
             context_1.emitter.trigger('eventChange', {
                 oldEvent: oldEvent,
                 event: this,
-                relatedEvents: buildEventApis(relevantEvents_1, context_1, instance),
+                relatedEvents: buildEventApis(relevantEvents, context_1, instance),
                 revert: function () {
                     context_1.dispatch({
-                        type: 'REMOVE_EVENTS',
-                        eventStore: relevantEvents_1,
+                        type: 'RESET_EVENTS',
+                        eventStore: eventStore_1,
                     });
                 },
             });
@@ -4607,6 +4614,9 @@ function getScrollbarWidths() {
 function computeScrollbarWidths() {
     var el = document.createElement('div');
     el.style.overflow = 'scroll';
+    el.style.position = 'absolute';
+    el.style.top = '-9999px';
+    el.style.left = '-9999px';
     document.body.appendChild(el);
     var res = computeScrollbarWidthsForEl(el);
     document.body.removeChild(el);
@@ -5145,6 +5155,8 @@ function reduceEventStore(eventStore, action, eventSources, dateProfile, context
         case 'ADD_EVENTS': // already parsed, but not expanded
             return addEvent(eventStore, action.eventStore, // new ones
             dateProfile ? dateProfile.activeRange : null, context);
+        case 'RESET_EVENTS':
+            return action.eventStore;
         case 'MERGE_EVENTS': // already parsed and expanded
             return mergeEventStores(eventStore, action.eventStore);
         case 'PREV': // TODO: how do we track all actions that affect dateProfile :(
@@ -5470,22 +5482,13 @@ var DateComponent = /** @class */ (function (_super) {
     DateComponent.prototype.isValidSegDownEl = function (el) {
         return !this.props.eventDrag && // HACK
             !this.props.eventResize && // HACK
-            !elementClosest(el, '.fc-event-mirror') &&
-            (this.isPopover() || !this.isInPopover(el));
-        // ^above line ensures we don't detect a seg interaction within a nested component.
-        // it's a HACK because it only supports a popover as the nested component.
+            !elementClosest(el, '.fc-event-mirror');
     };
     DateComponent.prototype.isValidDateDownEl = function (el) {
         return !elementClosest(el, '.fc-event:not(.fc-bg-event)') &&
             !elementClosest(el, '.fc-daygrid-more-link') && // a "more.." link
             !elementClosest(el, 'a[data-navlink]') && // a clickable nav link
-            !this.isInPopover(el);
-    };
-    DateComponent.prototype.isPopover = function () {
-        return false;
-    };
-    DateComponent.prototype.isInPopover = function (el) {
-        return Boolean(elementClosest(el, '.fc-popover'));
+            !elementClosest(el, '.fc-popover'); // hack
     };
     return DateComponent;
 }(BaseComponent));
@@ -5496,6 +5499,7 @@ function createPlugin(input) {
         id: guid(),
         deps: input.deps || [],
         reducers: input.reducers || [],
+        isLoadingFuncs: input.isLoadingFuncs || [],
         contextInit: [].concat(input.contextInit || []),
         eventRefiners: input.eventRefiners || {},
         eventDefMemberAdders: input.eventDefMemberAdders || [],
@@ -5534,6 +5538,7 @@ function buildPluginHooks(pluginDefs, globalDefs) {
     var isAdded = {};
     var hooks = {
         reducers: [],
+        isLoadingFuncs: [],
         contextInit: [],
         eventRefiners: {},
         eventDefMemberAdders: [],
@@ -5599,6 +5604,7 @@ function buildBuildPluginHooks() {
 function combineHooks(hooks0, hooks1) {
     return {
         reducers: hooks0.reducers.concat(hooks1.reducers),
+        isLoadingFuncs: hooks0.isLoadingFuncs.concat(hooks1.isLoadingFuncs),
         contextInit: hooks0.contextInit.concat(hooks1.contextInit),
         eventRefiners: (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({}, hooks0.eventRefiners), hooks1.eventRefiners),
         eventDefMemberAdders: hooks0.eventDefMemberAdders.concat(hooks1.eventDefMemberAdders),
@@ -6362,14 +6368,13 @@ function reduceEventSourcesNewTimeZone(eventSources, dateProfile, context) {
     var activeRange = dateProfile ? dateProfile.activeRange : null; // need this check?
     return fetchSourcesByIds(eventSources, excludeStaticSources(eventSources, context), activeRange, context);
 }
-function computeEventSourceLoadingLevel(eventSources) {
-    var cnt = 0;
+function computeEventSourcesLoading(eventSources) {
     for (var sourceId in eventSources) {
         if (eventSources[sourceId].isFetching) {
-            cnt += 1;
+            return true;
         }
     }
-    return cnt;
+    return false;
 }
 function addSources(eventSourceHash, sources, fetchRange, context) {
     var hash = {};
@@ -6704,9 +6709,10 @@ var JSON_FEED_EVENT_SOURCE_REFINERS = {
 
 var eventSourceDef$2 = {
     parseMeta: function (refined) {
-        if (refined.url) {
+        if (refined.url && (refined.format === 'json' || !refined.format)) {
             return {
                 url: refined.url,
+                format: 'json',
                 method: (refined.method || 'GET').toUpperCase(),
                 extraParams: refined.extraParams,
                 startParam: refined.startParam,
@@ -6900,6 +6906,9 @@ var globalPlugins = [
     simpleRecurringEventsPlugin,
     changeHandlerPlugin,
     createPlugin({
+        isLoadingFuncs: [
+            function (state) { return computeEventSourcesLoading(state.eventSources); },
+        ],
         contentTypeHandlers: {
             html: function () { return ({ render: injectHtml }); },
             domNodes: function () { return ({ render: injectDomNodes }); },
@@ -7149,7 +7158,6 @@ var CalendarDataManager = /** @class */ (function () {
             businessHours: this.parseContextBusinessHours(calendarContext),
             eventSources: eventSources,
             eventUiBases: {},
-            loadingLevel: computeEventSourceLoadingLevel(eventSources),
             eventStore: createEmptyEventStore(),
             renderableEventStore: createEmptyEventStore(),
             dateSelection: null,
@@ -7163,7 +7171,7 @@ var CalendarDataManager = /** @class */ (function () {
             var reducer = _c[_b];
             (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)(initialState, reducer(null, null, contextAndState));
         }
-        if (initialState.loadingLevel) {
+        if (computeIsLoading(initialState, calendarContext)) {
             this.emitter.trigger('loading', true); // NOT DRY
         }
         this.state = initialState;
@@ -7208,16 +7216,14 @@ var CalendarDataManager = /** @class */ (function () {
             currentDate = dateProfile.currentRange.start;
         }
         var eventSources = reduceEventSources(state.eventSources, action, dateProfile, calendarContext);
-        var eventSourceLoadingLevel = computeEventSourceLoadingLevel(eventSources);
         var eventStore = reduceEventStore(state.eventStore, action, eventSources, dateProfile, calendarContext);
-        var renderableEventStore = (eventSourceLoadingLevel && !currentViewData.options.progressiveEventRendering) ?
+        var isEventsLoading = computeEventSourcesLoading(eventSources); // BAD. also called in this func in computeIsLoading
+        var renderableEventStore = (isEventsLoading && !currentViewData.options.progressiveEventRendering) ?
             (state.renderableEventStore || eventStore) : // try from previous state
             eventStore;
         var _b = this.buildViewUiProps(calendarContext), eventUiSingleBase = _b.eventUiSingleBase, selectionConfig = _b.selectionConfig; // will memoize obj
         var eventUiBySource = this.buildEventUiBySource(eventSources);
         var eventUiBases = this.buildEventUiBases(renderableEventStore.defs, eventUiSingleBase, eventUiBySource);
-        var prevLoadingLevel = state.loadingLevel || 0;
-        var loadingLevel = eventSourceLoadingLevel;
         var newState = {
             dynamicOptionOverrides: dynamicOptionOverrides,
             currentViewType: currentViewType,
@@ -7228,7 +7234,6 @@ var CalendarDataManager = /** @class */ (function () {
             renderableEventStore: renderableEventStore,
             selectionConfig: selectionConfig,
             eventUiBases: eventUiBases,
-            loadingLevel: loadingLevel,
             businessHours: this.parseContextBusinessHours(calendarContext),
             dateSelection: reduceDateSelection(state.dateSelection, action),
             eventSelection: reduceSelectedEvent(state.eventSelection, action),
@@ -7240,11 +7245,13 @@ var CalendarDataManager = /** @class */ (function () {
             var reducer = _c[_i];
             (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)(newState, reducer(state, action, contextAndState)); // give the OLD state, for old value
         }
+        var wasLoading = computeIsLoading(state, calendarContext);
+        var isLoading = computeIsLoading(newState, calendarContext);
         // TODO: use propSetHandlers in plugin system
-        if (!prevLoadingLevel && loadingLevel) {
+        if (!wasLoading && isLoading) {
             emitter.trigger('loading', true);
         }
-        else if (prevLoadingLevel && !loadingLevel) {
+        else if (wasLoading && !isLoading) {
             emitter.trigger('loading', false);
         }
         this.state = newState;
@@ -7486,6 +7493,15 @@ function buildViewUiProps(calendarContext) {
             allow: options.selectAllow,
         }, calendarContext),
     };
+}
+function computeIsLoading(state, context) {
+    for (var _i = 0, _a = context.pluginHooks.isLoadingFuncs; _i < _a.length; _i++) {
+        var isLoadingFunc = _a[_i];
+        if (isLoadingFunc(state)) {
+            return true;
+        }
+    }
+    return false;
 }
 function parseContextBusinessHours(calendarContext) {
     return parseBusinessHours(calendarContext.options.businessHours, calendarContext);
@@ -8182,6 +8198,9 @@ var NowTimer = /** @class */ (function (_super) {
         var currentUnitStart = context.dateEnv.startOf(unroundedNow, props.unit);
         var nextUnitStart = context.dateEnv.add(currentUnitStart, createDuration(1, props.unit));
         var waitMs = nextUnitStart.valueOf() - unroundedNow.valueOf();
+        // there is a max setTimeout ms value (https://stackoverflow.com/a/3468650/96342)
+        // ensure no longer than a day
+        waitMs = Math.min(1000 * 60 * 60 * 24, waitMs);
         return {
             currentState: { nowDate: currentUnitStart, todayRange: buildDayRange(currentUnitStart) },
             nextState: { nowDate: nextUnitStart, todayRange: buildDayRange(nextUnitStart) },
@@ -8223,7 +8242,7 @@ var DayHeader = /** @class */ (function (_super) {
         var _a = this.props, dates = _a.dates, dateProfile = _a.dateProfile, datesRepDistinctDays = _a.datesRepDistinctDays, renderIntro = _a.renderIntro;
         var dayHeaderFormat = this.createDayHeaderFormatter(context.options.dayHeaderFormat, datesRepDistinctDays, dates.length);
         return ((0,_vdom_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(NowTimer, { unit: "day" }, function (nowDate, todayRange) { return ((0,_vdom_js__WEBPACK_IMPORTED_MODULE_1__.createElement)("tr", null,
-            renderIntro && renderIntro(),
+            renderIntro && renderIntro('day'),
             dates.map(function (date) { return (datesRepDistinctDays ? ((0,_vdom_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableDateCell, { key: date.toISOString(), date: date, dateProfile: dateProfile, todayRange: todayRange, colCnt: dates.length, dayHeaderFormat: dayHeaderFormat })) : ((0,_vdom_js__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableDowCell, { key: date.getUTCDay(), dow: date.getUTCDay(), dayHeaderFormat: dayHeaderFormat }))); }))); }));
     };
     return DayHeader;
@@ -9100,7 +9119,7 @@ function renderInner$1(innerProps) {
 
 // exports
 // --------------------------------------------------------------------------------------------------
-var version = '5.3.2'; // important to type it, so .d.ts has generic string
+var version = '5.5.0'; // important to type it, so .d.ts has generic string
 
 
 //# sourceMappingURL=main.js.map
@@ -9173,7 +9192,7 @@ var de = {
   },
   weekText: 'KW',
   allDayText: 'Ganztägig',
-  moreLinkText(n) {
+  moreLinkText: function(n) {
     return '+ weitere ' + n
   },
   noEventsText: 'Keine Ereignisse anzuzeigen',
@@ -9407,7 +9426,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/common */ "./node_modules/@fullcalendar/common/main.js");
 /*!
-FullCalendar v5.3.2
+FullCalendar v5.5.0
 Docs & License: https://fullcalendar.io/
 (c) 2020 Adam Shaw
 */
@@ -9647,7 +9666,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/common */ "./node_modules/@fullcalendar/common/main.js");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /*!
-FullCalendar v5.3.2
+FullCalendar v5.5.0
 Docs & License: https://fullcalendar.io/
 (c) 2020 Adam Shaw
 */
@@ -9855,6 +9874,9 @@ var TableCell = /** @class */ (function (_super) {
     };
     return TableCell;
 }(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.DateComponent));
+TableCell.addPropsEquality({
+    onMoreClick: true,
+});
 function renderMoreLinkInner(props) {
     return props.text;
 }
@@ -10097,7 +10119,14 @@ function limitEvents(hiddenCnts, segIsHidden, colPlacements, _moreLinkConsumesLe
         if (!segIsVisible[instanceId]) {
             segIsVisible[instanceId] = true;
             for (var col = seg.firstCol; col <= seg.lastCol; col += 1) {
-                visibleColPlacements[col].push(placement);
+                var destPlacements = visibleColPlacements[col];
+                var newPosition = 0;
+                // insert while keeping top sorted in each column
+                while (newPosition < destPlacements.length &&
+                    placement.top >= destPlacements[newPosition].top) {
+                    newPosition += 1;
+                }
+                destPlacements.splice(newPosition, 0, placement);
             }
         }
     }
@@ -10179,7 +10208,9 @@ var TableRow = /** @class */ (function (_super) {
                 var normalFgNodes = _this.renderFgSegs(segsByFirstCol[col], segIsHidden, segTops, segMarginTops, selectedInstanceHash, props.todayRange);
                 var mirrorFgNodes = _this.renderFgSegs(mirrorSegsByCol[col], {}, segTops, // use same tops as real rendering
                 {}, {}, props.todayRange, Boolean(props.eventDrag), Boolean(props.eventResize), false);
-                return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableCell, { key: cell.key, elRef: _this.cellElRefs.createRef(cell.key), innerElRef: _this.frameElRefs.createRef(cell.key) /* FF <td> problem, but okay to use for left/right. TODO: rename prop */, dateProfile: props.dateProfile, date: cell.date, showDayNumber: props.showDayNumbers, showWeekNumber: props.showWeekNumbers && col === 0, forceDayTop: props.showWeekNumbers /* even displaying weeknum for row, not necessarily day */, todayRange: props.todayRange, extraHookProps: cell.extraHookProps, extraDataAttrs: cell.extraDataAttrs, extraClassNames: cell.extraClassNames, moreCnt: moreCnts[col], buildMoreLinkText: props.buildMoreLinkText, onMoreClick: props.onMoreClick, segIsHidden: segIsHidden, moreMarginTop: moreTops[col] /* rename */, segsByEachCol: segsByEachCol[col], fgPaddingBottom: paddingBottoms[col], fgContentElRef: _this.fgElRefs.createRef(cell.key), fgContent: ( // Fragment scopes the keys
+                return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableCell, { key: cell.key, elRef: _this.cellElRefs.createRef(cell.key), innerElRef: _this.frameElRefs.createRef(cell.key) /* FF <td> problem, but okay to use for left/right. TODO: rename prop */, dateProfile: props.dateProfile, date: cell.date, showDayNumber: props.showDayNumbers, showWeekNumber: props.showWeekNumbers && col === 0, forceDayTop: props.showWeekNumbers /* even displaying weeknum for row, not necessarily day */, todayRange: props.todayRange, extraHookProps: cell.extraHookProps, extraDataAttrs: cell.extraDataAttrs, extraClassNames: cell.extraClassNames, moreCnt: moreCnts[col], buildMoreLinkText: props.buildMoreLinkText, onMoreClick: function (arg) {
+                        props.onMoreClick((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({}, arg), { fromCol: col }));
+                    }, segIsHidden: segIsHidden, moreMarginTop: moreTops[col] /* rename */, segsByEachCol: segsByEachCol[col], fgPaddingBottom: paddingBottoms[col], fgContentElRef: _this.fgElRefs.createRef(cell.key), fgContent: ( // Fragment scopes the keys
                     (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.Fragment, null,
                         (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, normalFgNodes),
                         (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, mirrorFgNodes))), bgContent: ( // Fragment scopes the keys
@@ -10320,6 +10351,9 @@ var TableRow = /** @class */ (function (_super) {
     };
     return TableRow;
 }(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.DateComponent));
+TableRow.addPropsEquality({
+    onMoreClick: true,
+});
 TableRow.addStateEquality({
     segHeights: _fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.isPropsEqual,
 });
@@ -10413,18 +10447,7 @@ var MorePopover = /** @class */ (function (_super) {
     (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__extends)(MorePopover, _super);
     function MorePopover() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.handlePopoverEl = function (popoverEl) {
-            _this.popoverEl = popoverEl;
-            if (popoverEl) {
-                _this.context.registerInteractiveComponent(_this, {
-                    el: popoverEl,
-                    useEventCenter: false,
-                });
-            }
-            else {
-                _this.context.unregisterInteractiveComponent(_this);
-            }
-        };
+        _this.rootElRef = (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createRef)();
         return _this;
     }
     MorePopover.prototype.render = function () {
@@ -10432,7 +10455,7 @@ var MorePopover = /** @class */ (function (_super) {
         var props = this.props;
         var date = props.date, hiddenInstances = props.hiddenInstances, todayRange = props.todayRange, dateProfile = props.dateProfile, selectedInstanceId = props.selectedInstanceId;
         var title = dateEnv.format(date, options.dayPopoverFormat);
-        return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.DayCellRoot, { date: date, dateProfile: dateProfile, todayRange: todayRange, elRef: this.handlePopoverEl }, function (rootElRef, dayClassNames, dataAttrs) { return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(Popover, { elRef: rootElRef, title: title, extraClassNames: ['fc-more-popover'].concat(dayClassNames), extraAttrs: dataAttrs, onClose: props.onCloseClick, alignmentEl: props.alignmentEl, topAlignmentEl: props.topAlignmentEl },
+        return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.DayCellRoot, { date: date, dateProfile: dateProfile, todayRange: todayRange, elRef: this.rootElRef }, function (rootElRef, dayClassNames, dataAttrs) { return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(Popover, { elRef: rootElRef, title: title, extraClassNames: ['fc-more-popover'].concat(dayClassNames), extraAttrs: dataAttrs, onClose: props.onCloseClick, alignmentEl: props.alignmentEl, topAlignmentEl: props.topAlignmentEl },
             (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.DayCellContent, { date: date, dateProfile: dateProfile, todayRange: todayRange }, function (innerElRef, innerContent) { return (innerContent &&
                 (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)("div", { className: "fc-more-popover-misc", ref: innerElRef }, innerContent)); }),
             props.segs.map(function (seg) {
@@ -10442,29 +10465,37 @@ var MorePopover = /** @class */ (function (_super) {
                     } }, hasListItemDisplay(seg) ? ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableListItemEvent, (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({ seg: seg, isDragging: false, isSelected: instanceId === selectedInstanceId, defaultDisplayEventEnd: false }, (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.getSegMeta)(seg, todayRange)))) : ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableBlockEvent, (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({ seg: seg, isDragging: false, isResizing: false, isDateSelecting: false, isSelected: instanceId === selectedInstanceId, defaultDisplayEventEnd: false }, (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.getSegMeta)(seg, todayRange))))));
             }))); }));
     };
-    MorePopover.prototype.queryHit = function (positionLeft, positionTop, elWidth, elHeight) {
+    MorePopover.prototype.positionToHit = function (positionLeft, positionTop, originEl) {
+        var rootEl = this.rootElRef.current;
+        if (!originEl || !rootEl) { // why?
+            return null;
+        }
+        var originRect = originEl.getBoundingClientRect();
+        var elRect = rootEl.getBoundingClientRect();
+        var newOriginLeft = elRect.left - originRect.left;
+        var newOriginTop = elRect.top - originRect.top;
+        var localLeft = positionLeft - newOriginLeft;
+        var localTop = positionTop - newOriginTop;
         var date = this.props.date;
-        if (positionLeft < elWidth && positionTop < elHeight) {
+        if ( // ugly way to detect intersection
+        localLeft >= 0 && localLeft < elRect.width &&
+            localTop >= 0 && localTop < elRect.height) {
             return {
-                component: this,
                 dateSpan: {
                     allDay: true,
                     range: { start: date, end: (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.addDays)(date, 1) },
                 },
-                dayEl: this.popoverEl,
-                rect: {
-                    left: 0,
-                    top: 0,
-                    right: elWidth,
-                    bottom: elHeight,
+                dayEl: rootEl,
+                relativeRect: {
+                    left: newOriginLeft,
+                    top: newOriginTop,
+                    right: elRect.width,
+                    bottom: elRect.height,
                 },
                 layer: 1,
             };
         }
         return null;
-    };
-    MorePopover.prototype.isPopover = function () {
-        return true; // gross
     };
     return MorePopover;
 }(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.DateComponent));
@@ -10480,6 +10511,7 @@ var Table = /** @class */ (function (_super) {
         _this.splitEventDrag = (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.memoize)(splitInteractionByRow);
         _this.splitEventResize = (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.memoize)(splitInteractionByRow);
         _this.buildBuildMoreLinkText = (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.memoize)(buildBuildMoreLinkText);
+        _this.morePopoverRef = (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createRef)();
         _this.rowRefs = new _fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.RefMap();
         _this.state = {
             morePopoverState: null,
@@ -10488,6 +10520,7 @@ var Table = /** @class */ (function (_super) {
             _this.rootEl = rootEl;
             (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.setRef)(_this.props.elRef, rootEl);
         };
+        // TODO: bad names "more link click" versus "more click"
         _this.handleMoreLinkClick = function (arg) {
             var context = _this.context;
             var dateEnv = context.dateEnv;
@@ -10514,7 +10547,7 @@ var Table = /** @class */ (function (_super) {
             }
             if (!clickOption || clickOption === 'popover') {
                 _this.setState({
-                    morePopoverState: (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({}, arg), { currentFgEventSegs: _this.props.fgEventSegs }),
+                    morePopoverState: (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({}, arg), { currentFgEventSegs: _this.props.fgEventSegs, fromRow: arg.fromRow, fromCol: arg.fromCol }),
                 });
             }
             else if (typeof clickOption === 'string') { // a view name
@@ -10570,8 +10603,10 @@ var Table = /** @class */ (function (_super) {
                     (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)("tbody", null, props.cells.map(function (cells, row) { return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(TableRow, { ref: _this.rowRefs.createRef(row), key: cells.length
                             ? cells[0].date.toISOString() /* best? or put key on cell? or use diff formatter? */
                             : row // in case there are no cells (like when resource view is loading)
-                        , showDayNumbers: rowCnt > 1, showWeekNumbers: props.showWeekNumbers, todayRange: todayRange, dateProfile: dateProfile, cells: cells, renderIntro: props.renderRowIntro, businessHourSegs: businessHourSegsByRow[row], eventSelection: props.eventSelection, bgEventSegs: bgEventSegsByRow[row].filter(isSegAllDay) /* hack */, fgEventSegs: fgEventSegsByRow[row], dateSelectionSegs: dateSelectionSegsByRow[row], eventDrag: eventDragByRow[row], eventResize: eventResizeByRow[row], dayMaxEvents: dayMaxEvents, dayMaxEventRows: dayMaxEventRows, clientWidth: props.clientWidth, clientHeight: props.clientHeight, buildMoreLinkText: buildMoreLinkText, onMoreClick: _this.handleMoreLinkClick })); }))),
-                (!props.forPrint && morePopoverState && morePopoverState.currentFgEventSegs === props.fgEventSegs) && ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(MorePopover, { date: morePopoverState.date, dateProfile: dateProfile, segs: morePopoverState.allSegs, alignmentEl: morePopoverState.dayEl, topAlignmentEl: rowCnt === 1 ? props.headerAlignElRef.current : null, onCloseClick: _this.handleMorePopoverClose, selectedInstanceId: props.eventSelection, hiddenInstances: // yuck
+                        , showDayNumbers: rowCnt > 1, showWeekNumbers: props.showWeekNumbers, todayRange: todayRange, dateProfile: dateProfile, cells: cells, renderIntro: props.renderRowIntro, businessHourSegs: businessHourSegsByRow[row], eventSelection: props.eventSelection, bgEventSegs: bgEventSegsByRow[row].filter(isSegAllDay) /* hack */, fgEventSegs: fgEventSegsByRow[row], dateSelectionSegs: dateSelectionSegsByRow[row], eventDrag: eventDragByRow[row], eventResize: eventResizeByRow[row], dayMaxEvents: dayMaxEvents, dayMaxEventRows: dayMaxEventRows, clientWidth: props.clientWidth, clientHeight: props.clientHeight, buildMoreLinkText: buildMoreLinkText, onMoreClick: function (arg) {
+                            _this.handleMoreLinkClick((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)((0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({}, arg), { fromRow: row }));
+                        } })); }))),
+                (!props.forPrint && morePopoverState && morePopoverState.currentFgEventSegs === props.fgEventSegs) && ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(MorePopover, { ref: _this.morePopoverRef, date: morePopoverState.date, dateProfile: dateProfile, segs: morePopoverState.allSegs, alignmentEl: morePopoverState.dayEl, topAlignmentEl: rowCnt === 1 ? props.headerAlignElRef.current : null, onCloseClick: _this.handleMorePopoverClose, selectedInstanceId: props.eventSelection, hiddenInstances: // yuck
                     (props.eventDrag ? props.eventDrag.affectedInstances : null) ||
                         (props.eventResize ? props.eventResize.affectedInstances : null) ||
                         {}, todayRange: todayRange })))); })));
@@ -10586,6 +10621,12 @@ var Table = /** @class */ (function (_super) {
         false);
     };
     Table.prototype.positionToHit = function (leftPosition, topPosition) {
+        var morePopover = this.morePopoverRef.current;
+        var morePopoverHit = morePopover ? morePopover.positionToHit(leftPosition, topPosition, this.rootEl) : null;
+        var morePopoverState = this.state.morePopoverState;
+        if (morePopoverHit) {
+            return (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__assign)({ row: morePopoverState.fromRow, col: morePopoverState.fromCol }, morePopoverHit);
+        }
         var _a = this, colPositions = _a.colPositions, rowPositions = _a.rowPositions;
         var col = colPositions.leftToIndex(leftPosition);
         var row = rowPositions.topToIndex(topPosition);
@@ -10801,7 +10842,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fullcalendar/common */ "./node_modules/@fullcalendar/common/main.js");
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /*!
-FullCalendar v5.3.2
+FullCalendar v5.5.0
 Docs & License: https://fullcalendar.io/
 (c) 2020 Adam Shaw
 */
@@ -11137,7 +11178,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/main.js");
 /*!
-FullCalendar v5.3.2
+FullCalendar v5.5.0
 Docs & License: https://fullcalendar.io/
 (c) 2020 Adam Shaw
 */
@@ -11246,7 +11287,7 @@ var TimeColsView = /** @class */ (function (_super) {
         };
         /* Header Render Methods
         ------------------------------------------------------------------------------------------------------------------*/
-        _this.renderHeadAxis = function (frameHeight) {
+        _this.renderHeadAxis = function (rowKey, frameHeight) {
             if (frameHeight === void 0) { frameHeight = ''; }
             var options = _this.context.options;
             var dateProfile = _this.props.dateProfile;
@@ -11255,7 +11296,7 @@ var TimeColsView = /** @class */ (function (_super) {
             var navLinkAttrs = (options.navLinks && dayCnt === 1) // only do in day views (to avoid doing in week views that dont need it)
                 ? { 'data-navlink': (0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.buildNavLinkData)(range.start, 'week'), tabIndex: 0 }
                 : {};
-            if (options.weekNumbers) {
+            if (options.weekNumbers && rowKey === 'day') {
                 return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)(_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.WeekNumberRoot, { date: range.start, defaultFormat: DEFAULT_WEEK_NUM_FORMAT }, function (rootElRef, classNames, innerElRef, innerContent) { return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)("th", { ref: rootElRef, className: [
                         'fc-timegrid-axis',
                         'fc-scrollgrid-shrink',
@@ -11354,7 +11395,7 @@ var TimeColsView = /** @class */ (function (_super) {
                 chunks: [
                     {
                         key: 'axis',
-                        rowContent: function (arg) { return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)("tr", null, _this.renderHeadAxis(arg.rowSyncHeights[0]))); },
+                        rowContent: function (arg) { return ((0,_fullcalendar_common__WEBPACK_IMPORTED_MODULE_1__.createElement)("tr", null, _this.renderHeadAxis('day', arg.rowSyncHeights[0]))); },
                     },
                     {
                         key: 'cols',

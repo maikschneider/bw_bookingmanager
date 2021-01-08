@@ -7,6 +7,7 @@ import listPlugin from '@fullcalendar/list';
 import deLocale from '@fullcalendar/core/locales/de';
 import '../Scss/backendCalendar.scss';
 import tippy from 'tippy.js';
+import interactionPlugin from '@fullcalendar/interaction';
 import 'tippy.js/dist/tippy.css';
 import {BackendCalendarViewState} from "./BackendCalendarViewState";
 
@@ -84,11 +85,12 @@ class BackendModuleCalendar {
           $(calendarEl).next().css('display', display);
         },
         weekNumbers: true,
-        plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
         navLinks: true,
         nowIndicator: true,
         dayMaxEvents: true,
         events: this.viewState.events,
+        selectable: true,
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();
