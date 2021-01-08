@@ -28391,10 +28391,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             this.events = {
                 'url': TYPO3.settings.ajaxUrls['api_calendar_show'],
                 'extraParams': {
-                    'pid': viewState.pid,
-                    'entryUid': this.entryUid
+                    'pid': viewState.pid
                 }
             };
+            if (this.entryUid) {
+                this.events.extraParams['entryUid'] = this.entryUid;
+            }
         }
         /**
          * Used in BackendModuleCalendar to persist the current display of view type and selected date

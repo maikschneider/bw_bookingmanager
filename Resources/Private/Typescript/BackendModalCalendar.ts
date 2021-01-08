@@ -74,6 +74,7 @@ class BackendModalCalendar {
           icon: 'actions-close',
           btnClass: 'btn-danger',
           trigger: () => {
+            this.selectedEvent = null;
             Modal.currentModal.trigger('modal-dismiss')
           }
         },
@@ -115,28 +116,24 @@ class BackendModalCalendar {
     $('#savedStartDate').html(start);
     $('#savedEndDate').html(end);
 
-    // repaint newly selected event
-
-
     // close
     Modal.currentModal.trigger('modal-dismiss');
   }
 
   public onEventClick(info) {
 
-    const events = this.calendar.getEvents();
-    console.log(events);
-    info.event.setExtendedProp('isSelected', true);
+    const isBookableTimeslot = info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable;
+    const isSavedEntry = info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isSavedEntry;
 
-    if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable) {
+    if (isBookableTimeslot || isSavedEntry) {
       info.jsEvent.preventDefault();
 
       // adjust style for previous clicked event
       if (this.selectedEvent) {
-        this.selectedEvent.setProp('color', 'green');
+        this.selectedEvent.setExtendedProp('isSelected', false);
       }
       this.selectedEvent = info.event;
-      this.selectedEvent.setProp('color', 'orange');
+      this.selectedEvent.setExtendedProp('isSelected', true);
 
     }
   }
@@ -176,14 +173,23 @@ class BackendModalCalendar {
         events: this.viewState.events,
         eventClick: this.onEventClick.bind(this),
         eventClassNames: (arg) => {
+          let classNames = arg.event.classNames.slice();
           if (arg.event.extendedProps.isSelected) {
-            return ['active'];
+            classNames.push('active');
           }
-          return arg.event.classNames;
+          if (arg.event.extendedProps.model === 'Entry' && arg.event.extendedProps.isSavedEntry && !arg.event.extendedProps.isSelected) {
+            classNames.push('removed');
+          }
+          return classNames;
         },
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();
+
+          // mark selected element for display
+          if (this.selectedEvent) {
+            this.selectedEvent.setExtendedProp('isSelected', true);
+          }
         },
         eventDidMount: (info) => {
           if (info.event.extendedProps.tooltip) {
@@ -207,13 +213,23 @@ class BackendModalCalendar {
           }
 
           // unhide current entry
-          if (this.viewState.entryUid === info.event.extendedProps.uid) {
+          if (info.event.extendedProps.model === 'Entry' && this.viewState.entryUid === info.event.extendedProps.uid) {
             info.event.setProp('display', 'auto');
+            if (!this.selectedEvent) {
+              this.selectedEvent = info.event;
+            }
           }
 
           // hide timeslot of current Entry if its weight is 1
           if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isSelectedEntryTimeslot && info.event.extendedProps.maxWeight === 1) {
             info.event.setProp('display', 'none');
+          }
+
+          console.log(this.selectedEvent);
+
+          // @TODO: execute just once after rendering
+          if (this.selectedEvent && this.selectedEvent.extendedProps.uniqueId === info.event.extendedProps.uniqueId) {
+            info.event.setExtendedProp('isSelected', true);
           }
 
         }

@@ -135,6 +135,7 @@ class CalendarEvent
             'uid' => $this->uid,
             'calendar' => $this->calendar,
             'isSelected' => false,
+            'uniqueId' => $this->getUniqueId()
         ];
     }
 
@@ -142,6 +143,11 @@ class CalendarEvent
     {
         $now = new \DateTime('now');
         return $this->start < $now;
+    }
+
+    public function getUniqueId()
+    {
+        return md5(static::MODEL . '-' . $this->uid . '-' . $this->start->getTimestamp() . '-' . $this->end->getTimestamp());
     }
 
     public function getClassNames(): array
@@ -239,12 +245,12 @@ class CalendarEvent
     {
     }
 
+    public function addBackendModalLink(UriBuilder $uriBuilder): void
+    {
+    }
+
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
-    }
-
-    public function addBackendModalLink(UriBuilder $uriBuilder): void
-    {
     }
 }

@@ -43,10 +43,13 @@ export class BackendCalendarViewState {
     this.events = {
       'url': TYPO3.settings.ajaxUrls['api_calendar_show'],
       'extraParams': {
-        'pid': viewState.pid,
-        'entryUid': this.entryUid
+        'pid': viewState.pid
       }
     };
+
+    if (this.entryUid) {
+      this.events.extraParams['entryUid'] = this.entryUid;
+    }
 
   }
 

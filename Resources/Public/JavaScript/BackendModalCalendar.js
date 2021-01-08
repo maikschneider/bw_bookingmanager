@@ -35449,10 +35449,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             this.events = {
                 'url': TYPO3.settings.ajaxUrls['api_calendar_show'],
                 'extraParams': {
-                    'pid': viewState.pid,
-                    'entryUid': this.entryUid
+                    'pid': viewState.pid
                 }
             };
+            if (this.entryUid) {
+                this.events.extraParams['entryUid'] = this.entryUid;
+            }
         }
         /**
          * Used in BackendModuleCalendar to persist the current display of view type and selected date
@@ -35532,6 +35534,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                         icon: 'actions-close',
                         btnClass: 'btn-danger',
                         trigger: function () {
+                            _this.selectedEvent = null;
                             Modal.currentModal.trigger('modal-dismiss');
                         }
                     },
@@ -35568,22 +35571,20 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             var end = Intl.DateTimeFormat(this.viewState.language, format).format(event.end);
             $('#savedStartDate').html(start);
             $('#savedEndDate').html(end);
-            // repaint newly selected event
             // close
             Modal.currentModal.trigger('modal-dismiss');
         };
         BackendModalCalendar.prototype.onEventClick = function (info) {
-            var events = this.calendar.getEvents();
-            console.log(events);
-            info.event.setExtendedProp('isSelected', true);
-            if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable) {
+            var isBookableTimeslot = info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable;
+            var isSavedEntry = info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isSavedEntry;
+            if (isBookableTimeslot || isSavedEntry) {
                 info.jsEvent.preventDefault();
                 // adjust style for previous clicked event
                 if (this.selectedEvent) {
-                    this.selectedEvent.setProp('color', 'green');
+                    this.selectedEvent.setExtendedProp('isSelected', false);
                 }
                 this.selectedEvent = info.event;
-                this.selectedEvent.setProp('color', 'orange');
+                this.selectedEvent.setExtendedProp('isSelected', true);
             }
         };
         BackendModalCalendar.prototype.renderCalendar = function (calendarEl) {
@@ -35619,14 +35620,22 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                     events: _this.viewState.events,
                     eventClick: _this.onEventClick.bind(_this),
                     eventClassNames: function (arg) {
+                        var classNames = arg.event.classNames.slice();
                         if (arg.event.extendedProps.isSelected) {
-                            return ['active'];
+                            classNames.push('active');
                         }
-                        return arg.event.classNames;
+                        if (arg.event.extendedProps.model === 'Entry' && arg.event.extendedProps.isSavedEntry && !arg.event.extendedProps.isSelected) {
+                            classNames.push('removed');
+                        }
+                        return classNames;
                     },
                     datesSet: function () {
                         _this.viewState.calendarView = _this.calendar.view.type;
                         _this.viewState.start = _this.calendar.currentData.currentDate.toISOString();
+                        // mark selected element for display
+                        if (_this.selectedEvent) {
+                            _this.selectedEvent.setExtendedProp('isSelected', true);
+                        }
                     },
                     eventDidMount: function (info) {
                         if (info.event.extendedProps.tooltip) {
@@ -35645,12 +35654,20 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                             info.event.setProp('display', 'none');
                         }
                         // unhide current entry
-                        if (_this.viewState.entryUid === info.event.extendedProps.uid) {
+                        if (info.event.extendedProps.model === 'Entry' && _this.viewState.entryUid === info.event.extendedProps.uid) {
                             info.event.setProp('display', 'auto');
+                            if (!_this.selectedEvent) {
+                                _this.selectedEvent = info.event;
+                            }
                         }
                         // hide timeslot of current Entry if its weight is 1
                         if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isSelectedEntryTimeslot && info.event.extendedProps.maxWeight === 1) {
                             info.event.setProp('display', 'none');
+                        }
+                        console.log(_this.selectedEvent);
+                        // @TODO: execute just once after rendering
+                        if (_this.selectedEvent && _this.selectedEvent.extendedProps.uniqueId === info.event.extendedProps.uniqueId) {
+                            info.event.setExtendedProp('isSelected', true);
                         }
                     }
                 });
