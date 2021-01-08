@@ -9,10 +9,3 @@ $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = [
 ];
 
 $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-bm'] = 'apps-pagetree-folder-contains-bm';
-
-// Register PageTS config file
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerPageTSConfigFile(
-    'bw_bookingmanager',
-    'Configuration/TSconfig/Page.tsconfig',
-    'Bookingmanager-PageTS'
-);
