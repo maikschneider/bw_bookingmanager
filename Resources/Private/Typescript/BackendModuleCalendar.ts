@@ -32,6 +32,7 @@ class BackendModuleCalendar {
   public init() {
     this.initCalendar();
     this.bindEvents();
+    return this;
   }
 
   public bindEvents() {
@@ -52,6 +53,23 @@ class BackendModuleCalendar {
     this.calendar.refetchEvents();
     // upload new view state to backend user settings
     this.viewState.saveAsUserView();
+  }
+
+  public onSelect(info) {
+
+    this.viewState.selectedStart = info.start;
+    this.viewState.selectedEnd = info.end;
+
+    // remove old context menu trigger
+    $('.fc-daygrid-day').removeClass('t3js-contextmenutrigger');
+
+    $('.fc-daygrid-day .fc-highlight')
+      .closest('.fc-daygrid-day')
+      .addClass('t3js-contextmenutrigger')
+      .attr('data-table', 'tx_bwbookingmanager_domain_model_calendar')
+      .attr('data-context', 'calendar')
+      .attr('onclick', '')
+      .attr('data-uid', this.viewState.pid);
   }
 
   public initCalendar() {
@@ -91,6 +109,8 @@ class BackendModuleCalendar {
         dayMaxEvents: true,
         events: this.viewState.events,
         selectable: true,
+        unselectAuto: true,
+        select: this.onSelect.bind(this),
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();

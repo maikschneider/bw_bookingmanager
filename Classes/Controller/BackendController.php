@@ -56,6 +56,11 @@ class BackendController
         $viewState['pid'] = $pid;
         $viewState['language'] = $language;
 
+        $pageRenderer = $this->moduleTemplate->getPageRenderer();
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendCalendarContextMenuActions');
+        //$pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendModuleCalendar');
+
         $this->view->assign('calendars', $calendars);
         $this->view->assign('viewState', json_encode($viewState, JSON_THROW_ON_ERROR));
 

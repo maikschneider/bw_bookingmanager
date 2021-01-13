@@ -6,22 +6,24 @@ module.exports = {
     filename: 'Resources/Public/Css/backend/BackendCalendar.css',
   })],
   mode: 'development',
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   watch: true,
   entry: {
     BackendModuleCalendar: './Resources/Private/TypeScript/BackendModuleCalendar.ts',
-    BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts'
+    BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts',
+    BackendCalendarContextMenuActions: './Resources/Private/TypeScript/BackendCalendarContextMenuActions.ts'
   },
   output: {
     filename: 'Resources/Public/JavaScript/[name].js',
     path: path.resolve(__dirname, '.'),
+    libraryTarget: 'amd',
+    library: "TYPO3/CMS/BwBookingmanager/[name]"
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+        use: 'ts-loader'
       },
       {
         test: /\.css$/i,
@@ -41,7 +43,8 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       'TYPO3/CMS/Backend': path.resolve(__dirname, 'public/typo3/sysext/backend/Resources/Private/TypeScript'),
-      'TYPO3/CMS/Core': path.resolve(__dirname, 'public/typo3/sysext/core/Resources/Private/TypeScript')
+      'TYPO3/CMS/Core': path.resolve(__dirname, 'public/typo3/sysext/core/Resources/Private/TypeScript'),
+      'TYPO3/CMS/BwBookingmanager': path.resolve(__dirname, 'Resources/Private/TypeScript')
     }
   },
 };

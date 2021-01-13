@@ -12,6 +12,8 @@ export class BackendCalendarViewState {
   public calendar: number;
   public entryUid: number;
   public end: any;
+  public selectedStart: any;
+  public selectedEnd: any;
 
   private saveRequest: any;
 

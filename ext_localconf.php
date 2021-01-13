@@ -1,4 +1,7 @@
 <?php
+
+use Blueways\BwBookingmanager\ContextMenu\CalendarItemProvider;
+
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
@@ -41,6 +44,9 @@ call_user_func(
         // register TSConfig for User und Page
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('@import "EXT:bw_bookingmanager/Configuration/TSconfig/Page.tsconfig"');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('@import "EXT:bw_bookingmanager/Configuration/TSconfig/User.tsconfig"');
+
+        // register context menu
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['ContextMenu']['ItemProviders'][1610288958] = CalendarItemProvider::class;
 
         // notification hooks
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['sendNotification'][] = 'Blueways\BwBookingmanager\Hooks\NotificationSpecial1IsCheckedHook';
