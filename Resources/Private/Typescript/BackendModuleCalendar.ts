@@ -111,6 +111,12 @@ class BackendModuleCalendar {
         selectable: true,
         unselectAuto: true,
         select: this.onSelect.bind(this),
+        eventClick: (arg) => {
+          if (arg.event.url) {
+            arg.jsEvent.preventDefault();
+            top.TYPO3.Backend.ContentContainer.setUrl(arg.event.url);
+          }
+        },
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();
