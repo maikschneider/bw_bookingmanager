@@ -84,7 +84,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $sql = "select
         " . $calendarUid . " as calendar,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as t_start_date,
-		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.end_date)))) as UNSIGNED) as t_end_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) + (t.end_date - t.start_date) as UNSIGNED) as t_end_date,
         t.*,
 #		dates.date,
 #		TIME(FROM_UNIXTIME(t.start_date)) as start,
@@ -133,7 +133,8 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             (repeat_end = 0 OR FROM_UNIXTIME(repeat_end) > dates.date) AND
             (holiday_setting=0 or (holiday_setting=1 and is_holiday is null) or (holiday_setting=2 and is_holiday=1)) AND
 
-            (	repeat_type = 0 OR repeat_type = 1 OR
+            (	repeat_type = 0 AND DATE(FROM_UNIXTIME(t.start_date)) = DATE(dates.date) OR
+                repeat_type = 1 OR
                 repeat_type = 4 AND
                 (
                     (SUBSTRING(REVERSE(BIN(repeat_days)), 1, 1) = 1) AND weekday = 1 OR
