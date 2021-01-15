@@ -98,7 +98,7 @@ class CalendarEvent
 
     public static function isFullDay(\DateTime $startDate, \DateTime $endDate): bool
     {
-        return $startDate->format('H') === '00' && (int)$endDate->format('H') >= 23;
+        return $startDate->format('H') === '00' && ((int)$endDate->format('H') >= 23 || (int)$endDate->format('H') === 0);
     }
 
     public function getColor(): string
