@@ -15,6 +15,10 @@ CREATE TABLE tx_bwbookingmanager_domain_model_calendar (
 	direct_booking smallint(5) unsigned DEFAULT '0' NOT NULL,
 	entries int(11) unsigned DEFAULT '0' NOT NULL,
 	icss int(11) unsigned DEFAULT '0' NOT NULL,
+	default_start_time int(11) unsigned DEFAULT '0' NOT NULL,
+	default_end_time int(11) unsigned DEFAULT '0' NOT NULL,
+	min_length int(11) unsigned DEFAULT '0' NOT NULL,
+	min_offset int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

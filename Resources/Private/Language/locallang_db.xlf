@@ -37,7 +37,22 @@
 				<source>Entries</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.direct_booking">
+				<source>Direct booking</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.allow_direct_booking">
 				<source>Allow direct bookings</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_start_time">
+				<source>Default start time</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_end_time">
+				<source>Default end time</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_length">
+				<source>Minimal booking length</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_offset">
+				<source>Min. time between</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
@@ -380,6 +395,15 @@
 			</trans-unit>
 			<trans-unit id="date.oclock">
 				<source>o'clock</source>
+			</trans-unit>
+			<trans-unit id="advanced">
+				<source>Advanced</source>
+			</trans-unit>
+			<trans-unit id="general">
+				<source>General</source>
+			</trans-unit>
+			<trans-unit id="exceptions">
+				<source>Exceptions</source>
 			</trans-unit>
 		</body>
 	</file>
