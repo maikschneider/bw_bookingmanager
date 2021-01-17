@@ -48,8 +48,7 @@ class BackendCalendarContextMenuActions {
   public static newBlockslot(table, uid) {
     const model = $(this).attr('data-model-name');
     const calendarUid = $(this).attr('data-def-calendar-uid');
-    let defValsOverride = '&defVals[' + model + '][calendars]=tx_bwbookingmanager_domain_model_calendar_' + calendarUid;
-    defValsOverride += '&defVals[' + model + '][reason]=hoosa';
+    const defValsOverride = '&defVals[' + model + '][calendars]=tx_bwbookingmanager_domain_model_calendar_' + calendarUid;
 
     BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride);
   }
@@ -62,8 +61,7 @@ class BackendCalendarContextMenuActions {
   public static newHoliday(table, uid) {
     const model = $(this).attr('data-model-name');
     const calendarUid = $(this).attr('data-def-calendar-uid');
-    let defValsOverride = '&defVals[' + model + '][calendars]=tx_bwbookingmanager_domain_model_calendar_' + calendarUid;
-    defValsOverride += '&defVals[' + model + '][title]=hoosa';
+    const defValsOverride = '&defVals[' + model + '][calendars]=tx_bwbookingmanager_domain_model_calendar_' + calendarUid;
 
     BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride);
   }

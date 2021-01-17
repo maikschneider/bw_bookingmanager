@@ -196,7 +196,7 @@ return [
                 'type' => 'input',
                 'size' => 10,
                 'range' => [
-                    'lower' => 1,
+                    'lower' => 0,
                     'upper' => 1440,
                 ],
                 'default' => 0,

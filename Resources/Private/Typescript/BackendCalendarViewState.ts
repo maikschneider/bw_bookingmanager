@@ -1,3 +1,12 @@
+class BackendCalendar {
+  uid: number;
+  directBooking: boolean;
+  defaultStartTime: any;
+  defaultEndTime: any;
+  minLength: number;
+  minOffset: number;
+}
+
 export class BackendCalendarViewState {
   public pid: number;
   public calendarView: string;
@@ -14,6 +23,7 @@ export class BackendCalendarViewState {
   public end: any;
   public selectedStart: any;
   public selectedEnd: any;
+  public currentCalendars: BackendCalendar[];
 
   private saveRequest: any;
 
@@ -28,12 +38,13 @@ export class BackendCalendarViewState {
 
     this.pid = viewState.pid;
 
+    // @TODO: most properties are in parsed json for sure, we could extend
     this.language = 'language' in viewState && viewState.language !== 'default' ? viewState.language : 'en';
     this.start = 'start' in viewState ? viewState.start : new Date();
-    this.calendarView = 'calendarView' in viewState ? viewState.calendarView : 'dayGridMonth';
-    this.pastEntries = 'pastEntries' in viewState && viewState.pastEntries === 'true';
-    this.pastTimeslots = 'pastTimeslots' in viewState && viewState.pastTimeslots === 'true';
-    this.notBookableTimeslots = 'notBookableTimeslots' in viewState && viewState.notBookableTimeslots === 'true';
+    this.calendarView = viewState.calendarView;
+    this.pastEntries = viewState.pastEntries;
+    this.pastTimeslots = viewState.pastTimeslots;
+    this.notBookableTimeslots = viewState.notBookableTimeslots;
 
     // stuff needed in modal
     this.futureEntries = 'futureEntries' in viewState && viewState.futureEntries === 'true';
@@ -41,6 +52,9 @@ export class BackendCalendarViewState {
     this.entryUid = 'entryUid' in viewState ? viewState.entryUid : null;
     this.calendar = 'calendar' in viewState ? viewState.calendar : null;
     this.timeslot = 'timeslot' in viewState ? viewState.timeslot : null;
+
+    // stuff needed for direct booking
+    this.currentCalendars = viewState.currentCalendars;
 
     this.events = {
       'url': TYPO3.settings.ajaxUrls['api_calendar_show'],

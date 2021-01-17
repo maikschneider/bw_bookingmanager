@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Blueways\BwBookingmanager\Controller\Ajax;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Utility\FullCalendarUtility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\Response;
@@ -30,8 +31,9 @@ class ApiController extends ActionController
         $body = $request->getParsedBody();
 
         if (isset($body['viewState'])) {
-            $moduleDataIdentifier = 'bwbookingmanager/calendarViewState-' . $body['viewState']['pid'];
-            $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, $body['viewState']);
+            $viewState = new BackendCalendarViewState((int)$body['viewState']['pid']);
+            $viewState->overrideFromApiSave($body['viewState']);
+            $viewState->persistInUserSettings();
         }
 
         return $response;

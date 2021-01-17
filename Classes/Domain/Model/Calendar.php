@@ -70,6 +70,58 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $directBooking;
 
     /**
+     * @var int
+     */
+    protected $defaultStartTime;
+
+    /**
+     * @return int
+     */
+    public function getDefaultStartTime(): int
+    {
+        return $this->defaultStartTime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultEndTime(): int
+    {
+        return $this->defaultEndTime;
+    }
+
+    /**
+     * @var int
+     */
+    protected $defaultEndTime;
+
+    /**
+     * @var int
+     */
+    protected $minLength;
+
+    /**
+     * @return int
+     */
+    public function getMinLength(): int
+    {
+        return $this->minLength;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinOffset(): int
+    {
+        return $this->minOffset;
+    }
+
+    /**
+     * @var int
+     */
+    protected $minOffset;
+
+    /**
      * __construct
      */
     public function __construct()

@@ -52,6 +52,20 @@ class FullCalendarUtility
         return $this->getOutputForBackendModule($events);
     }
 
+    private function getOutputForBackendModal(array $events, $entryUid)
+    {
+        $fullCalendarEvents = [];
+
+        /** @var CalendarEvent $event */
+        foreach ($events as $event) {
+            $event->addBackendModalLink($this->uriBuilder);
+            $event->addBackendModalIsSelectedEntryTimeslot($entryUid);
+            $fullCalendarEvents[] = $event->getFullCalendarOutput();
+        }
+
+        return $fullCalendarEvents;
+    }
+
     /**
      * @param CalendarEvent[] $events
      * @return array
@@ -72,19 +86,5 @@ class FullCalendarUtility
     public function injectUriBuilder(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
     {
         $this->uriBuilder = $uriBuilder;
-    }
-
-    private function getOutputForBackendModal(array $events, $entryUid)
-    {
-        $fullCalendarEvents = [];
-
-        /** @var CalendarEvent $event */
-        foreach ($events as $event) {
-            $event->addBackendModalLink($this->uriBuilder);
-            $event->addBackendModalIsSelectedEntryTimeslot($entryUid);
-            $fullCalendarEvents[] = $event->getFullCalendarOutput();
-        }
-
-        return $fullCalendarEvents;
     }
 }

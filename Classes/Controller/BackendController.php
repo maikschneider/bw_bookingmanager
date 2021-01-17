@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -49,12 +50,10 @@ class BackendController
         $this->initializeView('calendar');
 
         $calendarRepository = $this->objectManager->get(CalendarRepository::class);
-        $language = $this->getLanguageService()->lang;
         $calendars = $calendarRepository->findAllByPid($pid);
 
         $viewState = $this->getCalendarViewState();
-        $viewState['pid'] = $pid;
-        $viewState['language'] = $language;
+        $viewState->addCalendars($calendars);
 
         $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
@@ -75,10 +74,10 @@ class BackendController
         return $pid ?: 0;
     }
 
-    protected function getCalendarViewState(): array
+    protected function getCalendarViewState(): BackendCalendarViewState
     {
         $pid = $this->getCurrentPid();
-        return $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?: [];
+        return BackendCalendarViewState::getFromUserSettings($pid);
     }
 
     /**
@@ -179,7 +178,7 @@ class BackendController
                     'data-attrs' => [
                         'changeViewState' => 'pastTimeslots'
                     ],
-                    'classes' => $viewState['pastTimeslots'] === 'true' ? 'active' : ''
+                    'classes' => $viewState->pastTimeslots ? 'active' : ''
                 ],
                 [
                     'label' => 'flexforms_general.mode.show_not_bookable_timeslots',
@@ -190,7 +189,7 @@ class BackendController
                     'data-attrs' => [
                         'changeViewState' => 'notBookableTimeslots'
                     ],
-                    'classes' => $viewState['notBookableTimeslots'] === 'true' ? 'active' : ''
+                    'classes' => $viewState->notBookableTimeslots ? 'active' : ''
                 ],
                 [
                     'label' => 'flexforms_general.mode.show_past_entries',
@@ -201,7 +200,7 @@ class BackendController
                     'data-attrs' => [
                         'changeViewState' => 'pastEntries'
                     ],
-                    'classes' => $viewState['pastEntries'] === 'true' ? 'active' : ''
+                    'classes' => $viewState->pastEntries ? 'active' : ''
                 ],
             ]);
         }
