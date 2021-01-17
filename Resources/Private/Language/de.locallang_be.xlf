@@ -362,6 +362,22 @@
 				<source>Reply-to address</source>
 				<target>Antwort-Adresse</target>
 			</trans-unit>
+			<trans-unit id="context.newTimeslot">
+				<source>New Timeslot</source>
+				<target>Neuer Timeslot</target>
+			</trans-unit>
+			<trans-unit id="context.newBlockslot">
+				<source>New Blockslot</source>
+				<target>Neuer Blockslot</target>
+			</trans-unit>
+			<trans-unit id="context.newHoliday">
+				<source>New Holiday</source>
+				<target>Neue Ferien</target>
+			</trans-unit>
+			<trans-unit id="context.newEntry">
+				<source>New Entry</source>
+				<target>Neuer Eintrag</target>
+			</trans-unit>
         </body>
     </file>
 </xliff>
