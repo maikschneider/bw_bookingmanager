@@ -60,11 +60,7 @@ class BackendModuleCalendar {
     this.viewState.selectedStart = info.start;
     this.viewState.selectedEnd = info.end;
 
-    // remove old context menu trigger
-    $('.fc-daygrid-day').removeClass('t3js-contextmenutrigger');
-
-    $('.fc-daygrid-day .fc-highlight')
-      .closest('.fc-daygrid-day')
+    $('.fc-highlight')
       .addClass('t3js-contextmenutrigger')
       .attr('data-table', 'tx_bwbookingmanager_domain_model_calendar')
       .attr('data-context', 'calendar')
