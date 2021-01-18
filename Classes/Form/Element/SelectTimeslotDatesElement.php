@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Form\Element;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use DateTime;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
@@ -43,22 +44,36 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/BackendModalCalendar';
 
         $savedData = $this->getSavedData();
-        $language = $this->getLanguageService()->lang;
-        $start = new \DateTime();
-        $start->setTimestamp($savedData['startDate']);
-        $end = new \DateTime();
-        $end->setTimestamp($savedData['endDate']);
-        $viewState = [
-            'pid' => $savedData['pid'],
-            'language' => $language,
-            'start' => $start->format(DateTime::ATOM),
-            'end' => $end->format(DateTime::ATOM),
-            'timeslot' => $savedData['timeslot'],
-            'calendar' => $savedData['calendar'],
-            'entryUid' => $savedData['entryUid'],
-            'notBookableTimeslots' => 'true',
-            'futureEntries' => 'false',
-        ];
+
+        $start = new DateTime();
+        if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate'])) {
+            $start->setTimestamp($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate']);
+        }
+        if ($this->data['databaseRow']['start_date']) {
+            $start->setTimestamp($this->data['databaseRow']['start_date']);
+        }
+        $start = $start->format('Y-m-d\TH:i:s.v\Z');
+
+        $end = new DateTime();
+        if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'])) {
+            $end->setTimestamp($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate']);
+        }
+        if ($this->data['databaseRow']['end_date']) {
+            $end->setTimestamp($this->data['databaseRow']['end_date']);
+        }
+        $end = $end->format('Y-m-d\TH:i:s.v\Z');
+        $timeslot = $this->data['databaseRow']['timeslot'];
+        $calendar = $this->data['databaseRow']['calendar'][0];
+        $entryUid = $this->data['databaseRow']['uid'];
+
+        $viewState = new BackendCalendarViewState($savedData['pid']);
+        $viewState->start = $start;
+        $viewState->end = $end;
+        $viewState->notBookableTimeslots = true;
+        $viewState->futureEntries = false;
+        $viewState->timeslot = $timeslot;
+        $viewState->calendar = $calendar;
+        $viewState->entryUid = $entryUid;
 
         $this->templateView->assign('savedData', $savedData);
         $this->templateView->assign('viewState', json_encode($viewState));

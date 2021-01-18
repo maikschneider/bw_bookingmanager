@@ -15,6 +15,8 @@ class BackendCalendarViewState
 
     public string $start;
 
+    public string $end;
+
     public string $calendarView = 'dayGridMonth';
 
     public bool $pastEntries = false;
@@ -24,6 +26,12 @@ class BackendCalendarViewState
     public bool $notBookableTimeslots = false;
 
     public bool $futureEntries = false;
+
+    public ?int $timeslot;
+
+    public ?int $calendar;
+
+    public $entryUid;
 
     public function __construct(int $pid)
     {

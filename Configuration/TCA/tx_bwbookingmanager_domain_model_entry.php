@@ -20,9 +20,9 @@ return [
     ],
     'types' => [
         'Blueways\BwBookingmanager\Domain\Model\Entry' => ['showitem' => '
-            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.topPalette;topPalette, 
-            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general;generalPalette, 
-            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData;contactDataPalette, 
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.topPalette;topPalette,
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general;generalPalette,
+            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData;contactDataPalette,
             --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.special;specialPalette'],
     ],
      'palettes' => [
@@ -225,8 +225,7 @@ return [
                 'renderType' => 'hidden',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
                 'foreign_table_where' => ' AND tx_bwbookingmanager_domain_model_timeslot.pid=###CURRENT_PID###',
-                'minitems' => 0,
-                'maxitems' => 1,
+                'default' => 0
             ],
         ],
         'calendar' => [

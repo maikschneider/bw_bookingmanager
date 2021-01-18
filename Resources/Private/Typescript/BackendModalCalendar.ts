@@ -31,8 +31,6 @@ class BackendModalCalendar {
 
   public selectedEvent: EventApi;
 
-  private saveRequest: any;
-
   public init() {
     this.initViewState();
     this.bindEvents();
@@ -42,8 +40,6 @@ class BackendModalCalendar {
     const button = document.getElementById('entry-date-select-button');
 
     this.viewState = new BackendCalendarViewState(button);
-
-    console.log(this.viewState);
   }
 
   public bindEvents() {
@@ -75,7 +71,7 @@ class BackendModalCalendar {
           btnClass: 'btn-danger',
           trigger: () => {
             this.selectedEvent = null;
-            Modal.currentModal.trigger('modal-dismiss')
+            Modal.currentModal.trigger('modal-dismiss');
           }
         },
         {
@@ -121,7 +117,6 @@ class BackendModalCalendar {
   }
 
   public onEventClick(info) {
-
     const isBookableTimeslot = info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isBookable;
     const isSavedEntry = info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isSavedEntry;
 
@@ -129,9 +124,13 @@ class BackendModalCalendar {
       info.jsEvent.preventDefault();
 
       // adjust style for previous clicked event
-      if (this.selectedEvent) {
-        this.selectedEvent.setExtendedProp('isSelected', false);
+      if (this.calendar.getEvents().length) {
+        const events = this.calendar.getEvents();
+        for (let i = 0; i < events.length; i++) {
+          events[i].setExtendedProp('isSelected', false);
+        }
       }
+
       this.selectedEvent = info.event;
       this.selectedEvent.setExtendedProp('isSelected', true);
 
@@ -220,12 +219,15 @@ class BackendModalCalendar {
             }
           }
 
+          // new entry with default values: mark timeslot
+          if (!this.selectedEvent && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.uid === this.viewState.timeslot && this.viewState.start === info.event.start.toISOString() && this.viewState.end === info.event.end.toISOString()) {
+            this.selectedEvent = info.event;
+          }
+
           // hide timeslot of current Entry if its weight is 1
           if (info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.isSelectedEntryTimeslot && info.event.extendedProps.maxWeight === 1) {
             info.event.setProp('display', 'none');
           }
-
-          console.log(this.selectedEvent);
 
           // @TODO: execute just once after rendering
           if (this.selectedEvent && this.selectedEvent.extendedProps.uniqueId === info.event.extendedProps.uniqueId) {
