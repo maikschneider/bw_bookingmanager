@@ -11,6 +11,8 @@ class EntryCalendarEvent extends CalendarEvent
 
     public const MODEL = 'Entry';
 
+    public bool $editable = false;
+
     protected string $color = '';
 
     protected string $prename = '';
@@ -76,5 +78,20 @@ class EntryCalendarEvent extends CalendarEvent
     public function addBackendModalLink(UriBuilder $uriBuilder): void
     {
         $this->setUrl('#');
+    }
+
+    public function getFullCalendarOutput(): array
+    {
+        $output = parent::getFullCalendarOutput();
+        $output['editable'] = $this->editable;
+        return $output;
+    }
+
+    public function addBackendModalIsEditable($entryUid)
+    {
+        if ($this->uid === (int)$entryUid) {
+            $this->editable = true;
+            $this->setUrl('');
+        }
     }
 }

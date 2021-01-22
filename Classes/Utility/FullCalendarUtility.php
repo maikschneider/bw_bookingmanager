@@ -60,6 +60,7 @@ class FullCalendarUtility
         foreach ($events as $event) {
             $event->addBackendModalLink($this->uriBuilder);
             $event->addBackendModalIsSelectedEntryTimeslot($entryUid);
+            $event->addBackendModalIsEditable($entryUid);
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
         }
 

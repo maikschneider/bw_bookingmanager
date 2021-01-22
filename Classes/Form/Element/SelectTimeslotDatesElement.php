@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Form\Element;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
+use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use DateTime;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
@@ -10,6 +11,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class SelectTimeslotDatesElement extends AbstractFormElement
@@ -41,7 +43,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
     public function render()
     {
         $resultArray = [];
-        $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/BackendModalCalendar';
+        $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/SelectTimeslotDatesElement';
 
         $savedData = $this->getSavedData();
 
@@ -66,11 +68,17 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $calendar = $this->data['databaseRow']['calendar'][0];
         $entryUid = $this->data['databaseRow']['uid'];
 
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $calendarRepo = $objectManager->get(CalendarRepository::class);
+        $calendars = $calendarRepo->findAllByPid($savedData['pid']);
+
         $viewState = new BackendCalendarViewState($savedData['pid']);
+        $viewState->addCalendars($calendars);
         $viewState->start = $start;
         $viewState->end = $end;
         $viewState->notBookableTimeslots = true;
-        $viewState->futureEntries = false;
+        $viewState->futureEntries = $viewState->hasDirectBookingCalendar();
+        $viewState->pastEntries = $viewState->hasDirectBookingCalendar();
         $viewState->timeslot = $timeslot;
         $viewState->calendar = $calendar;
         $viewState->entryUid = $entryUid;

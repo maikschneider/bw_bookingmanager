@@ -378,6 +378,14 @@
 				<source>New Entry</source>
 				<target>Neuer Eintrag</target>
 			</trans-unit>
+			<trans-unit id="modal.save">
+				<source>Save</source>
+				<target>Speichern</target>
+			</trans-unit>
+			<trans-unit id="modal.cancel">
+				<source>Cancel</source>
+				<target>Abbrechen</target>
+			</trans-unit>
         </body>
     </file>
 </xliff>

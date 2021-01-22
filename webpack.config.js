@@ -11,7 +11,8 @@ module.exports = {
   entry: {
     BackendModuleCalendar: './Resources/Private/TypeScript/BackendModuleCalendar.ts',
     BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts',
-    BackendCalendarContextMenuActions: './Resources/Private/TypeScript/BackendCalendarContextMenuActions.ts'
+    BackendCalendarContextMenuActions: './Resources/Private/TypeScript/BackendCalendarContextMenuActions.ts',
+    SelectTimeslotDatesElement: './Resources/Private/TypeScript/SelectTimeslotDatesElement.ts'
   },
   output: {
     filename: 'Resources/Public/JavaScript/[name].js',

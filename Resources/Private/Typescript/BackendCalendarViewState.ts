@@ -24,6 +24,8 @@ export class BackendCalendarViewState {
   public selectedStart: any;
   public selectedEnd: any;
   public currentCalendars: BackendCalendar[];
+  public buttonSaveText: string;
+  public buttonCancelText: string;
 
   private saveRequest: any;
 
@@ -52,6 +54,8 @@ export class BackendCalendarViewState {
     this.entryUid = 'entryUid' in viewState ? viewState.entryUid : null;
     this.calendar = 'calendar' in viewState ? viewState.calendar : null;
     this.timeslot = 'timeslot' in viewState ? viewState.timeslot : null;
+    this.buttonSaveText = 'buttonSaveText' in viewState ? viewState.buttonSaveText : '';
+    this.buttonCancelText = 'buttonCancelText' in viewState ? viewState.buttonCancelText : '';
 
     // stuff needed for direct booking
     this.currentCalendars = viewState.currentCalendars;

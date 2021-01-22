@@ -249,6 +249,10 @@ class CalendarEvent
     {
     }
 
+    public function addBackendModalIsEditable($entryUid)
+    {
+    }
+
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];

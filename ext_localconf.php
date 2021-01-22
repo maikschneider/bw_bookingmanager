@@ -1,6 +1,7 @@
 <?php
 
 use Blueways\BwBookingmanager\ContextMenu\CalendarItemProvider;
+use Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook;
 
 defined('TYPO3_MODE') || die('Access denied.');
 
@@ -91,5 +92,8 @@ call_user_func(
         // register hooks to delete cache
         $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['extkey'] = 'Blueways\\BwBookingmanager\\Hooks\\TCEmainHook';
         $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['extkey'] = 'Blueways\\BwBookingmanager\\Hooks\\TCEmainHook';
+
+        // register backend js
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/template.php']['preHeaderRenderHook']['bw_bookingmanager'] = PreHeaderRenderHook::class . '->addFullCalendarJs';
     }
 );

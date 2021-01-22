@@ -10,6 +10,7 @@ import '../Scss/backendCalendar.scss';
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import {BackendCalendarViewState} from "./BackendCalendarViewState";
+import interactionPlugin from '@fullcalendar/interaction';
 
 declare global {
   interface Window {
@@ -31,42 +32,30 @@ class BackendModalCalendar {
 
   public selectedEvent: EventApi;
 
-  public init() {
-    this.initViewState();
-    this.bindEvents();
-  }
+  public openModal() {
 
-  public initViewState() {
-    const button = document.getElementById('entry-date-select-button');
-
-    this.viewState = new BackendCalendarViewState(button);
-  }
-
-  public bindEvents() {
-    $('#entry-date-select-button').on('click', this.onEntryDateSelectButtonClick.bind(this));
-  }
-
-  public onEntryDateSelectButtonClick(e) {
-    e.preventDefault();
+    if (!this.viewState) {
+      console.error('No viewState');
+      return;
+    }
 
     const html = $('<div />').attr('id', 'calendar').addClass('modalCalendar');
-    const button = document.getElementById('entry-date-select-button');
-    const buttonCancelText = button.getAttribute('data-modal-cancel-button-text');
-    const buttonSaveText = button.getAttribute('data-modal-save-button-text');
 
     Modal.advanced({
-      title: button.getAttribute('data-modal-title'),
+      title: 'Title',
       content: html,
       size: Modal.sizes.large,
       callback: (modal) => {
-        const calendarEl = modal.find('#calendar').get(0);
-        this.renderCalendar(calendarEl);
+        setTimeout(() => {
+          const calendarEl = modal.find('#calendar').get(0);
+          this.renderCalendar(calendarEl);
+        }, 500);
       },
 
       buttons: [
         {
           name: 'cancel',
-          text: buttonCancelText,
+          text: this.viewState.buttonCancelText,
           icon: 'actions-close',
           btnClass: 'btn-danger',
           trigger: () => {
@@ -76,44 +65,34 @@ class BackendModalCalendar {
         },
         {
           name: 'save',
-          text: buttonSaveText,
+          text: this.viewState.buttonSaveText,
           icon: 'actions-document-save',
           btnClass: 'btn-primary',
-          trigger: this.onModalSaveClick.bind(this)
+          trigger: (e) => {
+            e.preventDefault();
+            console.log(this.selectedEvent);
+            this.onSave(this.selectedEvent, this.viewState);
+            Modal.currentModal.trigger('modal-dismiss');
+          }
         }
       ]
     })
   }
 
-  public onModalSaveClick(e) {
-    e.preventDefault();
+  public onSave(selectedEvent, viewState) {
+  }
 
-    const event = this.selectedEvent;
+  public hasDirectBookingCalendar() {
+    return this.getFirstDirectBookableCalendar() !== null;
+  }
 
-    // save to new form
-    const entryUid = this.viewState.events.extraParams.entryUid;
-    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][timeslot]"]').val(event.extendedProps.uid);
-    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][start_date]"]').val(event.start.getTime() / 1000);
-    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][end_date]"]').val(event.end.getTime() / 1000);
-    $('select[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][calendar]"]').val(event.extendedProps.calendar);
-
-    // update date label
-    const format = {
-      weekday: 'short',
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'UTC'
-    };
-    const start = Intl.DateTimeFormat(this.viewState.language, format).format(event.start);
-    const end = Intl.DateTimeFormat(this.viewState.language, format).format(event.end);
-    $('#savedStartDate').html(start);
-    $('#savedEndDate').html(end);
-
-    // close
-    Modal.currentModal.trigger('modal-dismiss');
+  public getFirstDirectBookableCalendar() {
+    for (let i = 0; i < this.viewState.currentCalendars.length; i++) {
+      if (this.viewState.currentCalendars[i].directBooking) {
+        return this.viewState.currentCalendars[i];
+      }
+    }
+    return null;
   }
 
   public onEventClick(info) {
@@ -165,12 +144,43 @@ class BackendModalCalendar {
           $(calendarEl).next().css('display', display);
         },
         weekNumbers: true,
-        plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+        editable: true,
         navLinks: true,
         nowIndicator: true,
         dayMaxEvents: true,
         events: this.viewState.events,
+        selectable: true,
         eventClick: this.onEventClick.bind(this),
+        select: (info) => {
+          console.log(info);
+          if (this.selectedEvent) {
+            this.selectedEvent.setAllDay(info.allDay);
+            this.selectedEvent.setStart(info.start);
+            this.selectedEvent.setEnd(info.end);
+          } else {
+            this.selectedEvent = this.calendar.addEvent({
+              start: info.start,
+              end: info.end,
+              title: 'new event',
+              extendedProps: {
+                isSelected: true
+              }
+            })
+          }
+        },
+        eventDrop: (info) => {
+          // update selected event after drop
+          if (info.event.extendedProps.uniqueId === this.selectedEvent.extendedProps.uniqueId) {
+            this.selectedEvent = info.event;
+          }
+        },
+        eventResize: (info) => {
+          // update selected event after resize
+          if (info.event.extendedProps.uniqueId === this.selectedEvent.extendedProps.uniqueId) {
+            this.selectedEvent = info.event;
+          }
+        },
         eventClassNames: (arg) => {
           let classNames = arg.event.classNames.slice();
           if (arg.event.extendedProps.isSelected) {
@@ -217,6 +227,8 @@ class BackendModalCalendar {
             if (!this.selectedEvent) {
               this.selectedEvent = info.event;
             }
+            //info.event.setStart(this.selectedEvent.start);
+            //info.event.setEnd(this.selectedEvent.end);
           }
 
           // new entry with default values: mark timeslot
@@ -244,4 +256,4 @@ class BackendModalCalendar {
   }
 }
 
-export = new BackendModalCalendar().init();
+export = BackendModalCalendar;

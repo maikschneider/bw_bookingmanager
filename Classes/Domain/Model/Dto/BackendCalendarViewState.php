@@ -33,10 +33,16 @@ class BackendCalendarViewState
 
     public $entryUid;
 
+    public string $buttonSaveText = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.save';
+
+    public string $buttonCancelText = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.cancel';
+
     public function __construct(int $pid)
     {
         $this->pid = $pid;
         $this->language = $this->getLanguageService()->lang;
+        $this->buttonSaveText = $this->getLanguageService()->sL($this->buttonSaveText);
+        $this->buttonCancelText = $this->getLanguageService()->sL($this->buttonCancelText);
     }
 
     protected function getLanguageService(): LanguageService
@@ -90,6 +96,21 @@ class BackendCalendarViewState
             $currentCalendars[] = $currentCal;
         }
         return $currentCalendars;
+    }
+
+    public function hasDirectBookingCalendar(): bool
+    {
+        return $this->getFirstDirectBookingCalendar() !== null;
+    }
+
+    public function getFirstDirectBookingCalendar()
+    {
+        foreach ($this->currentCalendars ?? [] as $calendar) {
+            if ($calendar['directBooking']) {
+                return $calendar;
+            }
+        }
+        return null;
     }
 
 }

@@ -303,6 +303,12 @@
 			<trans-unit id="context.newEntry">
 				<source>New Entry</source>
 			</trans-unit>
+			<trans-unit id="modal.save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="modal.cancel">
+				<source>Cancel</source>
+			</trans-unit>
         </body>
     </file>
 </xliff>
