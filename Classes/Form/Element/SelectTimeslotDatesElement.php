@@ -56,14 +56,17 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         }
         $start = $start->format('Y-m-d\TH:i:s.v\Z');
 
-        $end = new DateTime();
+        $entryEnd = null;
         if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'])) {
-            $end->setTimestamp($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate']);
+            $entryEnd = new DateTime();
+            $entryEnd->setTimestamp($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate']);
+            $entryEnd = $entryEnd->format('Y-m-d\TH:i:s.v\Z');
         }
         if ($this->data['databaseRow']['end_date']) {
-            $end->setTimestamp($this->data['databaseRow']['end_date']);
+            $entryEnd = new DateTime();
+            $entryEnd->setTimestamp($this->data['databaseRow']['end_date']);
+            $entryEnd = $entryEnd->format('Y-m-d\TH:i:s.v\Z');
         }
-        $end = $end->format('Y-m-d\TH:i:s.v\Z');
         $timeslot = $this->data['databaseRow']['timeslot'];
         $calendar = $this->data['databaseRow']['calendar'][0];
         $entryUid = $this->data['databaseRow']['uid'];
@@ -75,7 +78,8 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $viewState = new BackendCalendarViewState($savedData['pid']);
         $viewState->addCalendars($calendars);
         $viewState->start = $start;
-        $viewState->end = $end;
+        $viewState->entryStart = $start;
+        $viewState->entryEnd = $entryEnd;
         $viewState->notBookableTimeslots = true;
         $viewState->futureEntries = $viewState->hasDirectBookingCalendar();
         $viewState->pastEntries = $viewState->hasDirectBookingCalendar();

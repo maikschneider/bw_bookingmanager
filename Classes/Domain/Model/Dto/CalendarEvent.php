@@ -68,8 +68,8 @@ class CalendarEvent
     {
         $fullCalendarConfig = [
             'title' => $this->getTitle(),
-            'start' => $this->start->format(DateTime::ATOM),
-            'end' => $this->end->format(DateTime::ATOM),
+            'start' => $this->start->format('Y-m-d\TH:i:s.v\Z'),
+            'end' => $this->end->format('Y-m-d\TH:i:s.v\Z'),
             'allDay' => static::isFullDay($this->start, $this->end),
             'color' => $this->getColor(),
             'display' => $this->getDisplay(),

@@ -15,8 +15,6 @@ class BackendCalendarViewState
 
     public string $start;
 
-    public string $end;
-
     public string $calendarView = 'dayGridMonth';
 
     public bool $pastEntries = false;
@@ -32,6 +30,10 @@ class BackendCalendarViewState
     public ?int $calendar;
 
     public $entryUid;
+
+    public $entryStart;
+
+    public $entryEnd;
 
     public string $buttonSaveText = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.save';
 
@@ -53,7 +55,7 @@ class BackendCalendarViewState
     public static function getFromUserSettings(int $pid): BackendCalendarViewState
     {
         $saveState = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?? '';
-        return $saveState !== '' ? unserialize($saveState) : new BackendCalendarViewState($pid);
+        return $saveState !== '' ? unserialize($saveState, ['allowed_classes' => [self::class]]) : new BackendCalendarViewState($pid);
     }
 
     public function overrideFromApiSave($postData)

@@ -16,10 +16,6 @@ declare global {
  */
 class SelectTimeslotDatesElement {
 
-  public viewState: BackendCalendarViewState;
-
-  public selectedEvent: EventApi;
-
   public constructor() {
 
     const button = document.getElementById('entry-date-select-button');
@@ -34,19 +30,21 @@ class SelectTimeslotDatesElement {
     e.preventDefault();
     const button = e.currentTarget;
 
-    parent.window.BackendModalCalendar.viewState = this.viewState ? this.viewState : new BackendCalendarViewState(button);
+    parent.window.BackendModalCalendar.viewState = new BackendCalendarViewState(button);
 
     parent.window.BackendModalCalendar.openModal();
   }
 
   public onModalSave(event, viewState) {
 
-    this.selectedEvent = event;
-    this.viewState = viewState;
+    // update button json
+    document.getElementById('entry-date-select-button').setAttribute('data-view-state', JSON.stringify(viewState));
 
     // save to new form
     const entryUid = viewState.events.extraParams.entryUid;
-    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][timeslot]"]').val(event.extendedProps.uid);
+    if (event.extendedProps.model === 'Timeslot') {
+      $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][timeslot]"]').val(event.extendedProps.uid);
+    }
     $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][start_date]"]').val(event.start.getTime() / 1000);
     $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][end_date]"]').val(event.end.getTime() / 1000);
     $('select[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][calendar]"]').val(event.extendedProps.calendar);

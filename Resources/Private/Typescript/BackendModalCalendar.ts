@@ -70,8 +70,8 @@ class BackendModalCalendar {
           btnClass: 'btn-primary',
           trigger: (e) => {
             e.preventDefault();
-            console.log(this.selectedEvent);
             this.onSave(this.selectedEvent, this.viewState);
+            this.selectedEvent = null;
             Modal.currentModal.trigger('modal-dismiss');
           }
         }
@@ -80,19 +80,6 @@ class BackendModalCalendar {
   }
 
   public onSave(selectedEvent, viewState) {
-  }
-
-  public hasDirectBookingCalendar() {
-    return this.getFirstDirectBookableCalendar() !== null;
-  }
-
-  public getFirstDirectBookableCalendar() {
-    for (let i = 0; i < this.viewState.currentCalendars.length; i++) {
-      if (this.viewState.currentCalendars[i].directBooking) {
-        return this.viewState.currentCalendars[i];
-      }
-    }
-    return null;
   }
 
   public onEventClick(info) {
@@ -116,6 +103,17 @@ class BackendModalCalendar {
     }
   }
 
+  public addEvent() {
+  }
+
+  public setActiveEvent(event: EventApi) {
+    if (this.selectedEvent) {
+      this.calendar.getEventById(this.selectedEvent.id).setExtendedProp('isSelected', false);
+    }
+    event.setExtendedProp('isSelected', true);
+    this.selectedEvent = event;
+  }
+
   public renderCalendar(calendarEl) {
 
     if (!calendarEl) {
@@ -128,7 +126,7 @@ class BackendModalCalendar {
 
       this.calendar = new Calendar(calendarEl, {
         locales: [deLocale],
-        initialDate: this.viewState.start,
+        initialDate: this.viewState.entryStart ?? this.viewState.start,
         timeZone: 'Europe/Berlin',
         locale: this.viewState.language,
         initialView: this.viewState.calendarView,
@@ -145,41 +143,65 @@ class BackendModalCalendar {
         },
         weekNumbers: true,
         plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
-        editable: true,
         navLinks: true,
         nowIndicator: true,
         dayMaxEvents: true,
         events: this.viewState.events,
-        selectable: true,
-        eventClick: this.onEventClick.bind(this),
+        selectable: this.viewState.hasDirectBookingCalendar(),
+        //eventClick: this.onEventClick.bind(this),
         select: (info) => {
-          console.log(info);
-          if (this.selectedEvent) {
-            this.selectedEvent.setAllDay(info.allDay);
-            this.selectedEvent.setStart(info.start);
-            this.selectedEvent.setEnd(info.end);
-          } else {
-            this.selectedEvent = this.calendar.addEvent({
-              start: info.start,
-              end: info.end,
-              title: 'new event',
-              extendedProps: {
-                isSelected: true
-              }
-            })
+
+          let start = info.start;
+          let end = info.end;
+          let allDay = info.allDay;
+
+          // adjust start and end time of selected days
+          const calendar = this.viewState.getFirstDirectBookableCalendar();
+          if (calendar && this.calendar.currentData.currentViewType === 'dayGridMonth') {
+            if (calendar.defaultEndTime) {
+              start = new Date(start.getTime() + calendar.defaultStartTime * 1000);
+              allDay = false;
+            }
+            if (calendar.defaultEndTime) {
+              end = new Date(end.getTime() - 86400000 + calendar.defaultEndTime * 1000);
+              allDay = false;
+            }
           }
+
+          // update viewState
+          this.viewState.entryStart = start;
+          this.viewState.entryEnd = end;
+
+          // create new event if none
+          if (!this.selectedEvent) {
+            console.log('no selected event');
+            const calendar = this.viewState.getFirstDirectBookableCalendar();
+            this.selectedEvent = this.calendar.addEvent({
+              editable: true,
+              allDay: allDay,
+              start: start,
+              end: end,
+              extendedProps: {
+                isSelected: true,
+                uid: this.viewState.events.extraParams.entryUid,
+                calendar: calendar.uid
+              }
+            });
+            return;
+          }
+
+          // move existing event
+          this.selectedEvent.setAllDay(allDay);
+          this.selectedEvent.setStart(start);
+          this.selectedEvent.setEnd(end);
         },
         eventDrop: (info) => {
-          // update selected event after drop
-          if (info.event.extendedProps.uniqueId === this.selectedEvent.extendedProps.uniqueId) {
-            this.selectedEvent = info.event;
-          }
+          this.viewState.entryStart = info.event.start;
+          this.viewState.entryEnd = info.event.end;
         },
         eventResize: (info) => {
-          // update selected event after resize
-          if (info.event.extendedProps.uniqueId === this.selectedEvent.extendedProps.uniqueId) {
-            this.selectedEvent = info.event;
-          }
+          this.viewState.entryStart = info.event.start;
+          this.viewState.entryEnd = info.event.end;
         },
         eventClassNames: (arg) => {
           let classNames = arg.event.classNames.slice();
@@ -194,10 +216,11 @@ class BackendModalCalendar {
         datesSet: () => {
           this.viewState.calendarView = this.calendar.view.type;
           this.viewState.start = this.calendar.currentData.currentDate.toISOString();
-
-          // mark selected element for display
-          if (this.selectedEvent) {
-            this.selectedEvent.setExtendedProp('isSelected', true);
+        },
+        eventWillUnmount: (info) => {
+          if(this.selectedEvent && info.event.id === this.selectedEvent.id) {
+            console.log('unset');
+            //this.selectedEvent = null;
           }
         },
         eventDidMount: (info) => {
@@ -221,19 +244,19 @@ class BackendModalCalendar {
             info.event.setProp('display', 'none');
           }
 
-          // unhide current entry
-          if (info.event.extendedProps.model === 'Entry' && this.viewState.entryUid === info.event.extendedProps.uid) {
+          // unhide all entries in direct booking calendar
+          if (this.viewState.hasDirectBookingCalendar() && info.event.extendedProps.model === 'Entry') {
             info.event.setProp('display', 'auto');
-            if (!this.selectedEvent) {
-              this.selectedEvent = info.event;
-            }
-            //info.event.setStart(this.selectedEvent.start);
-            //info.event.setEnd(this.selectedEvent.end);
+          }
+
+          // unhide current entry in direct booking calendar
+          if (info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isSavedEntry) {
+            this.setActiveEvent(info.event);
           }
 
           // new entry with default values: mark timeslot
-          if (!this.selectedEvent && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.uid === this.viewState.timeslot && this.viewState.start === info.event.start.toISOString() && this.viewState.end === info.event.end.toISOString()) {
-            this.selectedEvent = info.event;
+          if (!this.selectedEvent && info.event.extendedProps.model === 'Timeslot' && info.event.extendedProps.uid === this.viewState.timeslot && this.viewState.start === info.event.start.toISOString() && this.viewState.entryEnd === info.event.end.toISOString()) {
+            this.setActiveEvent(info.event);
           }
 
           // hide timeslot of current Entry if its weight is 1
@@ -241,15 +264,47 @@ class BackendModalCalendar {
             info.event.setProp('display', 'none');
           }
 
-          // @TODO: execute just once after rendering
-          if (this.selectedEvent && this.selectedEvent.extendedProps.uniqueId === info.event.extendedProps.uniqueId) {
-            info.event.setExtendedProp('isSelected', true);
+        },
+        eventSourceSuccess: () => {
+
+          // create new event in case of defValues or previous created event
+          const isNewCreated = typeof this.viewState.entryUid === 'string' && this.viewState.entryUid.substr(0, 3) === 'NEW';
+          if (this.viewState.hasDirectBookingCalendar && this.viewState.entryEnd && !this.selectedEvent && isNewCreated) {
+            // create new event
+            console.log('create new event');
+            const calendar = this.viewState.getFirstDirectBookableCalendar();
+            this.selectedEvent = this.calendar.addEvent({
+              start: this.viewState.entryStart,
+              end: this.viewState.entryEnd,
+              editable: true,
+              extendedProps: {
+                isSelected: true,
+                uid: this.viewState.events.extraParams.entryUid,
+                calendar: calendar.uid
+              }
+            });
           }
 
-        }
+          if (this.viewState.hasDirectBookingCalendar && this.selectedEvent) {
+            console.log('has selected event');
+          } else {
+            console.log('no selected event');
+          }
+
+          setTimeout(() => {
+            if (this.viewState.hasDirectBookingCalendar && this.selectedEvent && this.viewState.entryEnd) {
+              const allDay = this.viewState.entryStart.substr(11) === this.viewState.entryEnd.substr(11);
+              this.selectedEvent.setDates(this.viewState.entryStart, this.viewState.entryEnd, {allDay: allDay});
+            }
+          }, 1000);
+
+        },
       });
 
       this.calendar.render();
+
+
+
     });
 
 
