@@ -107,12 +107,18 @@ class CalendarItemProvider extends AbstractProvider
             'newBlockslot' => 'tx_bwbookingmanager_domain_model_blockslot'
         ];
 
-        $calendarUid = $itemName === 'newEntry' ? $this->getFirstDirectBookingCalendar()->getUid() : $this->calendars->getFirst()->getUid();
+        // for entry creation in direct booking calendar use default start and end time
+        $calendar = $itemName === 'newEntry' ? $this->getFirstDirectBookingCalendar() : $this->calendars->getFirst();
+        $calendarUid = $calendar->getUid();
+        $calendarStartTime = $itemName === 'newEntry' ? $calendar->getDefaultStartTime() : 0;
+        $calendarEndTime = $itemName === 'newEntry' ? $calendar->getDefaultEndTime() : 0;
 
         return [
             'data-callback-module' => 'TYPO3/CMS/BwBookingmanager/BackendCalendarContextMenuActions',
             'data-model-name' => $itemTableMapping[$itemName],
-            'data-def-calendar-uid' => $calendarUid
+            'data-def-calendar-uid' => $calendarUid,
+            'data-def-calendar-start-time' => $calendarStartTime,
+            'data-def-calendar-end-time' => $calendarEndTime
         ];
     }
 

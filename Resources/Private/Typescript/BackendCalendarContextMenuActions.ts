@@ -24,11 +24,13 @@ class BackendCalendarContextMenuActions {
    * @param uid
    * @param model
    * @param defValsOverride
+   * @param start
+   * @param end
    */
-  public static goToCreateForm(table, uid, model, defValsOverride) {
+  public static goToCreateForm(table, uid, model, defValsOverride, start, end) {
 
-    const start = BackendCalendar.viewState.selectedStart.getTime() / 1000;
-    const end = BackendCalendar.viewState.selectedEnd.getTime() / 1000;
+    start = start ? start : BackendCalendar.viewState.selectedStart.getTime() / 1000;
+    end = end ? end : BackendCalendar.viewState.selectedEnd.getTime() / 1000;
     const returnUrl = BackendCalendarContextMenuActions.getReturnUrl();
     const url = top.TYPO3.settings.FormEngine.moduleUrl
       + '&edit[' + model + '][' + uid + ']=new'
@@ -50,7 +52,7 @@ class BackendCalendarContextMenuActions {
     const calendarUid = $(this).attr('data-def-calendar-uid');
     const defValsOverride = '&defVals[' + model + '][calendars]=tx_bwbookingmanager_domain_model_calendar_' + calendarUid;
 
-    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride);
+    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride, null, null);
   }
 
   /**
@@ -63,7 +65,7 @@ class BackendCalendarContextMenuActions {
     const calendarUid = $(this).attr('data-def-calendar-uid');
     const defValsOverride = '&defVals[' + model + '][calendars]=tx_bwbookingmanager_domain_model_calendar_' + calendarUid;
 
-    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride);
+    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride, null, null);
   }
 
   /**
@@ -71,11 +73,17 @@ class BackendCalendarContextMenuActions {
    * @param uid
    */
   public static newEntry(table, uid) {
+    const defaultStart = parseInt($(this).attr('data-def-calendar-start-time'));
+    const defaultEnd = parseInt($(this).attr('data-def-calendar-end-time'));
+
+    const start = BackendCalendar.viewState.selectedStart.getTime() / 1000 + defaultStart;
+    const end = (BackendCalendar.viewState.selectedEnd.getTime() / 1000) - 86400 + defaultEnd;
+    
     const model = $(this).attr('data-model-name');
     const calendarUid = $(this).attr('data-def-calendar-uid');
     let defValsOverride = '&defVals[' + model + '][calendar]=' + calendarUid;
     defValsOverride += '&defVals[' + model + '][confirmed]=1';
-    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride);
+    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride, start, end);
   }
 
   /**
@@ -87,7 +95,7 @@ class BackendCalendarContextMenuActions {
     const model = $(this).attr('data-model-name');
     const calendarUid = $(this).attr('data-def-calendar-uid');
     const defValsOverride = '&defVals[' + model + '][calendar]=' + calendarUid;
-    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride);
+    BackendCalendarContextMenuActions.goToCreateForm(table, uid, model, defValsOverride, null, null);
   }
 
 }
