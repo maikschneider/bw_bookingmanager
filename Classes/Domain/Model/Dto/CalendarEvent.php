@@ -241,20 +241,13 @@ class CalendarEvent
     {
     }
 
-    public function addBackendModalIsSelectedEntryTimeslot($entryUid)
-    {
-    }
-
-    public function addBackendModalLink(UriBuilder $uriBuilder): void
-    {
-    }
-
-    public function addBackendModalIsEditable($entryUid)
-    {
-    }
 
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    public function addBackendModalSettings($uriBuilder, $entryUid, $entryStart, $entryEnd)
+    {
     }
 }

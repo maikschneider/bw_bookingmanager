@@ -41,7 +41,7 @@ class SelectTimeslotDatesElement {
     document.getElementById('entry-date-select-button').setAttribute('data-view-state', JSON.stringify(viewState));
 
     // save to new form
-    const entryUid = viewState.events.extraParams.entryUid;
+    const entryUid = viewState.entryUid;
     if (event.extendedProps.model === 'Timeslot') {
       $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][timeslot]"]').val(event.extendedProps.uid);
     }

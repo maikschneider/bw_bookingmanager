@@ -4,6 +4,7 @@ namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
+use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 class EntryCalendarEvent extends CalendarEvent
@@ -63,7 +64,7 @@ class EntryCalendarEvent extends CalendarEvent
 
     public function addBackendModalIsSelectedEntryTimeslot($entryUid): void
     {
-        $this->isSavedEntry = $this->uid === (int)$entryUid;
+
     }
 
     public function getExtendedProps(): array
@@ -75,11 +76,6 @@ class EntryCalendarEvent extends CalendarEvent
         return $props;
     }
 
-    public function addBackendModalLink(UriBuilder $uriBuilder): void
-    {
-        $this->setUrl('#');
-    }
-
     public function getFullCalendarOutput(): array
     {
         $output = parent::getFullCalendarOutput();
@@ -87,11 +83,18 @@ class EntryCalendarEvent extends CalendarEvent
         return $output;
     }
 
-    public function addBackendModalIsEditable($entryUid)
+    public function addBackendModalSettings($uriBuilder, $entryUid, $entryStart, $entryEnd)
     {
-        if ($this->uid === (int)$entryUid) {
+        // editable flag
+        if ($this->uid === (int)$entryUid || (string)$this->uid === (string)$entryUid) {
             $this->editable = true;
-            $this->setUrl('');
+            $this->isSavedEntry = true;
+
+            // adjust start/end in case of edited in modal
+            if ($entryStart && $entryEnd) {
+                $this->start = $entryStart;
+                $this->end = $entryEnd;
+            }
         }
     }
 }

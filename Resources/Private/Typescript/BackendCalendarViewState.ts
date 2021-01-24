@@ -1,3 +1,5 @@
+import {Calendar} from "@fullcalendar/core";
+
 class BackendCalendar {
   uid: number;
   directBooking: boolean;
@@ -64,14 +66,17 @@ export class BackendCalendarViewState {
 
     this.events = {
       'url': TYPO3.settings.ajaxUrls['api_calendar_show'],
-      'extraParams': {
-        'pid': viewState.pid
+      'extraParams': () => {
+        const entryStart = this.entryStart ? (new Date(this.entryStart)).getTime() / 1000 : null;
+        const entryEnd = this.entryEnd ? (new Date(this.entryEnd)).getTime() / 1000 : null;
+        return {
+          'pid': this.pid,
+          'entryUid': this.entryUid,
+          'entryStart': entryStart,
+          'entryEnd': entryEnd
+        };
       }
     };
-
-    if (this.entryUid) {
-      this.events.extraParams['entryUid'] = this.entryUid;
-    }
 
   }
 
@@ -106,6 +111,17 @@ export class BackendCalendarViewState {
       }
     }
     return null;
+  }
+
+  public hasVisibleEntryInView(calendar: Calendar) {
+    if (!this.entryEnd || !this.entryStart) {
+      return false;
+    }
+
+    const entryStartDate = new Date(this.entryStart);
+    const entryEndDate = new Date(this.entryEnd);
+
+    return !(entryEndDate < calendar.currentData.dateProfile.activeRange.start || entryStartDate > calendar.currentData.dateProfile.activeRange.end);
   }
 
 }

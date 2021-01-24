@@ -20,7 +20,12 @@ class ApiController extends ActionController
 
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $calendarUtil = $objectManager->get(FullCalendarUtility::class);
-        $events = $calendarUtil->getEvents($params['pid'], $params['start'], $params['end'], $params['entryUid'] ?? null);
+
+        $entryUid = $params['entryUid'] !== 'null' ? $params['entryUid'] : null;
+        $entryStart = $params['entryStart'] !== 'null' ? $params['entryStart'] : null;
+        $entryEnd = $params['entryEnd'] !== 'null' ? $params['entryEnd'] : null;
+
+        $events = $calendarUtil->getEvents($params['pid'], $params['start'], $params['end'], $entryUid, $entryStart, $entryEnd);
 
         $response->getBody()->write(json_encode($events, JSON_THROW_ON_ERROR));
         return $response;

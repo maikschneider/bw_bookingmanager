@@ -67,14 +67,14 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function getCalendarEventsInCalendar($calendars, DateTime $startDate, DateTime $endDate): array
     {
         $events = [];
-        $holidays = $this->findInCalendars($calendars, $startDate, $endDate);
+        $entries = $this->findInCalendars($calendars, $startDate, $endDate);
 
-        if (!$holidays->count()) {
+        if (!$entries->count()) {
             return [];
         }
 
-        foreach ($holidays as $holiday) {
-            $events[] = EntryCalendarEvent::createFromEntity($holiday);
+        foreach ($entries as $entry) {
+            $events[] = EntryCalendarEvent::createFromEntity($entry);
         }
         return $events;
     }
