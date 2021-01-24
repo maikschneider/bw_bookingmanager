@@ -216,6 +216,8 @@ class BackendModalCalendar {
           console.info('moved existing selected event', this.selectedEvent);
         }
 
+        this.calendar.unselect();
+
         console.groupEnd();
       },
       eventDrop: (info) => {

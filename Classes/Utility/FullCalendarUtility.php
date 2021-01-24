@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
 use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
@@ -50,7 +51,12 @@ class FullCalendarUtility
         if ($entryUid && $entryStart && $entryEnd) {
             // NEW023820 => create new (virtual) EntryEvent
             if (GeneralUtility::isFirstPartOfStr((string)$entryUid, 'NEW')) {
-
+                $event = new EntryCalendarEvent();
+                $event->setStart($entryStart);
+                $event->setEnd($entryEnd);
+                $event->setUid($entryUid);
+                // @TODO: add the correct calendar uid to the event
+                $entryEvents[] = $event;
             } else {
                 // check if saved entry already in result
                 $savedEntry = array_filter($entryEvents, function ($event) use ($entryUid) {

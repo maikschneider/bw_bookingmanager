@@ -27,9 +27,17 @@ class CalendarEvent
 
     protected int $calendar = 0;
 
+    /**
+     * @param int $calendar
+     */
+    public function setCalendar(int $calendar): void
+    {
+        $this->calendar = $calendar;
+    }
+
     protected string $url = '';
 
-    protected int $uid = 0;
+    protected $uid = 0;
 
     protected int $pid = 0;
 
@@ -41,18 +49,12 @@ class CalendarEvent
         $this->end = new DateTime();
     }
 
-    /**
-     * @return int
-     */
-    public function getUid(): int
+    public function getUid()
     {
         return $this->uid;
     }
 
-    /**
-     * @param int $uid
-     */
-    public function setUid(int $uid): void
+    public function setUid($uid): void
     {
         $this->uid = $uid;
     }
