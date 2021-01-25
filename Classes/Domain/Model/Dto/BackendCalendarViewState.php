@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class BackendCalendarViewState
 {
@@ -27,7 +28,7 @@ class BackendCalendarViewState
 
     public bool $futureEntries = false;
 
-    public ?int $timeslot;
+    public int $timeslot = 0;
 
     public ?int $calendar;
 
@@ -72,6 +73,7 @@ class BackendCalendarViewState
         $state->start = $params['start'];
         $state->end = $params['end'];
         $state->calendar = $params['calendar'] !== 'null' ? (int)$params['calendar'] : 0;
+        $state->timeslot = $params['timeslot'] !== 'null' ? (int)$params['timeslot'] : 0;
 
         return $state;
     }
@@ -159,6 +161,11 @@ class BackendCalendarViewState
         }
 
         return (new \DateTime())->setTimestamp((int)$this->entryEnd);
+    }
+
+    public function isNewModalView(): bool
+    {
+        return GeneralUtility::isFirstPartOfStr((string)$this->entryUid, 'NEW');
     }
 
 }

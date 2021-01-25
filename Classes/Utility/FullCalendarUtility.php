@@ -68,12 +68,13 @@ class FullCalendarUtility
         }
 
         // NEW023820 => create new (virtual) EntryEvent
-        if (GeneralUtility::isFirstPartOfStr((string)$entryUid, 'NEW')) {
+        if ($viewState->isNewModalView()) {
             $event = new EntryCalendarEvent();
             $event->setStart($viewState->getEntryStartDate());
             $event->setEnd($viewState->getEntryEndDate());
             $event->setUid($entryUid);
             $event->setCalendar($viewState->calendar);
+            $event->setTimeslot($viewState->timeslot);
             return [$event];
         }
         // check if saved entry already in result

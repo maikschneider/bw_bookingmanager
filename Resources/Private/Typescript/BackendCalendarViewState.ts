@@ -67,7 +67,8 @@ export class BackendCalendarViewState {
           'entryUid': this.entryUid,
           'entryStart': entryStart,
           'entryEnd': entryEnd,
-          'calendar': this.calendar
+          'calendar': this.calendar,
+          'timeslot': this.timeslot
         };
       }
     };

@@ -21,6 +21,8 @@ class EntryCalendarEvent extends CalendarEvent
 
     protected bool $isSavedEntry = false;
 
+    protected int $timeslot = 0;
+
     public static function createFromEntity(Entry $entry): EntryCalendarEvent
     {
         $title = $entry->getPrename() . ' ' . $entry->getName();
@@ -33,9 +35,19 @@ class EntryCalendarEvent extends CalendarEvent
         $event->setEnd($entry->getEndDate());
         $event->prename = $entry->getPrename();
         $event->name = $entry->getName();
-        $event->calendar = $entry->getCalendar()->getUid();
+        if ($entry->getCalendar() !== null) {
+            $event->calendar = (int)$entry->getCalendar()->getUid();
+        }
+        if ($entry->getTimeslot() !== null) {
+            $event->setTimeslot($entry->getTimeslot()->getUid());
+        }
 
         return $event;
+    }
+
+    public function setTimeslot(int $timeslot): void
+    {
+        $this->timeslot = $timeslot;
     }
 
     public function getIcsTitle(Ics $ics): string
@@ -57,14 +69,9 @@ class EntryCalendarEvent extends CalendarEvent
         $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);
     }
 
-    public function addBackendModuleToolTip()
+    public function addBackendModuleToolTip(): void
     {
         $this->tooltip = $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:showEntry') . ' →';
-    }
-
-    public function addBackendModalIsSelectedEntryTimeslot($entryUid): void
-    {
-
     }
 
     public function getExtendedProps(): array
@@ -72,6 +79,7 @@ class EntryCalendarEvent extends CalendarEvent
         $props = parent::getExtendedProps();
 
         $props['isSavedEntry'] = $this->isSavedEntry;
+        $props['timeslot'] = $this->timeslot;
 
         return $props;
     }

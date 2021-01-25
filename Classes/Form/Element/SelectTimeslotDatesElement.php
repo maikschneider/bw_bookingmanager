@@ -67,7 +67,13 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             $entryEnd->setTimestamp($this->data['databaseRow']['end_date']);
             $entryEnd = $entryEnd->format('Y-m-d\TH:i:s.v\Z');
         }
-        $timeslot = $this->data['databaseRow']['timeslot'];
+        $timeslot = 0;
+        if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['timeslot'])) {
+            $timeslot = $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['timeslot'];
+        }
+        if ($this->data['databaseRow']['timeslot']) {
+            $timeslot = $this->data['databaseRow']['timeslot'];
+        }
         $calendar = $this->data['databaseRow']['calendar'][0];
         $entryUid = $this->data['databaseRow']['uid'];
 

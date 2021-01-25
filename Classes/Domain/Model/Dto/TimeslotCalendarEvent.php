@@ -197,7 +197,13 @@ class TimeslotCalendarEvent extends CalendarEvent
             $this->isSelectedEntryTimeslot = true;
         }
 
+        // check if this is the selected timeslot via defVals (not persisted in database)
+        if($viewState->isNewModalView() && $viewState->timeslot && $viewState->timeslot === $this->uid && $viewState->getEntryStartDate()->getTimestamp() === $this->start->getTimestamp() && $viewState->getEntryEndDate()->getTimestamp() === $this->end->getTimestamp()) {
+            $this->isSelectedEntryTimeslot = true;
+        }
+
         // make timeslots clickable
         $this->setUrl('#');
     }
+
 }
