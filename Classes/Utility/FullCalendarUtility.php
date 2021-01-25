@@ -33,8 +33,6 @@ class FullCalendarUtility
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $startDate = $viewState->getStartDate();
         $endDate = $viewState->getEndDate();
-        $entryStart = $viewState->getEntryStartDate();
-        $entryEnd = $viewState->getEntryEndDate();
         $entryUid = $viewState->entryUid;
 
         $calendarRepository = $objectManager->get(CalendarRepository::class);
@@ -48,38 +46,50 @@ class FullCalendarUtility
         $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $holidayEvents = $holidayRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $entryEvents = $entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+        $virtualEvents = $this->getVirtualEvents($entryRepository, $entryEvents, $viewState);
 
-        if ($entryUid && $entryStart && $entryEnd) {
-            // NEW023820 => create new (virtual) EntryEvent
-            if (GeneralUtility::isFirstPartOfStr((string)$entryUid, 'NEW')) {
-                $event = new EntryCalendarEvent();
-                $event->setStart($entryStart);
-                $event->setEnd($entryEnd);
-                $event->setUid($entryUid);
-                $event->setCalendar($viewState->calendar);
-                $entryEvents[] = $event;
-            } else {
-                // check if saved entry already in result
-                $savedEntry = array_filter($entryEvents, static function ($event) use ($entryUid) {
-                    return $event->uid === (int)$entryUid;
-                });
-                // query entry, convert to event and add to result
-                if (!count($savedEntry)) {
-                    $entry = $entryRepository->findByUid((int)$entryUid);
-                    if ($entry) {
-                        $event = EntryCalendarEvent::createFromEntity($entry);
-                        $entryEvents[] = $event;
-                    }
-                }
-            }
-        }
-
-        $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents);
+        $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents, $virtualEvents);
 
         if ($entryUid) {
             return $this->getOutputForBackendModal($events, $viewState);
         }
         return $this->getOutputForBackendModule($events);
+    }
+
+    private function getVirtualEvents(
+        EntryRepository $entryRepository,
+        array $entryEvents,
+        BackendCalendarViewState $viewState
+    ): array {
+        $entryUid = $viewState->entryUid;
+
+        if (!$entryUid || !$viewState->getEntryStartDate() || !$viewState->getEntryEndDate()) {
+            return [];
+        }
+
+        // NEW023820 => create new (virtual) EntryEvent
+        if (GeneralUtility::isFirstPartOfStr((string)$entryUid, 'NEW')) {
+            $event = new EntryCalendarEvent();
+            $event->setStart($viewState->getEntryStartDate());
+            $event->setEnd($viewState->getEntryEndDate());
+            $event->setUid($entryUid);
+            $event->setCalendar($viewState->calendar);
+            return [$event];
+        }
+        // check if saved entry already in result
+        $savedEntry = array_filter($entryEvents, static function ($event) use ($entryUid) {
+            return $event->uid === (int)$entryUid;
+        });
+        // query entry, convert to event and add to result
+        if (!count($savedEntry)) {
+            $entry = $entryRepository->findByUid((int)$entryUid);
+            if ($entry) {
+                $event = EntryCalendarEvent::createFromEntity($entry);
+                return [$event];
+            }
+        }
+
+        return [];
     }
 
     private function getOutputForBackendModal(array $events, $viewState): array

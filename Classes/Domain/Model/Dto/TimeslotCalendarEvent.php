@@ -190,16 +190,14 @@ class TimeslotCalendarEvent extends CalendarEvent
         return $props;
     }
 
-    public function addBackendModalIsSelectedEntryTimeslot($entryUid): void
+    public function addBackendModalSettings($uriBuilder, $viewState): void
     {
         // check if this is the timeslot of the selected entry
-        if (in_array((int)$entryUid, $this->entries, true)) {
+        if (in_array((int)$viewState->entryUid, $this->entries, true)) {
             $this->isSelectedEntryTimeslot = true;
         }
-    }
 
-    public function addBackendModalLink(UriBuilder $uriBuilder): void
-    {
+        // make timeslots clickable
         $this->setUrl('#');
     }
 }

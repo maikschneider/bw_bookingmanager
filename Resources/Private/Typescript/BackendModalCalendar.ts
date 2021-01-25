@@ -125,6 +125,7 @@ class BackendModalCalendar {
 
   public setActiveEvent(event: EventApi) {
     if (this.selectedEvent) {
+      this.selectedEvent.setExtendedProp('isSelected', false);
       this.calendar.getEventById(this.selectedEvent.id).setExtendedProp('isSelected', false);
     }
     event.setExtendedProp('isSelected', true);
