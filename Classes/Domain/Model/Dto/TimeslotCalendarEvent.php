@@ -110,8 +110,8 @@ class TimeslotCalendarEvent extends CalendarEvent
                     'calendar' => $this->calendar,
                     'timeslot' => $this->uid,
                     'confirmed' => 1,
-                    'startDate' => $this->start->getTimestamp(),
-                    'endDate' => $this->end->getTimestamp()
+                    'start_date' => $this->start->getTimestamp(),
+                    'end_date' => $this->end->getTimestamp()
                 ]
             ],
             'returnUrl' => $this->getBackendReturnUrl($uriBuilder)
