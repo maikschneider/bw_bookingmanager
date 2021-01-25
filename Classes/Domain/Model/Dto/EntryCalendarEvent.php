@@ -35,10 +35,10 @@ class EntryCalendarEvent extends CalendarEvent
         $event->setEnd($entry->getEndDate());
         $event->prename = $entry->getPrename();
         $event->name = $entry->getName();
-        if ($entry->getCalendar() !== null) {
+        if ($entry->getCalendar() !== null && $entry->getCalendar()->getUid()) {
             $event->calendar = (int)$entry->getCalendar()->getUid();
         }
-        if ($entry->getTimeslot() !== null) {
+        if ($entry->getTimeslot() !== null && $entry->getTimeslot()->getUid()) {
             $event->setTimeslot($entry->getTimeslot()->getUid());
         }
 
