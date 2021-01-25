@@ -150,6 +150,9 @@
 			<trans-unit id="module.shift">
 				<source>Shift listing</source>
 			</trans-unit>
+			<trans-unit id="module.calendar">
+				<source>Calendar</source>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
             </trans-unit>

@@ -107,7 +107,7 @@ class BackendController
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
         $actions = [
-            ['action' => 'calendar', 'label' => 'shift', 'route' => 'bookingmanager_calendar'],
+            ['action' => 'calendar', 'label' => 'calendar', 'route' => 'bookingmanager_calendar'],
             ['action' => 'entryList', 'label' => 'entryListing', 'route' => 'bookingmanager_entry_list'],
         ];
 

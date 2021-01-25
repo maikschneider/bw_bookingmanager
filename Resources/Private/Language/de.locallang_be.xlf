@@ -181,6 +181,10 @@
 			<trans-unit id="module.shift">
 				<target>Schichtansicht</target>
 			</trans-unit>
+			<trans-unit id="module.calendar">
+				<source>Calendar</source>
+				<target>Kalender</target>
+			</trans-unit>
 			<trans-unit id="administration.nocalendar">
 				<source>No calendar</source>
 				<target>Kein Kalender</target>
