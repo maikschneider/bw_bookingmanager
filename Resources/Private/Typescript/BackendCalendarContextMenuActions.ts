@@ -75,10 +75,10 @@ class BackendCalendarContextMenuActions {
   public static newEntry(table, uid) {
     const defaultStart = parseInt($(this).attr('data-def-calendar-start-time'));
     let defaultEnd = parseInt($(this).attr('data-def-calendar-end-time'));
-    defaultEnd = defaultEnd ? 86400 + defaultEnd : 0;
+    defaultEnd = defaultEnd ? -86400 + defaultEnd : 0;
 
     const start = BackendCalendar.viewState.selectedStart.getTime() / 1000 + defaultStart;
-    const end = (BackendCalendar.viewState.selectedEnd.getTime() / 1000) - defaultEnd;
+    const end = (BackendCalendar.viewState.selectedEnd.getTime() / 1000) + defaultEnd;
 
     const model = $(this).attr('data-model-name');
     const calendarUid = $(this).attr('data-def-calendar-uid');
