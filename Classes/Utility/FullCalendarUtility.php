@@ -28,20 +28,21 @@ class FullCalendarUtility
      */
     protected $llService;
 
-    public function getEvents($pid, $start, $end, $entryUid, $entryStart, $entryEnd): array
+    public function getEvents(BackendCalendarViewState $viewState): array
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $startDate = new \DateTime($start);
-        $endDate = new \DateTime($end);
-        $entryStart = $entryStart ? (new \DateTime())->setTimestamp((int)$entryStart) : null;
-        $entryEnd = $entryEnd ? (new \DateTime())->setTimestamp((int)$entryEnd) : null;
+        $startDate = $viewState->getStartDate();
+        $endDate = $viewState->getEndDate();
+        $entryStart = $viewState->getEntryStartDate();
+        $entryEnd = $viewState->getEntryEndDate();
+        $entryUid = $viewState->entryUid;
 
         $calendarRepository = $objectManager->get(CalendarRepository::class);
         $timeslotRepository = $objectManager->get(TimeslotRepository::class);
         $blockslotRepository = $objectManager->get(BlockslotRepository::class);
         $holidayRepository = $objectManager->get(HolidayRepository::class);
         $entryRepository = $objectManager->get(EntryRepository::class);
-        $calendars = $calendarRepository->findAllByPid($pid);
+        $calendars = $calendarRepository->findAllByPid($viewState->pid);
 
         $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
@@ -55,11 +56,11 @@ class FullCalendarUtility
                 $event->setStart($entryStart);
                 $event->setEnd($entryEnd);
                 $event->setUid($entryUid);
-                // @TODO: add the correct calendar uid to the event
+                $event->setCalendar($viewState->calendar);
                 $entryEvents[] = $event;
             } else {
                 // check if saved entry already in result
-                $savedEntry = array_filter($entryEvents, function ($event) use ($entryUid) {
+                $savedEntry = array_filter($entryEvents, static function ($event) use ($entryUid) {
                     return $event->uid === (int)$entryUid;
                 });
                 // query entry, convert to event and add to result
@@ -76,18 +77,18 @@ class FullCalendarUtility
         $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents);
 
         if ($entryUid) {
-            return $this->getOutputForBackendModal($events, $entryUid, $entryStart, $entryEnd);
+            return $this->getOutputForBackendModal($events, $viewState);
         }
         return $this->getOutputForBackendModule($events);
     }
 
-    private function getOutputForBackendModal(array $events, $entryUid, $entryStart, $entryEnd)
+    private function getOutputForBackendModal(array $events, $viewState): array
     {
         $fullCalendarEvents = [];
 
         /** @var CalendarEvent $event */
         foreach ($events as $event) {
-            $event->addBackendModalSettings($this->uriBuilder, $entryUid, $entryStart, $entryEnd);
+            $event->addBackendModalSettings($this->uriBuilder, $viewState);
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
         }
 

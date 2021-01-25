@@ -15,6 +15,8 @@ class BackendCalendarViewState
 
     public string $start;
 
+    public string $end;
+
     public string $calendarView = 'dayGridMonth';
 
     public bool $pastEntries = false;
@@ -55,7 +57,23 @@ class BackendCalendarViewState
     public static function getFromUserSettings(int $pid): BackendCalendarViewState
     {
         $saveState = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?? '';
-        return $saveState !== '' ? unserialize($saveState, ['allowed_classes' => [self::class]]) : new BackendCalendarViewState($pid);
+        return $saveState !== '' ? unserialize($saveState,
+            ['allowed_classes' => [self::class]]) : new BackendCalendarViewState($pid);
+    }
+
+    public static function createFromApiRequest(\Psr\Http\Message\ServerRequestInterface $request)
+    {
+        $params = $request->getQueryParams();
+
+        $state = new self((int)$params['pid']);
+        $state->entryUid = $params['entryUid'] !== 'null' ? $params['entryUid'] : null;
+        $state->entryStart = $params['entryStart'] !== 'null' ? $params['entryStart'] : null;
+        $state->entryEnd = $params['entryEnd'] !== 'null' ? $params['entryEnd'] : null;
+        $state->start = $params['start'];
+        $state->end = $params['end'];
+        $state->calendar = $params['calendar'] !== 'null' ? (int)$params['calendar'] : 0;
+
+        return $state;
     }
 
     public function overrideFromApiSave($postData)
@@ -113,6 +131,34 @@ class BackendCalendarViewState
             }
         }
         return null;
+    }
+
+    public function getStartDate()
+    {
+        return new \DateTime($this->start);
+    }
+
+    public function getEndDate()
+    {
+        return new \DateTime($this->end);
+    }
+
+    public function getEntryStartDate()
+    {
+        if (!$this->entryStart) {
+            return null;
+        }
+
+        return (new \DateTime())->setTimestamp((int)$this->entryStart);
+    }
+
+    public function getEntryEndDate()
+    {
+        if (!$this->entryEnd) {
+            return null;
+        }
+
+        return (new \DateTime())->setTimestamp((int)$this->entryEnd);
     }
 
 }

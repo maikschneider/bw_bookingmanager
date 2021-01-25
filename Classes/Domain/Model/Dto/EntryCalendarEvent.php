@@ -4,7 +4,6 @@ namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
-use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 class EntryCalendarEvent extends CalendarEvent
@@ -34,6 +33,7 @@ class EntryCalendarEvent extends CalendarEvent
         $event->setEnd($entry->getEndDate());
         $event->prename = $entry->getPrename();
         $event->name = $entry->getName();
+        $event->calendar = $entry->getCalendar()->getUid();
 
         return $event;
     }
@@ -83,17 +83,17 @@ class EntryCalendarEvent extends CalendarEvent
         return $output;
     }
 
-    public function addBackendModalSettings($uriBuilder, $entryUid, $entryStart, $entryEnd)
+    public function addBackendModalSettings(UriBuilder $uriBuilder, BackendCalendarViewState $viewState): void
     {
         // editable flag
-        if ($this->uid === (int)$entryUid || (string)$this->uid === (string)$entryUid) {
+        if ($this->uid === (int)$viewState->entryUid || (string)$this->uid === (string)$viewState->entryUid) {
             $this->editable = true;
             $this->isSavedEntry = true;
 
             // adjust start/end in case of edited in modal
-            if ($entryStart && $entryEnd) {
-                $this->start = $entryStart;
-                $this->end = $entryEnd;
+            if ($viewState->getEntryStartDate() && $viewState->getEntryEndDate()) {
+                $this->start = $viewState->getEntryStartDate();
+                $this->end = $viewState->getEntryEndDate();
             }
         }
     }

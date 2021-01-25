@@ -249,7 +249,7 @@ class CalendarEvent
         return $GLOBALS['LANG'];
     }
 
-    public function addBackendModalSettings($uriBuilder, $entryUid, $entryStart, $entryEnd)
+    public function addBackendModalSettings(UriBuilder $uriBuilder, BackendCalendarViewState $viewState): void
     {
     }
 }

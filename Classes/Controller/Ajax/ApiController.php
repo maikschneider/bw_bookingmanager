@@ -16,16 +16,11 @@ class ApiController extends ActionController
 
     public function calendarShowAction(ServerRequestInterface $request, Response $response): Response
     {
-        $params = $request->getQueryParams();
-
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $calendarUtil = $objectManager->get(FullCalendarUtility::class);
+        $viewState = BackendCalendarViewState::createFromApiRequest($request);
 
-        $entryUid = $params['entryUid'] !== 'null' ? $params['entryUid'] : null;
-        $entryStart = $params['entryStart'] !== 'null' ? $params['entryStart'] : null;
-        $entryEnd = $params['entryEnd'] !== 'null' ? $params['entryEnd'] : null;
-
-        $events = $calendarUtil->getEvents($params['pid'], $params['start'], $params['end'], $entryUid, $entryStart, $entryEnd);
+        $events = $calendarUtil->getEvents($viewState);
 
         $response->getBody()->write(json_encode($events, JSON_THROW_ON_ERROR));
         return $response;

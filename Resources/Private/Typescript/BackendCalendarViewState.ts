@@ -1,5 +1,3 @@
-import {Calendar} from "@fullcalendar/core";
-
 class BackendCalendar {
   uid: number;
   directBooking: boolean;
@@ -41,17 +39,14 @@ export class BackendCalendarViewState {
 
     const viewState = JSON.parse(el.getAttribute('data-view-state'));
 
-    this.pid = viewState.pid;
-
     // @TODO: most properties are in parsed json for sure, we could extend
+    this.pid = viewState.pid;
     this.language = 'language' in viewState && viewState.language !== 'default' ? viewState.language : 'en';
     this.start = 'start' in viewState ? viewState.start : new Date();
     this.calendarView = viewState.calendarView;
     this.pastEntries = viewState.pastEntries;
     this.pastTimeslots = viewState.pastTimeslots;
     this.notBookableTimeslots = viewState.notBookableTimeslots;
-
-    // stuff needed in modal
     this.futureEntries = 'futureEntries' in viewState && viewState.futureEntries === 'true';
     this.entryUid = 'entryUid' in viewState ? viewState.entryUid : null;
     this.calendar = 'calendar' in viewState ? viewState.calendar : null;
@@ -60,8 +55,6 @@ export class BackendCalendarViewState {
     this.buttonCancelText = 'buttonCancelText' in viewState ? viewState.buttonCancelText : '';
     this.entryStart = 'entryStart' in viewState ? viewState.entryStart : null;
     this.entryEnd = 'entryEnd' in viewState ? viewState.entryEnd : null;
-
-    // stuff needed for direct booking
     this.currentCalendars = viewState.currentCalendars;
 
     this.events = {
@@ -73,7 +66,8 @@ export class BackendCalendarViewState {
           'pid': this.pid,
           'entryUid': this.entryUid,
           'entryStart': entryStart,
-          'entryEnd': entryEnd
+          'entryEnd': entryEnd,
+          'calendar': this.calendar
         };
       }
     };
@@ -111,17 +105,6 @@ export class BackendCalendarViewState {
       }
     }
     return null;
-  }
-
-  public hasVisibleEntryInView(calendar: Calendar) {
-    if (!this.entryEnd || !this.entryStart) {
-      return false;
-    }
-
-    const entryStartDate = new Date(this.entryStart);
-    const entryEndDate = new Date(this.entryEnd);
-
-    return !(entryEndDate < calendar.currentData.dateProfile.activeRange.start || entryStartDate > calendar.currentData.dateProfile.activeRange.end);
   }
 
 }
