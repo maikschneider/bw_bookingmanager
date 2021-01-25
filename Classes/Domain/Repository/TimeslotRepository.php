@@ -110,10 +110,10 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4
             ) v
 
-        left join (select start_date, end_date, uid from tx_bwbookingmanager_domain_model_blockslot b inner join tx_bwbookingmanager_calendar_blockslot_mm m on m.uid_foreign=b.uid where b.deleted=0 and b.hidden=0 and m.uid_local=" . $calendarUid . ") b on
+        left join (select start_date, end_date, uid from tx_bwbookingmanager_domain_model_blockslot b inner join tx_bwbookingmanager_calendar_blockslot_mm m on m.uid_local=b.uid where b.deleted=0 and b.hidden=0 and m.uid_foreign=" . $calendarUid . ") b on
             (DATE(FROM_UNIXTIME(start_date))<=date and DATE(FROM_UNIXTIME(end_date))>=date)
 
-        left join (select start_date, end_date, uid is not null as is_holiday from tx_bwbookingmanager_domain_model_holiday h inner join tx_bwbookingmanager_calendar_holiday_mm hm on hm.uid_foreign=h.uid where h.deleted=0 and h.hidden=0 and hm.uid_local=" . $calendarUid . ") h on
+        left join (select start_date, end_date, uid is not null as is_holiday from tx_bwbookingmanager_domain_model_holiday h inner join tx_bwbookingmanager_calendar_holiday_mm hm on hm.uid_local=h.uid where h.deleted=0 and h.hidden=0 and hm.uid_foreign=" . $calendarUid . ") h on
             (DATE(FROM_UNIXTIME(h.start_date))<=date and DATE(FROM_UNIXTIME(h.end_date))>=date)
 
         where
