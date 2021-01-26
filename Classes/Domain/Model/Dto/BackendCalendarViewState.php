@@ -42,12 +42,23 @@ class BackendCalendarViewState
 
     public string $buttonCancelText = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.cancel';
 
+    public string $warningTitle = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.warningTitle';
+
+    public string $warningText = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.warningText';
+
+    public string $warningButton = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.warningButton';
+
+
+
     public function __construct(int $pid)
     {
         $this->pid = $pid;
         $this->language = $this->getLanguageService()->lang;
         $this->buttonSaveText = $this->getLanguageService()->sL($this->buttonSaveText);
         $this->buttonCancelText = $this->getLanguageService()->sL($this->buttonCancelText);
+        $this->warningTitle = $this->getLanguageService()->sL($this->warningTitle);
+        $this->warningText = $this->getLanguageService()->sL($this->warningText);
+        $this->warningButton = $this->getLanguageService()->sL($this->warningButton);
     }
 
     protected function getLanguageService(): LanguageService

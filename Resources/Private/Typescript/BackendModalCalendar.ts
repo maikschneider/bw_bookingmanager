@@ -76,15 +76,9 @@ class BackendModalCalendar {
           trigger: (e) => {
             e.preventDefault();
             if (!this.selectedEvent) {
-              TYPO3.Modal.confirm('Warning', 'You may break the internet!', TYPO3.Severity.warning, [
+              TYPO3.Modal.confirm(this.viewState.warningTitle, this.viewState.warningText, TYPO3.Severity.warning, [
                 {
-                  text: 'Break it',
-                  active: true,
-                  trigger: function () {
-                    // break the net
-                  }
-                }, {
-                  text: 'Abort!',
+                  text: this.viewState.warningButton,
                   trigger: function () {
                     TYPO3.Modal.dismiss();
                   }
@@ -271,7 +265,7 @@ class BackendModalCalendar {
 
         // unhide current entry in direct booking calendar
         if (info.event.extendedProps.model === 'Entry' && info.event.extendedProps.isSavedEntry) {
-            this.setActiveEvent(info.event);
+          this.setActiveEvent(info.event);
         }
 
         // new entry with default values: mark timeslot

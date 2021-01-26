@@ -312,6 +312,15 @@
 			<trans-unit id="modal.cancel">
 				<source>Cancel</source>
 			</trans-unit>
+			<trans-unit id="modal.warningTitle">
+				<source>Warning</source>
+			</trans-unit>
+			<trans-unit id="modal.warningText">
+				<source>There is currently no visible selection that can be saved.</source>
+			</trans-unit>
+			<trans-unit id="modal.warningButton">
+				<source>Close</source>
+			</trans-unit>
         </body>
     </file>
 </xliff>

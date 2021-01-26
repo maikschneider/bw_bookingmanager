@@ -390,6 +390,18 @@
 				<source>Cancel</source>
 				<target>Abbrechen</target>
 			</trans-unit>
+			<trans-unit id="modal.warningTitle">
+				<source>Warning</source>
+				<target>Achtung</target>
+			</trans-unit>
+			<trans-unit id="modal.warningText">
+				<source>There is currently no visible selection that can be saved.</source>
+				<target>Es ist keine Auswahl sichtbar, die gespeichert werden kann.</target>
+			</trans-unit>
+			<trans-unit id="modal.warningButton">
+				<source>Close</source>
+				<target>Schließen</target>
+			</trans-unit>
         </body>
     </file>
 </xliff>
