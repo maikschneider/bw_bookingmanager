@@ -208,7 +208,7 @@ class BackendController
                     'data-attrs' => [
                         'toggle' => 'tooltip',
                     ],
-                    'classes' => '',
+                    'classes' => 'print',
                 ]
             ]);
         }
