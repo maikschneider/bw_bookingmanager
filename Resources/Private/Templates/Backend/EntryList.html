@@ -1,1 +1,198 @@
-Hello
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+{namespace bw=Blueways\BwBookingmanager\ViewHelpers} {namespace be = TYPO3\CMS\Backend\ViewHelpers} {namespace bu =
+TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
+
+
+<f:layout name="Default"/>
+
+<f:section name="content">
+
+	<h1>
+		<f:for each="{calendars}" as="calendar" iteration="i">
+			<f:if condition="{i.index}">,</f:if>
+			{calendar.name}
+		</f:for>
+	</h1>
+
+	<f:if condition="{calendars} == 0">
+		<f:then>
+			<div class="alert alert-info">
+				<div class="message-body">
+					<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.nocalendarfound"/>
+				</div>
+			</div>
+		</f:then>
+		<f:else>
+			<div id="setting-container" style="{f:if(condition:hideForm,then:'display:none',else:'')}">
+				<f:be.infobox title="Filter options" state="-1" iconName="filter" disableIcon="false">
+
+					<f:form id="entryListForm" class="settings" method="GET" name="demand" object="{demand}">
+
+						<div class="row form-horizontal">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label for="calendarUid" class="col-xs-4 control-label">
+										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.calendar"/>
+									</label>
+									<div class="col-xs-8">
+										<div class="input">
+											<f:form.select prependOptionLabel="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.allCalendars')}"
+																		 prependOptionValue="0"
+																		 class="form-control"
+																		 property="calendarUid"
+																		 id="calendarUid"
+																		 options="{calendars}"
+																		 optionLabelField="name"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row form-horizontal">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label for="searchWord" class="col-xs-4 control-label">
+										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.searchWord"/>
+									</label>
+									<div class="col-xs-8">
+										<div class="input">
+											<f:form.textfield class="form-control t3js-clearable" id="searchWord" property="searchWord"/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<div class="col-xs-11 col-xs-offset-1 form-check">
+										<f:form.checkbox class="form-check-input" property="hidden" value="1" id="hidden"/>
+										<label for="hidden" class="form-check-label">
+											<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.hidden"/>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row form-horizontal">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label for="sortingField" class="col-xs-4 control-label">
+										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortingField"/>
+									</label>
+
+									<div class="col-xs-8">
+										<f:form.select class="form-control" id="sortingField" property="sortingField" options="{
+                                        start_date:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.startDate\')}',
+                                        end_date:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.endDate\')}',
+                                        name:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.name\')}',
+                                        prename:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.prename\')}',
+                                        phone:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.phone\')}',
+                                        email:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.email\')}',
+                                        weight:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.weight\')}'
+                                        }"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label for="sortingDirection" class="col-xs-1 control-label"> - </label>
+									<div class="col-xs-8">
+										<f:form.select class="form-control" property="sortingDirection" id="sortingDirection" options="{ asc:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortingDirection.asc\')}',
+                                                                        desc:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortingDirection.desc\')}' }"/>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="row form-horizontal">
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label for="startDate" class="col-xs-4 control-label">
+										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.timerange"/>
+									</label>
+
+									<div class="col-xs-8">
+										<div class="input-group">
+											<f:form.textfield type="datetime"
+																				property="startDate"
+																				id="startDate"
+																				class="form-control t3js-datetimepicker t3js-clearable"
+																				data="{date-type:'date',date-offset:'0',date-format:'DD.MM.YYYY'}"/>
+											<span class="input-group-btn">
+												<label class="btn btn-default" for="startDate">
+													<span class="fa fa-calendar"></span>
+												</label>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group">
+									<label for="endDate" class="col-xs-1 control-label"> - </label>
+									<div class="col-xs-8">
+										<div class="input-group">
+											<f:form.textfield type="datetime"
+																				property="endDate"
+																				id="endDate"
+																				class="form-control t3js-datetimepicker t3js-clearable"
+																				data="{date-type:'date',date-offset:'0',date-format:'DD.MM.YYYY'}"/>
+											<span class="input-group-btn">
+												<label class="btn btn-default" for="endDate">
+													<span class="fa fa-calendar"></span>
+												</label>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<f:if condition="{settings.showConfirmButton}">
+							<div class="row form-horizontal">
+								<div class="col-xs-6">
+									<div class="form-group">
+										<label class="col-xs-4 control-label">
+											<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.confirmation"/>
+										</label>
+
+										<div class="col-xs-8 form-check">
+											<f:form.checkbox class="form-check-input" property="showConfirmed" value="1" id="showConfirmed"/>
+											<label for="showConfirmed" class="form-check-label">
+												<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.showConfirmed"/>
+											</label><br/>
+
+											<f:form.checkbox class="form-check-input"
+																			 property="showUnconfirmed"
+																			 value="1"
+																			 id="showUnconfirmed"/>
+											<label for="showUnconfirmed" class="form-check-label">
+												<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.showUnconfirmed"/>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</f:if>
+						<div class="row form-horizontal">
+							<div class="col-xs-9 col-xs-offset-2">
+								<f:form.button class="btn btn-primary" type="submit">
+									<i class="fa fa-refresh"></i>
+									<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.submit"/>
+								</f:form.button>
+							</div>
+						</div>
+					</f:form>
+				</f:be.infobox>
+			</div>
+
+
+			<bw:be.betterTableList tableName="tx_bwbookingmanager_domain_model_entry"
+														 fieldList="{settings.tableFields}"
+														 recordsPerPage="100"
+														 enableClickMenu="false"
+														 noControlPanels="false"
+														 clickTitleMode="edit"/>
+		</f:else>
+	</f:if>
+</f:section>
+
+</html>

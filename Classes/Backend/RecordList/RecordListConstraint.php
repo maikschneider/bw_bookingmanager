@@ -19,7 +19,7 @@ class RecordListConstraint
     public function isInAdministrationModule()
     {
         if (self::is9Up()) {
-            return GeneralUtility::_GET('route') === '/web/BwBookingmanagerTxBookingmanagerM1/';
+            return GeneralUtility::_GET('route') === '/web/bwbookingmanager/';
         }
 
         return GeneralUtility::_GET('M') === 'web_BwBookingmanagerTxBookingmanagerM1';
@@ -80,7 +80,8 @@ class RecordListConstraint
             $parameters['where'][] = $expressionBuilder->orX(...$fieldParts);
         }
 
-        // order
+        // order (default: start date)
+        $parameters['orderBy'] = [['start_date', 'asc']];
         if (isset($arguments['sortingField'])) {
             $direction = ($arguments['sortingDirection'] === 'asc' || $arguments['sortingDirection'] === 'desc') ? $arguments['sortingDirection'] : '';
             $parameters['orderBy'] = [[$arguments['sortingField'], $direction]];

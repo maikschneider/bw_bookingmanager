@@ -29,15 +29,15 @@ class TableListHook
         array $fieldList,
         QueryBuilder $queryBuilder
     ) {
-        if ($table === $this->recordListConstraint::TABLE && $this->recordListConstraint->isInAdministrationModule()) {
+        if ($table === $this->recordListConstraint::TABLE && GeneralUtility::_GET('route') === '/web/bwbookingmanager/') {
 
             // Fix for TYPO3 v9+: After the where parameter gets extended, the default parameter for storagePid gets lost
             $parameters['where'][] = 'pid='.$pageId;
 
             $demands = [];
-            $vars = GeneralUtility::_GET('tx_bwbookingmanager_web_bwbookingmanagertxbookingmanagerm1');
-            if (is_array($vars) && is_array($vars['demand'])) {
-                $demands = $vars['demand'];
+            $vars = GeneralUtility::_GET('demand');
+            if (is_array($vars)) {
+                $demands = $vars;
             }
             $this->recordListConstraint->extendQuery($parameters, $demands);
         }

@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Psr\Http\Message\ResponseInterface;
@@ -13,7 +14,10 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\View\ViewInterface;
@@ -58,7 +62,6 @@ class BackendController
         $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendCalendarContextMenuActions');
-        //$pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendModuleCalendar');
 
         $this->view->assign('calendars', $calendars);
         $this->view->assign('viewState', json_encode($viewState, JSON_THROW_ON_ERROR));
@@ -166,6 +169,37 @@ class BackendController
             ]
         ];
 
+        if ($currentTemplate === 'entryList') {
+            $returnUrl = (string)$uriBuilder->buildUriFromRoute(
+                'bookingmanager_entry_list',
+                ['id' => $this->getCurrentPid()]
+            );
+
+            $buttons = array_merge($buttons, [
+                [
+                    'label' => 'administration.filter.buttonTitle',
+                    'icon' => 'actions-filter',
+                    'position' => ButtonBar::BUTTON_POSITION_LEFT,
+                    'group' => 3,
+                    'data-attrs' => [
+                        'togglelink' => '1',
+                        'toggle' => 'tooltip',
+                    ],
+                    'classes' => ''
+                ],
+                [
+                    'label' => 'administration.print.buttonTitle',
+                    'icon' => 'actions-file-csv',
+                    'position' => ButtonBar::BUTTON_POSITION_LEFT,
+                    'group' => 3,
+                    'data-attrs' => [
+                        'toggle' => 'tooltip',
+                    ],
+                    'classes' => '',
+                ]
+            ]);
+        }
+
         if ($currentTemplate === 'calendar') {
             $viewState = $this->getCalendarViewState();
             $buttons = array_merge($buttons, [
@@ -262,9 +296,47 @@ class BackendController
         return $GLOBALS['BE_USER'];
     }
 
-    public function entryListAction(\Psr\Http\Message\ServerRequestInterface $request): ResponseInterface
+    public function entryListAction(ServerRequestInterface $request): ResponseInterface
     {
+        $this->request = $request;
         $this->initializeView('entryList');
+
+        $pageRenderer = $this->moduleTemplate->getPageRenderer();
+        $typoscript = $this->objectManager->get(ConfigurationManager::class)->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $tsService = $this->objectManager->get(TypoScriptService::class);
+        $settings = $tsService->convertTypoScriptArrayToPlainArray($typoscript);
+        $settings = $settings['module']['tx_bwbookingmanager']['settings'];
+
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
+        if((int)$settings['showConfirmButton']) {
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BetterRecordlist');
+        }
+
+        $hideForm = true;
+        $queryParams = $request->getQueryParams();
+        $demand = GeneralUtility::makeInstance(AdministrationDemand::class);
+        // override default demand values with values from GET request
+        if (is_array($queryParams['demand'])) {
+            $hideForm = false;
+            foreach ($queryParams['demand'] as $key => $value) {
+                if (property_exists(AdministrationDemand::class, $key)) {
+                    $getter = 'set' . ucfirst($key);
+                    $demand->$getter($value);
+                }
+            }
+        }
+
+        $calendarRepository = $this->objectManager->get(CalendarRepository::class);
+        $calendars = $calendarRepository->findAll();
+        $calendar = $calendars && $calendars->count() ? $calendars->getFirst() : [];
+
+        $this->view->assign('hideForm', $hideForm);
+        $this->view->assign('page', $this->getCurrentPid());
+        $this->view->assign('demand', $demand);
+        $this->view->assign('settings', $settings);
+        $this->view->assign('calendar', $calendar);
+        $this->view->assign('calendars', $calendars);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());

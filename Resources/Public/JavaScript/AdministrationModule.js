@@ -13,4 +13,15 @@ define(['jquery', 'TYPO3/CMS/Backend/Tooltip'], function ($) {
         });
     });
 
+    $('#entryListForm').on('submit', function(e) {
+      e.preventDefault();
+      const url = e.currentTarget.getAttribute('action');
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      const search = new URLSearchParams(formData);
+      const queryString = search.toString();
+
+      top.TYPO3.Backend.ContentContainer.setUrl(url + '&' + queryString);
+  })
+
 });
