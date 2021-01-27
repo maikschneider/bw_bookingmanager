@@ -42,7 +42,7 @@ call_user_func(
                 'bottom',
                 null,
                 [
-                    'routeTarget' => \Blueways\BwBookingmanager\Controller\BackendController::class . '::calendarAction',
+                    'routeTarget' => \Blueways\BwBookingmanager\Controller\BackendController::class . '::indexAction',
                     'access' => 'user,group',
                     'name' => 'web_bwbookingmanager',
                     'icon' => 'EXT:bw_bookingmanager/Resources/Public/Icons/module_administration.svg',

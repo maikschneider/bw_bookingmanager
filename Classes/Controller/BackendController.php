@@ -46,6 +46,28 @@ class BackendController
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
     }
 
+    public function indexAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $this->request = $request;
+        $pid = $this->getCurrentPid();
+        $selectableRoutes = ['calendarAction', 'entryListAction'];
+        $selectedRoute = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/selectedRoute-' . $pid) ?? 0;
+        $methodName = $selectableRoutes[$selectedRoute];
+
+        if (method_exists(self::class, $selectableRoutes[$selectedRoute])) {
+            return $this->$methodName($request);
+        }
+
+        return $this->calendarAction($request);
+    }
+
+    protected function getCurrentPid(): int
+    {
+        $params = $this->request->getQueryParams();
+        $pid = (int)$params['id'];
+        return $pid ?: 0;
+    }
+
     public function calendarAction(ServerRequestInterface $request): ResponseInterface
     {
         $this->request = $request;
@@ -66,21 +88,12 @@ class BackendController
         $this->view->assign('calendars', $calendars);
         $this->view->assign('viewState', json_encode($viewState, JSON_THROW_ON_ERROR));
 
+        // save selected route
+        $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
+        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 0);
+
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
-    }
-
-    protected function getCurrentPid(): int
-    {
-        $params = $this->request->getQueryParams();
-        $pid = (int)$params['id'];
-        return $pid ?: 0;
-    }
-
-    protected function getCalendarViewState(): BackendCalendarViewState
-    {
-        $pid = $this->getCurrentPid();
-        return BackendCalendarViewState::getFromUserSettings($pid);
     }
 
     /**
@@ -117,7 +130,7 @@ class BackendController
         foreach ($actions as $action) {
             $item = $menu->makeMenuItem()
                 ->setTitle($this->getLanguageService()->sL($llPrefix . $action['label']))
-                ->setHref($uriBuilder->buildUriFromRoute($action['route']))
+                ->setHref($uriBuilder->buildUriFromRoute($action['route'], ['id' => $this->getCurrentPid()]))
                 ->setActive($currentTemplate === $action['action']);
             $menu->addMenuItem($item);
         }
@@ -291,6 +304,12 @@ class BackendController
         $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT, 4);
     }
 
+    protected function getCalendarViewState(): BackendCalendarViewState
+    {
+        $pid = $this->getCurrentPid();
+        return BackendCalendarViewState::getFromUserSettings($pid);
+    }
+
     private function getBackendUser()
     {
         return $GLOBALS['BE_USER'];
@@ -308,7 +327,7 @@ class BackendController
         $settings = $settings['module']['tx_bwbookingmanager']['settings'];
 
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
-        if((int)$settings['showConfirmButton']) {
+        if ((int)$settings['showConfirmButton']) {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BetterRecordlist');
         }
@@ -337,6 +356,10 @@ class BackendController
         $this->view->assign('settings', $settings);
         $this->view->assign('calendar', $calendar);
         $this->view->assign('calendars', $calendars);
+
+        // save selected route
+        $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
+        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 1);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
