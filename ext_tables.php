@@ -21,21 +21,6 @@ call_user_func(
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_bwbookingmanager_domain_model_notification');
 
         if (TYPO3_MODE === 'BE') {
-            \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-                'Blueways.BwBookingmanager',
-                'web',
-                'tx_bookingmanager_m1',
-                '',
-                array(
-                    'Administration' => 'index, timeslot, newEntry, blockslot, newBlockslot, dashboard',
-                ),
-                array(
-                    'access' => 'user,group',
-                    'icon' => 'EXT:bw_bookingmanager/Resources/Public/Icons/module_administration.svg',
-                    'labels' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_m1.xlf',
-                )
-            );
-
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
                 'web',
                 'bwbookingmanager',
