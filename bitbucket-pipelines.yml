@@ -10,6 +10,7 @@ pipelines:
                 - composer install
               artifacts:
                 - vendor/**
+                - public/**
         - step:
             name: Build and Install
             image: node:10.15.3
