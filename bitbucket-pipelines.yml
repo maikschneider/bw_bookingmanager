@@ -14,4 +14,4 @@ pipelines:
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git add *
             - git commit -a -m "Build $BITBUCKET_COMMIT"
-            - git push -v --tags origin 9.x:9.x
+            - git push --force -v --tags origin 9.x:9.x
