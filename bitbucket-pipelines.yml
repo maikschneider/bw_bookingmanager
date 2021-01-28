@@ -9,7 +9,7 @@ pipelines:
             - npm install
             - echo "// @ts-nocheck" | cat - public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts > temp && mv temp public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts
             - npm run build
-            - ./Build/Scripts/cleanUp.sh
+            - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git stash
             - git checkout 9.x
             - git stash pop
