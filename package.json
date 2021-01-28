@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Generic booking manager for TYPO3 CMS",
   "repository": "https://bitbucket.org/blueways/bw_bookingmanager",
-  "main": "Gruntfile.js",
   "devDependencies": {
     "@types/bootstrap": "^4.3.1",
     "@types/jquery": "^3.3.31",
@@ -33,9 +32,7 @@
     "@fullcalendar/adaptive": "^5.5.0",
     "tippy.js": "^6.2.7",
     "webpack-merge": "^5.7.3",
-    "terser-webpack-plugin": "^5.1.1"
-  },
-  "dependencies": {
+    "terser-webpack-plugin": "^5.1.1",
     "fullcalendar": "^5.5.0"
   },
   "scripts": {
