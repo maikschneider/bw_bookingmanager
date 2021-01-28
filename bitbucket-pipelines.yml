@@ -11,7 +11,7 @@ pipelines:
             - npm run build
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git stash
-            - git checkout 9.x
+            - git checkout -b 9.x
             - git stash pop
             - git add Resources/*
             - git commit -a -m "Build $BITBUCKET_COMMIT"
