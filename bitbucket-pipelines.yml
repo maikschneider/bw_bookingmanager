@@ -1,26 +1,17 @@
 pipelines:
   branches:
     9.x-dev:
-        - step:
-              name: Install PHP dependencies
-              image: drud/ddev-webserver:v1.16.1
-              caches:
-                - composer
-              script:
-                - composer install
-              artifacts:
-                - vendor/**
-                - public/**
-        - step:
-            name: Build and Install
-            image: node:10.15.3
-            caches:
-              - node
-            script:
-              - git fetch
-              - git checkout -b 9.x
-              - git merge $BITBUCKET_COMMIT
-              - npm install
-              - npm run build
-              - ./Build/Scripts/cleanUp.sh
-              - git push -v --tags origin 9.x:9.x
+      - step:
+          name: Build and Install
+          image: drud/ddev-webserver:v1.16.1
+          script:
+            - composer install
+            - npm install
+            - npm run build
+            - ./Build/Scripts/cleanUp.sh
+            - git stash
+            - git checkout 9.x
+            - git stash pop
+            - git add Resources/*
+            - git commit -a -m "Build $BITBUCKET_COMMIT"
+            - git push -v --tags origin 9.x:9.x
