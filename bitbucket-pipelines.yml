@@ -9,7 +9,7 @@ pipelines:
               script:
                 - composer install
               artifacts:
-                - vendor/*
+                - vendor/**
         - step:
             name: Build and Install
             image: node:10.15.3
