@@ -3,7 +3,7 @@ pipelines:
     9.x-dev:
         - step:
               name: Install PHP dependencies
-              image: php7.4
+              image: php:7.4
               caches:
                 - composer
               script:
