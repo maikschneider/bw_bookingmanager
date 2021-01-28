@@ -5,9 +5,6 @@ module.exports = {
   plugins: [new MiniCssExtractPlugin({
     filename: 'Resources/Public/Css/backend/BackendCalendar.css',
   })],
-  mode: 'development',
-  devtool: 'inline-source-map',
-  watch: true,
   entry: {
     BackendModuleCalendar: './Resources/Private/TypeScript/BackendModuleCalendar.ts',
     BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts',
