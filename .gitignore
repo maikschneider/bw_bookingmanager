@@ -11,3 +11,4 @@ bin
 yarn.lock
 .ddev
 .env
+psalm.xml
