@@ -1,7 +1,8 @@
 echo "Cleaning up.."
 rm -rf Documentation
 rm -rf Tests
-rm .*
+rm .editorconfig
+rm .gitignore
 rm -rf .ddev
 rm bitbucket-pipelines.yml
 rm composer.lock
