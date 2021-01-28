@@ -5,16 +5,13 @@ pipelines:
           name: Build and Install
           image: drud/ddev-webserver:v1.16.1
           script:
-            - git checkout 9.x
+            - git checkout -b 9.x
             - git reset $BITBUCKET_COMMIT --hard
             - composer install
             - npm install
             - echo "// @ts-nocheck" | cat - public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts > temp && mv temp public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts
             - npm run build
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
-            - git stash
-            - git checkout -b 9.x
-            - git stash pop
             - git add *
             - git commit -a -m "Build $BITBUCKET_COMMIT"
             - git push -v --tags origin 9.x:9.x
