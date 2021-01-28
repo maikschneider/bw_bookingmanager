@@ -13,6 +13,6 @@ pipelines:
             - git stash
             - git checkout -b 9.x
             - git stash pop
-            - git add Resources/*
+            - git add *
             - git commit -a -m "Build $BITBUCKET_COMMIT"
             - git push -v --tags origin 9.x:9.x
