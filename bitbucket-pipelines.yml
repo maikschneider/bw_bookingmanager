@@ -3,7 +3,7 @@ pipelines:
     9.x-dev:
         - step:
               name: Install PHP dependencies
-              image: drud/ddev-webserver:latest
+              image: drud/ddev-webserver:v1.16.1
               caches:
                 - composer
               script:
