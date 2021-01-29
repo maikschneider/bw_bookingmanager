@@ -30,6 +30,7 @@ export class BackendCalendarViewState {
   public warningTitle: string;
   public warningText: string;
   public warningButton: string;
+  public calendarOptions: any;
 
   private saveRequest: any;
 
@@ -62,6 +63,7 @@ export class BackendCalendarViewState {
     this.warningTitle = 'warningTitle' in viewState ? viewState.warningTitle : '';
     this.warningText = 'warningText' in viewState ? viewState.warningText : '';
     this.warningButton = 'warningButton' in viewState ? viewState.warningButton : '';
+    this.calendarOptions = 'calendarOptions' in viewState ? viewState.calendarOptions : {};
 
     this.events = {
       'url': TYPO3.settings.ajaxUrls['api_calendar_show'],

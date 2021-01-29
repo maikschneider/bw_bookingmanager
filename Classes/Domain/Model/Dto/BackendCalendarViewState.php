@@ -3,7 +3,10 @@
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class BackendCalendarViewState
 {
@@ -48,7 +51,7 @@ class BackendCalendarViewState
 
     public string $warningButton = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:modal.warningButton';
 
-
+    public array $calendarOptions = [];
 
     public function __construct(int $pid)
     {
@@ -177,6 +180,16 @@ class BackendCalendarViewState
     public function isNewModalView(): bool
     {
         return GeneralUtility::isFirstPartOfStr((string)$this->entryUid, 'NEW');
+    }
+
+    public function addTypoScriptOptionOverrides(): void
+    {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $tsService = $objectManager->get(TypoScriptService::class);
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        $settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $settings = $settings['module.']['tx_bwbookingmanager.']['settings.']['calendarOptions.'];
+        $this->calendarOptions = $tsService->convertTypoScriptArrayToPlainArray($settings);
     }
 
 }

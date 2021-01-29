@@ -10,6 +10,7 @@ import tippy from 'tippy.js';
 import interactionPlugin from '@fullcalendar/interaction';
 import 'tippy.js/dist/tippy.css';
 import {BackendCalendarViewState} from "./BackendCalendarViewState";
+import merge from "webpack-merge";
 
 declare global {
   interface Window {
@@ -81,7 +82,7 @@ class BackendModuleCalendar {
       const $spinner = $('<div>').attr('id', 'loading').html(spinner);
       $(calendarEl).after($spinner);
 
-      this.calendar = new Calendar(calendarEl, {
+      let options = {
         locales: [deLocale],
         initialDate: this.viewState.start,
         timeZone: 'Europe/Berlin',
@@ -135,7 +136,12 @@ class BackendModuleCalendar {
             info.event.setProp('display', 'none');
           }
         }
-      });
+      };
+
+      // override options from typoscript
+      options = Object.assign(options, this.viewState.calendarOptions);
+
+      this.calendar = new Calendar(calendarEl, options);
 
       this.calendar.render();
     });

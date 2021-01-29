@@ -137,6 +137,9 @@ module.tx_bwbookingmanager {
     showSecondaryButton = 0
     showHistoryButton = 0
     showViewBigButton = 0
+
+    calendarOptions {
+    }
   }
 }
 

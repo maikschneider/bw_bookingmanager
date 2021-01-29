@@ -92,6 +92,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $viewState->timeslot = $timeslot;
         $viewState->calendar = $calendar;
         $viewState->entryUid = $entryUid;
+        $viewState->addTypoScriptOptionOverrides();
 
         $this->templateView->assign('savedData', $savedData);
         $this->templateView->assign('viewState', json_encode($viewState));

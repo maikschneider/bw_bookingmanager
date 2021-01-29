@@ -80,6 +80,7 @@ class BackendController
 
         $viewState = $this->getCalendarViewState();
         $viewState->addCalendars($calendars);
+        $viewState->addTypoScriptOptionOverrides();
 
         $pageRenderer = $this->moduleTemplate->getPageRenderer();
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');

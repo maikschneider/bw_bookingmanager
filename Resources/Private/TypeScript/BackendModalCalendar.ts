@@ -132,7 +132,7 @@ class BackendModalCalendar {
       return;
     }
 
-    this.calendar = new Calendar(calendarEl, {
+    let options = {
       locales: [deLocale],
       initialDate: this.viewState.entryStart ?? this.viewState.start,
       timeZone: 'Europe/Berlin',
@@ -288,10 +288,14 @@ class BackendModalCalendar {
         this.selectedEvent = null;
 
       },
-    });
+    };
+
+    // override options from typoScript
+    options = Object.assign(options, this.viewState.calendarOptions);
+
+    this.calendar = new Calendar(calendarEl, options);
 
     this.calendar.render();
-
 
   }
 }
