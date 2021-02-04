@@ -8,7 +8,7 @@ pipelines:
             - git fetch --unshallow
             - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
             - git fetch origin
-            - git checkout origin/9.x
+            - git checkout 9.x
             - git checkout 9.x-dev .
             - composer install
             - npm install
@@ -17,4 +17,4 @@ pipelines:
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git add *
             - git commit -a -m "Build $BITBUCKET_COMMIT"
-            - git push --tags origin 9.x:9.x
+            - git push origin 9.x --tags
