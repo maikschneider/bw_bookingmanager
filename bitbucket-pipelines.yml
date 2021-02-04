@@ -5,7 +5,7 @@ pipelines:
           name: Build and Install
           image: drud/ddev-webserver:v1.16.1
           script:
-            - git checkout -b 9.x
+            - git checkout origin/9.x
             - git merge --strategy-option theirs 9.x-dev
             - git checkout 9.x-dev .
             - composer install
@@ -15,4 +15,4 @@ pipelines:
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git add *
             - git commit -a -m "Build $BITBUCKET_COMMIT"
-            - git push --force -v --tags origin 9.x:9.x
+            - git push --tags origin 9.x:9.x
