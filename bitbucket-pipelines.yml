@@ -5,8 +5,9 @@ pipelines:
           name: Build and Install
           image: drud/ddev-webserver:v1.16.1
           script:
-            - git checkout -b 9.x
-            - git reset $BITBUCKET_COMMIT --hard
+            - git checkout 9.x
+            - git merge --strategy-option theirs 9.x-dev
+            - git checkout 9.x-dev .
             - composer install
             - npm install
             - echo "// @ts-nocheck" | cat - public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts > temp && mv temp public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts
