@@ -5,8 +5,8 @@ pipelines:
           name: Build and Install
           image: drud/ddev-webserver:v1.16.1
           script:
-            - git fetch
-            - git checkout 9.x
+            - git fetch origin --verbose
+            - git checkout origin/9.x
             - git merge --strategy-option theirs 9.x-dev
             - git checkout 9.x-dev .
             - composer install
