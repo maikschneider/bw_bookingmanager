@@ -5,7 +5,9 @@ pipelines:
           name: Build and Install
           image: drud/ddev-webserver:v1.16.1
           script:
-            - git fetch origin --verbose
+            - git fetch --unshallow
+            - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+            - git fetch origin
             - git checkout origin/9.x
             - git merge --strategy-option theirs 9.x-dev
             - git checkout 9.x-dev .
