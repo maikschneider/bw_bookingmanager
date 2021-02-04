@@ -16,8 +16,10 @@ class BlockslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return [];
         }
 
+        $blockslotCalendarEventClass = $this->objectManager->get(BlockslotCalendarEvent::class);
+
         foreach ($blockslots as $blockslot) {
-            $events[] = BlockslotCalendarEvent::createFromEntity($blockslot);
+            $events[] = $blockslotCalendarEventClass::createFromEntity($blockslot);
         }
         return $events;
     }

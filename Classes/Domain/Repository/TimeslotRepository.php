@@ -175,9 +175,11 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return [];
         }
 
+        $timeslotCalendarEventClass = $this->objectManager->get(TimeslotCalendarEvent::class);
+
         $calendarEvents = [];
         foreach ($timeslots as $timeslot) {
-            $calendarEvents[] = TimeslotCalendarEvent::createFromRawSql($timeslot);
+            $calendarEvents[] = $timeslotCalendarEventClass::createFromRawSql($timeslot);
         }
         return $calendarEvents;
     }

@@ -73,8 +73,10 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return [];
         }
 
+        $entryCalendarEventClass = $this->objectManager->get(EntryCalendarEvent::class);
+
         foreach ($entries as $entry) {
-            $events[] = EntryCalendarEvent::createFromEntity($entry);
+            $events[] = $entryCalendarEventClass::createFromEntity($entry);
         }
         return $events;
     }

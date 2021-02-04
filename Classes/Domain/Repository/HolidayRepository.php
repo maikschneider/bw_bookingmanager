@@ -27,8 +27,10 @@ class HolidayRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return [];
         }
 
+        $holidayCalendarEventClass = $this->objectManager->get(HolidayCalendarEvent::class);
+
         foreach ($holidays as $holiday) {
-            $events[] = HolidayCalendarEvent::createFromEntity($holiday);
+            $events[] = $holidayCalendarEventClass::createFromEntity($holiday);
         }
         return $events;
     }
