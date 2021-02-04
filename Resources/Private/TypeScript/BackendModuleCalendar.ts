@@ -31,6 +31,7 @@ class BackendModuleCalendar {
   public viewState: BackendCalendarViewState;
 
   public init() {
+    console.log('hello!');
     this.initCalendar();
     this.bindEvents();
     return this;
