@@ -16,7 +16,7 @@ class HolidayCalendarEvent extends CalendarEvent
 
     public static function createFromEntity(Holiday $holiday): HolidayCalendarEvent
     {
-        $event = new self();
+        $event = new static();
         $event->setTitle($holiday->getName());
         $event->setStart($holiday->getStartDate());
         $event->setEnd($holiday->getEndDate());
