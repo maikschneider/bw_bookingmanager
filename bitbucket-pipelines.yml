@@ -18,5 +18,5 @@ pipelines:
             - npm run build
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git add *
-            - git commit -a -m "Build $BITBUCKET_COMMIT_SHORT" --allow-empty
+            - git commit -a -m "build: $BITBUCKET_COMMIT_SHORT" --allow-empty
             - git push origin 9.x --tags
