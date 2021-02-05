@@ -22,7 +22,7 @@ class TimeslotCalendarEvent extends CalendarEvent
 
     public static function createFromRawSql(array $timeslot): TimeslotCalendarEvent
     {
-        $event = new self();
+        $event = new static();
         $event->uid = $timeslot['uid'];
         $event->pid = $timeslot['pid'];
         $event->start->setTimestamp($timeslot['t_start_date']);
