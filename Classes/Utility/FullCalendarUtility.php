@@ -42,6 +42,10 @@ class FullCalendarUtility
         $entryRepository = $objectManager->get(EntryRepository::class);
         $calendars = $calendarRepository->findAllByPid($viewState->pid);
 
+        if (!$calendars && !$calendars->count()) {
+            return [];
+        }
+
         $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
         $holidayEvents = $holidayRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
