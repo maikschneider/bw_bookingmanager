@@ -188,8 +188,10 @@ class BackendCalendarViewState
         $tsService = $objectManager->get(TypoScriptService::class);
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-        $settings = $settings['module.']['tx_bwbookingmanager.']['settings.']['calendarOptions.'];
-        $this->calendarOptions = $tsService->convertTypoScriptArrayToPlainArray($settings);
+        if (isset($settings['module.']['tx_bwbookingmanager.']['settings.']['calendarOptions.'])) {
+            $settings = $settings['module.']['tx_bwbookingmanager.']['settings.']['calendarOptions.'];
+            $this->calendarOptions = $tsService->convertTypoScriptArrayToPlainArray($settings);
+        }
     }
 
 }

@@ -12,7 +12,7 @@ class BlockslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $events = [];
         $blockslots = $this->findAllInRange($calendars, $startDate, $endDate);
 
-        if (!$blockslots->count()) {
+        if (!$blockslots && !$blockslots->count()) {
             return [];
         }
 
