@@ -45,4 +45,9 @@ module.exports = {
       'TYPO3/CMS/BwBookingmanager': path.resolve(__dirname, 'Resources/Private/TypeScript')
     }
   },
+  externals: {
+    'TYPO3/CMS/Backend/Modal': 'TYPO3/CMS/Backend/Modal',
+    'TYPO3/CMS/Backend/Icons': 'TYPO3/CMS/Backend/Icons',
+    'jquery': 'jquery'
+  }
 };
