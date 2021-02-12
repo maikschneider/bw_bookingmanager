@@ -46,7 +46,9 @@ class CalendarEvent
     public function __construct()
     {
         $this->start = new DateTime();
+        $this->start->setTimezone(new \DateTimeZone('Europe/Berlin'));
         $this->end = new DateTime();
+        $this->end->setTimezone(new \DateTimeZone('Europe/Berlin'));
     }
 
     public function getUid()
