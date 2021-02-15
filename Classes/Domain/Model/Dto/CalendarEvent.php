@@ -217,7 +217,7 @@ class CalendarEvent
      */
     public function setStart(DateTime $start): void
     {
-        $this->start = $start;
+        $this->start->setTimestamp($start->getTimestamp());
     }
 
     /**
@@ -225,7 +225,7 @@ class CalendarEvent
      */
     public function setEnd(DateTime $end): void
     {
-        $this->end = $end;
+        $this->end->setTimestamp($end->getTimestamp());
     }
 
     public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
