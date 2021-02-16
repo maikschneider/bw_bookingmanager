@@ -100,7 +100,8 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         select
             date,
-            DAYOFWEEK(date) as weekday, is_holiday
+            DAYOFWEEK(date) as weekday,
+            IFNULL(is_holiday, 0) as is_holiday
         from
             (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) date
               from
@@ -133,7 +134,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             hidden = 0 AND
             DATE(FROM_UNIXTIME(t.start_date))<=DATE(dates.date) AND
             (repeat_end = 0 OR FROM_UNIXTIME(repeat_end) > dates.date) AND
-            (holiday_setting=0 or (holiday_setting=1 and is_holiday is null) or (holiday_setting=2 and is_holiday=1)) AND
+            (holiday_setting=0 or (holiday_setting=1 and is_holiday=0) or (holiday_setting=2 and is_holiday=1)) AND
 
             (	repeat_type = 0 AND DATE(FROM_UNIXTIME(t.start_date)) = DATE(dates.date) OR
                 repeat_type = 1 OR
