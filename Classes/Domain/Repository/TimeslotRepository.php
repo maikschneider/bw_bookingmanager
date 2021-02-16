@@ -82,8 +82,10 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     {
         $sql = "select
         " . $calendarUid . " as calendar,
-		CAST(UNIX_TIMESTAMP(convert_tz(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date))), 'UTC', 'Europe/Berlin')) as UNSIGNED) as t_start_date,
-		CAST(UNIX_TIMESTAMP(convert_tz(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date))), 'UTC', 'Europe/Berlin')) + (t.end_date - t.start_date) as UNSIGNED) as t_end_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as t_start_date,
+		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) + (t.end_date - t.start_date) as UNSIGNED) as t_end_date,
+		t.start_date as orig_start,
+		t.end_date as orig_end,
         t.*,
 #		dates.date,
 #		TIME(FROM_UNIXTIME(t.start_date)) as start,
