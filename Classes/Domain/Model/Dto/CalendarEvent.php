@@ -46,7 +46,9 @@ class CalendarEvent
     public function __construct()
     {
         $this->start = new DateTime();
+        $this->start->setTimezone(new \DateTimeZone('Europe/Berlin'));
         $this->end = new DateTime();
+        $this->end->setTimezone(new \DateTimeZone('Europe/Berlin'));
     }
 
     public function getUid()
@@ -215,7 +217,7 @@ class CalendarEvent
      */
     public function setStart(DateTime $start): void
     {
-        $this->start = $start;
+        $this->start->setTimestamp($start->getTimestamp());
     }
 
     /**
@@ -223,7 +225,7 @@ class CalendarEvent
      */
     public function setEnd(DateTime $end): void
     {
-        $this->end = $end;
+        $this->end->setTimestamp($end->getTimestamp());
     }
 
     public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)

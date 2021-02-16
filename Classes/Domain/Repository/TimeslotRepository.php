@@ -3,7 +3,6 @@
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
-use Blueways\BwBookingmanager\Utility\TimeslotDataMapper;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -85,6 +84,8 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         " . $calendarUid . " as calendar,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as t_start_date,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) + (t.end_date - t.start_date) as UNSIGNED) as t_end_date,
+		t.start_date as orig_start,
+		t.end_date as orig_end,
         t.*,
 #		dates.date,
 #		TIME(FROM_UNIXTIME(t.start_date)) as start,

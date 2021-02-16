@@ -27,6 +27,23 @@ class TimeslotCalendarEvent extends CalendarEvent
         $event->pid = $timeslot['pid'];
         $event->start->setTimestamp($timeslot['t_start_date']);
         $event->end->setTimestamp($timeslot['t_end_date']);
+
+        // DST fix
+        $timezone = new \DateTimeZone('Europe/Berlin');
+        $transitions = $timezone->getTransitions(
+            $timeslot['orig_start'],
+            $timeslot['t_start_date']
+        );
+        $lastTransitionIndex = (int)(sizeof($transitions) - 1);
+        if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
+            $event->start->modify('+1 hour');
+            $event->end->modify('+1 hour');
+        }
+        if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
+            $event->start->modify('-1 hour');
+            $event->end->modify('-1 hour');
+        }
+
         $event->maxWeight = $timeslot['max_weight'];
         $event->bookedWeight = $timeslot['booked_weight'];
         $event->calendar = $timeslot['calendar'];

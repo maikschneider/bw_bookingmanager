@@ -265,7 +265,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             0 => []
         ];
 
-        return isset($repeatMapping[$repeatDays]) ? $repeatMapping[$repeatDays] : [];
+        return $repeatMapping[$repeatDays] ?? [];
     }
 
     /**
