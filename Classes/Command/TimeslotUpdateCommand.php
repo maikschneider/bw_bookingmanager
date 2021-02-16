@@ -3,7 +3,9 @@
 namespace Blueways\BwBookingmanager\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -34,6 +36,8 @@ class TimeslotUpdateCommand extends Command
         }
 
         $this->copyCalendarRelationToTimeslots($io);
+
+        $this->migrateRepeatType($io);
 
         $this->migrateRepeatSettings($io);
 
@@ -103,11 +107,11 @@ set c.timeslots = (select COUNT(*) from tx_bwbookingmanager_domain_model_timeslo
 
         $io->writeln('Checking for repeating timeslots that can be merged..');
 
-        $updateQuery = "select t1.calendar, time(FROM_UNIXTIME(t1.start_date)) as 'time', t1.uid, count(*) as 'count', group_concat(t1.uid order by t1.start_date) as 'slots'
+        $updateQuery = "select t1.calendar, time(FROM_UNIXTIME(t1.start_date)) as 'time', t1.uid, count(*) as 'count', group_concat(t1.uid order by t1.start_date) as 'slots', group_concat(t1.repeat_days order by t1.start_date) as 'weekdays', group_concat(WEEKOFYEAR(FROM_UNIXTIME(t1.start_date))) as 'weekofyear'
 from tx_bwbookingmanager_domain_model_timeslot t1
-where t1.deleted=0 and t1.repeat_type=2
-group by t1.calendar, time(FROM_UNIXTIME(t1.start_date)), time(FROM_UNIXTIME(t1.end_date)), t1.max_weight
-
+where t1.deleted=0 and t1.repeat_type=4
+group by t1.calendar, time(FROM_UNIXTIME(t1.start_date)), time(FROM_UNIXTIME(t1.end_date)), t1.max_weight, WEEKOFYEAR(FROM_UNIXTIME(t1.start_date)), YEAR(FROM_UNIXTIME(t1.start_date)), repeat_end
+having count>1
 order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
 
         $result = $connection->executeQuery($updateQuery)->fetchAll();
@@ -119,15 +123,6 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
 
         $io->note('There are ' . (string)count($result) . ' timeslot migrations possible');
 
-        // calculate $timeslotWeekDays => [ 'uid' => xyz, 'weekday' => 16] // weekday is binary value
-        $entryWeekDayQuery = "select uid, DAYOFWEEK(FROM_UNIXTIME(start_date)) as 'weekday' from tx_bwbookingmanager_domain_model_timeslot;";
-        $timeslotWeekDays = $connection->executeQuery($entryWeekDayQuery)->fetchAll();
-        $weekDayMapping = [0, 64, 32, 16, 8, 4, 2, 1];
-        $timeslotWeekDays = array_map(function ($timeslot) use ($weekDayMapping) {
-            $timeslot['weekday'] = $weekDayMapping[(int)$timeslot['weekday']];
-            return $timeslot;
-        }, $timeslotWeekDays);
-
         $entryConditions = '';
         $timeslotRepeatDaysConditions = '';
         $timeslotListToDelete = [];
@@ -135,13 +130,11 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
 
         foreach ($result as $migration) {
             $timeslotUids = explode(',', $migration['slots']);
+            $repeatDays = explode(',', $migration['repeat_days']);
 
             // calculate repeat repeat_days
-            $repeatCode = array_map('intval', $timeslotUids);
-            $repeatCode = array_reduce($repeatCode, function ($carry, $timeslotUid) use ($timeslotWeekDays) {
-                $key = array_search($timeslotUid, array_column($timeslotWeekDays, 'uid'));
-                return $carry += $timeslotWeekDays[$key]['weekday'];
-            });
+            $repeatCode = array_map('intval', $repeatDays);
+            $repeatCode = array_reduce($repeatCode, function($carry, $code){ return $carry + $code; });
 
             // divide into main timeslot and timeslots to divide
             $mainTimeslotUid = array_shift($timeslotUids);
@@ -168,9 +161,7 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
         }
 
         if (count($timeslotListforRepeatType4)) {
-            // concat the lists for in(|) query
-            $timeslotListforRepeatType4 = implode(',', $timeslotListforRepeatType4);
-            $timeslotUpdateQuery = "update tx_bwbookingmanager_domain_model_timeslot set repeat_type = case when uid in (" . $timeslotListforRepeatType4 . ") then 4 else repeat_type end, repeat_days = case" . $timeslotRepeatDaysConditions . " else repeat_days end;";
+            $timeslotUpdateQuery = "update tx_bwbookingmanager_domain_model_timeslot set repeat_days = case" . $timeslotRepeatDaysConditions . " else repeat_days end;";
             $connection->executeQuery($timeslotUpdateQuery);
         }
 
@@ -181,6 +172,29 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
             $connection->executeQuery($timeslotDeleteQuery);
         }
 
-        $io->success('Repeat migration successfull');
+        $io->success('Repeat migration successful');
+    }
+
+    private function migrateRepeatType(SymfonyStyle $io): void
+    {
+        $io->writeln('Checking for deprecated repeat_type=2..');
+
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
+        $sql = "select uid from tx_bwbookingmanager_domain_model_timeslot where repeat_type=2;";
+        $result = $connection->executeQuery($sql)->fetchAll();;
+
+        if (empty($result)) {
+            $io->note('There are no timeslots with old repeat_type, skipping migration');
+            return;
+        }
+
+        $io->note('There are ' . (string)count($result) . ' timeslot migrations possible');
+
+        $sql = "update tx_bwbookingmanager_domain_model_timeslot set repeat_type=4, repeat_days = case when DAYOFWEEK(FROM_UNIXTIME(start_date))=1 then 1 when DAYOFWEEK(FROM_UNIXTIME(start_date))=2 then 2 when DAYOFWEEK(FROM_UNIXTIME(start_date))=3 then 4 when DAYOFWEEK(FROM_UNIXTIME(start_date))=4 then 8 when DAYOFWEEK(FROM_UNIXTIME(start_date))=5 then 16 when DAYOFWEEK(FROM_UNIXTIME(start_date))=6 then 32 when DAYOFWEEK(FROM_UNIXTIME(start_date))=7 then 64 else repeat_days end WHERE repeat_type=2;";
+
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
+        $result = $connection->executeQuery($sql);
+
+        $io->success('Repeat_type migration successful.');
     }
 }
