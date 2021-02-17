@@ -28,6 +28,11 @@ class RenderConfiguration
     protected $entries;
 
     /**
+     * @var \Blueways\BwBookingmanager\Domain\Model\Blockslot[]
+     */
+    protected $blockslots;
+
+    /**
      * @var \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf
      */
     protected $dateConf;
@@ -149,6 +154,18 @@ class RenderConfiguration
         $day['hasBookableTimeslots'] = (boolean)$day['bookableTimeslotsStatus'];
         $day['isDirectBookable'] = $this->isDirectBookable($entries);
         $day['isBookable'] = ((!$day['isInPast'] || $day['isCurrentDay']) && ($day['hasBookableTimeslots'] || $day['isDirectBookable']));
+
+        // check if blockslot in this day
+        // @TODO: current check is only for whole day
+        // (if blockslots goes until 12:00, bookins are possible - even at 10:00)
+        if ($day['isDirectBookable']) {
+            foreach ($this->blockslots ?? [] as $blockslot) {
+                if ($blockslot->getStartDate() <= $date && $blockslot->getEndDate() > $date) {
+                    $day['isBookable'] = false;
+                    break;
+                }
+            }
+        }
 
         return $day;
     }
@@ -305,5 +322,10 @@ class RenderConfiguration
         }
 
         return $weeks;
+    }
+
+    public function setBlockslots($blockslots)
+    {
+        $this->blockslots = $blockslots;
     }
 }

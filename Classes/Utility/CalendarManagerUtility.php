@@ -26,6 +26,12 @@ class CalendarManagerUtility
     protected $timeslotRepository;
 
     /**
+     * @var \Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository
+     * @inject
+     */
+    protected $blockslotRepository;
+
+    /**
      * CalendarManagerUtility constructor.
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
@@ -91,12 +97,14 @@ class CalendarManagerUtility
     {
         $entries = $this->entryRepository->findInRange($this->calendar, $dateConf, false)->toArray();
         $timeslots = $this->timeslotRepository->findInRange($this->calendar, $dateConf);
+        $blockslots = $this->blockslotRepository->findAllInRange([$this->calendar], $dateConf->start, $dateConf->end);
 
         /** @var \Blueways\BwBookingmanager\Helper\RenderConfiguration $calendarConfiguration */
         $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf,
             $this->calendar);
         $calendarConfiguration->setTimeslots($timeslots);
         $calendarConfiguration->setEntries($entries);
+        $calendarConfiguration->setBlockslots($blockslots);
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
         return $configuration;
