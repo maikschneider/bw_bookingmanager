@@ -160,7 +160,7 @@ class RenderConfiguration
         // (if blockslots goes until 12:00, bookins are possible - even at 10:00)
         if ($day['isDirectBookable']) {
             foreach ($this->blockslots ?? [] as $blockslot) {
-                if ($blockslot->getStartDate() <= $date && $blockslot->getEndDate() >= $date) {
+                if ($blockslot->getStartDate() <= $date && $blockslot->getEndDate() > $date) {
                     $day['isBookable'] = false;
                     break;
                 }
