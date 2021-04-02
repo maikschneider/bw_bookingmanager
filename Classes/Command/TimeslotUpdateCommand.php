@@ -3,7 +3,6 @@
 namespace Blueways\BwBookingmanager\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,6 +16,8 @@ class TimeslotUpdateCommand extends Command
     protected function configure()
     {
         $this->setDescription('Updates database relation to calendars and repeat_type of timeslots');
+        $this->addOption('withMerge', null, InputOption::VALUE_NONE,
+            'Look for timeslots that can be merged based on their repeat settings');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -39,7 +40,9 @@ class TimeslotUpdateCommand extends Command
 
         $this->migrateRepeatType($io);
 
-        $this->migrateRepeatSettings($io);
+        if ($input->getOption('withMerge')) {
+            $this->migrateRepeatSettings($io);
+        }
 
         return 0;
     }
@@ -101,16 +104,39 @@ set c.timeslots = (select COUNT(*) from tx_bwbookingmanager_domain_model_timeslo
         $io->success('Relation migration successful');
     }
 
+    private function migrateRepeatType(SymfonyStyle $io): void
+    {
+        $io->writeln('Checking for deprecated repeat_type=2..');
+
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
+        $sql = "select uid from tx_bwbookingmanager_domain_model_timeslot where repeat_type=2;";
+        $result = $connection->executeQuery($sql)->fetchAll();;
+
+        if (empty($result)) {
+            $io->note('There are no timeslots with old repeat_type, skipping migration');
+            return;
+        }
+
+        $io->note('There are ' . (string)count($result) . ' timeslot migrations possible');
+
+        $sql = "update tx_bwbookingmanager_domain_model_timeslot set repeat_type=4, repeat_days = case when DAYOFWEEK(FROM_UNIXTIME(start_date))=1 then 1 when DAYOFWEEK(FROM_UNIXTIME(start_date))=2 then 2 when DAYOFWEEK(FROM_UNIXTIME(start_date))=3 then 4 when DAYOFWEEK(FROM_UNIXTIME(start_date))=4 then 8 when DAYOFWEEK(FROM_UNIXTIME(start_date))=5 then 16 when DAYOFWEEK(FROM_UNIXTIME(start_date))=6 then 32 when DAYOFWEEK(FROM_UNIXTIME(start_date))=7 then 64 else repeat_days end where repeat_type=2;";
+
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
+        $result = $connection->executeQuery($sql);
+
+        $io->success('Repeat_type migration successful.');
+    }
+
     protected function migrateRepeatSettings(SymfonyStyle $io)
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
 
         $io->writeln('Checking for repeating timeslots that can be merged..');
 
-        $updateQuery = "select t1.calendar, time(FROM_UNIXTIME(t1.start_date)) as 'time', t1.uid, count(*) as 'count', group_concat(t1.uid order by t1.start_date) as 'slots', group_concat(t1.repeat_days order by t1.start_date) as 'weekdays', group_concat(WEEKOFYEAR(FROM_UNIXTIME(t1.start_date))) as 'weekofyear'
+        $updateQuery = "select t1.calendar, time(FROM_UNIXTIME(t1.start_date)) as 'time', t1.uid, count(*) as 'count', group_concat(t1.uid order by t1.start_date) as 'slots', group_concat(t1.repeat_days order by t1.start_date) as 'weekdays', group_concat(WEEKOFYEAR(FROM_UNIXTIME(t1.start_date))) as 'weekofyear', repeat_days
 from tx_bwbookingmanager_domain_model_timeslot t1
 where t1.deleted=0 and t1.repeat_type=4
-group by t1.calendar, time(FROM_UNIXTIME(t1.start_date)), time(FROM_UNIXTIME(t1.end_date)), t1.max_weight, WEEKOFYEAR(FROM_UNIXTIME(t1.start_date)), YEAR(FROM_UNIXTIME(t1.start_date)), repeat_end
+group by t1.calendar, time(FROM_UNIXTIME(t1.start_date)), time(FROM_UNIXTIME(t1.end_date)), t1.max_weight, WEEKOFYEAR(FROM_UNIXTIME(t1.start_date)), year(FROM_UNIXTIME(t1.start_date)), repeat_end
 having count>1
 order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
 
@@ -134,7 +160,9 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
 
             // calculate repeat repeat_days
             $repeatCode = array_map('intval', $repeatDays);
-            $repeatCode = array_reduce($repeatCode, function($carry, $code){ return $carry + $code; });
+            $repeatCode = array_reduce($repeatCode, function ($carry, $code) {
+                return $carry + $code;
+            });
 
             // divide into main timeslot and timeslots to divide
             $mainTimeslotUid = array_shift($timeslotUids);
@@ -173,28 +201,5 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
         }
 
         $io->success('Repeat migration successful');
-    }
-
-    private function migrateRepeatType(SymfonyStyle $io): void
-    {
-        $io->writeln('Checking for deprecated repeat_type=2..');
-
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
-        $sql = "select uid from tx_bwbookingmanager_domain_model_timeslot where repeat_type=2;";
-        $result = $connection->executeQuery($sql)->fetchAll();;
-
-        if (empty($result)) {
-            $io->note('There are no timeslots with old repeat_type, skipping migration');
-            return;
-        }
-
-        $io->note('There are ' . (string)count($result) . ' timeslot migrations possible');
-
-        $sql = "update tx_bwbookingmanager_domain_model_timeslot set repeat_type=4, repeat_days = case when DAYOFWEEK(FROM_UNIXTIME(start_date))=1 then 1 when DAYOFWEEK(FROM_UNIXTIME(start_date))=2 then 2 when DAYOFWEEK(FROM_UNIXTIME(start_date))=3 then 4 when DAYOFWEEK(FROM_UNIXTIME(start_date))=4 then 8 when DAYOFWEEK(FROM_UNIXTIME(start_date))=5 then 16 when DAYOFWEEK(FROM_UNIXTIME(start_date))=6 then 32 when DAYOFWEEK(FROM_UNIXTIME(start_date))=7 then 64 else repeat_days end WHERE repeat_type=2;";
-
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
-        $result = $connection->executeQuery($sql);
-
-        $io->success('Repeat_type migration successful.');
     }
 }
