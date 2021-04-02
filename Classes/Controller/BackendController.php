@@ -50,7 +50,7 @@ class BackendController
     {
         $this->request = $request;
         $pid = $this->getCurrentPid();
-        $selectableRoutes = ['calendarAction', 'entryListAction'];
+        $selectableRoutes = ['entryListAction', 'calendarAction'];
         $selectedRoute = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/selectedRoute-' . $pid) ?? 0;
         $methodName = $selectableRoutes[$selectedRoute];
 
@@ -91,7 +91,7 @@ class BackendController
 
         // save selected route
         $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
-        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 0);
+        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 1);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
@@ -124,8 +124,8 @@ class BackendController
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
         $actions = [
-            ['action' => 'calendar', 'label' => 'calendar', 'route' => 'bookingmanager_calendar'],
             ['action' => 'entryList', 'label' => 'entryListing', 'route' => 'bookingmanager_entry_list'],
+            ['action' => 'calendar', 'label' => 'calendar', 'route' => 'bookingmanager_calendar'],
         ];
 
         foreach ($actions as $action) {
@@ -360,7 +360,7 @@ class BackendController
 
         // save selected route
         $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
-        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 1);
+        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 0);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
