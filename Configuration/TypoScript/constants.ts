@@ -1,3 +1,5 @@
+@import 'EXT:bw_email/Configuration/TypoScript/constants.typoscript'
+
 plugin.tx_bwbookingmanager {
   persistence {
     storagePid =

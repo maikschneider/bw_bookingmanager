@@ -1,3 +1,8 @@
+####################
+### DEPENDENCIES ###
+####################
+@import 'EXT:bw_email/Configuration/TypoScript/setup.typoscript'
+
 ############################
 ### COMMON CONFIGURATION ###
 ############################
