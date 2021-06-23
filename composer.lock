@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "blueways/bw-email",
-            "version": "v2.1.4",
+            "version": "v2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://bitbucket.org/blueways/bw_email.git",
-                "reference": "e03b74cc5e4e1124042b3424b97250212095b3fa"
+                "reference": "6ff40bbe354e9f1b134352f7aff45faf20d94856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://bitbucket.org/blueways/bw_email/get/e03b74cc5e4e1124042b3424b97250212095b3fa.zip",
-                "reference": "e03b74cc5e4e1124042b3424b97250212095b3fa",
+                "url": "https://bitbucket.org/blueways/bw_email/get/6ff40bbe354e9f1b134352f7aff45faf20d94856.zip",
+                "reference": "6ff40bbe354e9f1b134352f7aff45faf20d94856",
                 "shasum": ""
             },
             "require": {
@@ -30,6 +30,13 @@
                 "typo3/cms-base-distribution": "9.5.*"
             },
             "type": "typo3-cms-extension",
+            "extra": {
+                "typo3/cms": {
+                    "cms-package-dir": "{$vendor-dir}/typo3/cms",
+                    "web-dir": "public",
+                    "extension-key": "bw_email"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Blueways\\BwEmail\\": "Classes"
@@ -55,9 +62,10 @@
                 "zurb foundation"
             ],
             "support": {
-                "source": "https://bitbucket.org/blueways/bw_email/src/e03b74cc5e4e1124042b3424b97250212095b3fa/?at=v2.1.4"
+                "issues": "https://bitbucket.org/blueways/bw_email/issues",
+                "source": "https://bitbucket.org/blueways/bw_email/src/6ff40bbe354e9f1b134352f7aff45faf20d94856/?at=v2.1.5"
             },
-            "time": "2020-09-21T12:35:36+00:00"
+            "time": "2021-06-23T09:24:04+00:00"
         },
         {
             "name": "maikschneider/inky",

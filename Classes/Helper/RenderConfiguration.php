@@ -143,7 +143,8 @@ class RenderConfiguration
         $entries = $this->getEntriesForDay($date);
 
         $day = [];
-        $day['date'] = $date->getTimestamp();
+        $day['date'] = $date->getTimestamp() + $this->calendar->getDefaultStartTime();
+        $day['endDate'] = $date->getTimestamp() + $this->calendar->getDefaultEndTime();
         $day['entries'] = $this->getEntryOffsets($entries);
         $day['timeslots'] = $this->getTimeslotOffsets($timeslots);
         $day['isCurrentDay'] = $this->isCurrentDay($date);
