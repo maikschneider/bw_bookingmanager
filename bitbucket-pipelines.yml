@@ -19,8 +19,8 @@ pipelines:
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git add */.*
             - 'if [[ $(git status --porcelain --untracked-files=no | wc -l) -gt "0" ]]; then git commit -a -m "build: $BITBUCKET_COMMIT_SHORT" || true; fi'
-            - TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Eo "(\d+\.)+\d+")
-            - LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Eo "(\d+\.)+\d+")
-            - GIT_LOG=$(git log "v$LATEST_TAG"..HEAD --oneline)
+            - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Eo "(\d+\.)+\d+")
+            - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Eo "(\d+\.)+\d+")
+            - export GIT_LOG=$(git log "v$LATEST_TAG"..HEAD --pretty=format:"%s")
             - 'if [ $TYPO3_EXT_VERSION != $LATEST_TAG ]; then git tag -a "v${TYPO3_EXT_VERSION}" -m "$GIT_LOG"; fi'
             - git push origin 9.x --tags
