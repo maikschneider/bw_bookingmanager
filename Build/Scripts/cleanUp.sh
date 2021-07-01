@@ -4,7 +4,6 @@ rm -rf Tests
 rm .editorconfig
 rm .gitignore
 rm -rf .ddev
-rm bitbucket-pipelines.yml
 rm composer.lock
 rm package.json
 rm tsconfig.json
