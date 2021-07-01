@@ -1,0 +1,26 @@
+pipelines:
+  branches:
+    9.x-dev:
+      - step:
+          name: Build and Install
+          image: drud/ddev-webserver:v1.16.1
+          script:
+            - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
+            - git fetch --unshallow
+            - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+            - git fetch origin
+            - git checkout 9.x
+            - git merge -s ours 9.x-dev --no-commit --no-ff
+            - git checkout 9.x-dev .
+            - composer install
+            - npm install
+            - echo "// @ts-nocheck" | cat - public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts > temp && mv temp public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts
+            - npm run build
+            - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
+            - git add */.*
+            - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Eo "(\d+\.)+\d+")
+            - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Eo "(\d+\.)+\d+")
+            - echo $TYPO3_EXT_VERSION
+            - echo $LATEST_TAG
+            - 'if [[ $(git status --porcelain --untracked-files=no | wc -l) -gt "0" ]]; then git commit -a -m "build: $BITBUCKET_COMMIT_SHORT" || true; fi'
+            - git push origin 9.x --tags
