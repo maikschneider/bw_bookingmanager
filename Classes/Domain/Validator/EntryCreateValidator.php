@@ -143,14 +143,42 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         $this->timeslot = clone $this->entry->getTimeslot();
 
         // timezone fix
-        $this->timeslot_startDate = $this->timeslot->getStartDate()->setTimezone(new \DateTimeZone('UTC'));
-        $this->timeslot_endDate = $this->timeslot->getEndDate()->setTimezone(new \DateTimeZone('UTC'));
+        $this->timeslot_startDate = $this->timeslot->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->timeslot_endDate = $this->timeslot->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
 
-        $this->entry_startDate = $this->entry->getStartDate()->setTimezone(new \DateTimeZone('UTC'));
-        $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('UTC'));
+        $this->entry_startDate = $this->entry->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+
+        // DST fix
+        $timezone = new \DateTimeZone('Europe/Berlin');
+        $transitions = $timezone->getTransitions(
+            $this->timeslot_startDate->getTimestamp(),
+            $this->entry_startDate->getTimestamp()
+        );
+        $lastTransitionIndex = sizeof($transitions) - 1;
+        if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
+            $this->timeslot_startDate->modify('+1 hour');
+            $this->timeslot_endDate->modify('+1 hour');
+        }
+        if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
+            $this->timeslot_startDate->modify('-1 hour');
+            $this->timeslot_endDate->modify('-1 hour');
+        }
 
         $this->validateDates();
         $this->validateWeight();
+
+        // @Todo: strange bug: If i do not decrease the date by one hour after
+        // validation, the skater timeslot of 12 o'clock (not the 10 o'clock!?) gets updated to the +1 hour format
+        // -> so i decrease the hour again...
+        if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
+            $this->timeslot_startDate->modify('-1 hour');
+            $this->timeslot_endDate->modify('-1 hour');
+        }
+        if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
+            $this->timeslot_startDate->modify('+1 hour');
+            $this->timeslot_endDate->modify('+1 hour');
+        }
     }
 
     private function validateDates()
