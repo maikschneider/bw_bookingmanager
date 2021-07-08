@@ -24,8 +24,8 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->logicalAnd([
                 $query->in('calendar.uid', $calendars),
-                $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
-                $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
+                $query->logicalNot($query->lessThan('endDate', $startDate->getTimestamp())),
+                $query->logicalNot($query->greaterThan('startDate', $endDate->getTimestamp()))
             ])
         );
         $query->getQuerySettings()->setRespectStoragePage(false);
@@ -49,8 +49,8 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query->matching(
             $query->logicalAnd([
                 $query->equals('calendar', $calendar),
-                $query->greaterThanOrEqual('startDate', $dateConf->start->getTimestamp()),
-                $query->lessThanOrEqual('startDate', $dateConf->end->getTimestamp()),
+                $query->logicalNot($query->lessThan('endDate', $dateConf->start->getTimestamp())),
+                $query->logicalNot($query->greaterThan('startDate', $dateConf->end->getTimestamp()))
             ])
         );
         $query->setOrderings(
