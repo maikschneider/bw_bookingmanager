@@ -57,7 +57,7 @@ class SelectTimeslotDatesElement {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      timeZone: 'UTC'
+      timeZone: 'Europe/Berlin'
     };
     const start = Intl.DateTimeFormat(viewState.language, format).format(event.start);
     const end = Intl.DateTimeFormat(viewState.language, format).format(event.end);
