@@ -154,6 +154,28 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $feUser;
 
     /**
+     * @var int
+     * @validate Integer
+     */
+    protected $salutation = 0;
+
+    /**
+     * @return int
+     */
+    public function getSalutation(): int
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * @param int $salutation
+     */
+    public function setSalutation(int $salutation): void
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
      * __construct
      *
      * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
