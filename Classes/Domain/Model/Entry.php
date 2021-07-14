@@ -157,22 +157,22 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var int
      * @validate Integer
      */
-    protected $salutation = 0;
+    protected $gender = 0;
 
     /**
      * @return int
      */
-    public function getSalutation(): int
+    public function getGender(): int
     {
-        return $this->salutation;
+        return $this->gender;
     }
 
     /**
-     * @param int $salutation
+     * @param int $gender
      */
-    public function setSalutation(int $salutation): void
+    public function setGender(int $gender): void
     {
-        $this->salutation = $salutation;
+        $this->gender = $gender;
     }
 
     /**

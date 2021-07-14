@@ -88,7 +88,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_entry (
 	special2 smallint(5) unsigned DEFAULT '0' NOT NULL,
 	weight int(11) DEFAULT '0' NOT NULL,
 	fe_user int(11) unsigned DEFAULT '0' NOT NULL,
-	salutation smallint(5) unsigned default '0' not null,
+	gender smallint(5) unsigned default '0' not null,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
