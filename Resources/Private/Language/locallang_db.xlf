@@ -198,16 +198,16 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.fe_user">
 				<source>Frontend user</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.salutation">
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender">
 				<source>Salutation</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.salutation.0">
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.0">
 				<source>None</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.salutation.1">
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.1">
 				<source>Mr.</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.salutation.2">
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.2">
 				<source>Mrs.</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
