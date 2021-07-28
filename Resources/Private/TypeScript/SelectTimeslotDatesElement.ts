@@ -45,8 +45,10 @@ class SelectTimeslotDatesElement {
     if (event.extendedProps.model === 'Timeslot') {
       $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][timeslot]"]').val(event.extendedProps.uid);
     }
-    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][start_date]"]').val(event.start.getTime() / 1000);
-    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][end_date]"]').val(event.end.getTime() / 1000);
+    const start_date = new Date(event.start.getTime() + event.start.getTimezoneOffset() * 60000);
+    const end_date = new Date(event.end.getTime() + event.end.getTimezoneOffset() * 60000);
+    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][start_date]"]').val(start_date.getTime() / 1000);
+    $('input[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][end_date]"]').val(end_date.getTime() / 1000);
     $('select[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][calendar]"]').val(event.extendedProps.calendar);
 
     // update date label
@@ -59,8 +61,8 @@ class SelectTimeslotDatesElement {
       minute: '2-digit',
       timeZone: 'Europe/Berlin'
     };
-    const start = Intl.DateTimeFormat(viewState.language, format).format(event.start);
-    const end = Intl.DateTimeFormat(viewState.language, format).format(event.end);
+    const start = Intl.DateTimeFormat(viewState.language, format).format(start_date);
+    const end = Intl.DateTimeFormat(viewState.language, format).format(end_date);
     $('#savedStartDate').html(start);
     $('#savedEndDate').html(end);
   }
