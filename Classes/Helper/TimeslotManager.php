@@ -248,19 +248,6 @@ class TimeslotManager
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+' . $i . ' days');
 
-            // DST fix
-            $transitions = $timezone->getTransitions(
-                $timeslot->getStartDate()->getTimestamp(),
-                $newStartDate->getTimestamp()
-            );
-            $lastTransitionIndex = sizeof($transitions) - 1;
-            if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
-                $newStartDate->modify('+1 hour');
-            }
-            if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
-                $newStartDate->modify('-1 hour');
-            }
-
             $newEndDate = clone $newStartDate;
             $newEndDate->add($dateStartEndDiff);
 
@@ -339,19 +326,6 @@ class TimeslotManager
             $newStartDate = clone $dateToStartFilling;
             $newStartDate->modify('+' . $i . ' weeks');
 
-            // DST fix
-            $transitions = $timezone->getTransitions(
-                $timeslot->getStartDate()->getTimestamp(),
-                $newStartDate->getTimestamp()
-            );
-            $lastTransitionIndex = sizeof($transitions) - 1;
-            if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
-                $newStartDate->modify('+1 hour');
-            }
-            if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
-                $newStartDate->modify('-1 hour');
-            }
-
             $newEndDate = clone $newStartDate;
             $newEndDate->add($dateStartEndDiff);
 
@@ -394,7 +368,6 @@ class TimeslotManager
         $endDate = $timeslot->getRepeatEnd() && $timeslot->getRepeatEnd() < $this->endDate ? $timeslot->getRepeatEnd() : $this->endDate;
         $daysToCrawl = $endDate->diff($timeslot->getStartDate())->days;
 
-        $isDst = $timeslot->getStartDate()->format('I');
         $startEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
         for ($i=1; $i<= $daysToCrawl; $i++) {
@@ -404,14 +377,6 @@ class TimeslotManager
                 $newTimeslot = clone $timeslot;
                 $newStartDate = clone $timeslot->getStartDate();
                 $newStartDate->modify('+ '.$i.' days');
-
-                // DST fix
-                if ($isDst && !$newStartDate->format('I')) {
-                    $newStartDate->modify('+1 hour');
-                }
-                if (!$isDst && $newStartDate->format('I')) {
-                    $newStartDate->modify('-1 hour');
-                }
 
                 // set new start end times
                 $newTimeslot->setStartDate($newStartDate);

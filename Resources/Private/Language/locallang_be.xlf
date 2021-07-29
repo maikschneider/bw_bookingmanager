@@ -126,6 +126,12 @@
             <trans-unit id="tca.entry.palettes.special">
                 <source>Additional</source>
             </trans-unit>
+			<trans-unit id="tca.entry.palettes.internal">
+				<source>Internal</source>
+			</trans-unit>
+			<trans-unit id="tca.entry.tabs.internal">
+				<source>Internal</source>
+			</trans-unit>
 			<trans-unit id="tca.tt_content.calendar">
 				<source>Show calendar</source>
 			</trans-unit>

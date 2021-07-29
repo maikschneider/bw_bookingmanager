@@ -151,6 +151,14 @@
                 <source>Additional</source>
                 <target>Zusatz</target>
             </trans-unit>
+			<trans-unit id="tca.entry.palettes.internal">
+				<source>Internal</source>
+				<target>Intern</target>
+			</trans-unit>
+			<trans-unit id="tca.entry.tabs.internal">
+				<source>Internal</source>
+				<target>Intern</target>
+			</trans-unit>
 			<trans-unit id="tca.tt_content.calendar">
 				<target>Kalender anzeigen</target>
 				<source>Show calendar</source>

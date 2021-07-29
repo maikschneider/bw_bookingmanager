@@ -210,6 +210,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.2">
 				<source>Mrs.</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.notes">
+				<source>Notes</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
 			</trans-unit>
