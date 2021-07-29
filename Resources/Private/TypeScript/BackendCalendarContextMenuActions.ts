@@ -29,8 +29,18 @@ class BackendCalendarContextMenuActions {
    */
   public static goToCreateForm(table, uid, model, defValsOverride, start, end) {
 
-    start = start ? start : BackendCalendar.viewState.selectedStart.getTime() / 1000;
-    end = end ? end : BackendCalendar.viewState.selectedEnd.getTime() / 1000;
+    if (!start) {
+      start = BackendCalendar.viewState.selectedStart;
+      start = new Date(start.getTime() + start.getTimezoneOffset() * 60000);
+      start = start.getTime() / 1000;
+    }
+
+    if (!end) {
+      end = BackendCalendar.viewState.selectedEnd;
+      end = new Date(end.getTime() + end.getTimezoneOffset() * 60000);
+      end = end.getTime() / 1000;
+    }
+
     const returnUrl = BackendCalendarContextMenuActions.getReturnUrl();
     const url = top.TYPO3.settings.FormEngine.moduleUrl
       + '&edit[' + model + '][' + uid + ']=new'
@@ -77,8 +87,13 @@ class BackendCalendarContextMenuActions {
     let defaultEnd = parseInt($(this).attr('data-def-calendar-end-time'));
     defaultEnd = defaultEnd ? -86400 + defaultEnd : 0;
 
-    const start = BackendCalendar.viewState.selectedStart.getTime() / 1000 + defaultStart;
-    const end = (BackendCalendar.viewState.selectedEnd.getTime() / 1000) + defaultEnd;
+    let start = BackendCalendar.viewState.selectedStart;
+    start = new Date(start.getTime() + start.getTimezoneOffset() * 60000);
+    start = start.getTime() / 1000 + defaultStart;
+
+    let end = BackendCalendar.viewState.selectedEnd;
+    end = new Date(end.getTime() + end.getTimezoneOffset() * 60000);
+    end = end.getTime() / 1000 + defaultEnd;
 
     const model = $(this).attr('data-model-name');
     const calendarUid = $(this).attr('data-def-calendar-uid');
