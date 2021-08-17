@@ -6,15 +6,15 @@ pipelines:
           image: drud/ddev-webserver:v1.16.1
           script:
             - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
-            - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Po "(\d+\.)+\d+")
-            - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Po "(\d+\.)+\d+")
-            - export GIT_LOG=$(git log "v$LATEST_TAG"..HEAD --pretty=format:"%s")
             - git fetch --unshallow
             - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
             - git fetch origin
             - git checkout 9.x
             - git merge -s ours 9.x-dev --no-commit --no-ff
+            - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Po "(\d+\.)+\d+")
+            - export GIT_LOG=$(git log "v$LATEST_TAG"..HEAD --pretty=format:"%s")
             - git checkout 9.x-dev .
+            - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Po "(\d+\.)+\d+")
             - composer install
             - npm install
             - echo "// @ts-nocheck" | cat - public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts > temp && mv temp public/typo3/sysext/backend/Resources/Private/TypeScript/Modal.ts
