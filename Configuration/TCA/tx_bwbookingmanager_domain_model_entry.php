@@ -92,7 +92,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'renderType' => 'hidden',
-                'eval' => 'datetime,required',
+                'eval' => 'date,required'
             ],
         ],
         'end_date' => [
@@ -101,7 +101,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'renderType' => 'hidden',
-                'eval' => 'datetime,required',
+                'eval' => 'date,required',
             ],
         ],
         'name' => [
