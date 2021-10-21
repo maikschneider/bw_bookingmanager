@@ -1,6 +1,8 @@
 <?php
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;/***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -26,10 +28,32 @@ class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findAllByPid(int $pid)
     {
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
+        $queryBuilder = $connection->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('uid')
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->eq('pages.uid', $pid),
+                    $queryBuilder->expr()->eq('pages.pid', $pid)
+                )
+            );
+        $rows = $query->execute()->fetchAll();
+
+        $calendarUids = [];
+        foreach ($rows ?? [] as $row) {
+            $calendarUids[] = $row['uid'];
+        }
+
+        if (empty($calendarUids)) {
+            return [];
+        }
+
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);
         $query->matching(
-            $query->equals('pid', $pid)
+            $query->in('pid', $calendarUids),
         );
         return $query->execute();
     }
