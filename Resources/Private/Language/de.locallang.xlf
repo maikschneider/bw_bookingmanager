@@ -3,186 +3,193 @@
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
-			<trans-unit id="bwbookingmanager_pi1.title">
-				<target>Kalender Plugin</target>
-			</trans-unit>
-			<trans-unit id="bwbookingmanager_pi1.description">
-				<target>Zeigt Kalender und Buchungsformulare an</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
-				<source>Calendar</source>
-                <target>Kalender</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.name">
-				<source>Name</source>
-                <target>Name</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.timeslots">
-				<source>Timeslots</source>
-                <target>Timeslots</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots">
-				<source>Blockslots</source>
-                <target>Blockslots</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
-				<source>Notifications</source>
-                <target>Benachrichtigungen</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
-				<source>Timeslot</source>
-                <target>Timeslot</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.start_date">
-				<source>Start Date</source>
-                <target>Start Datum</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.end_date">
-				<source>End Date</source>
-                <target>End Datum</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type">
-				<source>Repeat Type</source>
-                <target>Wiederholungsart</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight">
-				<source>Max Weight</source>
-                <target>Maximale Anzahl an Terminen</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries">
-				<source>Entries</source>
-                <target>Einträge</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
-				<source>Calendars</source>
-                <target>Kalender</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
-				<source>Repeat End</source>
-                <target>Wiederholung Ende</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry">
-				<source>Entry</source>
-                <target>Eintrag</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date">
-				<source>Start Date</source>
-                <target>Start Datum</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.end_date">
-				<source>End Date</source>
-                <target>End Datum</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.name">
-				<source>Name</source>
-                <target>Familienname</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.prename">
-				<source>Prename</source>
-                <target>Vorname</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.street">
-				<source>Street</source>
-                <target>Straße</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.zip">
-				<source>Zip</source>
-                <target>PLZ</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.city">
-				<source>City</source>
-                <target>Wohnort</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.phone">
-				<source>Phone</source>
-                <target>Telefonnummer</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.email">
-				<source>Email</source>
-                <target>E-Mail</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter">
-				<source>Newsletter</source>
-                <target>Newsletter</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1">
-				<source>Special 1</source>
-                <target>Special 1</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special2">
-				<source>Special 2</source>
-                <target>Special 2</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight">
-				<source>Weight</source>
-                <target>Gewicht</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot">
-				<source>Timeslot</source>
-                <target>Timeslot</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
-				<source>Blockslot</source>
-                <target>Blockslot</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.start_date">
-				<source>Start Date</source>
-                <target>Start Datum</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.end_date">
-				<source>End Date</source>
-                <target>End Datum</target>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason">
-				<source>Reason</source>
-                <target>Grund</target>
-			</trans-unit>
-			<trans-unit id="flashmessage.booking.success.title">
-				<source>Booking success</source>
-				<target>Buchung erfolgreich</target>
-			</trans-unit>
-			<trans-unit id="flashmessage.booking.success.message">
-				<target>Die Buchung war erfolgreich, Sie erhalten eine Bestätigungsmail.</target>
-			</trans-unit>
-			<trans-unit id="flashmessage.delete.success.title">
-				<source>Booking canceled</source>
-				<source>Buchung gelöscht</source>
-			</trans-unit>
-			<trans-unit id="flashmessage.delete.success.message">
-				<source>Your booking was successfully deleted.</source>
-				<source>Ihre Buchung wurde erfolgreich gelöscht.</source>
-			</trans-unit>
-			<trans-unit id="flashmessage.delete.error.title">
-				<source>Error deleting</source>
-				<target>Fehler beim Löschen</target>
-			</trans-unit>
-			<trans-unit id="flashmessage.delete.error.message">
-				<source>There was an error deleting your booking. Please get in touch with us.</source>
-				<target>Beim Löschen Ihrer Buchung ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Support.</target>
-			</trans-unit>
-			<trans-unit id="flashmessage.delete.toolate.title">
-				<source>Too late.</source>
-				<target>Zu spät.</target>
-			</trans-unit>
-			<trans-unit id="flashmessage.delete.toolate.message">
-				<source>This entry could not be deleted, it's too late.</source>
-				<target>Der Eintrag kann nicht gelöscht werden.</target>
-			</trans-unit>
-			<trans-unit id="free">
-				<source>Free</source>
-				<target>Frei</target>
-			</trans-unit>
-			<trans-unit id="booked">
+			<trans-unit id="booked" approved="yes">
 				<source>Booked</source>
 				<target>Gebucht</target>
 			</trans-unit>
-			<trans-unit id="notBookable">
+			<trans-unit id="bwbookingmanager_pi1.description" approved="yes">
+				<source></source>
+				<target>Zeigt Kalender und Buchungsformulare an</target>
+			</trans-unit>
+			<trans-unit id="bwbookingmanager_pi1.title" approved="yes">
+				<source></source>
+				<target>Kalender Plugin</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.booking.success.message" approved="yes">
+				<source></source>
+				<target>Die Buchung war erfolgreich, Sie erhalten eine Bestätigungsmail.</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.booking.success.title" approved="yes">
+				<source>Booking success</source>
+				<target>Buchung erfolgreich</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.error.message" approved="yes">
+				<source>There was an error deleting your booking. Please get in touch with us.</source>
+				<target>Beim Löschen Ihrer Buchung ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Support.</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.error.title" approved="yes">
+				<source>Error deleting</source>
+				<target>Fehler beim Löschen</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.success.message" approved="yes">
+				<source>Ihre Buchung wurde erfolgreich gelöscht.</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.success.title" approved="yes">
+				<source>Buchung gelöscht</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.toolate.message" approved="yes">
+				<source>This entry could not be deleted, it's too late.</source>
+				<target>Der Eintrag kann nicht gelöscht werden.</target>
+			</trans-unit>
+			<trans-unit id="flashmessage.delete.toolate.title" approved="yes">
+				<source>Too late.</source>
+				<target>Zu spät.</target>
+			</trans-unit>
+			<trans-unit id="free" approved="yes">
+				<source>Free</source>
+				<target>Frei</target>
+			</trans-unit>
+			<trans-unit id="notBookable" approved="yes">
 				<source>Not bookable</source>
 				<target>Nicht buchbar</target>
 			</trans-unit>
-			<trans-unit id="showEntry">
+			<trans-unit id="showEntry" approved="yes">
 				<source>Show entry</source>
 				<target>Eintrag anzeigen</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot" approved="yes">
+				<source>Blockslot</source>
+				<target>Blockslot</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.end_date" approved="yes">
+				<source>End Date</source>
+				<target>End Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.reason" approved="yes">
+				<source>Reason</source>
+				<target>Grund</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot.start_date" approved="yes">
+				<source>Start Date</source>
+				<target>Start Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar" approved="yes">
+				<source>Calendar</source>
+				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.blockslots" approved="yes">
+				<source>Blockslots</source>
+				<target>Blockslots</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.color" approved="yes">
+				<source><![CDATA[Color]]></source>
+				<target><![CDATA[Farbe]]></target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.name" approved="yes">
+				<source>Name</source>
+				<target>Name</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications" approved="yes">
+				<source>Notifications</source>
+				<target>Benachrichtigungen</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.timeslots" approved="yes">
+				<source>Timeslots</source>
+				<target>Timeslots</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry" approved="yes">
+				<source>Entry</source>
+				<target>Eintrag</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.city" approved="yes">
+				<source>City</source>
+				<target>Wohnort</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.email" approved="yes">
+				<source>Email</source>
+				<target>E-Mail</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.end_date" approved="yes">
+				<source>End Date</source>
+				<target>End Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.name" approved="yes">
+				<source>Name</source>
+				<target>Familienname</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.newsletter" approved="yes">
+				<source>Newsletter</source>
+				<target>Newsletter</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.phone" approved="yes">
+				<source>Phone</source>
+				<target>Telefonnummer</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.prename" approved="yes">
+				<source>Prename</source>
+				<target>Vorname</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special1" approved="yes">
+				<source>Special 1</source>
+				<target>Special 1</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.special2" approved="yes">
+				<source>Special 2</source>
+				<target>Special 2</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.start_date" approved="yes">
+				<source>Start Date</source>
+				<target>Start Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.street" approved="yes">
+				<source>Street</source>
+				<target>Straße</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.timeslot" approved="yes">
+				<source>Timeslot</source>
+				<target>Timeslot</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.weight" approved="yes">
+				<source>Weight</source>
+				<target>Gewicht</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.zip" approved="yes">
+				<source>Zip</source>
+				<target>PLZ</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot" approved="yes">
+				<source>Timeslot</source>
+				<target>Timeslot</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars" approved="yes">
+				<source>Calendars</source>
+				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.end_date" approved="yes">
+				<source>End Date</source>
+				<target>End Datum</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.entries" approved="yes">
+				<source>Entries</source>
+				<target>Einträge</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.max_weight" approved="yes">
+				<source>Max Weight</source>
+				<target>Maximale Anzahl an Terminen</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end" approved="yes">
+				<source>Repeat End</source>
+				<target>Wiederholung Ende</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type" approved="yes">
+				<source>Repeat Type</source>
+				<target>Wiederholungsart</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.start_date" approved="yes">
+				<source>Start Date</source>
+				<target>Start Datum</target>
 			</trans-unit>
 		</body>
 	</file>
