@@ -41,6 +41,9 @@ class EntryCalendarEvent extends CalendarEvent
         if ($entry->getTimeslot() !== null && $entry->getTimeslot()->getUid()) {
             $event->setTimeslot($entry->getTimeslot()->getUid());
         }
+        if ($entry->getCalendar()->getColor()) {
+            $event->color = $entry->getCalendar()->getColor();
+        }
 
         return $event;
     }
