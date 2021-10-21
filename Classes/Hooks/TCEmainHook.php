@@ -2,10 +2,39 @@
 
 namespace Blueways\BwBookingmanager\Hooks;
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TCEmainHook
 {
+
+    public function processDatamap_beforeStart(\TYPO3\CMS\Core\DataHandling\DataHandler &$pObj)
+    {
+        if (is_array($pObj->datamap['tx_bwbookingmanager_domain_model_entry'])) {
+            foreach ($pObj->datamap['tx_bwbookingmanager_domain_model_entry'] as &$entry) {
+                if ($entry['calendar']) {
+
+                    $calendar = BackendUtility::getRecord('tx_bwbookingmanager_domain_model_calendar',
+                        (int)$entry['calendar']);
+                    if ($calendar['direct_booking'] && ($calendar['default_start_time'] || $calendar['default_end_time'])) {
+                        $entryStartDate = new \DateTime($entry['start_date']);
+                        $entryEndDate = new \DateTime($entry['end_date']);
+
+                        $calendarStartTime = $calendar['default_start_time'];
+                        $calendarStartTime = new \DateTime("@$calendarStartTime");
+                        $calendarEndTime = $calendar['default_end_time'];
+                        $calendarEndTime = new \DateTime("@$calendarEndTime");
+
+                        $entryStartDate->setTime($calendarStartTime->format('H'), $calendarStartTime->format('i'));
+                        $entryEndDate->setTime($calendarEndTime->format('H'), $calendarEndTime->format('i'));
+
+                        $entry['start_date'] = $entryStartDate->format('c');
+                        $entry['end_date'] = $entryEndDate->format('c');
+                    }
+                }
+            }
+        }
+    }
 
     public function processDatamap_afterAllOperations(\TYPO3\CMS\Core\DataHandling\DataHandler &$pObj)
     {
