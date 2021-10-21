@@ -19,6 +19,7 @@ CREATE TABLE tx_bwbookingmanager_domain_model_calendar (
 	default_end_time int(11) unsigned DEFAULT '0' NOT NULL,
 	min_length int(11) unsigned DEFAULT '0' NOT NULL,
 	min_offset int(11) unsigned DEFAULT '0' NOT NULL,
+	color varchar(10) default '' not null,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

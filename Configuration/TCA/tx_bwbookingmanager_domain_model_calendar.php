@@ -17,7 +17,7 @@ return [
     'palettes' => [
         'direct_booking_palette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.direct_booking',
-            'showitem' => 'direct_booking, --linebreak--, default_start_time, default_end_time, --linebreak--, min_length, min_offset'
+            'showitem' => 'direct_booking, color, --linebreak--, default_start_time, default_end_time, --linebreak--, min_length, min_offset'
         ],
         'general' => [
             'showitem' => 'hidden, --linebreak--, name, record_type, --linebreak--, timeslots, --linebreak--, notifications'
@@ -206,6 +206,14 @@ return [
                 ],
             ],
         ],
-
+        'color' => [
+            'exclude' => false,
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:tx_bwbookingmanager_domain_model_calendar.color',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'colorpicker',
+                'size' => 10,
+            ]
+        ]
     ],
 ];
