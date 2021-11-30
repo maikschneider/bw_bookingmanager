@@ -29,7 +29,9 @@ call_user_func(
                 'Api' => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout'
             ],
             // non-cacheable actions
-            []
+            [
+                'Api' => 'calendarShow'
+            ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
