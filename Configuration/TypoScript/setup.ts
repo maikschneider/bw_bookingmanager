@@ -89,6 +89,8 @@ BOOKINGMANAGER {
     no_cache = 1
     contentObjectExceptionHandler = 0
     disableCharsetHeader = 0
+    additionalHeaders.10.header = Content-type:application/json
+    debug = 0
   }
 
   10 = USER
