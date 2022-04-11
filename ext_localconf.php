@@ -1,44 +1,41 @@
 <?php
 
-use Blueways\BwBookingmanager\ContextMenu\CalendarItemProvider;
-use Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook;
-
 defined('TYPO3_MODE') || die('Access denied.');
 
 call_user_func(
     function () {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Blueways.BwBookingmanager',
+            'BwBookingmanager',
             'Pi1',
             [
-                'Calendar' => 'list, show',
-                'Entry' => 'list, new, show, delete, create'
+                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'list, show',
+                \Blueways\BwBookingmanager\Controller\EntryController::class => 'list, new, show, delete, create'
             ],
             // non-cacheable actions
             [
-                'Calendar' => 'show',
-                'Timeslot' => '',
-                'Entry' => 'create, list, delete',
+                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'show',
+                \Blueways\BwBookingmanager\Controller\TimeslotController::class => '',
+                \Blueways\BwBookingmanager\Controller\EntryController::class => 'create, list, delete',
             ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Blueways.BwBookingmanager',
+            'BwBookingmanager',
             'Api',
             [
-                'Api' => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout'
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout'
             ],
             // non-cacheable actions
             [
-                'Api' => 'calendarShow'
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow'
             ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'Blueways.BwBookingmanager',
+            'BwBookingmanager',
             'Ics',
             [
-                'Ics' => 'show'
+                \Blueways\BwBookingmanager\Controller\IcsController::class => 'show'
             ],
             // non-cacheable actions
             []
@@ -49,7 +46,7 @@ call_user_func(
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('@import "EXT:bw_bookingmanager/Configuration/TSconfig/User.tsconfig"');
 
         // register context menu
-        $GLOBALS['TYPO3_CONF_VARS']['BE']['ContextMenu']['ItemProviders'][1610288958] = CalendarItemProvider::class;
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['ContextMenu']['ItemProviders'][1610288958] = \Blueways\BwBookingmanager\ContextMenu\CalendarItemProvider::class;
 
         // notification hooks
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['sendNotification'][] = 'Blueways\BwBookingmanager\Hooks\NotificationSpecial1IsCheckedHook';
@@ -96,6 +93,6 @@ call_user_func(
         $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['extkey'] = 'Blueways\\BwBookingmanager\\Hooks\\TCEmainHook';
 
         // register backend js
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/template.php']['preHeaderRenderHook']['bw_bookingmanager'] = PreHeaderRenderHook::class . '->addFullCalendarJs';
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/template.php']['preHeaderRenderHook']['bw_bookingmanager'] = \Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook::class . '->addFullCalendarJs';
     }
 );

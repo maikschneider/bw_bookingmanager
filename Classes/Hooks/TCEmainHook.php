@@ -2,13 +2,15 @@
 
 namespace Blueways\BwBookingmanager\Hooks;
 
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TCEmainHook
 {
 
-    public function processDatamap_beforeStart(\TYPO3\CMS\Core\DataHandling\DataHandler &$pObj)
+    public function processDatamap_beforeStart(DataHandler &$pObj)
     {
         if (is_array($pObj->datamap['tx_bwbookingmanager_domain_model_entry'])) {
             foreach ($pObj->datamap['tx_bwbookingmanager_domain_model_entry'] as &$entry) {
@@ -36,9 +38,9 @@ class TCEmainHook
         }
     }
 
-    public function processDatamap_afterAllOperations(\TYPO3\CMS\Core\DataHandling\DataHandler &$pObj)
+    public function processDatamap_afterAllOperations(DataHandler &$pObj)
     {
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
 
         // new / update entry
         if (is_array($pObj->datamap['tx_bwbookingmanager_domain_model_entry'])) {

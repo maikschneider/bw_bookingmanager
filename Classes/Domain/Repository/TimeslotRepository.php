@@ -2,6 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Repository;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use Blueways\BwBookingmanager\Helper\TimeslotManager;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
 
 /***
@@ -14,19 +22,19 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
 /**
  * The repository for Timeslots
  */
-class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class TimeslotRepository extends Repository
 {
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
-     * @return array|\Blueways\BwBookingmanager\Domain\Model\Timeslot[]|\TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @param Calendar $calendar
+     * @param DateConf $dateConf
+     * @return array|Timeslot[]|ObjectStorage
+     * @throws InvalidQueryException
      */
-    public function findInRange($calendar, \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf)
+    public function findInRange($calendar, DateConf $dateConf)
     {
         $timeslots = $this->findAllPossibleByDateRange([$calendar->getUid()], $dateConf->start, $dateConf->end);
-        $timeslotManager = new \Blueways\BwBookingmanager\Helper\TimeslotManager(
+        $timeslotManager = new TimeslotManager(
             $timeslots,
             $calendar,
             $dateConf->start,
@@ -41,8 +49,8 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @param int
      * @param \DateTime $startDate
      * @param \DateTime $endDate
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @return array|QueryResultInterface
+     * @throws InvalidQueryException
      */
     public function findAllPossibleByDateRange(
         array $calendars,
@@ -55,7 +63,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 // no repeatable events starting during date range
                 $query->logicalAnd([
                     $query->in('calendar', $calendars),
-                    $query->equals('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
+                    $query->equals('repeatType', Timeslot::REPEAT_NO),
                     $query->greaterThanOrEqual('startDate', $startDate->getTimestamp()),
                     $query->lessThanOrEqual('startDate', $endDate->getTimestamp()),
                 ]),
@@ -63,7 +71,7 @@ class TimeslotRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 // these events can be in the past and occur in range after repeat function
                 $query->logicalAnd([
                     $query->in('calendar', $calendars),
-                    $query->greaterThan('repeatType', \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_NO),
+                    $query->greaterThan('repeatType', Timeslot::REPEAT_NO),
                     $query->lessThan('startDate', $endDate->getTimestamp()),
                     $query->logicalOr([
                         $query->equals('repeatEnd', 0),

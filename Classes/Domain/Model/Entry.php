@@ -2,24 +2,27 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
  ***/
-
 /**
  * Entry
  */
-class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Entry extends AbstractEntity
 {
 
     /**
      * startDate
      *
      * @var \DateTime
-     * @validate NotEmpty, DateTime
+     * @Extbase\Validate("NotEmpty")
+     * @Extbase\Validate("DateTime")
      */
     protected $startDate;
 
@@ -27,7 +30,8 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * endDate
      *
      * @var \DateTime
-     * @validate NotEmpty, DateTime
+     * @Extbase\Validate("NotEmpty")
+     * @Extbase\Validate("DateTime")
      */
     protected $endDate;
 
@@ -35,7 +39,8 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * name
      *
      * @var string
-     * @validate NotEmpty, StringLengthValidator(minimum=3, maximum=50)
+     * @Extbase\Validate("NotEmpty")
+     * @Extbase\Validate("StringLengthValidator", options={"minimum": 3, "maximum": 50})
      */
     protected $name = '';
 
@@ -78,7 +83,8 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * email
      *
      * @var string
-     * @validate NotEmpty, EmailAddress
+     * @Extbase\Validate("NotEmpty")
+     * @Extbase\Validate("EmailAddress")
      */
     protected $email = '';
 
@@ -114,24 +120,24 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * weight
      *
      * @var int
-     * @validate Integer
+     * @Extbase\Validate("Integer")
      */
     protected $weight = 1;
 
     /**
      * calendar
      *
-     * @lazy
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @validate NotEmpty
+     * @var Calendar $calendar
+     * @Extbase\ORM\Lazy
+     * @Extbase\Validate("NotEmpty")
      */
     protected $calendar = null;
 
     /**
      * timeslot
      *
-     * @lazy
-     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     * @var Timeslot
+     * @Extbase\ORM\Lazy
      */
     protected $timeslot = null;
 
@@ -148,14 +154,14 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $crdate;
 
     /**
-     * @lazy
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+     * @var FrontendUser
+     * @Extbase\ORM\Lazy
      */
     protected $feUser;
 
     /**
      * @var int
-     * @validate Integer
+     * @Extbase\Validate("Integer")
      */
     protected $gender = 0;
 
@@ -178,15 +184,15 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * __construct
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @param Calendar $calendar
+     * @param Timeslot $timeslot
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      * @return void
      */
     public function __construct(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null,
-        \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot = null,
+        Calendar $calendar = null,
+        Timeslot $timeslot = null,
         \DateTime $startDate = null,
         \DateTime $endDate = null
     ) {
@@ -205,7 +211,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null
+     * @return FrontendUser|null
      */
     public function getFeUser()
     {
@@ -213,9 +219,9 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser
+     * @param FrontendUser $feUser
      */
-    public function setFeUser(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser)
+    public function setFeUser(FrontendUser $feUser)
     {
         $this->feUser = $feUser;
     }
@@ -578,7 +584,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the timeslot
      *
-     * @return \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @return Timeslot $timeslot
      */
     public function getTimeslot()
     {
@@ -588,10 +594,10 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the timeslot
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @param Timeslot $timeslot
      * @return void
      */
-    public function setTimeslot(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot)
+    public function setTimeslot(Timeslot $timeslot)
     {
         $this->timeslot = $timeslot;
     }
@@ -599,7 +605,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the calendar
      *
-     * @return \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @return Calendar $calendar
      */
     public function getCalendar()
     {
@@ -609,10 +615,10 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the calendar
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param Calendar $calendar
      * @return void
      */
-    public function setCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
+    public function setCalendar(Calendar $calendar)
     {
         $this->calendar = $calendar;
     }
@@ -663,7 +669,7 @@ class Entry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser
+     * @param FrontendUser $feUser
      */
     public function mergeWithFeUser($feUser)
     {

@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -67,7 +68,7 @@ class TimeslotCalendarEvent extends CalendarEvent
 
             // get the hook from offset of global registed hooks array, make instance and call it
             $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
-            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
+            $_procObj = GeneralUtility::makeInstance($hookClassName);
             if (!$_procObj->isBookable($this)) {
                 return false;
             }
@@ -93,7 +94,7 @@ class TimeslotCalendarEvent extends CalendarEvent
         return $this->bookedWeight >= $this->maxWeight;
     }
 
-    public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
+    public function addBackendEditActionLink(UriBuilder $uriBuilder)
     {
         if (!$this->getIsBookable()) {
             return;

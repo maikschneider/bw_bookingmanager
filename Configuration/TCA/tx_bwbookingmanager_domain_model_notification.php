@@ -14,9 +14,6 @@ return [
         'searchFields' => 'name,email,email_subject,template,hook,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_notification.svg',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, event, name, email, email_subject, template, hook, calendars',
-    ],
     'types' => [
         '1' => ['showitem' => 'hidden, event, name, email, email_subject, template, hook, calendars'],
     ],
@@ -28,7 +25,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
                     ],
                 ],
             ],

@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -15,7 +17,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Timeslot
  */
-class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Timeslot extends AbstractEntity
 {
 
     const REPEAT_NO = 0;
@@ -66,12 +68,12 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * entries
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
+     * @var ObjectStorage<Entry>
      */
     protected $entries = null;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @var Calendar
      */
     protected $calendar;
 
@@ -113,7 +115,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected function initStorageObjects()
     {
-        $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->entries = new ObjectStorage();
     }
 
     public static function getConsecutiveRepeatingDaysString(int $repeatDays)
@@ -269,7 +271,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @return Calendar
      */
     public function getCalendar(): Calendar
     {
@@ -277,7 +279,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param Calendar $calendar
      */
     public function setCalendar(Calendar $calendar): void
     {
@@ -379,10 +381,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Adds a Entry
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
+     * @param Entry $entry
      * @return void
      */
-    public function addEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
+    public function addEntry(Entry $entry)
     {
         $this->entries->attach($entry);
     }
@@ -390,10 +392,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Entry
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove The Entry to be removed
+     * @param Entry $entryToRemove The Entry to be removed
      * @return void
      */
-    public function removeEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove)
+    public function removeEntry(Entry $entryToRemove)
     {
         $this->entries->detach($entryToRemove);
     }
@@ -501,7 +503,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the entries
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     * @return ObjectStorage<Entry> $entries
      */
     public function getEntries()
     {
@@ -511,10 +513,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the entries
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     * @param ObjectStorage<Entry> $entries
      * @return void
      */
-    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
+    public function setEntries(ObjectStorage $entries)
     {
         $this->entries = $entries;
     }
@@ -589,7 +591,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
             // get the hook from offset of global registed hooks array, make instance and call it
             $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
-            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
+            $_procObj = GeneralUtility::makeInstance($hookClassName);
             if (!$_procObj->isBookable($this)) {
                 return false;
             }

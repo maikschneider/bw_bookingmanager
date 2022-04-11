@@ -2,10 +2,13 @@
 
 namespace Blueways\BwBookingmanager\ViewHelpers\Be;
 
+use TYPO3\CMS\Fluid\ViewHelpers\Be\TableListViewHelper;
+use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class BetterTableListViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\TableListViewHelper
+class BetterTableListViewHelper extends TableListViewHelper
 {
     public function initializeArguments()
     {
@@ -39,7 +42,7 @@ class BetterTableListViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\TableLis
 
         $pageinfo = BackendUtility::readPageAccess(GeneralUtility::_GP('id'), $GLOBALS['BE_USER']->getPagePermsClause(1));
         /** @var $dblist \TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList */
-        $dblist = GeneralUtility::makeInstance(\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class);
+        $dblist = GeneralUtility::makeInstance(DatabaseRecordList::class);
         $dblist->pageRow = $pageinfo;
         if ($readOnly === false) {
             $dblist->calcPerms = $GLOBALS['BE_USER']->calcPerms($pageinfo);
@@ -49,7 +52,7 @@ class BetterTableListViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\TableLis
         $dblist->clickTitleMode = $clickTitleMode;
         $dblist->clickMenuEnabled = $enableClickMenu;
         if ($storagePid === null) {
-            $frameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+            $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
             $storagePid = $frameworkConfiguration['persistence']['storagePid'];
         }
         $dblist->start($storagePid, $tableName, (int)GeneralUtility::_GP('pointer'), $filter, $levels, $recordsPerPage);

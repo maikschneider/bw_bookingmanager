@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
+use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
+use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
@@ -70,7 +72,7 @@ class IcsUtility
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Ics $ics
+     * @param Ics $ics
      * @return string
      */
     public function getIcsFeed(Ics $ics): string
@@ -89,7 +91,7 @@ class IcsUtility
             $timeslotRepository = $objectManager->get(TimeslotRepository::class);
             $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
 
-            /** @var \Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent $timeslotEvent */
+            /** @var TimeslotCalendarEvent $timeslotEvent */
             foreach ($timeslotEvents as $timeslotEvent) {
                 if (($options[0] && $timeslotEvent->getIsBookable()) || ($options[1] && !$timeslotEvent->getIsBookable())) {
                     $feed .= $timeslotEvent->getIcsOutput($ics);
@@ -102,7 +104,7 @@ class IcsUtility
             $entryRepository = $objectManager->get(EntryRepository::class);
             $entryEvents = $entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
 
-            /** @var \Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent $entryEvent */
+            /** @var EntryCalendarEvent $entryEvent */
             foreach ($entryEvents as $entryEvent) {
                 $feed .= $entryEvent->getIcsOutput($ics);
             }

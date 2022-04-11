@@ -2,6 +2,10 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
@@ -10,24 +14,23 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  *
  * @package Blueways\BwBookingmanager\Domain\Validator
  */
-class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
+class EntryCreateValidator extends AbstractValidator
 {
 
     /**
      * timeslot repository
      *
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     *
+     * @var TimeslotRepository
      */
     protected $timeslotRepository;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Entry
+     * @var Entry
      */
     protected $entry;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     * @var Timeslot
      */
     protected $timeslot;
 
@@ -159,10 +162,10 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         $this->validateTimes();
 
         switch ($this->timeslot->getRepeatType()) {
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
+            case Timeslot::REPEAT_WEEKLY:
                 $this->validateWeeklyRepeatDates();
                 break;
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_MONTHLY:
+            case Timeslot::REPEAT_MONTHLY:
                 $this->validateMonthlyRepeatDates();
                 break;
         }
@@ -227,7 +230,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
     }
 
     public function injectTimeslotRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+        TimeslotRepository $timeslotRepository
     ) {
         $this->timeslotRepository = $timeslotRepository;
     }

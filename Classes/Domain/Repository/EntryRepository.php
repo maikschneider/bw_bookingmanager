@@ -2,6 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Repository;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
 use DateTime;
@@ -16,7 +21,7 @@ use DateTime;
 /**
  * The repository for Entries
  */
-class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class EntryRepository extends Repository
 {
     public function findInCalendars($calendars, DateTime $startDate, \DateTime $endDate)
     {
@@ -34,14 +39,14 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @param Calendar $calendar
+     * @param DateConf $dateConf
      * @param bool $respectStoragePage
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @return array|QueryResultInterface
+     * @throws InvalidQueryException
      */
     public function findInRange(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        Calendar $calendar,
         DateConf $dateConf,
         bool $respectStoragePage = true
     ) {
@@ -55,7 +60,7 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
         $query->setOrderings(
             [
-                'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                'startDate' => QueryInterface::ORDER_ASCENDING
             ]
         );
 
@@ -84,8 +89,8 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param \DateTime $startDate
      * @param \DateTime $endDate
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @return array|QueryResultInterface
+     * @throws InvalidQueryException
      * @deprecated
      */
     public function findAllInRange(
@@ -100,7 +105,7 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ]),
             $query->setOrderings(
                 [
-                    'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                    'startDate' => QueryInterface::ORDER_ASCENDING
                 ]
             )
         );
@@ -111,8 +116,8 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     /**
      * @param $feUserId
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @return array|QueryResultInterface
+     * @throws InvalidQueryException
      */
     public function getByUserId($feUserId)
     {
@@ -127,7 +132,7 @@ class EntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ]),
             $query->setOrderings(
                 [
-                    'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
+                    'startDate' => QueryInterface::ORDER_ASCENDING
                 ]
             )
         );

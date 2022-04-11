@@ -2,13 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Service;
 
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Core\SingletonInterface;
 
 class AccessControlService implements SingletonInterface
 {
 
     /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $user
+     * @param FrontendUser $user
      * @return bool
      */
     public function isLoggedIn($user = null)

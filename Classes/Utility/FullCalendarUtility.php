@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
+use TYPO3\CMS\Core\Localization\LanguageService;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
@@ -13,7 +14,6 @@ use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Lang\LanguageService;
 
 class FullCalendarUtility
 {
@@ -127,7 +127,7 @@ class FullCalendarUtility
         return $fullCalendarEvents;
     }
 
-    public function injectUriBuilder(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
+    public function injectUriBuilder(UriBuilder $uriBuilder)
     {
         $this->uriBuilder = $uriBuilder;
     }

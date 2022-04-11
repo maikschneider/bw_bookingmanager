@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Tests\Functional\Domain\Repository;
 
+use TYPO3\TestingFramework\Core\Exception;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -21,7 +22,7 @@ class TimeslotRepositoryTest extends FunctionalTestCase
     ];
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     * @var TimeslotRepository
      */
     private $subject = null;
 
@@ -39,7 +40,7 @@ class TimeslotRepositoryTest extends FunctionalTestCase
 
     /**
      * @test
-     * @throws \TYPO3\TestingFramework\Core\Exception
+     * @throws Exception
      */
     public function correctTimeslotRepeatQueryResult()
     {
@@ -54,7 +55,7 @@ class TimeslotRepositoryTest extends FunctionalTestCase
 
     /**
      * @test
-     * @throws \TYPO3\TestingFramework\Core\Exception
+     * @throws Exception
      */
     public function correctAmountOfRepeating(): void
     {

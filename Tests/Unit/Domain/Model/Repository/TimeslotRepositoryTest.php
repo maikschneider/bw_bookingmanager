@@ -15,7 +15,7 @@ class TimeslotRepositoryTest extends UnitTestCase
 {
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     * @var TimeslotRepository
      */
     protected TimeslotRepository $subject;
 

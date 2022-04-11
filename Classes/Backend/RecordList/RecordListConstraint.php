@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Backend\RecordList;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
@@ -30,7 +31,7 @@ class RecordListConstraint
      */
     private static function is9up(): bool
     {
-        return VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9000000;
+        return VersionNumberUtility::convertVersionNumberToInteger(GeneralUtility::makeInstance(Typo3Version::class)->getVersion()) >= 9000000;
     }
 
     public function extendQuery(array &$parameters, array $arguments)

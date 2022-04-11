@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 
 class Tca
@@ -9,7 +10,7 @@ class Tca
 
     public function getTimeslotLabel(&$params, $parentObject)
     {
-        $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
+        $record = BackendUtility::getRecord($params['table'], $params['row']['uid']);
         $newTitle = '';
 
         $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
@@ -18,7 +19,7 @@ class Tca
 
         $repeatType = $record['repeat_type'];
         switch ($repeatType) {
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
+            case Timeslot::REPEAT_WEEKLY:
                 $newTitle .= $startDate->format('l') . ', ';
                 $newTitle .= $startDate->format('H:i') . ' - ';
                 $newTitle .= $endDate->format('H:i');
@@ -26,13 +27,13 @@ class Tca
                 $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
                 break;
 
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_DAILY:
+            case Timeslot::REPEAT_DAILY:
                 $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
                 $repeatEnd = $record['repeat_end'] ? $repeatEnd->format('d.m.y') : '∞';
                 $newTitle .= ' (' . $startDate->format('d.m.y') . ' - ' . $repeatEnd . ')';
                 break;
 
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_MULTIPLE_WEEKLY:
+            case Timeslot::REPEAT_MULTIPLE_WEEKLY:
                 $newTitle .= $startDate->format('H:i') . ' - ' . $endDate->format('H:i');
                 $newTitle .= ' (' . Timeslot::getConsecutiveRepeatingDaysString($record['repeat_days']) . ')';
                 break;
@@ -50,7 +51,7 @@ class Tca
 
     public function getBlockslotLabel(&$params, $parentObject)
     {
-        $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
+        $record = BackendUtility::getRecord($params['table'], $params['row']['uid']);
 
         $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
         $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
@@ -63,7 +64,7 @@ class Tca
 
     public function getHolidayLabel(&$params, $parentObject)
     {
-        $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
+        $record = BackendUtility::getRecord($params['table'], $params['row']['uid']);
 
         $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));
         $endDate = new \DateTime(date('Y-m-d H:i:sP', $record['end_date']));
@@ -76,7 +77,7 @@ class Tca
 
     public function getEntryLabel(&$params, $parentObject)
     {
-        $record = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($params['table'], $params['row']['uid']);
+        $record = BackendUtility::getRecord($params['table'], $params['row']['uid']);
         $newTitle = '';
 
         $startDate = new \DateTime(date('Y-m-d H:i:sP', $record['start_date']));

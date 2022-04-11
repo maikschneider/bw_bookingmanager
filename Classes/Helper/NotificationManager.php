@@ -12,7 +12,10 @@ namespace Blueways\BwBookingmanager\Helper;
  * @version  GIT: <git_id />
  * @link     http://www.blueways.de
  */
-
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use Blueways\BwBookingmanager\Domain\Model\Notification;
 use Blueways\BwEmail\Utility\SenderUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -22,17 +25,17 @@ class NotificationManager
 {
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Entry $entry
+     * @var Entry $entry
      */
     protected $entry = null;
 
     /**
-     * @var array<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
+     * @var array<Notification> $notifications
      */
     protected $notifications = null;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
+     * @var ConfigurationManager $configurationManager
      */
     protected $configurationManager;
 
@@ -49,15 +52,15 @@ class NotificationManager
     /**
      * NotificationManager constructor.
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @param Entry $entry
+     * @throws InvalidConfigurationTypeException
      */
     public function __construct($entry)
     {
         $this->entry = $entry;
         $this->notifications = $entry->getCalendar()->getNotifications();
         $this->configurationManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Configuration\ConfigurationManager');
-        $this->extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $this->extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
         $this->senderUtility = GeneralUtility::makeInstance(SenderUtility::class);
     }
 
@@ -143,7 +146,7 @@ class NotificationManager
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Notification $notification
+     * @param Notification $notification
      */
     public function sendNotification($notification)
     {

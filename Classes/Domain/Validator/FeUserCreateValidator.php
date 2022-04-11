@@ -2,16 +2,18 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 /**
  * Class FeUserCreateValidator
  *
  * @package Blueways\BwBookingmanager\Domain\Validator
  */
-class FeUserCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
+class FeUserCreateValidator extends AbstractValidator
 {
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+     * @var FrontendUserRepository
      */
     protected $frontendUserRepository;
 
@@ -49,7 +51,7 @@ class FeUserCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abst
     }
 
     public function injectFrontendUserRepository(
-        \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository $frontendUserRepository
+        FrontendUserRepository $frontendUserRepository
     ) {
         $this->frontendUserRepository = $frontendUserRepository;
     }

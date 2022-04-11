@@ -1,6 +1,9 @@
 <?php
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;/***
@@ -13,7 +16,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;/***
 /**
  * The repository for Calendars
  */
-class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class CalendarRepository extends Repository
 {
     public function findAllIgnorePid()
     {
@@ -24,7 +27,7 @@ class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
     /**
      * @param int $pid
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return array|QueryResultInterface
      */
     public function findAllByPid(int $pid)
     {
@@ -59,7 +62,7 @@ class CalendarRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @param ObjectStorage<Calendar> $calendars
      * @return array
      */
     public static function getUidsFromObjectStorage(ObjectStorage $calendars): array

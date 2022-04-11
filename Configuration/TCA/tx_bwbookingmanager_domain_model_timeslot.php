@@ -1,9 +1,11 @@
 <?php
+
+use Blueways\BwBookingmanager\Helper\Tca;
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot',
         'label' => 'start_date',
-        'label_userFunc' => \Blueways\BwBookingmanager\Helper\Tca::class . '->getTimeslotLabel',
+        'label_userFunc' => Tca::class . '->getTimeslotLabel',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
@@ -14,13 +16,9 @@ return [
         'searchFields' => 'start_date,end_date,repeat_type,holiday_setting,repeat_end,max_weight,entries,is_bookable_hooks,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.svg'
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, start_date, end_date, repeat_type, holiday_setting, repeat_end, max_weight, entries, is_bookable_hooks, calendars, calendar',
-    ],
     'types' => [
         '1' => [
-            'showitem' => 'hidden,
-            --palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette, max_weight, is_bookable_hooks, calendars, calendar'],
+            'showitem' => 'hidden,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette,max_weight,is_bookable_hooks,calendars,calendar'],
     ],
     'palettes' => [
         'datesPalette' => [
@@ -36,7 +34,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled'
                     ]
                 ],
             ],

@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /***
@@ -14,11 +15,11 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 /**
  * Entry
  */
-class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Ics extends AbstractEntity
 {
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
+     * @var ObjectStorage<Calendar>
      */
     protected $calendars;
 
@@ -204,17 +205,17 @@ class Ics extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return ObjectStorage
      */
-    public function getCalendars(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+    public function getCalendars(): ObjectStorage
     {
         return $this->calendars;
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars
+     * @param ObjectStorage $calendars
      */
-    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
+    public function setCalendars(ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
     }

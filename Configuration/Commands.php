@@ -1,7 +1,8 @@
 <?php
 
+use Blueways\BwBookingmanager\Command\TimeslotUpdateCommand;
 return [
   'bookingmanager:timeslotUpdate' => [
-      'class' => Blueways\BwBookingmanager\Command\TimeslotUpdateCommand::class
+      'class' => TimeslotUpdateCommand::class
   ]
 ];

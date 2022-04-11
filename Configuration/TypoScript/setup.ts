@@ -12,11 +12,9 @@ plugin.tx_bwbookingmanager {
     storagePid = {$plugin.tx_bwbookingmanager_pi1.persistence.storagePid}
     #recursive = 1
   }
-
   mvc {
     callDefaultActionIfActionCantBeResolved = 1
   }
-
   view {
     templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
     templateRootPaths.1 = {$plugin.tx_bwbookingmanager.view.templateRootPath}
@@ -25,7 +23,6 @@ plugin.tx_bwbookingmanager {
     layoutRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Layouts/
     layoutRootPaths.1 = {$plugin.tx_bwbookingmanager.view.layoutRootPath}
   }
-
   settings {
     cancelTime = {$plugin.tx_bwbookingmanager.settings.cancelTime}
     userStoragePid = {$plugin.tx_bwbookingmanager.settings.userStoragePid}
@@ -38,7 +35,6 @@ plugin.tx_bwbookingmanager {
       showUid = {$plugin.tx_bwbookingmanager.settings.mail.showUid}
       doSendConfirmation = {$plugin.tx_bwbookingmanager.settings.mail.doSendConfirmation}
     }
-
     directBooking {
       defaultStartTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultStartTime}
       defaultEndTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultEndTime}
@@ -60,7 +56,6 @@ plugin.tx_bwbookingmanager_pi1 {
     # Should be on by default, but can be disabled if all action in the plugin are uncached
     requireCHashArgumentForActionArguments = 1
   }
-
   settings {
     showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
     calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
@@ -92,7 +87,6 @@ BOOKINGMANAGER {
     additionalHeaders.10.header = Content-type:application/json
     debug = 0
   }
-
   10 = USER
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
@@ -119,7 +113,6 @@ BOOKINGMANAGERICS {
     pluginName = Ics
   }
 
-
   config.additionalHeaders.10.header = Content-Type: text/calendar; charset=utf-8
   config.additionalHeaders.20.header = Content-Disposition: attachment; filename="CalendarFeed.ics"
 }
@@ -136,7 +129,6 @@ module.tx_bwbookingmanager {
       4 = phone
       5 = weight
     }
-
     showConfirmButton = 1
     showEditButton = 1
     showDeleteButton = 0

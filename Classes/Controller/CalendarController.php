@@ -2,6 +2,13 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use Blueways\BwBookingmanager\Service\AccessControlService;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
@@ -18,40 +25,35 @@ use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
  * @version  GIT: <git_id />
  * @link     http: //www.blueways.de
  */
-class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class CalendarController extends ActionController
 {
 
     /**
      * CalendarRepository
      *
-     * @var    \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
-     * @inject
+     * @var CalendarRepository
      */
     protected $calendarRepository = null;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     * @inject
+     * @var EntryRepository
      */
     protected $entryRepository;
 
     /**
      * timeslotRepository
      *
-     * @var    \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     * @inject
+     * @var TimeslotRepository
      */
     protected $timeslotRepository = null;
 
     /**
-     * @var \Blueways\BwBookingmanager\Service\AccessControlService
-     * @inject
+     * @var AccessControlService
      */
     protected $accessControlService;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
-     * @inject
+     * @var FrontendUserRepository
      */
     protected $frontendUserRepository;
 
@@ -63,7 +65,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     }
 
     /**
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws StopActionException
      */
     public function listAction()
     {
@@ -87,12 +89,12 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar|null $calendar
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @param Calendar|null $calendar
+     * @throws NoSuchArgumentException
+     * @throws InvalidQueryException
      */
     public function showAction(
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar = null
+        Calendar $calendar = null
     ) {
         // check for fe_user
         $feUser = false;
@@ -113,7 +115,7 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
         // build render configuration
-        /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
+        /** @var Calendar $calendar */
         $calendar = $calendar ?: $this->calendarRepository->findByUid((int)$this->settings['calendarPid']);
         $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
         $configuration = $calendarManager->getConfiguration($dateConf);
@@ -124,5 +126,30 @@ class CalendarController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
             'configuration' => $configuration,
             'feUser' => $feUser
         ]);
+    }
+
+    public function injectCalendarRepository(CalendarRepository $calendarRepository): void
+    {
+        $this->calendarRepository = $calendarRepository;
+    }
+
+    public function injectEntryRepository(EntryRepository $entryRepository): void
+    {
+        $this->entryRepository = $entryRepository;
+    }
+
+    public function injectTimeslotRepository(TimeslotRepository $timeslotRepository): void
+    {
+        $this->timeslotRepository = $timeslotRepository;
+    }
+
+    public function injectAccessControlService(AccessControlService $accessControlService): void
+    {
+        $this->accessControlService = $accessControlService;
+    }
+
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
     }
 }

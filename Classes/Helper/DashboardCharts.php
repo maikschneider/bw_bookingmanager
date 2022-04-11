@@ -2,16 +2,22 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 class DashboardCharts
 {
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @var ObjectStorage<Calendar> $calendars
      */
     protected $calendars = null;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     * @var ObjectStorage<Entry> $entries
      */
     protected $entries = null;
 
@@ -31,7 +37,7 @@ class DashboardCharts
     protected $calendarColors = null;
 
     /**
-     * @var \TYPO3\CMS\Lang\LanguageService $languageService
+     * @var LanguageService $languageService
      */
     protected $languageService = null;
 
@@ -44,7 +50,7 @@ class DashboardCharts
         $this->view = $view;
 
         $this->generateCalendarColors();
-        $this->languageService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
+        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
     }
 
     public function getChart1()
@@ -211,20 +217,20 @@ class DashboardCharts
     public function getDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
+        $uriArguments['signature'] = GeneralUtility::hmac($uriArguments['arguments'],
             $routeName);
 
-        $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
     }
 
     public static function getStaticDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
+        $uriArguments['signature'] = GeneralUtility::hmac($uriArguments['arguments'],
             $routeName);
 
-        $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
     }
 

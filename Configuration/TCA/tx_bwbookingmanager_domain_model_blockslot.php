@@ -1,9 +1,11 @@
 <?php
+
+use Blueways\BwBookingmanager\Helper\Tca;
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot',
         'label' => 'start_date',
-        'label_userFunc' => \Blueways\BwBookingmanager\Helper\Tca::class . '->getBlockslotLabel',
+        'label_userFunc' => Tca::class . '->getBlockslotLabel',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
@@ -13,9 +15,6 @@ return [
         ],
         'searchFields' => 'start_date,end_date,reason,calendars',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_blockslot.svg'
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, start_date, end_date, reason, calendars',
     ],
     'types' => [
         '1' => ['showitem' => 'hidden, start_date, end_date, reason, calendars'],
@@ -28,7 +27,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled'
                     ]
                 ],
             ],

@@ -1,9 +1,11 @@
 <?php
+
+use Blueways\BwBookingmanager\Helper\Tca;
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry',
         'label' => 'start_date',
-        'label_userFunc' => \Blueways\BwBookingmanager\Helper\Tca::class . '->getEntryLabel',
+        'label_userFunc' => Tca::class . '->getEntryLabel',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
@@ -16,18 +18,9 @@ return [
         'searchFields' => 'start_date,end_date,name,prename,token,street,zip,city,phone,email,newsletter,weight,timeslot,calendar,special1,special2,confirmed,fe_user,gender,notes',
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_entry.svg',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'token, hidden, calendar, timeslot, start_date, end_date, name, prename, street, zip, city, phone, email, newsletter, weight,special1, special2, confirmed, fe_user, gender, notes',
-    ],
     'types' => [
         'Blueways\BwBookingmanager\Domain\Model\Entry' => [
-            'showitem' => '
-            --palette--;;topPalette,
-            --palette--;;generalPalette,
-            --palette--;;contactDataPalette,
-            --palette--;;specialPalette,
-        --div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.tabs.internal,
-            --palette--;;internalPalette'
+            'showitem' => '--palette--;;topPalette,--palette--;;generalPalette,--palette--;;contactDataPalette,--palette--;;specialPalette,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.tabs.internal,--palette--;;internalPalette'
         ],
     ],
     'palettes' => [
@@ -174,7 +167,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
                     ],
                 ],
                 'default' => 0,
@@ -200,7 +193,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
                     ],
                 ],
                 'default' => 0,
@@ -213,7 +206,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
                     ],
                 ],
                 'default' => 0,

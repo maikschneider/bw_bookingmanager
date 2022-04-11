@@ -2,6 +2,10 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use Blueways\BwBookingmanager\Domain\Model\Blockslot;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 
 /**
@@ -18,35 +22,35 @@ class RenderConfiguration
 {
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot[]
+     * @var Timeslot[]
      */
     protected $timeslots;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Entry[]
+     * @var Entry[]
      */
     protected $entries;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Blockslot[]
+     * @var Blockslot[]
      */
     protected $blockslots;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf
+     * @var DateConf
      */
     protected $dateConf;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @var Calendar
      */
     protected $calendar;
 
     /**
      * RenderConfiguration constructor.
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param DateConf $dateConf
+     * @param Calendar $calendar
      */
     public function __construct($dateConf, $calendar)
     {
@@ -272,7 +276,7 @@ class RenderConfiguration
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot[] $timeslots
+     * @param Timeslot[] $timeslots
      * @return float|int
      */
     private function getBookableTimeslotsStatus($timeslots)

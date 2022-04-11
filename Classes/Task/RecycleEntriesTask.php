@@ -2,11 +2,12 @@
 
 namespace Blueways\BwBookingmanager\Task;
 
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
 use Doctrine\DBAL\DBALException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class RecycleEntriesTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
+class RecycleEntriesTask extends AbstractTask
 {
 
     /**

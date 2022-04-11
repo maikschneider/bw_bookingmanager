@@ -228,7 +228,7 @@ class CalendarEvent
         $this->end = $end;
     }
 
-    public function addBackendEditActionLink(\TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder)
+    public function addBackendEditActionLink(UriBuilder $uriBuilder)
     {
     }
 

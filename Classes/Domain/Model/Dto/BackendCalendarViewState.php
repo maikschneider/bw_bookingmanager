@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
+use Psr\Http\Message\ServerRequestInterface;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -76,7 +78,7 @@ class BackendCalendarViewState
             ['allowed_classes' => [self::class]]) : new BackendCalendarViewState($pid);
     }
 
-    public static function createFromApiRequest(\Psr\Http\Message\ServerRequestInterface $request)
+    public static function createFromApiRequest(ServerRequestInterface $request)
     {
         $params = $request->getQueryParams();
 
@@ -120,7 +122,7 @@ class BackendCalendarViewState
     protected function getCurrentCalendarSettings($calendars): array
     {
         $currentCalendars = [];
-        /** @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar */
+        /** @var Calendar $calendar */
         foreach ($calendars as $calendar) {
             $currentCal = [];
             $currentCal['uid'] = $calendar->getUid();

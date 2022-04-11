@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use \Blueways\BwBookingmanager\Domain\Model\Timeslot;
 
 /**
@@ -11,12 +13,12 @@ class TimeslotManager
 {
 
     /**
-     * @var array<\Blueways\BwBookingmanager\Domain\Model\Timeslot>|\TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
+     * @var array<Timeslot>|ObjectStorage<Timeslot> $timeslots
      */
     protected $timeslots = null;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @var Calendar $calendar
      */
     protected $calendar = null;
 
@@ -39,13 +41,13 @@ class TimeslotManager
      * __construct
      *
      * @param $timeslots
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param Calendar $calendar
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      */
     public function __construct(
         $timeslots,
-        \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar,
+        Calendar $calendar,
         \DateTime $startDate,
         \DateTime $endDate
     ) {
@@ -211,7 +213,7 @@ class TimeslotManager
             $timeslotStartDate = $timeslot->getStartDate();
             $timeslotEndDate = $timeslot->getEndDate();
 
-            $entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+            $entries = new ObjectStorage();
             foreach ($timeslot->getEntries() as $entry) {
                 if ($entry->getCalendar()->getUid() === $this->calendar->getUid() && $entry->getStartDate() == $timeslotStartDate && $entry->getEndDate() == $timeslotEndDate) {
                     $entries->attach($entry);
@@ -224,7 +226,7 @@ class TimeslotManager
     /**
      * duplicates daily timeslot for whole date range
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
+     * @param Timeslot $timeslot
      * @return array
      */
     private function repeatDailyTimeslot($timeslot)

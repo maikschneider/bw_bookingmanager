@@ -2,31 +2,33 @@
 
 namespace Blueways\BwBookingmanager\Task;
 
-class RecycleEntriesAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface
+use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+class RecycleEntriesAdditionalFieldProvider extends AbstractAdditionalFieldProvider
 {
-
     /**
      * @var int Default number of days
      */
     protected $defaultNumberOfDays = 30;
-
     /**
      * Gets additional fields to render in the form to add/edit a task
      *
      * @param array $taskInfo Values of the fields from the add/edit task form
-     * @param \TYPO3\CMS\Scheduler\Task\AbstractTask $task The task object being edited. Null when adding a task!
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule Reference to the scheduler backend module
+     * @param AbstractTask $task The task object being edited. Null when adding a task!
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return array A two dimensional array, array('Identifier' => array('fieldId' => array('code' => '', 'label' => '', 'cshKey' => '', 'cshLabel' => ''))
      */
     public function getAdditionalFields(
         array &$taskInfo,
         $task,
-        \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule
+        SchedulerModuleController $schedulerModule
     ) {
         // Initialize selected fields
         if (!isset($taskInfo['scheduler_recycleEntries_numberOfDays'])) {
             $taskInfo['scheduler_recycleEntries_numberOfDays'] = $this->defaultNumberOfDays;
-            if ($schedulerModule->CMD === 'edit') {
+            if ((string) $schedulerModule->getCurrentAction() === 'edit') {
                 $taskInfo['scheduler_recycleEntries_numberOfDays'] = $task->numberOfDays;
             }
         }
@@ -43,36 +45,33 @@ class RecycleEntriesAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\Addi
         ];
         return $additionalFields;
     }
-
     /**
      * Validates the additional fields' values
      *
      * @param array $submittedData An array containing the data submitted by the add/edit task form
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule Reference to the scheduler backend module
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return bool TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
     public function validateAdditionalFields(
         array &$submittedData,
-        \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule
+        SchedulerModuleController $schedulerModule
     ) {
         $result = true;
         // Check if number of days is indeed a number and greater or equals to 0
         // If not, fail validation and issue error message
         if (!is_numeric($submittedData['scheduler_recycleEntries_numberOfDays']) || (int)$submittedData['scheduler_recycleEntries_numberOfDays'] < 0) {
             $result = false;
-            $schedulerModule->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/Resources/Private/Language/locallang.xlf:msg.invalidNumberOfDays'),
-                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            $this->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/Resources/Private/Language/locallang.xlf:msg.invalidNumberOfDays'), FlashMessage::ERROR);
         }
         return $result;
     }
-
     /**
      * Takes care of saving the additional fields' values in the task's object
      *
      * @param array $submittedData An array containing the data submitted by the add/edit task form
-     * @param \TYPO3\CMS\Scheduler\Task\AbstractTask $task Reference to the scheduler backend module
+     * @param AbstractTask $task Reference to the scheduler backend module
      */
-    public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task)
+    public function saveAdditionalFields(array $submittedData, AbstractTask $task)
     {
         $task->numberOfDays = (int)$submittedData['scheduler_recycleEntries_numberOfDays'];
     }

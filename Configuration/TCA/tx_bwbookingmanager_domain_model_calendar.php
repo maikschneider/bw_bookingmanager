@@ -26,18 +26,9 @@ return [
             'showitem' => 'blockslots, --linebreak--, holidays'
         ]
     ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, record_type, name, timeslots, direct_booking, blockslots, holidays, notifications',
-    ],
     'types' => [
         'Blueways\BwBookingmanager\Domain\Model\Calendar' => [
-            'showitem' => '
-                --div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:general,
-                    --palette--;;general,
-                --div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:exceptions,
-                    --palette--;;exceptions,
-                --div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:advanced,
-                    --palette--;;direct_booking_palette'
+            'showitem' => '--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:general,--palette--;;general,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:exceptions,--palette--;;exceptions,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:advanced,--palette--;;direct_booking_palette'
         ],
     ],
     'columns' => [
@@ -62,7 +53,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
                     ],
                 ],
             ],
@@ -154,7 +145,7 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled',
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
                     ],
                 ],
             ],

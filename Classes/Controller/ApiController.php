@@ -2,6 +2,19 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
+use Blueways\BwBookingmanager\Service\AccessControlService;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
@@ -49,22 +62,22 @@ class ApiController extends ActionController
     ];
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
+     * @var CalendarRepository
      */
     protected $calendarRepository;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
+     * @var TimeslotRepository
      */
     protected $timeslotRepository;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
+     * @var EntryRepository
      */
     protected $entryRepository;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository
+     * @var FrontendUserRepository
      */
     protected $frontendUserRepository;
 
@@ -74,7 +87,7 @@ class ApiController extends ActionController
     protected $uriBuilder;
 
     /**
-     * @var \Blueways\BwBookingmanager\Service\AccessControlService
+     * @var AccessControlService
      */
     protected $accessControlService;
 
@@ -92,9 +105,9 @@ class ApiController extends ActionController
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @param Calendar $calendar
+     * @throws InvalidQueryException
+     * @throws NoSuchCacheException
      * @throws \Exception
      */
     public function calendarShowAction(Calendar $calendar)
@@ -124,12 +137,12 @@ class ApiController extends ActionController
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param Calendar $calendar
      * @param int $day
      * @param int $month
      * @param int $year
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws NoSuchCacheException
+     * @throws InvalidQueryException
      */
     public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year)
     {
@@ -202,7 +215,7 @@ class ApiController extends ActionController
         $propertyMappingConfiguration->skipUnknownProperties();
 
         // set validator
-        $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
+        $validatorResolver = $this->objectManager->get(ValidatorResolver::class);
         $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
         $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
         $validatorConjunction->addValidator($entryValidator);
@@ -256,7 +269,7 @@ class ApiController extends ActionController
             $propertyMappingConfiguration->skipUnknownProperties();
 
             // set user validator
-            $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
+            $validatorResolver = $this->objectManager->get(ValidatorResolver::class);
             $validatorConjunction = $validatorResolver->getBaseValidatorConjunction(FrontendUser::class);
             $userValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator');
             $validatorConjunction->addValidator($userValidator);
@@ -289,39 +302,39 @@ class ApiController extends ActionController
     }
 
     public function injectAccessControlService(
-        \Blueways\BwBookingmanager\Service\AccessControlService $accessControlService
+        AccessControlService $accessControlService
     ) {
         $this->accessControlService = $accessControlService;
     }
 
     public function injectCalendarRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
+        CalendarRepository $calendarRepository
     ) {
         $this->calendarRepository = $calendarRepository;
     }
 
-    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
+    public function injectEntryRepository(EntryRepository $entryRepository)
     {
         $this->entryRepository = $entryRepository;
     }
 
     public function injectFrontendUserRepository(
-        \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository $frontendUserRepository
+        FrontendUserRepository $frontendUserRepository
     ) {
         $this->frontendUserRepository = $frontendUserRepository;
     }
 
     public function injectTimeslotRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+        TimeslotRepository $timeslotRepository
     ) {
         $this->timeslotRepository = $timeslotRepository;
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser|null $user
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @param Entry $newEntry
+     * @param FrontendUser|null $user
+     * @throws IllegalObjectTypeException
+     * @throws NoSuchCacheException
      */
     public function entryCreateAction($newEntry, $user = null)
     {
@@ -356,7 +369,7 @@ class ApiController extends ActionController
         }
 
         // delete calendar cache
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
         $cache->flushByTag('calendar' . $newEntry->getCalendar()->getUid());
 
         // send mails
@@ -369,8 +382,8 @@ class ApiController extends ActionController
     }
 
     /**
-     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws InvalidPasswordHashException
+     * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function loginAction()
@@ -404,7 +417,7 @@ class ApiController extends ActionController
         }
 
         $passwordHashFactory = $this->objectManager->get(
-            \TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory::class
+            PasswordHashFactory::class
         );
         $passwordHash = $passwordHashFactory->getDefaultHashInstance('FE');
         $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user['password']);
@@ -432,7 +445,7 @@ class ApiController extends ActionController
     }
 
     /**
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function logoutAction()
@@ -447,7 +460,7 @@ class ApiController extends ActionController
 
     /**
      * @return string|void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function errorAction()

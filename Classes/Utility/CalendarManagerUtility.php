@@ -2,6 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use Blueways\BwBookingmanager\Helper\RenderConfiguration;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -9,48 +17,45 @@ class CalendarManagerUtility
 {
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @var Calendar
      */
     protected $calendar;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     * @inject
+     * @var EntryRepository
      */
     protected $entryRepository;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     * @inject
+     * @var TimeslotRepository
      */
     protected $timeslotRepository;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository
-     * @inject
+     * @var BlockslotRepository
      */
     protected $blockslotRepository;
 
     /**
      * CalendarManagerUtility constructor.
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param Calendar $calendar
      */
-    public function __construct(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
+    public function __construct(Calendar $calendar)
     {
         $this->calendar = $calendar;
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @param DateConf $dateConf
      * @return mixed
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws NoSuchCacheException
+     * @throws InvalidQueryException
      */
     public function getConfiguration(DateConf $dateConf)
     {
         $cacheIdentifier = sha1($this->calendar->getUid() . $dateConf->start->getTimestamp() . $dateConf->end->getTimestamp());
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
 
         if (($configuration = $cache->get($cacheIdentifier)) === false) {
             $configuration = $this->buildAndCacheConfiguration($dateConf);
@@ -60,10 +65,10 @@ class CalendarManagerUtility
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @param DateConf $dateConf
      * @return array
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws NoSuchCacheException
+     * @throws InvalidQueryException
      */
     private function buildAndCacheConfiguration(DateConf $dateConf)
     {
@@ -81,17 +86,17 @@ class CalendarManagerUtility
         }
 
         $cacheIdentifier = sha1($this->calendar->getUid() . $dateConf->start->getTimestamp() . $dateConf->end->getTimestamp());
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
         $cache->set($cacheIdentifier, $configuration, array_unique($cacheTags), 2592000);
 
         return $configuration;
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
+     * @param DateConf $dateConf
      * @return array
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws NoSuchCacheException
+     * @throws InvalidQueryException
      */
     private function buildConfiguration(DateConf $dateConf)
     {
@@ -99,8 +104,8 @@ class CalendarManagerUtility
         $timeslots = $this->timeslotRepository->findInRange($this->calendar, $dateConf);
         $blockslots = $this->blockslotRepository->findAllInRange([$this->calendar], $dateConf->start, $dateConf->end);
 
-        /** @var \Blueways\BwBookingmanager\Helper\RenderConfiguration $calendarConfiguration */
-        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf,
+        /** @var RenderConfiguration $calendarConfiguration */
+        $calendarConfiguration = new RenderConfiguration($dateConf,
             $this->calendar);
         $calendarConfiguration->setTimeslots($timeslots);
         $calendarConfiguration->setEntries($entries);
@@ -108,6 +113,21 @@ class CalendarManagerUtility
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
         return $configuration;
+    }
+
+    public function injectEntryRepository(EntryRepository $entryRepository): void
+    {
+        $this->entryRepository = $entryRepository;
+    }
+
+    public function injectTimeslotRepository(TimeslotRepository $timeslotRepository): void
+    {
+        $this->timeslotRepository = $timeslotRepository;
+    }
+
+    public function injectBlockslotRepository(BlockslotRepository $blockslotRepository): void
+    {
+        $this->blockslotRepository = $blockslotRepository;
     }
 
 }

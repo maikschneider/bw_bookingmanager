@@ -2,12 +2,13 @@
 
 namespace Blueways\BwBookingmanager\Hooks;
 
+use TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
-class EntryRecordListHook implements \TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface
+class EntryRecordListHook implements RecordListHookInterface
 {
 
     /**
