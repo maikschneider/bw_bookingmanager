@@ -3,16 +3,17 @@
 namespace Blueways\BwBookingmanager\Hooks;
 
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class PreHeaderRenderHook
 {
-    public function addFullCalendarJs($parameter)
+
+    public function addFullCalendarJs(): void
     {
         /** @var PageRenderer $pageRenderer */
-        $pageRenderer = $parameter['pageRenderer'];
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendModalCalendar', 'function(BackendModalCalendar){
-
-        window.BackendModalCalendar = new BackendModalCalendar();
-
+            window.BackendModalCalendar = new BackendModalCalendar();
         }');
     }
 }

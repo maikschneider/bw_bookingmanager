@@ -93,6 +93,6 @@ call_user_func(
         $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['extkey'] = 'Blueways\\BwBookingmanager\\Hooks\\TCEmainHook';
 
         // register backend js
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/template.php']['preHeaderRenderHook']['bw_bookingmanager'] = \Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook::class . '->addFullCalendarJs';
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['constructPostProcess'][] = \Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook::class . '->addFullCalendarJs';
     }
 );
