@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use TYPO3\CMS\Core\Page\PageRenderer;
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
@@ -40,10 +41,12 @@ class BackendController
     protected ServerRequestInterface $request;
 
     protected ObjectManager $objectManager;
+    private PageRenderer $pageRenderer;
 
-    public function __construct()
+    public function __construct(PageRenderer $pageRenderer)
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->pageRenderer = $pageRenderer;
     }
 
     public function indexAction(ServerRequestInterface $request): ResponseInterface
@@ -82,7 +85,7 @@ class BackendController
         $viewState->addCalendars($calendars);
         $viewState->addTypoScriptOptionOverrides();
 
-        $pageRenderer = $this->moduleTemplate->getPageRenderer();
+        $pageRenderer = $this->pageRenderer;
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendCalendarContextMenuActions');
 
@@ -321,7 +324,7 @@ class BackendController
         $this->request = $request;
         $this->initializeView('entryList');
 
-        $pageRenderer = $this->moduleTemplate->getPageRenderer();
+        $pageRenderer = $this->pageRenderer;
         $typoscript = $this->objectManager->get(ConfigurationManager::class)->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $tsService = $this->objectManager->get(TypoScriptService::class);
         $settings = $tsService->convertTypoScriptArrayToPlainArray($typoscript);

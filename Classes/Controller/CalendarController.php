@@ -2,6 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Blueways\BwBookingmanager\Service\AccessControlService;
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
@@ -67,18 +69,18 @@ class CalendarController extends ActionController
     /**
      * @throws StopActionException
      */
-    public function listAction()
+    public function listAction(): ResponseInterface
     {
         if ((int)$this->settings['mode'] === 1) {
-            $this->forward('show');
+            return new ForwardResponse('show');
         }
 
         if ((int)$this->settings['mode'] === 2) {
-            $this->forward('new', 'Entry');
+            return (new ForwardResponse('new'))->withControllerName('Entry');
         }
 
         if ((int)$this->settings['mode'] === 3) {
-            $this->forward('list', 'Entry');
+            return (new ForwardResponse('list'))->withControllerName('Entry');
         }
 
         $calendars = $this->calendarRepository->findAll();
@@ -86,6 +88,7 @@ class CalendarController extends ActionController
         $this->view->setTemplate($this->settings['template']['calendar']['list']);
 
         $this->view->assign('calendars', $calendars);
+        return $this->htmlResponse();
     }
 
     /**
@@ -95,7 +98,7 @@ class CalendarController extends ActionController
      */
     public function showAction(
         Calendar $calendar = null
-    ) {
+    ): ResponseInterface {
         // check for fe_user
         $feUser = false;
         if ($this->accessControlService->hasLoggedInFrontendUser()) {
@@ -126,6 +129,7 @@ class CalendarController extends ActionController
             'configuration' => $configuration,
             'feUser' => $feUser
         ]);
+        return $this->htmlResponse();
     }
 
     public function injectCalendarRepository(CalendarRepository $calendarRepository): void

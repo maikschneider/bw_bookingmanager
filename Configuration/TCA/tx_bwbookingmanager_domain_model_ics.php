@@ -67,7 +67,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:calendars',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_calendar',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
                 'MM' => 'tx_bwbookingmanager_calendar_ics_mm',

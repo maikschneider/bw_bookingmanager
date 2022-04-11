@@ -181,7 +181,7 @@ class BackendCalendarViewState
 
     public function isNewModalView(): bool
     {
-        return GeneralUtility::isFirstPartOfStr((string)$this->entryUid, 'NEW');
+        return \str_starts_with((string)$this->entryUid, 'NEW');
     }
 
     public function addTypoScriptOptionOverrides(): void

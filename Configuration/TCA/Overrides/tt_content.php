@@ -1,7 +1,7 @@
 <?php
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 /***************
  * A add Pi1 Plugin

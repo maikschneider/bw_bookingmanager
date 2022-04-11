@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Utility\IcsUtility;
@@ -17,13 +18,13 @@ class IcsController extends ActionController
      * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
-    public function showAction(Ics $ics, string $secret = ''): string
+    public function showAction(Ics $ics, string $secret = ''): ResponseInterface
     {
         if ($ics->getSecret() !== $secret) {
             $this->throwStatus(403, 'Incorrect secret');
         }
 
         $icsUtil = $this->objectManager->get(IcsUtility::class);
-        return $icsUtil->getFromIcs($ics);
+        return $this->htmlResponse($icsUtil->getFromIcs($ics));
     }
 }

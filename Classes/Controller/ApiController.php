@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
@@ -91,12 +92,13 @@ class ApiController extends ActionController
      */
     protected $accessControlService;
 
-    public function calendarListAction()
+    public function calendarListAction(): ResponseInterface
     {
         $calendars = $this->calendarRepository->findAllIgnorePid();
 
         $this->view->assign('calendars', $calendars);
         $this->view->setVariablesToRender(array('calendars'));
+        return $this->htmlResponse();
     }
 
     public function initializeAction()
@@ -110,7 +112,7 @@ class ApiController extends ActionController
      * @throws NoSuchCacheException
      * @throws \Exception
      */
-    public function calendarShowAction(Calendar $calendar)
+    public function calendarShowAction(Calendar $calendar): ResponseInterface
     {
         $startDate = new \DateTime('now');
         $startDate->setTime(0, 0, 0);
@@ -134,6 +136,7 @@ class ApiController extends ActionController
 
         $this->view->setConfiguration($this->configuration);
         $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+        return $this->htmlResponse();
     }
 
     /**
@@ -144,7 +147,7 @@ class ApiController extends ActionController
      * @throws NoSuchCacheException
      * @throws InvalidQueryException
      */
-    public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year)
+    public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year): ResponseInterface
     {
         $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
@@ -166,6 +169,7 @@ class ApiController extends ActionController
 
         $this->view->setConfiguration($this->configuration);
         $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+        return $this->htmlResponse();
     }
 
     public function initializeEntryCreateAction()
@@ -336,7 +340,7 @@ class ApiController extends ActionController
      * @throws IllegalObjectTypeException
      * @throws NoSuchCacheException
      */
-    public function entryCreateAction($newEntry, $user = null)
+    public function entryCreateAction($newEntry, $user = null): ResponseInterface
     {
         $newEntry->generateToken();
         // override PID (just in case the storage PID differs from current calendar)
@@ -379,6 +383,7 @@ class ApiController extends ActionController
         $this->view->setConfiguration($this->configuration);
         $this->view->assign('newEntry', $newEntry);
         $this->view->setVariablesToRender(array('newEntry'));
+        return $this->htmlResponse();
     }
 
     /**
@@ -386,7 +391,7 @@ class ApiController extends ActionController
      * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
-    public function loginAction()
+    public function loginAction(): ResponseInterface
     {
         if ($this->accessControlService->hasLoggedInFrontendUser()) {
             $this->performLogout();
@@ -435,6 +440,7 @@ class ApiController extends ActionController
         $this->view->assign('user', $user);
         $this->view->setConfiguration($this->configuration);
         $this->view->setVariablesToRender(array('user'));
+        return $this->htmlResponse();
     }
 
     protected function performLogout()
@@ -448,7 +454,7 @@ class ApiController extends ActionController
      * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
-    public function logoutAction()
+    public function logoutAction(): ResponseInterface
     {
         $this->performLogout();
         $this->throwStatus(
@@ -456,6 +462,7 @@ class ApiController extends ActionController
             'Logout successful',
             json_encode(['title' => 'Logout successful', 'message' => 'You have been successfully logged out.'])
         );
+        return $this->htmlResponse();
     }
 
     /**
@@ -463,14 +470,14 @@ class ApiController extends ActionController
      * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
-    public function errorAction()
+    public function errorAction(): ResponseInterface
     {
         if ($this->request->getControllerActionName() === "entryCreate") {
             $errors = $this->arguments->validate()->forProperty('newEntry')->getFlattenedErrors();
             $errors = array_merge($errors, $this->arguments->validate()->forProperty('user')->getFlattenedErrors());
 
             $errors = array_map(function ($error) {
-                return $error[0]->getMessage();
+                return $this->htmlResponse($error[0]->getMessage());
             }, $errors);
 
             $content = [
@@ -479,5 +486,6 @@ class ApiController extends ActionController
 
             $this->throwStatus(406, 'Validation failed', json_encode($content));
         }
+        return $this->htmlResponse();
     }
 }

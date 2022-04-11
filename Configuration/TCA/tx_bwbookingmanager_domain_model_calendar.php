@@ -73,7 +73,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.timeslots',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_timeslot',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
                 'foreign_field' => 'calendar',
@@ -87,7 +86,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.blockslots',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_blockslot',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_blockslot',
                 'MM' => 'tx_bwbookingmanager_calendar_blockslot_mm',
@@ -101,7 +99,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.holidays',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_holiday',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_holiday',
                 'MM' => 'tx_bwbookingmanager_calendar_holiday_mm',
@@ -115,7 +112,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.notifications',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_notification',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_notification',
                 'MM' => 'tx_bwbookingmanager_calendar_notification_mm',
@@ -129,7 +125,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.entries',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_entry',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_entry',
                 'foreign_field' => 'calendar',

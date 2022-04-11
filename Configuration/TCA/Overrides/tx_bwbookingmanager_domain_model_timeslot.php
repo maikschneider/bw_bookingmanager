@@ -1,6 +1,6 @@
 <?php
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 // Add HOOKs to TCA selection by using HOOK_ID and HOOK_LABEL from class
 foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'] ?? [] as $className) {

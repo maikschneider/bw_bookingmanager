@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Blueways\BwBookingmanager\Service\AccessControlService;
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
@@ -84,7 +85,7 @@ class EntryController extends ActionController
         Calendar $calendar,
         Timeslot $timeslot = null,
         Entry $newEntry = null
-    ) {
+    ): ResponseInterface {
         if (!$timeslot && !$calendar->isDirectBooking()) {
             $this->throwStatus(403, 'Direct booking is not allowed');
         }
@@ -129,12 +130,14 @@ class EntryController extends ActionController
             'feUser' => $feUser,
             'configuration' => $configuration
         ]);
+        return $this->htmlResponse();
     }
 
     /**
      * action create
      *
      * @param Entry $newEntry
+     * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @TYPO3\CMS\Extbase\Annotation\Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
@@ -227,12 +230,13 @@ class EntryController extends ActionController
      * @param string $token
      * @return void
      */
-    public function showAction(Entry $entry, $token = null)
+    public function showAction(Entry $entry, $token = null): ResponseInterface
     {
         $deleteable = $entry->isValidToken($token);
 
         $this->view->assign('deleteable', $deleteable);
         $this->view->assign('entry', $entry);
+        return $this->htmlResponse();
     }
 
     /**
@@ -304,7 +308,7 @@ class EntryController extends ActionController
         }
     }
 
-    public function listAction()
+    public function listAction(): ResponseInterface
     {
         if ($this->accessControlService->hasLoggedInFrontendUser()) {
             $feUserUid = $this->accessControlService->getFrontendUserUid();
@@ -319,13 +323,14 @@ class EntryController extends ActionController
                 'cancelDate' => $cancelDate
             ]);
         }
+        return $this->htmlResponse();
     }
 
     /**
      * @return string|void
      * @throws StopActionException
      */
-    public function errorAction()
+    public function errorAction(): ResponseInterface
     {
         if ($this->request->getControllerActionName() === "create") {
 
@@ -344,6 +349,7 @@ class EntryController extends ActionController
                 );
             }
         }
+        return $this->htmlResponse();
     }
 
     public function injectAccessControlService(AccessControlService $accessControlService): void
