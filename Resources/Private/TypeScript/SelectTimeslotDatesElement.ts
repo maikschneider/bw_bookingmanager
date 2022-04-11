@@ -1,5 +1,5 @@
 import {BackendCalendarViewState} from "TYPO3/CMS/BwBookingmanager/BackendCalendarViewState";
-import {EventApi} from "@fullcalendar/core";
+import $ = require('jquery');
 
 declare global {
   interface Window {
