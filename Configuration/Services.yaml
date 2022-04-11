@@ -11,6 +11,9 @@ services:
   Blueways\BwBookingmanager\Controller\BackendController:
     public: true
 
+  Blueways\BwBookingmanager\Utility\FullCalendarUtility:
+    public: true
+
   Blueways\BwBookingmanager\Command\TimeslotUpdateCommand:
     tags:
       - name: 'console.command'

@@ -2,7 +2,6 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
-use TYPO3\CMS\Core\Localization\LanguageService;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
@@ -12,45 +11,63 @@ use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\HolidayRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class FullCalendarUtility
 {
 
-    /**
-     * @var UriBuilder
-     */
-    protected $uriBuilder;
+    protected UriBuilder $uriBuilder;
+
+    protected CalendarRepository $calendarRepository;
+
+    protected TimeslotRepository $timeslotRepository;
+
+    protected BlockslotRepository $blockslotRepository;
+
+    protected HolidayRepository $holidayRepository;
+
+    protected EntryRepository $entryRepository;
 
     /**
-     * @var LanguageService
+     * @param \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder
+     * @param \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
+     * @param \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+     * @param \Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository $blockslotRepository
+     * @param \Blueways\BwBookingmanager\Domain\Repository\HolidayRepository $holidayRepository
+     * @param \Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository
      */
-    protected $llService;
+    public function __construct(
+        UriBuilder $uriBuilder,
+        CalendarRepository $calendarRepository,
+        TimeslotRepository $timeslotRepository,
+        BlockslotRepository $blockslotRepository,
+        HolidayRepository $holidayRepository,
+        EntryRepository $entryRepository
+    ) {
+        $this->uriBuilder = $uriBuilder;
+        $this->calendarRepository = $calendarRepository;
+        $this->timeslotRepository = $timeslotRepository;
+        $this->blockslotRepository = $blockslotRepository;
+        $this->holidayRepository = $holidayRepository;
+        $this->entryRepository = $entryRepository;
+    }
 
     public function getEvents(BackendCalendarViewState $viewState): array
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $startDate = $viewState->getStartDate();
         $endDate = $viewState->getEndDate();
         $entryUid = $viewState->entryUid;
 
-        $calendarRepository = $objectManager->get(CalendarRepository::class);
-        $timeslotRepository = $objectManager->get(TimeslotRepository::class);
-        $blockslotRepository = $objectManager->get(BlockslotRepository::class);
-        $holidayRepository = $objectManager->get(HolidayRepository::class);
-        $entryRepository = $objectManager->get(EntryRepository::class);
-        $calendars = $calendarRepository->findAllByPid($viewState->pid);
+        $calendars = $this->calendarRepository->findAllByPid($viewState->pid);
 
         if (!$calendars && !$calendars->count()) {
             return [];
         }
 
-        $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
-        $blockslotEvents = $blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
-        $holidayEvents = $holidayRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
-        $entryEvents = $entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
-        $virtualEvents = $this->getVirtualEvents($entryRepository, $entryEvents, $viewState);
+        $timeslotEvents = $this->timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+        $blockslotEvents = $this->blockslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+        $holidayEvents = $this->holidayRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+        $entryEvents = $this->entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+        $virtualEvents = $this->getVirtualEvents($entryEvents, $viewState);
 
         $events = array_merge([], $timeslotEvents, $blockslotEvents, $holidayEvents, $entryEvents, $virtualEvents);
 
@@ -61,7 +78,6 @@ class FullCalendarUtility
     }
 
     private function getVirtualEvents(
-        EntryRepository $entryRepository,
         array $entryEvents,
         BackendCalendarViewState $viewState
     ): array {
@@ -87,7 +103,7 @@ class FullCalendarUtility
         });
         // query entry, convert to event and add to result
         if (!count($savedEntry)) {
-            $entry = $entryRepository->findByUid((int)$entryUid);
+            $entry = $this->entryRepository->findByUid((int)$entryUid);
             if ($entry) {
                 $event = EntryCalendarEvent::createFromEntity($entry);
                 return [$event];
@@ -125,10 +141,5 @@ class FullCalendarUtility
         }
 
         return $fullCalendarEvents;
-    }
-
-    public function injectUriBuilder(UriBuilder $uriBuilder)
-    {
-        $this->uriBuilder = $uriBuilder;
     }
 }
