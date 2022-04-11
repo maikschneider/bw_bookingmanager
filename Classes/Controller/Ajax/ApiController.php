@@ -24,7 +24,7 @@ class ApiController extends ActionController
         return $this->jsonResponse(json_encode($events, JSON_THROW_ON_ERROR));
     }
 
-    public function userSettingAction(ServerRequestInterface $request, Response $response): Response
+    public function userSettingAction(ServerRequestInterface $request): ResponseInterface
     {
         $body = $request->getParsedBody();
 
@@ -34,7 +34,7 @@ class ApiController extends ActionController
             $viewState->persistInUserSettings();
         }
 
-        return $response;
+        return $this->jsonResponse('{}');
     }
 
 }
