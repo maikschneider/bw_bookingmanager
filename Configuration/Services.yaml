@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Blueways\BwBookingmanager\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  Blueways\BwBookingmanager\Controller\BackendController:
+    public: true
