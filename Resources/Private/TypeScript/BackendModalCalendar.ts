@@ -50,7 +50,7 @@ class BackendModalCalendar {
         // 2. select newly created element
         const calendarEl = modal.find('#calendar').get(0);
         // 3. load and append loading icon
-        Icons.getIcon('spinner-circle', Icons.sizes.default).done((spinner) => {
+        Icons.getIcon('spinner-circle', Icons.sizes.default).then((spinner) => {
           const $spinner = $('<div>').attr('id', 'loading').html(spinner);
           $(calendarEl).after($spinner);
           // 4. render calendar

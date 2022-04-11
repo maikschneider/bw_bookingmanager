@@ -388,7 +388,7 @@ class TimeslotDatesSelect {
 
     const contentTarget = '.t3js-modal-body';
     const $loaderTarget = this.currentModal.find(contentTarget);
-    Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).done((icon: string): void => {
+    Icons.getIcon('spinner-circle', Icons.sizes.default, null, null, Icons.markupIdentifiers.inline).then((icon: string): void => {
       $loaderTarget.html('<div class="modal-loading">' + icon + '</div>');
       $.get(
         reloadLink,

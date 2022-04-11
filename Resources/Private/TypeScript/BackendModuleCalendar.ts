@@ -78,7 +78,7 @@ class BackendModuleCalendar {
 
     this.viewState = new BackendCalendarViewState(calendarEl);
 
-    Icons.getIcon('spinner-circle', Icons.sizes.default).done((spinner) => {
+    Icons.getIcon('spinner-circle', Icons.sizes.default).then((spinner) => {
       const $spinner = $('<div>').attr('id', 'loading').html(spinner);
       $(calendarEl).after($spinner);
 

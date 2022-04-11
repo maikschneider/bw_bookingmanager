@@ -88,7 +88,7 @@ class BetterRecordList{
 		$anchorElement.tooltip('hide');
 
 		const $iconElement = $anchorElement.find(Identifiers.icon);
-		Icons.getIcon(iconName, Icons.sizes.small).done((icon: string): void => {
+		Icons.getIcon(iconName, Icons.sizes.small).then((icon: string): void => {
 			$iconElement.replaceWith(icon);
 		});
 
@@ -112,7 +112,7 @@ class BetterRecordList{
 	 * @private
 	 */
 	private _showSpinnerIcon($iconElement: JQuery<Element>): void {
-		Icons.getIcon('spinner-circle-dark', Icons.sizes.small).done((icon: string): void => {
+		Icons.getIcon('spinner-circle-dark', Icons.sizes.small).then((icon: string): void => {
 			$iconElement.replaceWith(icon);
 		});
 	}

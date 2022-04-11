@@ -52,8 +52,8 @@ class SelectTimeslotDatesElement {
     $('select[name="data[tx_bwbookingmanager_domain_model_entry][' + entryUid + '][calendar]"]').val(event.extendedProps.calendar);
 
     // update date label
-    const format = {
-      weekday: 'short',
+    const format: Intl.DateTimeFormatOptions = {
+      weekday: "short",
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
