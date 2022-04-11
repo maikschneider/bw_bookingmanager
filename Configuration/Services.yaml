@@ -10,3 +10,9 @@ services:
 
   Blueways\BwBookingmanager\Controller\BackendController:
     public: true
+
+  Blueways\BwBookingmanager\Command\TimeslotUpdateCommand:
+    tags:
+      - name: 'console.command'
+        command: 'bookingmanager:timeslotUpdate'
+        schedulable: false
