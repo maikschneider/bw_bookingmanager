@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -19,49 +20,31 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
-class BackendController
+class BackendController extends ActionController
 {
-    /**
-     * ModuleTemplate object
-     *
-     * @var ModuleTemplate
-     */
-    protected ModuleTemplate $moduleTemplate;
 
-    /**
-     * @var ViewInterface
-     */
-    protected ViewInterface $view;
+    protected CalendarRepository $calendarRepository;
 
-    protected ServerRequestInterface $request;
+    protected ModuleTemplateFactory $moduleTemplateFactory;
 
-    protected ObjectManager $objectManager;
-
-    private PageRenderer $pageRenderer;
-
-    public function __construct(PageRenderer $pageRenderer)
+    public function __construct(ModuleTemplateFactory $moduleTemplateFactory, CalendarRepository $calendarRepository)
     {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->pageRenderer = $pageRenderer;
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+        $this->calendarRepository = $calendarRepository;
     }
 
-    public function indexAction(ServerRequestInterface $request): ResponseInterface
+    public function indexAction(): ResponseInterface
     {
-        $this->request = $request;
         $pid = $this->getCurrentPid();
-        $selectableRoutes = ['entryListAction', 'calendarAction'];
+        $selectableRoutes = ['entryList', 'calendar'];
         $selectedRoute = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/selectedRoute-' . $pid) ?? 0;
         $methodName = $selectableRoutes[$selectedRoute];
-
-        if (method_exists(self::class, $selectableRoutes[$selectedRoute])) {
-            return $this->$methodName($request);
-        }
-
-        return $this->calendarAction($request);
+        return (new ForwardResponse($methodName));
     }
 
     protected function getCurrentPid(): int
@@ -71,21 +54,16 @@ class BackendController
         return $pid ?: 0;
     }
 
-    public function calendarAction(ServerRequestInterface $request): ResponseInterface
+    public function calendarAction(): ResponseInterface
     {
-        $this->request = $request;
         $pid = $this->getCurrentPid();
-
-        $this->initializeView('calendar');
-
-        $calendarRepository = $this->objectManager->get(CalendarRepository::class);
-        $calendars = $calendarRepository->findAllByPid($pid);
+        $calendars = $this->calendarRepository->findAllByPid($pid);
 
         $viewState = $this->getCalendarViewState();
         $viewState->addCalendars($calendars);
         $viewState->addTypoScriptOptionOverrides();
 
-        $pageRenderer = $this->pageRenderer;
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendCalendarContextMenuActions');
 
@@ -96,31 +74,15 @@ class BackendController
         $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
         $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 1);
 
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->generateMenu($moduleTemplate);
+        $moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
-    /**
-     * Initializes the view by setting the templateName
-     *
-     * @param string $templateName
-     */
-    protected function initializeView(string $templateName): void
+    protected function generateMenu(ModuleTemplate $moduleTemplate): void
     {
-        $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplate::class);
-        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
-        $this->view->setTemplate($templateName);
-        $this->view->setTemplateRootPaths(['EXT:bw_bookingmanager/Resources/Private/Templates/Backend']);
-        $this->view->setPartialRootPaths(['EXT:bw_bookingmanager/Resources/Private/Partials/Backend']);
-        $this->view->setLayoutRootPaths(['EXT:bw_bookingmanager/Resources/Private/Layouts/Backend']);
-
-        $this->generateMenu($templateName);
-        $this->createButtons($templateName);
-    }
-
-    protected function generateMenu($currentTemplate): void
-    {
-        $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $menu->setIdentifier('bw_bookingmanager');
         $llPrefix = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:module.';
 
@@ -132,14 +94,16 @@ class BackendController
         ];
 
         foreach ($actions as $action) {
+
+            $isActive = $this->request->getMethod() === $action['action'];
+
             $item = $menu->makeMenuItem()
                 ->setTitle($this->getLanguageService()->sL($llPrefix . $action['label']))
                 ->setHref($uriBuilder->buildUriFromRoute($action['route'], ['id' => $this->getCurrentPid()]))
-                ->setActive($currentTemplate === $action['action']);
+                ->setActive($isActive);
             $menu->addMenuItem($item);
         }
-
-        $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+        $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
     }
 
     protected function getLanguageService(): LanguageService
@@ -147,16 +111,13 @@ class BackendController
         return $GLOBALS['LANG'];
     }
 
-    protected function createButtons(string $currentTemplate): void
+    protected function createButtons(ModuleTemplate $moduleTemplate, string $currentTemplate): void
     {
-        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $currentPid = $this->getCurrentPid();
-        $returnUrl = (string)$uriBuilder->buildUriFromRoute(
-            'bookingmanager_calendar',
-            ['id' => $this->getCurrentPid()]
-        );
+
 
         // New Entry Button
         $buttons = [
@@ -219,6 +180,10 @@ class BackendController
 
         if ($currentTemplate === 'calendar') {
             $viewState = $this->getCalendarViewState();
+            $returnUrl = (string)$uriBuilder->buildUriFromRoute(
+                'bookingmanager_calendar',
+                ['id' => $this->getCurrentPid()]
+            );
             $buttons = array_merge($buttons, [
                 [
                     'label' => 'flexforms_general.mode.show_past_timeslots',
@@ -319,17 +284,14 @@ class BackendController
         return $GLOBALS['BE_USER'];
     }
 
-    public function entryListAction(ServerRequestInterface $request): ResponseInterface
+    public function entryListAction(): ResponseInterface
     {
-        $this->request = $request;
-        $this->initializeView('entryList');
-
-        $pageRenderer = $this->pageRenderer;
-        $typoscript = $this->objectManager->get(ConfigurationManager::class)->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-        $tsService = $this->objectManager->get(TypoScriptService::class);
+        $typoscript = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
         $settings = $tsService->convertTypoScriptArrayToPlainArray($typoscript);
         $settings = $settings['module']['tx_bwbookingmanager']['settings'];
 
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
         if ((int)$settings['showConfirmButton']) {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
@@ -337,7 +299,7 @@ class BackendController
         }
 
         $hideForm = true;
-        $queryParams = $request->getQueryParams();
+        $queryParams = $this->request->getQueryParams();
         $demand = GeneralUtility::makeInstance(AdministrationDemand::class);
         // override default demand values with values from GET request
         if (is_array($queryParams['demand'])) {
@@ -350,9 +312,17 @@ class BackendController
             }
         }
 
-        $calendarRepository = $this->objectManager->get(CalendarRepository::class);
-        $calendars = $calendarRepository->findAll();
+        $calendars = $this->calendarRepository->findAll();
         $calendar = $calendars && $calendars->count() ? $calendars->getFirst() : [];
+
+        // save selected route
+        $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
+        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 0);
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+
+        $this->generateMenu($moduleTemplate);
+        $this->createButtons($moduleTemplate, 'entryList');
 
         $this->view->assign('hideForm', $hideForm);
         $this->view->assign('page', $this->getCurrentPid());
@@ -361,11 +331,8 @@ class BackendController
         $this->view->assign('calendar', $calendar);
         $this->view->assign('calendars', $calendars);
 
-        // save selected route
-        $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->getCurrentPid();
-        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 0);
+        $moduleTemplate->setContent($this->view->render());
 
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 }
