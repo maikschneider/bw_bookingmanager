@@ -36,7 +36,7 @@ class RecycleEntriesTask extends AbstractTask
                 ->execute();
         } catch (DBALException $e) {
             throw new \RuntimeException(
-                TableGarbageCollectionTask::class . ' failed: ' .
+                self::class . ' failed: ' .
                 $e->getPrevious()->getMessage(),
                 1441390263
             );

@@ -20,3 +20,5 @@ rm -rf rector.php
 rm -rf typo3_src
 rm -rf ENVIRONMENT_VARIABLES.txt
 rm -rf GIT_LOG.txt
+rm -rf phpstan-baseline.neon
+rm -rf phpstan.neon
