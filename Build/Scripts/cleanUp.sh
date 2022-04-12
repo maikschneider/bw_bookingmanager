@@ -16,3 +16,5 @@ rm -rf bin
 rm -rf node_modules
 rm -rf Resources/Private/TypeScript
 rm -rf Resources/Private/Scss
+rm -rf rector.php
+rm -rf typo3_src
