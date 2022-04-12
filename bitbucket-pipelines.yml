@@ -1,17 +1,17 @@
 definitions:
   steps:
     - step: &buildAssets
-        - name: Build Assets
-        - image: node:latest
-        - caches:
-            - node
-        - artifacts:
-            - Resources/Public/Css/**
-            - Resources/Public/Images/**
-            - Resources/Public/JavaScript/**
-        - script:
-            - npm install
-            - npm run build
+        name: Build Assets
+        image: node:latest
+        caches:
+          - node
+        artifacts:
+          - Resources/Public/Css/**
+          - Resources/Public/Images/**
+          - Resources/Public/JavaScript/**
+        script:
+          - npm install
+          - npm run build
     - step: &buildComposer
         name: Composer install
         image: composer:latest
