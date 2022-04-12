@@ -14,7 +14,6 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 class FullCalendarUtility
 {
-
     protected UriBuilder $uriBuilder;
 
     protected CalendarRepository $calendarRepository;

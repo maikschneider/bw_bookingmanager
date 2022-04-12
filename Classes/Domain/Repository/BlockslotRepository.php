@@ -2,12 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Repository;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BlockslotCalendarEvent;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class BlockslotRepository extends Repository
 {
-
     public function getCalendarEventsInCalendar($calendars, \DateTime $startDate, \DateTime $endDate): array
     {
         $events = [];

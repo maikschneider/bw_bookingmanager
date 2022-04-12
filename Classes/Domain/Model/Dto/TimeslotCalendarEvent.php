@@ -2,10 +2,9 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TimeslotCalendarEvent extends CalendarEvent
 {
@@ -103,8 +102,8 @@ class TimeslotCalendarEvent extends CalendarEvent
         $urlParams = [
             'edit' => [
                 'tx_bwbookingmanager_domain_model_entry' => [
-                    $this->pid => 'new'
-                ]
+                    $this->pid => 'new',
+                ],
             ],
             'defVals' => [
                 'tx_bwbookingmanager_domain_model_entry' => [
@@ -112,10 +111,10 @@ class TimeslotCalendarEvent extends CalendarEvent
                     'timeslot' => $this->uid,
                     'confirmed' => 1,
                     'start_date' => $this->start->getTimestamp(),
-                    'end_date' => $this->end->getTimestamp()
-                ]
+                    'end_date' => $this->end->getTimestamp(),
+                ],
             ],
-            'returnUrl' => $this->getBackendReturnUrl($uriBuilder)
+            'returnUrl' => $this->getBackendReturnUrl($uriBuilder),
         ];
 
         $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);
@@ -199,12 +198,11 @@ class TimeslotCalendarEvent extends CalendarEvent
         }
 
         // check if this is the selected timeslot via defVals (not persisted in database)
-        if($viewState->isNewModalView() && $viewState->timeslot && $viewState->timeslot === $this->uid && $viewState->getEntryStartDate()->getTimestamp() === $this->start->getTimestamp() && $viewState->getEntryEndDate()->getTimestamp() === $this->end->getTimestamp()) {
+        if ($viewState->isNewModalView() && $viewState->timeslot && $viewState->timeslot === $this->uid && $viewState->getEntryStartDate()->getTimestamp() === $this->start->getTimestamp() && $viewState->getEntryEndDate()->getTimestamp() === $this->end->getTimestamp()) {
             $this->isSelectedEntryTimeslot = true;
         }
 
         // make timeslots clickable
         $this->setUrl('#');
     }
-
 }

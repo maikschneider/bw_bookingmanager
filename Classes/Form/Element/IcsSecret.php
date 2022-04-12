@@ -2,15 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Form\Element;
 
-use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class IcsSecret extends AbstractFormElement
 {
-
     public function render(): array
     {
         $name = 'data[tx_bwbookingmanager_domain_model_ics][' . $this->data['vanillaUid'] . '][secret]';

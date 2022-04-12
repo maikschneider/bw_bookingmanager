@@ -2,7 +2,6 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
-use TYPO3\CMS\Core\Page\PageRenderer;
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
@@ -15,6 +14,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -25,7 +25,6 @@ use TYPO3Fluid\Fluid\View\ViewInterface;
 
 class BackendController
 {
-
     /**
      * ModuleTemplate object
      *
@@ -41,6 +40,7 @@ class BackendController
     protected ServerRequestInterface $request;
 
     protected ObjectManager $objectManager;
+
     private PageRenderer $pageRenderer;
 
     public function __construct(PageRenderer $pageRenderer)
@@ -166,7 +166,7 @@ class BackendController
                 'icon' => 'ext-bwbookingmanager-type-entry',
                 'overlay' => 'overlay-new',
                 'position' => ButtonBar::BUTTON_POSITION_LEFT,
-                'group' => 2
+                'group' => 2,
             ],
             [
                 'table' => 'tx_bwbookingmanager_domain_model_blockslot',
@@ -174,7 +174,7 @@ class BackendController
                 'icon' => 'ext-bwbookingmanager-type-blockslot',
                 'overlay' => 'overlay-new',
                 'position' => ButtonBar::BUTTON_POSITION_LEFT,
-                'group' => 2
+                'group' => 2,
             ],
             [
                 'table' => 'tx_bwbookingmanager_domain_model_holiday',
@@ -182,8 +182,8 @@ class BackendController
                 'icon' => 'ext-bwbookingmanager-type-holiday',
                 'overlay' => 'overlay-new',
                 'position' => ButtonBar::BUTTON_POSITION_LEFT,
-                'group' => 2
-            ]
+                'group' => 2,
+            ],
         ];
 
         if ($currentTemplate === 'entryList') {
@@ -202,7 +202,7 @@ class BackendController
                         'togglelink' => '1',
                         'toggle' => 'tooltip',
                     ],
-                    'classes' => ''
+                    'classes' => '',
                 ],
                 [
                     'label' => 'administration.print.buttonTitle',
@@ -213,7 +213,7 @@ class BackendController
                         'toggle' => 'tooltip',
                     ],
                     'classes' => 'print',
-                ]
+                ],
             ]);
         }
 
@@ -227,9 +227,9 @@ class BackendController
                     'position' => ButtonBar::BUTTON_POSITION_RIGHT,
                     'group' => 3,
                     'data-attrs' => [
-                        'changeViewState' => 'pastTimeslots'
+                        'changeViewState' => 'pastTimeslots',
                     ],
-                    'classes' => $viewState->pastTimeslots ? 'active' : ''
+                    'classes' => $viewState->pastTimeslots ? 'active' : '',
                 ],
                 [
                     'label' => 'flexforms_general.mode.show_not_bookable_timeslots',
@@ -238,9 +238,9 @@ class BackendController
                     'position' => ButtonBar::BUTTON_POSITION_RIGHT,
                     'group' => 3,
                     'data-attrs' => [
-                        'changeViewState' => 'notBookableTimeslots'
+                        'changeViewState' => 'notBookableTimeslots',
                     ],
-                    'classes' => $viewState->notBookableTimeslots ? 'active' : ''
+                    'classes' => $viewState->notBookableTimeslots ? 'active' : '',
                 ],
                 [
                     'label' => 'flexforms_general.mode.show_past_entries',
@@ -249,9 +249,9 @@ class BackendController
                     'position' => ButtonBar::BUTTON_POSITION_RIGHT,
                     'group' => 3,
                     'data-attrs' => [
-                        'changeViewState' => 'pastEntries'
+                        'changeViewState' => 'pastEntries',
                     ],
-                    'classes' => $viewState->pastEntries ? 'active' : ''
+                    'classes' => $viewState->pastEntries ? 'active' : '',
                 ],
             ]);
         }
@@ -280,10 +280,10 @@ class BackendController
                 $uri = $uriBuilder->buildUriFromRoute('record_edit', [
                     'edit' => [
                         $tableConfiguration['table'] => [
-                            $currentPid => 'new'
-                        ]
+                            $currentPid => 'new',
+                        ],
                     ],
-                    'returnUrl' => $returnUrl
+                    'returnUrl' => $returnUrl,
                 ]);
             }
 

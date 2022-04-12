@@ -2,22 +2,22 @@
 
 namespace Blueways\BwBookingmanager\Hooks;
 
-use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TCEmainHook
 {
-
     public function processDatamap_beforeStart(DataHandler &$pObj)
     {
         if (is_array($pObj->datamap['tx_bwbookingmanager_domain_model_entry'])) {
             foreach ($pObj->datamap['tx_bwbookingmanager_domain_model_entry'] as &$entry) {
                 if ($entry['calendar']) {
-
-                    $calendar = BackendUtility::getRecord('tx_bwbookingmanager_domain_model_calendar',
-                        (int)$entry['calendar']);
+                    $calendar = BackendUtility::getRecord(
+                        'tx_bwbookingmanager_domain_model_calendar',
+                        (int)$entry['calendar']
+                    );
                     if ($calendar['direct_booking'] && ($calendar['default_start_time'] || $calendar['default_end_time'])) {
                         $entryStartDate = new \DateTime($entry['start_date']);
                         $entryEndDate = new \DateTime($entry['end_date']);
@@ -83,5 +83,4 @@ class TCEmainHook
             }
         }
     }
-
 }

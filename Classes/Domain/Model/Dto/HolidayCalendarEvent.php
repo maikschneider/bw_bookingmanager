@@ -7,7 +7,6 @@ use Blueways\BwBookingmanager\Domain\Model\Ics;
 
 class HolidayCalendarEvent extends CalendarEvent
 {
-
     public const MODEL = 'Holiday';
 
     protected ?string $display = 'background';

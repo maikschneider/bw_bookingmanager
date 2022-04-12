@@ -17,7 +17,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Ics extends AbstractEntity
 {
-
     /**
      * @var ObjectStorage<Calendar>
      */

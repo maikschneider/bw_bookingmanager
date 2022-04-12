@@ -2,35 +2,34 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
-use \Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * This class oganizes the correct arrangement of timeslots
  */
 class TimeslotManager
 {
-
     /**
      * @var array<Timeslot>|ObjectStorage<Timeslot> $timeslots
      */
-    protected $timeslots = null;
+    protected $timeslots;
 
     /**
      * @var Calendar $calendar
      */
-    protected $calendar = null;
+    protected $calendar;
 
     /**
      * @var \DateTime $startDate
      */
-    protected $startDate = null;
+    protected $startDate;
 
     /**
      * @var \DateTime $endDate
      */
-    protected $endDate = null;
+    protected $endDate;
 
     /**
      * @var array $filterCritera
@@ -72,8 +71,6 @@ class TimeslotManager
 
     /**
      * checks every slot for type of repeat and merges duplicated slots back
-     *
-     * @return void
      */
     public function repeatTimeslots()
     {
@@ -105,7 +102,7 @@ class TimeslotManager
     {
         $this->filterCritera = [
             'in' => [
-                [$this->startDate, $this->endDate]
+                [$this->startDate, $this->endDate],
             ],
             'inAny' => [
 
@@ -115,7 +112,7 @@ class TimeslotManager
             ],
             'holidays' => [
 
-            ]
+            ],
         ];
 
         // creteria for Blockslots
@@ -218,7 +215,7 @@ class TimeslotManager
                 if ($entry->getCalendar()->getUid() === $this->calendar->getUid() && $entry->getStartDate() == $timeslotStartDate && $entry->getEndDate() == $timeslotEndDate) {
                     $entries->attach($entry);
                 }
-            };
+            }
             $timeslot->setEntries($entries);
         }
     }
@@ -243,7 +240,7 @@ class TimeslotManager
         );
         $dateStartEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
-        $timezone = new \DateTimeZone("Europe/Berlin");
+        $timezone = new \DateTimeZone('Europe/Berlin');
 
         // create new timeslots and modify start and end date
         for ($i = 0; $i < $daysToFillTimeslots; $i++) {
@@ -372,13 +369,12 @@ class TimeslotManager
 
         $startEndDiff = $timeslot->getStartDate()->diff($timeslot->getEndDate());
 
-        for ($i=1; $i<= $daysToCrawl; $i++) {
+        for ($i = 1; $i <= $daysToCrawl; $i++) {
             $currentWeekDay = ($i + $startWeekDay) % 7;
-            if(in_array($currentWeekDay, $repeatDays)) {
-
+            if (in_array($currentWeekDay, $repeatDays)) {
                 $newTimeslot = clone $timeslot;
                 $newStartDate = clone $timeslot->getStartDate();
-                $newStartDate->modify('+ '.$i.' days');
+                $newStartDate->modify('+ ' . $i . ' days');
 
                 // set new start end times
                 $newTimeslot->setStartDate($newStartDate);
@@ -391,6 +387,5 @@ class TimeslotManager
         }
 
         return $timeslots;
-
     }
 }

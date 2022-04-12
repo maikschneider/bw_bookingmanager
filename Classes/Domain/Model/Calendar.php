@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -16,7 +17,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Calendar extends AbstractEntity
 {
-
     const ENTRY_TYPE_CLASSNAME = 'Blueways\\BwBookingmanager\\Domain\\Model\\Entry';
 
     /**
@@ -32,7 +32,7 @@ class Calendar extends AbstractEntity
      * @var ObjectStorage<Timeslot>
      * @Extbase\ORM\Lazy
      */
-    protected $timeslots = null;
+    protected $timeslots;
 
     /**
      * blockslots
@@ -40,7 +40,7 @@ class Calendar extends AbstractEntity
      * @var ObjectStorage<Blockslot>
      * @Extbase\ORM\Lazy
      */
-    protected $blockslots = null;
+    protected $blockslots;
 
     /**
      * holidays
@@ -48,7 +48,7 @@ class Calendar extends AbstractEntity
      * @var ObjectStorage<Holiday>
      * @Extbase\ORM\Lazy
      */
-    protected $holidays = null;
+    protected $holidays;
 
     /**
      * notifications
@@ -56,7 +56,7 @@ class Calendar extends AbstractEntity
      * @var ObjectStorage<Notification>
      * @Extbase\ORM\Lazy
      */
-    protected $notifications = null;
+    protected $notifications;
 
     /**
      * entries
@@ -64,10 +64,10 @@ class Calendar extends AbstractEntity
      * @var ObjectStorage<Entry>
      * @Extbase\ORM\Lazy
      */
-    protected $entries = null;
+    protected $entries;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $directBooking;
 
@@ -158,8 +158,6 @@ class Calendar extends AbstractEntity
      * Do not modify this method!
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
-     *
-     * @return void
      */
     protected function initStorageObjects()
     {
@@ -213,7 +211,6 @@ class Calendar extends AbstractEntity
      * Sets the name
      *
      * @param string $name
-     * @return void
      */
     public function setName($name)
     {
@@ -224,7 +221,6 @@ class Calendar extends AbstractEntity
      * Adds a Blockslot
      *
      * @param Blockslot $blockslot
-     * @return void
      */
     public function addBlockslot(Blockslot $blockslot)
     {
@@ -235,7 +231,6 @@ class Calendar extends AbstractEntity
      * Removes a Blockslot
      *
      * @param Blockslot $blockslotToRemove The Blockslot to be removed
-     * @return void
      */
     public function removeBlockslot(Blockslot $blockslotToRemove)
     {
@@ -256,7 +251,6 @@ class Calendar extends AbstractEntity
      * Sets the blockslots
      *
      * @param ObjectStorage<Blockslot> $blockslots
-     * @return void
      */
     public function setBlockslots(ObjectStorage $blockslots)
     {
@@ -283,7 +277,6 @@ class Calendar extends AbstractEntity
      * Adds a Timeslot
      *
      * @param Timeslot $timeslot
-     * @return void
      */
     public function addTimeslot(Timeslot $timeslot)
     {
@@ -294,7 +287,6 @@ class Calendar extends AbstractEntity
      * Removes a Timeslot
      *
      * @param Timeslot $timeslotToRemove The Timeslot to be removed
-     * @return void
      */
     public function removeTimeslot(Timeslot $timeslotToRemove)
     {
@@ -315,7 +307,6 @@ class Calendar extends AbstractEntity
      * Sets the timeslots
      *
      * @param ObjectStorage<Timeslot> $timeslots
-     * @return void
      */
     public function setTimeslots(ObjectStorage $timeslots)
     {
@@ -326,7 +317,6 @@ class Calendar extends AbstractEntity
      * Adds a Notification
      *
      * @param Notification $notification
-     * @return void
      */
     public function addNotification(Notification $notification)
     {
@@ -337,7 +327,6 @@ class Calendar extends AbstractEntity
      * Removes a Notification
      *
      * @param Notification $NotificationToRemove The Notification to be removed
-     * @return void
      */
     public function removeNotification(Notification $notificationToRemove)
     {
@@ -358,7 +347,6 @@ class Calendar extends AbstractEntity
      * Sets the notifications
      *
      * @param ObjectStorage<Notification> $notifications
-     * @return void
      */
     public function setNotifications(ObjectStorage $notifications)
     {

@@ -9,7 +9,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class CalendarItemProvider extends AbstractProvider
 {
-
     protected $calendars;
 
     protected $itemsConfiguration = [
@@ -17,26 +16,26 @@ class CalendarItemProvider extends AbstractProvider
             'type' => 'item',
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:context.newEntry',
             'iconIdentifier' => 'ext-bwbookingmanager-type-entry',
-            'callbackAction' => 'newEntry'
+            'callbackAction' => 'newEntry',
         ],
         'newTimeslot' => [
             'type' => 'item',
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:context.newTimeslot',
             'iconIdentifier' => 'ext-bwbookingmanager-type-timeslot',
-            'callbackAction' => 'newTimeslot'
+            'callbackAction' => 'newTimeslot',
         ],
         'newBlockslot' => [
             'type' => 'item',
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:context.newBlockslot',
             'iconIdentifier' => 'ext-bwbookingmanager-type-blockslot',
-            'callbackAction' => 'newBlockslot'
+            'callbackAction' => 'newBlockslot',
         ],
         'newHoliday' => [
             'type' => 'item',
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:context.newHoliday',
             'iconIdentifier' => 'ext-bwbookingmanager-type-holiday',
-            'callbackAction' => 'newHoliday'
-        ]
+            'callbackAction' => 'newHoliday',
+        ],
     ];
 
     public function __construct(string $table, string $identifier, string $context = '')
@@ -104,7 +103,7 @@ class CalendarItemProvider extends AbstractProvider
             'newEntry' => 'tx_bwbookingmanager_domain_model_entry',
             'newTimeslot' => 'tx_bwbookingmanager_domain_model_timeslot',
             'newHoliday' => 'tx_bwbookingmanager_domain_model_holiday',
-            'newBlockslot' => 'tx_bwbookingmanager_domain_model_blockslot'
+            'newBlockslot' => 'tx_bwbookingmanager_domain_model_blockslot',
         ];
 
         // for entry creation in direct booking calendar use default start and end time
@@ -118,7 +117,7 @@ class CalendarItemProvider extends AbstractProvider
             'data-model-name' => $itemTableMapping[$itemName],
             'data-def-calendar-uid' => $calendarUid,
             'data-def-calendar-start-time' => $calendarStartTime,
-            'data-def-calendar-end-time' => $calendarEndTime
+            'data-def-calendar-end-time' => $calendarEndTime,
         ];
     }
 

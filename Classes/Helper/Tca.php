@@ -2,12 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 class Tca
 {
-
     public function getTimeslotLabel(&$params, $parentObject)
     {
         $record = BackendUtility::getRecord($params['table'], $params['row']['uid']);

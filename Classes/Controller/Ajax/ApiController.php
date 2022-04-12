@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Blueways\BwBookingmanager\Controller\Ajax;
@@ -7,13 +8,11 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Utility\FullCalendarUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class ApiController extends ActionController
 {
-
     public function calendarShowAction(ServerRequestInterface $request): ResponseInterface
     {
         $calendarUtil = GeneralUtility::makeInstance(FullCalendarUtility::class);
@@ -36,5 +35,4 @@ class ApiController extends ActionController
 
         return $this->jsonResponse('{}');
     }
-
 }

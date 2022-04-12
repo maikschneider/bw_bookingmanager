@@ -7,16 +7,12 @@ use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use DateTime;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class SelectTimeslotDatesElement extends AbstractFormElement
 {
-
     /**
      * @var StandaloneView
      */
@@ -137,10 +133,9 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
             'startDate' => $startDate,
             'endDate' => $endDate,
-            'pid' => $pid
+            'pid' => $pid,
         ];
 
         return $savedData;
     }
-
 }

@@ -2,21 +2,18 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
-use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
-use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
  * Class EntryCreateValidator
- *
- * @package Blueways\BwBookingmanager\Domain\Validator
  */
 class EntryCreateValidator extends AbstractValidator
 {
-
     /**
      * timeslot repository
      *
@@ -70,7 +67,7 @@ class EntryCreateValidator extends AbstractValidator
         $this->validateDirectBooking();
         $this->validateTimeslotBooking();
 
-        if (sizeof($this->result->getErrors())) {
+        if (count($this->result->getErrors())) {
             return false;
         }
         return true;

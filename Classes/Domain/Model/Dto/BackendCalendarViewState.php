@@ -2,8 +2,8 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -12,7 +12,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class BackendCalendarViewState
 {
-
     public int $pid;
 
     public string $language;
@@ -74,8 +73,10 @@ class BackendCalendarViewState
     public static function getFromUserSettings(int $pid): BackendCalendarViewState
     {
         $saveState = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/calendarViewState-' . $pid) ?? '';
-        return $saveState !== '' ? unserialize($saveState,
-            ['allowed_classes' => [self::class]]) : new BackendCalendarViewState($pid);
+        return $saveState !== '' ? unserialize(
+            $saveState,
+            ['allowed_classes' => [self::class]]
+        ) : new BackendCalendarViewState($pid);
     }
 
     public static function createFromApiRequest(ServerRequestInterface $request)
@@ -195,5 +196,4 @@ class BackendCalendarViewState
             $this->calendarOptions = $tsService->convertTypoScriptArrayToPlainArray($settings);
         }
     }
-
 }

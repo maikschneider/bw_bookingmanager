@@ -1,9 +1,11 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model;
 
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
  *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -20,6 +22,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 class Notification extends AbstractEntity
 {
     const EVENT_CREATION = 0;
+
     const EVENT_DELETION = 1;
 
     /**
@@ -92,7 +95,6 @@ class Notification extends AbstractEntity
      * Sets the name
      *
      * @param string $name
-     * @return void
      */
     public function setName($name)
     {
@@ -113,7 +115,6 @@ class Notification extends AbstractEntity
      * Sets the emailSubject
      *
      * @param string $emailSubject
-     * @return void
      */
     public function setEmailSubject($emailSubject)
     {
@@ -134,7 +135,6 @@ class Notification extends AbstractEntity
      * Sets the email
      *
      * @param string $email
-     * @return void
      */
     public function setEmail($email)
     {
@@ -155,7 +155,6 @@ class Notification extends AbstractEntity
      * Sets the hook
      *
      * @param int $hook
-     * @return void
      */
     public function setHook($hook)
     {
@@ -168,13 +167,12 @@ class Notification extends AbstractEntity
      * @var ObjectStorage<Calendar>
      * @Extbase\ORM\Lazy
      */
-    protected $calendars = null;
+    protected $calendars;
 
     /**
      * Adds a Calendar
      *
      * @param Calendar $calendar
-     * @return void
      */
     public function addCalendar(Calendar $calendar)
     {
@@ -185,7 +183,6 @@ class Notification extends AbstractEntity
      * Removes a Calendar
      *
      * @param Calendar $calendarToRemove The Calendar to be removed
-     * @return void
      */
     public function removeCalendar(Calendar $calendarToRemove)
     {
@@ -206,7 +203,6 @@ class Notification extends AbstractEntity
      * Sets the calendars
      *
      * @param ObjectStorage<Calendar> $calendars
-     * @return void
      */
     public function setCalendars(ObjectStorage $calendars)
     {
@@ -227,7 +223,6 @@ class Notification extends AbstractEntity
      * Sets the template
      *
      * @param string $template
-     * @return void
      */
     public function setTemplate($template)
     {
@@ -236,10 +231,10 @@ class Notification extends AbstractEntity
 
     /**
      * checks if a hook is set and not default (=NONE)
-     * @return boolean
+     * @return bool
      */
     public function hasHook()
     {
-        return ($this->hook && $this->hook!='' && $this->hook!='0');
+        return $this->hook && $this->hook != '' && $this->hook != '0';
     }
 }

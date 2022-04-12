@@ -12,12 +12,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class TimeslotUpdateCommand extends Command
 {
-
     protected function configure()
     {
         $this->setDescription('Updates database relation to calendars and repeat_type of timeslots');
-        $this->addOption('withMerge', null, InputOption::VALUE_NONE,
-            'Look for timeslots that can be merged based on their repeat settings');
+        $this->addOption(
+            'withMerge',
+            null,
+            InputOption::VALUE_NONE,
+            'Look for timeslots that can be merged based on their repeat settings'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -71,7 +74,7 @@ class TimeslotUpdateCommand extends Command
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
 
         $io->writeln('Checking relations table..');
-        $updateQuery4 = "select COUNT(*) from tx_bwbookingmanager_calendar_timeslot_mm";
+        $updateQuery4 = 'select COUNT(*) from tx_bwbookingmanager_calendar_timeslot_mm';
         $result = $connection->executeQuery($updateQuery4);
 
         $numberOfMigrations = array_shift($result->fetchAll()[0]);
@@ -109,8 +112,8 @@ set c.timeslots = (select COUNT(*) from tx_bwbookingmanager_domain_model_timeslo
         $io->writeln('Checking for deprecated repeat_type=2..');
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
-        $sql = "select uid from tx_bwbookingmanager_domain_model_timeslot where repeat_type=2;";
-        $result = $connection->executeQuery($sql)->fetchAll();;
+        $sql = 'select uid from tx_bwbookingmanager_domain_model_timeslot where repeat_type=2;';
+        $result = $connection->executeQuery($sql)->fetchAll();
 
         if (empty($result)) {
             $io->note('There are no timeslots with old repeat_type, skipping migration');
@@ -119,7 +122,7 @@ set c.timeslots = (select COUNT(*) from tx_bwbookingmanager_domain_model_timeslo
 
         $io->note('There are ' . (string)count($result) . ' timeslot migrations possible');
 
-        $sql = "update tx_bwbookingmanager_domain_model_timeslot set repeat_type=4, repeat_days = case when DAYOFWEEK(FROM_UNIXTIME(start_date))=1 then 1 when DAYOFWEEK(FROM_UNIXTIME(start_date))=2 then 2 when DAYOFWEEK(FROM_UNIXTIME(start_date))=3 then 4 when DAYOFWEEK(FROM_UNIXTIME(start_date))=4 then 8 when DAYOFWEEK(FROM_UNIXTIME(start_date))=5 then 16 when DAYOFWEEK(FROM_UNIXTIME(start_date))=6 then 32 when DAYOFWEEK(FROM_UNIXTIME(start_date))=7 then 64 else repeat_days end where repeat_type=2;";
+        $sql = 'update tx_bwbookingmanager_domain_model_timeslot set repeat_type=4, repeat_days = case when DAYOFWEEK(FROM_UNIXTIME(start_date))=1 then 1 when DAYOFWEEK(FROM_UNIXTIME(start_date))=2 then 2 when DAYOFWEEK(FROM_UNIXTIME(start_date))=3 then 4 when DAYOFWEEK(FROM_UNIXTIME(start_date))=4 then 8 when DAYOFWEEK(FROM_UNIXTIME(start_date))=5 then 16 when DAYOFWEEK(FROM_UNIXTIME(start_date))=6 then 32 when DAYOFWEEK(FROM_UNIXTIME(start_date))=7 then 64 else repeat_days end where repeat_type=2;';
 
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
         $result = $connection->executeQuery($sql);
@@ -174,7 +177,7 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
             $timeslotListToDelete = array_merge($timeslotListToDelete, $timeslotUids);
 
             // update timeslots to new repeat_type and repeat_days
-            $timeslotRepeatDaysConditions .= ' WHEN uid=' . $mainTimeslotUid . " THEN " . $repeatCode;
+            $timeslotRepeatDaysConditions .= ' WHEN uid=' . $mainTimeslotUid . ' THEN ' . $repeatCode;
 
             // re-map entries to new timeslots
             foreach ($timeslotUids as $oldUid) {
@@ -183,20 +186,20 @@ order by t1.calendar, time(FROM_UNIXTIME(t1.start_date));";
         }
 
         // create and execute the queries
-        if ($entryConditions !== "") {
-            $entryUpdateQuery = "update tx_bwbookingmanager_domain_model_entry set timeslot = case" . $entryConditions . " else timeslot end;";
+        if ($entryConditions !== '') {
+            $entryUpdateQuery = 'update tx_bwbookingmanager_domain_model_entry set timeslot = case' . $entryConditions . ' else timeslot end;';
             $connection->executeQuery($entryUpdateQuery);
         }
 
         if (count($timeslotListforRepeatType4)) {
-            $timeslotUpdateQuery = "update tx_bwbookingmanager_domain_model_timeslot set repeat_days = case" . $timeslotRepeatDaysConditions . " else repeat_days end;";
+            $timeslotUpdateQuery = 'update tx_bwbookingmanager_domain_model_timeslot set repeat_days = case' . $timeslotRepeatDaysConditions . ' else repeat_days end;';
             $connection->executeQuery($timeslotUpdateQuery);
         }
 
         if (count($timeslotListToDelete)) {
             // concat the lists for in(|) query
             $timeslotListToDelete = implode(',', $timeslotListToDelete);
-            $timeslotDeleteQuery = "delete from tx_bwbookingmanager_domain_model_timeslot where uid in (" . $timeslotListToDelete . ");";
+            $timeslotDeleteQuery = 'delete from tx_bwbookingmanager_domain_model_timeslot where uid in (' . $timeslotListToDelete . ');';
             $connection->executeQuery($timeslotDeleteQuery);
         }
 

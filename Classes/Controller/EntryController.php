@@ -2,40 +2,39 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Blueways\BwBookingmanager\Service\AccessControlService;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
-use Blueways\BwBookingmanager\Domain\Model\Timeslot;
-use Blueways\BwBookingmanager\Domain\Model\Entry;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidActionNameException;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Extbase\Annotation\Validate;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use Blueways\BwBookingmanager\Helper\NotificationManager;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Helper\NotificationManager;
+use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\InvalidActionNameException;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Extbase\Mvc\Request;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * PHP version 7.2
  *
- * @package BwBookingManager
  * @author  Maik Schneider <m.schneider@blueways.de>
  * @license MIT https://opensource.org/licenses/MIT
  * @version GIT: <git_id />
@@ -43,7 +42,6 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  */
 class EntryController extends ActionController
 {
-
     /**
      * @var AccessControlService
      */
@@ -128,7 +126,7 @@ class EntryController extends ActionController
             'timeslot' => $timeslot,
             'newEntry' => $newEntry,
             'feUser' => $feUser,
-            'configuration' => $configuration
+            'configuration' => $configuration,
         ]);
         return $this->htmlResponse();
     }
@@ -140,8 +138,8 @@ class EntryController extends ActionController
      * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
+     * @Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @TYPO3\CMS\Extbase\Annotation\Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
-     * @return void
      * @throws InvalidConfigurationTypeException
      * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
@@ -174,7 +172,7 @@ class EntryController extends ActionController
             AbstractMessage::OK
         );
 
-        $this->redirect('show', null, null, array('entry' => $newEntry, 'token' => $newEntry->getToken()));
+        $this->redirect('show', null, null, ['entry' => $newEntry, 'token' => $newEntry->getToken()]);
     }
 
     /**
@@ -219,7 +217,7 @@ class EntryController extends ActionController
             }
 
             // unset feUser if empty
-            if ($arguments['newEntry']['feUser'] === "") {
+            if ($arguments['newEntry']['feUser'] === '') {
                 $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration()->skipProperties('feUser');
             }
         }
@@ -228,7 +226,6 @@ class EntryController extends ActionController
     /**
      * @param Entry $entry
      * @param string $token
-     * @return void
      */
     public function showAction(Entry $entry, $token = null): ResponseInterface
     {
@@ -241,7 +238,6 @@ class EntryController extends ActionController
 
     /**
      * @param Entry $entry
-     * @return void
      * @throws NoSuchArgumentException
      * @throws StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
@@ -255,7 +251,6 @@ class EntryController extends ActionController
 
         // check token und delete
         if ($validToken || $validUser) {
-
             $configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
             $typoscript = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
             $cancelTime = $typoscript['plugin.']['tx_bwbookingmanager.']['settings.']['cancelTime'];
@@ -283,7 +278,6 @@ class EntryController extends ActionController
                     AbstractMessage::OK
                 );
             } else {
-
                 $this->addFlashMessage(
                     $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.message'),
                     $this->getLanguageService()->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:flashmessage.delete.toolate.title'),
@@ -320,7 +314,7 @@ class EntryController extends ActionController
             $this->view->assignMultiple([
                 'feUser' => $feUser,
                 'entries' => $entries,
-                'cancelDate' => $cancelDate
+                'cancelDate' => $cancelDate,
             ]);
         }
         return $this->htmlResponse();
@@ -332,7 +326,7 @@ class EntryController extends ActionController
      */
     public function errorAction(): ResponseInterface
     {
-        if ($this->request->getControllerActionName() === "create") {
+        if ($this->request->getControllerActionName() === 'create') {
 
             /** @var Request $referringRequest */
             $referringRequest = $this->request->getReferringRequest();

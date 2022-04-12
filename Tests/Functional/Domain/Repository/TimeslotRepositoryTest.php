@@ -2,41 +2,40 @@
 
 namespace Blueways\BwBookingmanager\Tests\Functional\Domain\Repository;
 
-use TYPO3\TestingFramework\Core\Exception;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\TestingFramework\Core\Exception;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 class TimeslotRepositoryTest extends FunctionalTestCase
 {
-
     /**
      * @var array Load required extensions
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/bw_bookingmanager'
+        'typo3conf/ext/bw_bookingmanager',
     ];
 
     /**
      * @var TimeslotRepository
      */
-    private $subject = null;
+    private $subject;
 
-    private $connection = null;
+    private $connection;
 
     /**
      * @var PersistenceManager
      */
-    private $persistenceManager = null;
+    private $persistenceManager;
 
     /**
      * @var Typo3QuerySettings
      */
-    private $querySettings = null;
+    private $querySettings;
 
     /**
      * @test
@@ -47,10 +46,10 @@ class TimeslotRepositoryTest extends FunctionalTestCase
         $this->importDataSet('EXT:bw_bookingmanager/Tests/Functional/Fixtures/Calendar1.xml');
         $timeslots = $this->subject->getTimeslotsInCalendar(
             1,
-            new \DateTime("1970-01-01 00:00:00"),
-            new \DateTime("3000-01-01 00:00:00")
+            new \DateTime('1970-01-01 00:00:00'),
+            new \DateTime('3000-01-01 00:00:00')
         );
-        static::assertEquals([], $timeslots);
+        self::assertEquals([], $timeslots);
     }
 
     /**
@@ -64,11 +63,11 @@ class TimeslotRepositoryTest extends FunctionalTestCase
 
         $timeslots = $this->subject->getTimeslotsInCalendar(
             1,
-            new \DateTime("2020-12-01 00:00:00"),
-            new \DateTime("2020-12-31 23:59:00")
+            new \DateTime('2020-12-01 00:00:00'),
+            new \DateTime('2020-12-31 23:59:00')
         );
 
-        static::assertCount(16, $timeslots);
+        self::assertCount(16, $timeslots);
     }
 
     protected function setUp(): void

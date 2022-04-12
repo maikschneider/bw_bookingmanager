@@ -3,19 +3,18 @@
 namespace Blueways\BwBookingmanager\Utility;
 
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
-use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use Blueways\BwBookingmanager\Helper\RenderConfiguration;
-use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 
 class CalendarManagerUtility
 {
-
     /**
      * @var Calendar
      */
@@ -105,8 +104,10 @@ class CalendarManagerUtility
         $blockslots = $this->blockslotRepository->findAllInRange([$this->calendar], $dateConf->start, $dateConf->end);
 
         /** @var RenderConfiguration $calendarConfiguration */
-        $calendarConfiguration = new RenderConfiguration($dateConf,
-            $this->calendar);
+        $calendarConfiguration = new RenderConfiguration(
+            $dateConf,
+            $this->calendar
+        );
         $calendarConfiguration->setTimeslots($timeslots);
         $calendarConfiguration->setEntries($entries);
         $calendarConfiguration->setBlockslots($blockslots);
@@ -129,5 +130,4 @@ class CalendarManagerUtility
     {
         $this->blockslotRepository = $blockslotRepository;
     }
-
 }

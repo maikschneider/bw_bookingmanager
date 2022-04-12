@@ -1,7 +1,9 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Hooks;
 
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+
 class TimeslotIsBookableHook
 {
     const HOOK_LABEL = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.is_bookable_hooks.24h';
@@ -17,7 +19,7 @@ class TimeslotIsBookableHook
     public function isBookable($timeslot)
     {
         $this->timeslot = $timeslot;
-        
+
         return $this->checkDate();
     }
 
@@ -31,7 +33,7 @@ class TimeslotIsBookableHook
         if ($startDate < $now) {
             return false;
         }
-        
+
         return true;
     }
 }

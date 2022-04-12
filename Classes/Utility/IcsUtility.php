@@ -2,11 +2,10 @@
 
 namespace Blueways\BwBookingmanager\Utility;
 
-use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
-use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
+use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
+use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
-use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -14,14 +13,13 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class IcsUtility
 {
-
     public static function compileTemplate(string $templateString, CalendarEvent $object)
     {
         // look for FIELD:point
         // @TODO: look for relations
         preg_match_all('/(FIELD:)(\w+)((?:\.)(\w+))?/', $templateString, $fieldStatements);
 
-        if (sizeof($fieldStatements[0])) {
+        if (count($fieldStatements[0])) {
             foreach ($fieldStatements[0] as $key => $fieldStatement) {
                 $propertyName = $fieldStatements[2][$key];
                 if (property_exists($object, $propertyName)) {
@@ -34,7 +32,7 @@ class IcsUtility
         preg_match_all('/(FUNC:)(\w+)((?:\.)(\w+))?/', $templateString, $fieldStatements);
 
         // look for FUNC:getBookedWeight
-        if (sizeof($fieldStatements[0])) {
+        if (count($fieldStatements[0])) {
             foreach ($fieldStatements[0] as $key => $fieldStatement) {
                 $functionName = $fieldStatements[2][$key];
                 if (method_exists($object, $functionName)) {
@@ -50,12 +48,12 @@ class IcsUtility
     public static function getIcsDates(\DateTime $startDate, \DateTime $endDate): string
     {
         if (CalendarEvent::isFullDay($startDate, $endDate)) {
-            return "DTSTART;VALUE=DATE:" . $startDate->format('Ymd') . "
-                    DTEND;VALUE=DATE:" . $endDate->format('Ymd') . "";
+            return 'DTSTART;VALUE=DATE:' . $startDate->format('Ymd') . '
+                    DTEND;VALUE=DATE:' . $endDate->format('Ymd') . '';
         }
 
-        return "DTSTART:" . $startDate->format('Ymd\THis') . "
-                DTEND:" . $endDate->format('Ymd\THis') . "";
+        return 'DTSTART:' . $startDate->format('Ymd\THis') . '
+                DTEND:' . $endDate->format('Ymd\THis') . '';
     }
 
     public function getFromIcs(Ics $ics): string
@@ -64,7 +62,7 @@ class IcsUtility
 
         $feed .= $this->getIcsFeed($ics);
 
-        $feed .= "END:VCALENDAR";
+        $feed .= 'END:VCALENDAR';
         $feed = str_replace('  ', '', $feed);
         $feed = preg_replace('~\R~u', "\r\n", $feed);
 

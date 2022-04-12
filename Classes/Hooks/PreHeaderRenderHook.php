@@ -7,7 +7,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PreHeaderRenderHook
 {
-
     public function addFullCalendarJs(): void
     {
         /** @var PageRenderer $pageRenderer */

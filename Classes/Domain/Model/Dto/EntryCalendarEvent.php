@@ -8,7 +8,6 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 class EntryCalendarEvent extends CalendarEvent
 {
-
     public const MODEL = 'Entry';
 
     public bool $editable = false;
@@ -63,10 +62,10 @@ class EntryCalendarEvent extends CalendarEvent
         $urlParams = [
             'edit' => [
                 'tx_bwbookingmanager_domain_model_entry' => [
-                    $this->uid => 'edit'
-                ]
+                    $this->uid => 'edit',
+                ],
             ],
-            'returnUrl' => $this->getBackendReturnUrl($uriBuilder)
+            'returnUrl' => $this->getBackendReturnUrl($uriBuilder),
         ];
 
         $this->url = (string)$uriBuilder->buildUriFromRoute('record_edit', $urlParams);

@@ -2,14 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Repository;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
 use DateTime;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -30,7 +30,7 @@ class EntryRepository extends Repository
             $query->logicalAnd([
                 $query->in('calendar.uid', $calendars),
                 $query->logicalNot($query->lessThan('endDate', $startDate->getTimestamp())),
-                $query->logicalNot($query->greaterThan('startDate', $endDate->getTimestamp()))
+                $query->logicalNot($query->greaterThan('startDate', $endDate->getTimestamp())),
             ])
         );
         $query->getQuerySettings()->setRespectStoragePage(false);
@@ -55,12 +55,12 @@ class EntryRepository extends Repository
             $query->logicalAnd([
                 $query->equals('calendar', $calendar),
                 $query->logicalNot($query->lessThan('endDate', $dateConf->start->getTimestamp())),
-                $query->logicalNot($query->greaterThan('startDate', $dateConf->end->getTimestamp()))
+                $query->logicalNot($query->greaterThan('startDate', $dateConf->end->getTimestamp())),
             ])
         );
         $query->setOrderings(
             [
-                'startDate' => QueryInterface::ORDER_ASCENDING
+                'startDate' => QueryInterface::ORDER_ASCENDING,
             ]
         );
 
@@ -105,7 +105,7 @@ class EntryRepository extends Repository
             ]),
             $query->setOrderings(
                 [
-                    'startDate' => QueryInterface::ORDER_ASCENDING
+                    'startDate' => QueryInterface::ORDER_ASCENDING,
                 ]
             )
         );
@@ -128,11 +128,11 @@ class EntryRepository extends Repository
         $query->matching(
             $query->logicalAnd([
                 $query->equals('feUser', $feUserId),
-                $query->greaterThanOrEqual('startDate', $now->getTimestamp())
+                $query->greaterThanOrEqual('startDate', $now->getTimestamp()),
             ]),
             $query->setOrderings(
                 [
-                    'startDate' => QueryInterface::ORDER_ASCENDING
+                    'startDate' => QueryInterface::ORDER_ASCENDING,
                 ]
             )
         );

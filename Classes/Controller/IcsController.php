@@ -2,15 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Utility\IcsUtility;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 
 class IcsController extends ActionController
 {
-
     /**
      * @param Ics $ics
      * @param string $secret

@@ -2,38 +2,37 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
-use Psr\Http\Message\ResponseInterface;
-use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
-use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
-use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
-use Blueways\BwBookingmanager\Service\AccessControlService;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
-use Blueways\BwBookingmanager\Domain\Model\Entry;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
+use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
+use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ApiController extends ActionController
 {
-
     /**
      * @var string
      */
@@ -53,13 +52,13 @@ class ApiController extends ActionController
                 'displayStartDate' => [],
                 'displayEndDate' => [],
                 'feUser' => [
-                    '_exclude' => ['password']
-                ]
+                    '_exclude' => ['password'],
+                ],
             ],
         ],
         'user' => [
-            '_exclude' => ['password']
-        ]
+            '_exclude' => ['password'],
+        ],
     ];
 
     /**
@@ -97,7 +96,7 @@ class ApiController extends ActionController
         $calendars = $this->calendarRepository->findAllIgnorePid();
 
         $this->view->assign('calendars', $calendars);
-        $this->view->setVariablesToRender(array('calendars'));
+        $this->view->setVariablesToRender(['calendars']);
         return $this->htmlResponse();
     }
 
@@ -135,7 +134,7 @@ class ApiController extends ActionController
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+        $this->view->setVariablesToRender(['configuration', 'calendar', 'user', 'title', 'message']);
         return $this->htmlResponse();
     }
 
@@ -168,7 +167,7 @@ class ApiController extends ActionController
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+        $this->view->setVariablesToRender(['configuration', 'calendar', 'user', 'title', 'message']);
         return $this->htmlResponse();
     }
 
@@ -235,7 +234,6 @@ class ApiController extends ActionController
         // create fe_user from entry
         $doCreateUser = (int)GeneralUtility::_POST('createUserAccount') === 1 || GeneralUtility::_POST('createUserAccount') === 'on';
         if ($doCreateUser && (int)$this->settings['userStoragePid']) {
-
             $newEntry = $this->request->getArgument('newEntry');
 
             $feUser = [];
@@ -357,7 +355,6 @@ class ApiController extends ActionController
 
         // login the newly created user
         if ($user && !$user->getLastlogin()) {
-
             $GLOBALS['TSFE']->fe_user->checkPid = 0;
             $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
             /** @var FrontendUserAuthentication $userAuth */
@@ -382,7 +379,7 @@ class ApiController extends ActionController
 
         $this->view->setConfiguration($this->configuration);
         $this->view->assign('newEntry', $newEntry);
-        $this->view->setVariablesToRender(array('newEntry'));
+        $this->view->setVariablesToRender(['newEntry']);
         return $this->htmlResponse();
     }
 
@@ -439,7 +436,7 @@ class ApiController extends ActionController
 
         $this->view->assign('user', $user);
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('user'));
+        $this->view->setVariablesToRender(['user']);
         return $this->htmlResponse();
     }
 
@@ -472,7 +469,7 @@ class ApiController extends ActionController
      */
     public function errorAction(): ResponseInterface
     {
-        if ($this->request->getControllerActionName() === "entryCreate") {
+        if ($this->request->getControllerActionName() === 'entryCreate') {
             $errors = $this->arguments->validate()->forProperty('newEntry')->getFlattenedErrors();
             $errors = array_merge($errors, $this->arguments->validate()->forProperty('user')->getFlattenedErrors());
 
@@ -481,7 +478,7 @@ class ApiController extends ActionController
             }, $errors);
 
             $content = [
-                'errors' => $errors
+                'errors' => $errors,
             ];
 
             $this->throwStatus(406, 'Validation failed', json_encode($content));

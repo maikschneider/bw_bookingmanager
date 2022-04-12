@@ -2,12 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Service;
 
-use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
 class AccessControlService implements SingletonInterface
 {
-
     /**
      * @param FrontendUser $user
      * @return bool
@@ -28,7 +27,7 @@ class AccessControlService implements SingletonInterface
     public function getFrontendUserUid()
     {
         if ($this->hasLoggedInFrontendUser() && !empty($GLOBALS['TSFE']->fe_user->user['uid'])) {
-            return intval($GLOBALS['TSFE']->fe_user->user['uid']);
+            return (int)($GLOBALS['TSFE']->fe_user->user['uid']);
         }
         return null;
     }
@@ -40,5 +39,4 @@ class AccessControlService implements SingletonInterface
     {
         return !empty($GLOBALS['TSFE']->fe_user->user);
     }
-
 }

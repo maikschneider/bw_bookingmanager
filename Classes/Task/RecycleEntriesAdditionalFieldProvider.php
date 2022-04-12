@@ -2,16 +2,18 @@
 
 namespace Blueways\BwBookingmanager\Task;
 
-use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
-use TYPO3\CMS\Scheduler\Task\AbstractTask;
-use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
+use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
 class RecycleEntriesAdditionalFieldProvider extends AbstractAdditionalFieldProvider
 {
     /**
      * @var int Default number of days
      */
     protected $defaultNumberOfDays = 30;
+
     /**
      * Gets additional fields to render in the form to add/edit a task
      *
@@ -28,7 +30,7 @@ class RecycleEntriesAdditionalFieldProvider extends AbstractAdditionalFieldProvi
         // Initialize selected fields
         if (!isset($taskInfo['scheduler_recycleEntries_numberOfDays'])) {
             $taskInfo['scheduler_recycleEntries_numberOfDays'] = $this->defaultNumberOfDays;
-            if ((string) $schedulerModule->getCurrentAction() === 'edit') {
+            if ((string)$schedulerModule->getCurrentAction() === 'edit') {
                 $taskInfo['scheduler_recycleEntries_numberOfDays'] = $task->numberOfDays;
             }
         }
@@ -41,10 +43,11 @@ class RecycleEntriesAdditionalFieldProvider extends AbstractAdditionalFieldProvi
             'code' => $fieldHtml,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:recyclertask.numberOfDays',
             'cshKey' => '_MOD_system_txschedulerM1',
-            'cshLabel' => $fieldId
+            'cshLabel' => $fieldId,
         ];
         return $additionalFields;
     }
+
     /**
      * Validates the additional fields' values
      *
@@ -65,6 +68,7 @@ class RecycleEntriesAdditionalFieldProvider extends AbstractAdditionalFieldProvi
         }
         return $result;
     }
+
     /**
      * Takes care of saving the additional fields' values in the task's object
      *

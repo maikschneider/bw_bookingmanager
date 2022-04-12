@@ -10,7 +10,6 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 
 class CalendarEvent
 {
-
     public const MODEL = '';
 
     protected string $title = '';
@@ -81,7 +80,7 @@ class CalendarEvent
             'tooltip' => $this->tooltip,
             //'groupId' => $this->uid,
             'extendedProps' => $this->getExtendedProps(),
-            'classNames' => $this->getClassNames()
+            'classNames' => $this->getClassNames(),
         ];
 
         return $fullCalendarConfig;
@@ -139,7 +138,7 @@ class CalendarEvent
             'uid' => $this->uid,
             'calendar' => $this->calendar,
             'isSelected' => false,
-            'uniqueId' => $this->getUniqueId()
+            'uniqueId' => $this->getUniqueId(),
         ];
     }
 
@@ -183,15 +182,15 @@ class CalendarEvent
         $this->start->setTimezone($now->getTimezone());
         $this->end->setTimezone($now->getTimezone());
 
-        $icsText = "BEGIN:VEVENT
-            " . IcsUtility::getIcsDates($this->start, $this->end) . "
-            DTSTAMP:" . $now->format('Ymd\THis') . "
-            SUMMARY:" . IcsUtility::compileTemplate($this->getIcsTitle($ics), $this) . "
-            DESCRIPTION:" . IcsUtility::compileTemplate($this->getIcsDescription($ics), $this) . "
-            UID:randomId-" . random_int(1, 9999999) . "
+        $icsText = 'BEGIN:VEVENT
+            ' . IcsUtility::getIcsDates($this->start, $this->end) . '
+            DTSTAMP:' . $now->format('Ymd\THis') . '
+            SUMMARY:' . IcsUtility::compileTemplate($this->getIcsTitle($ics), $this) . '
+            DESCRIPTION:' . IcsUtility::compileTemplate($this->getIcsDescription($ics), $this) . '
+            UID:randomId-' . random_int(1, 9999999) . '
             STATUS:CONFIRMED
-            LAST-MODIFIED:" . $now->format('Ymd\THis') . "
-            LOCATION:" . IcsUtility::compileTemplate($this->getIcsLocation($ics), $this) . "
+            LAST-MODIFIED:' . $now->format('Ymd\THis') . '
+            LOCATION:' . IcsUtility::compileTemplate($this->getIcsLocation($ics), $this) . "
             END:VEVENT\n";
 
         return $icsText;
@@ -235,7 +234,7 @@ class CalendarEvent
     public function getBackendReturnUrl(UriBuilder $uriBuilder): string
     {
         $params = [
-            'id' => $this->pid
+            'id' => $this->pid,
         ];
 
         return (string)$uriBuilder->buildUriFromRoute('bookingmanager_calendar', $params);
@@ -244,7 +243,6 @@ class CalendarEvent
     public function addBackendModuleToolTip()
     {
     }
-
 
     protected function getLanguageService(): LanguageService
     {

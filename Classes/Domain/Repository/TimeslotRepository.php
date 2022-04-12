@@ -2,15 +2,15 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Repository;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
-use Blueways\BwBookingmanager\Domain\Model\Timeslot;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use Blueways\BwBookingmanager\Helper\TimeslotManager;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use Blueways\BwBookingmanager\Helper\TimeslotManager;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -24,7 +24,6 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
  */
 class TimeslotRepository extends Repository
 {
-
     /**
      * @param Calendar $calendar
      * @param DateConf $dateConf
@@ -75,8 +74,8 @@ class TimeslotRepository extends Repository
                     $query->lessThan('startDate', $endDate->getTimestamp()),
                     $query->logicalOr([
                         $query->equals('repeatEnd', 0),
-                        $query->greaterThanOrEqual('repeatEnd', $startDate->getTimestamp())
-                    ])
+                        $query->greaterThanOrEqual('repeatEnd', $startDate->getTimestamp()),
+                    ]),
                 ]),
             ])
         );
@@ -88,8 +87,8 @@ class TimeslotRepository extends Repository
 
     public function getTimeslotsInCalendar(int $calendarUid, \DateTime $startDate, \DateTime $endDate)
     {
-        $sql = "select
-        " . $calendarUid . " as calendar,
+        $sql = 'select
+        ' . $calendarUid . " as calendar,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) as UNSIGNED) as t_start_date,
 		CAST(UNIX_TIMESTAMP(concat(dates.date, ' ', TIME(FROM_UNIXTIME(t.start_date)))) + (t.end_date - t.start_date) as UNSIGNED) as t_end_date,
 		t.start_date as orig_start,
@@ -120,10 +119,10 @@ class TimeslotRepository extends Repository
                 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4
             ) v
 
-        left join (select start_date, end_date, uid from tx_bwbookingmanager_domain_model_blockslot b inner join tx_bwbookingmanager_calendar_blockslot_mm m on m.uid_local=b.uid where b.deleted=0 and b.hidden=0 and m.uid_foreign=" . $calendarUid . ") b on
+        left join (select start_date, end_date, uid from tx_bwbookingmanager_domain_model_blockslot b inner join tx_bwbookingmanager_calendar_blockslot_mm m on m.uid_local=b.uid where b.deleted=0 and b.hidden=0 and m.uid_foreign=" . $calendarUid . ') b on
             (DATE(FROM_UNIXTIME(start_date))<=date and DATE(FROM_UNIXTIME(end_date))>=date)
 
-        left join (select start_date, end_date, uid is not null as is_holiday from tx_bwbookingmanager_domain_model_holiday h inner join tx_bwbookingmanager_calendar_holiday_mm hm on hm.uid_local=h.uid where h.deleted=0 and h.hidden=0 and hm.uid_foreign=" . $calendarUid . ") h on
+        left join (select start_date, end_date, uid is not null as is_holiday from tx_bwbookingmanager_domain_model_holiday h inner join tx_bwbookingmanager_calendar_holiday_mm hm on hm.uid_local=h.uid where h.deleted=0 and h.hidden=0 and hm.uid_foreign=' . $calendarUid . ") h on
             (DATE(FROM_UNIXTIME(h.start_date))<=date and DATE(FROM_UNIXTIME(h.end_date))>=date)
 
         where
@@ -137,7 +136,7 @@ class TimeslotRepository extends Repository
         left join (select uid as entry_uid, start_date as entry_start, timeslot, weight as entry_weight from tx_bwbookingmanager_domain_model_entry where deleted=0 and hidden=0) e on (timeslot=uid and DATE(FROM_UNIXTIME(entry_start))=dates.date)
 
         where
-            calendar = " . $calendarUid . " AND
+            calendar = " . $calendarUid . ' AND
             deleted = 0 AND
             hidden = 0 AND
             DATE(FROM_UNIXTIME(t.start_date))<=DATE(dates.date) AND
@@ -160,7 +159,7 @@ class TimeslotRepository extends Repository
 
         group by t_start_date, t_end_date
 
-        order by dates.date;";
+        order by dates.date;';
 
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(false);

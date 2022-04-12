@@ -2,15 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Hooks;
 
-use TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface;
 
 class EntryRecordListHook implements RecordListHookInterface
 {
-
     /**
      * @return array
      */
@@ -73,7 +72,7 @@ class EntryRecordListHook implements RecordListHookInterface
                 unset($cells['edit']);
             }
 
-            if ($settings['showConfirmButton']=='1') {
+            if ($settings['showConfirmButton'] == '1') {
                 $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
                 $languageService = $GLOBALS['LANG'];
 

@@ -2,11 +2,11 @@
 
 namespace Blueways\BwBookingmanager\ViewHelpers\Be;
 
-use TYPO3\CMS\Fluid\ViewHelpers\Be\TableListViewHelper;
-use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Fluid\ViewHelpers\Be\TableListViewHelper;
+use TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList;
 
 class BetterTableListViewHelper extends TableListViewHelper
 {

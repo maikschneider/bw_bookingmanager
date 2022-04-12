@@ -2,9 +2,9 @@
 
 namespace Blueways\BwBookingmanager\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Repository;
 use Blueways\BwBookingmanager\Domain\Model\Dto\HolidayCalendarEvent;
 use DateTime;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -18,7 +18,6 @@ use DateTime;
  */
 class HolidayRepository extends Repository
 {
-
     public function getCalendarEventsInCalendar($calendars, \DateTime $startDate, \DateTime $endDate): array
     {
         $events = [];

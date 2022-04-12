@@ -2,16 +2,14 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
-use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+
 /**
  * Class FeUserCreateValidator
- *
- * @package Blueways\BwBookingmanager\Domain\Validator
  */
 class FeUserCreateValidator extends AbstractValidator
 {
-
     /**
      * @var FrontendUserRepository
      */
@@ -31,7 +29,7 @@ class FeUserCreateValidator extends AbstractValidator
         // validate username
         $this->checkForUniqueUsername($user);
 
-        if (sizeof($this->result->getErrors())) {
+        if (count($this->result->getErrors())) {
             return false;
         }
         return true;

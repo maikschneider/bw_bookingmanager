@@ -6,33 +6,31 @@ namespace Blueways\BwBookingmanager\Helper;
  * This is fwefewfew
  * PHP version 7.2
  *
- * @package  BwBookingManager
  * @author   Maik Schneider <m.schneider@blueways.de>
  * @license  MIT https: //opensource.org/licenses/MIT
  * @version  GIT: <git_id />
  * @link     http://www.blueways.de
  */
 use Blueways\BwBookingmanager\Domain\Model\Entry;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use Blueways\BwBookingmanager\Domain\Model\Notification;
 use Blueways\BwEmail\Utility\SenderUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
 class NotificationManager
 {
-
     /**
      * @var Entry $entry
      */
-    protected $entry = null;
+    protected $entry;
 
     /**
      * @var array<Notification> $notifications
      */
-    protected $notifications = null;
+    protected $notifications;
 
     /**
      * @var ConfigurationManager $configurationManager
@@ -40,7 +38,7 @@ class NotificationManager
     protected $configurationManager;
 
     /**
-     * @var Array
+     * @var array
      */
     protected $extbaseFrameworkConfiguration;
 
@@ -124,7 +122,6 @@ class NotificationManager
     private function sendNotifications($eventType)
     {
         foreach ($this->notifications as $notification) {
-
             if ($notification->getEvent() !== $eventType) {
                 continue;
             }

@@ -2,10 +2,10 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
@@ -19,15 +19,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class Timeslot extends AbstractEntity
 {
-
     const REPEAT_NO = 0;
+
     const REPEAT_DAILY = 1;
+
     const REPEAT_WEEKLY = 2;
+
     const REPEAT_MONTHLY = 3;
+
     const REPEAT_MULTIPLE_WEEKLY = 4;
 
     const HOLIDAY_NO_EFFECT = 0;
+
     const HOLIDAY_NOT_DURING = 1;
+
     const HOLIDAY_ONLY_DURING = 2;
 
     /**
@@ -70,7 +75,7 @@ class Timeslot extends AbstractEntity
      *
      * @var ObjectStorage<Entry>
      */
-    protected $entries = null;
+    protected $entries;
 
     /**
      * @var Calendar
@@ -110,8 +115,6 @@ class Timeslot extends AbstractEntity
      * Do not modify this method!
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
-     *
-     * @return void
      */
     protected function initStorageObjects()
     {
@@ -264,7 +267,7 @@ class Timeslot extends AbstractEntity
             3 => [1, 0],
             2 => [1],
             1 => [0],
-            0 => []
+            0 => [],
         ];
 
         return $repeatMapping[$repeatDays] ?? [];
@@ -316,7 +319,6 @@ class Timeslot extends AbstractEntity
      * Sets the repeatType
      *
      * @param int $repeatType
-     * @return void
      */
     public function setRepeatType($repeatType)
     {
@@ -337,7 +339,6 @@ class Timeslot extends AbstractEntity
      * Sets the maxWeight
      *
      * @param int $maxWeight
-     * @return void
      */
     public function setMaxWeight($maxWeight)
     {
@@ -382,7 +383,6 @@ class Timeslot extends AbstractEntity
      * Adds a Entry
      *
      * @param Entry $entry
-     * @return void
      */
     public function addEntry(Entry $entry)
     {
@@ -393,7 +393,6 @@ class Timeslot extends AbstractEntity
      * Removes a Entry
      *
      * @param Entry $entryToRemove The Entry to be removed
-     * @return void
      */
     public function removeEntry(Entry $entryToRemove)
     {
@@ -414,7 +413,6 @@ class Timeslot extends AbstractEntity
      * Sets the repeatEnd
      *
      * @param \DateTime $repeatEnd
-     * @return void
      */
     public function setRepeatEnd(\DateTime $repeatEnd)
     {
@@ -442,7 +440,6 @@ class Timeslot extends AbstractEntity
      * Sets the startDate
      *
      * @param \DateTime $startDate
-     * @return void
      */
     public function setStartDate(\DateTime $startDate)
     {
@@ -465,7 +462,6 @@ class Timeslot extends AbstractEntity
      * Sets the endDate
      *
      * @param \DateTime $endDate
-     * @return void
      */
     public function setEndDate(\DateTime $endDate)
     {
@@ -496,7 +492,7 @@ class Timeslot extends AbstractEntity
             'freeWeight' => $this->getFreeWeight(),
             'bookedWeight' => $this->getBookedWeight(),
             'feUsers' => $feUsers,
-            'entries' => $entries
+            'entries' => $entries,
         ];
     }
 
@@ -514,7 +510,6 @@ class Timeslot extends AbstractEntity
      * Sets the entries
      *
      * @param ObjectStorage<Entry> $entries
-     * @return void
      */
     public function setEntries(ObjectStorage $entries)
     {
@@ -630,7 +625,6 @@ class Timeslot extends AbstractEntity
      * Sets the isBookableHooks
      *
      * @param int $isBookableHooks
-     * @return void
      */
     public function setIsBookableHooks($isBookableHooks)
     {

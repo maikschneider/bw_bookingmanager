@@ -13,7 +13,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class TimeslotRepositoryTest extends UnitTestCase
 {
-
     /**
      * @var TimeslotRepository
      */
@@ -35,8 +34,4 @@ class TimeslotRepositoryTest extends UnitTestCase
         $this->objectManager = $this->prophesize(ObjectManager::class)->reveal();
         $this->subject = new TimeslotRepository($this->objectManager);
     }
-
-
 }
-
-

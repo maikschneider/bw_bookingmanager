@@ -7,7 +7,6 @@ use Blueways\BwBookingmanager\Domain\Model\Ics;
 
 class BlockslotCalendarEvent extends CalendarEvent
 {
-
     public const MODEL = 'Blockslot';
 
     protected ?string $display = 'background';

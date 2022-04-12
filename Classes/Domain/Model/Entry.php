@@ -3,8 +3,9 @@
 namespace Blueways\BwBookingmanager\Domain\Model;
 
 use TYPO3\CMS\Extbase\Annotation as Extbase;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -16,7 +17,6 @@ use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
  */
 class Entry extends AbstractEntity
 {
-
     /**
      * startDate
      *
@@ -131,7 +131,7 @@ class Entry extends AbstractEntity
      * @Extbase\ORM\Lazy
      * @Extbase\Validate("NotEmpty")
      */
-    protected $calendar = null;
+    protected $calendar;
 
     /**
      * timeslot
@@ -139,7 +139,7 @@ class Entry extends AbstractEntity
      * @var Timeslot
      * @Extbase\ORM\Lazy
      */
-    protected $timeslot = null;
+    protected $timeslot;
 
     /**
      * token
@@ -188,7 +188,6 @@ class Entry extends AbstractEntity
      * @param Timeslot $timeslot
      * @param \DateTime $startDate
      * @param \DateTime $endDate
-     * @return void
      */
     public function __construct(
         Calendar $calendar = null,
@@ -240,7 +239,6 @@ class Entry extends AbstractEntity
      * Sets the startDate
      *
      * @param \DateTime $startDate
-     * @return void
      */
     public function setStartDate(\DateTime $startDate)
     {
@@ -261,7 +259,6 @@ class Entry extends AbstractEntity
      * Sets the endDate
      *
      * @param \DateTime $endDate
-     * @return void
      */
     public function setEndDate(\DateTime $endDate)
     {
@@ -282,7 +279,6 @@ class Entry extends AbstractEntity
      * Sets the name
      *
      * @param string $name
-     * @return void
      */
     public function setName($name)
     {
@@ -303,7 +299,6 @@ class Entry extends AbstractEntity
      * Sets the token
      *
      * @param string $token
-     * @return void
      */
     public function setToken($token)
     {
@@ -324,7 +319,6 @@ class Entry extends AbstractEntity
      * Sets the prename
      *
      * @param string $prename
-     * @return void
      */
     public function setPrename($prename)
     {
@@ -345,7 +339,6 @@ class Entry extends AbstractEntity
      * Sets the street
      *
      * @param string $street
-     * @return void
      */
     public function setStreet($street)
     {
@@ -366,7 +359,6 @@ class Entry extends AbstractEntity
      * Sets the zip
      *
      * @param string $zip
-     * @return void
      */
     public function setZip($zip)
     {
@@ -387,7 +379,6 @@ class Entry extends AbstractEntity
      * Sets the city
      *
      * @param string $city
-     * @return void
      */
     public function setCity($city)
     {
@@ -408,7 +399,6 @@ class Entry extends AbstractEntity
      * Sets the phone
      *
      * @param string $phone
-     * @return void
      */
     public function setPhone($phone)
     {
@@ -429,7 +419,6 @@ class Entry extends AbstractEntity
      * Sets the email
      *
      * @param string $email
-     * @return void
      */
     public function setEmail($email)
     {
@@ -460,7 +449,6 @@ class Entry extends AbstractEntity
      * Sets the newsletter
      *
      * @param bool $newsletter
-     * @return void
      */
     public function setNewsletter($newsletter)
     {
@@ -491,7 +479,6 @@ class Entry extends AbstractEntity
      * Sets the confirmed
      *
      * @param bool $confirmed
-     * @return void
      */
     public function setConfirmed($confirmed)
     {
@@ -522,7 +509,6 @@ class Entry extends AbstractEntity
      * Sets the special1
      *
      * @param bool $special1
-     * @return void
      */
     public function setSpecial1($special1)
     {
@@ -553,7 +539,6 @@ class Entry extends AbstractEntity
      * Sets the special2
      *
      * @param bool $special2
-     * @return void
      */
     public function setSpecial2($special2)
     {
@@ -574,7 +559,6 @@ class Entry extends AbstractEntity
      * Sets the weight
      *
      * @param int $weight
-     * @return void
      */
     public function setWeight($weight)
     {
@@ -595,7 +579,6 @@ class Entry extends AbstractEntity
      * Sets the timeslot
      *
      * @param Timeslot $timeslot
-     * @return void
      */
     public function setTimeslot(Timeslot $timeslot)
     {
@@ -616,7 +599,6 @@ class Entry extends AbstractEntity
      * Sets the calendar
      *
      * @param Calendar $calendar
-     * @return void
      */
     public function setCalendar(Calendar $calendar)
     {
@@ -664,7 +646,7 @@ class Entry extends AbstractEntity
         return [
             'uid' => $this->uid,
             'start' => $this->startDate->format('c'),
-            'end' => $this->endDate->format('c')
+            'end' => $this->endDate->format('c'),
         ];
     }
 

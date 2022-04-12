@@ -4,8 +4,7 @@ namespace Blueways\BwBookingmanager\Domain\Model\Dto;
 
 class DateConf
 {
-
-    CONST DEFAULT_DAYS_LENGTH = 150;
+    const DEFAULT_DAYS_LENGTH = 150;
 
     /**
      * @var \DateTime
@@ -33,7 +32,7 @@ class DateConf
     public $startOrig;
 
     /**
-     * @var integer
+     * @var int
      */
     public $viewType;
 
@@ -41,7 +40,7 @@ class DateConf
      * DateConf constructor.
      *
      * @param \DateTime $date
-     * @param integer $viewType
+     * @param int $viewType
      */
     public function __construct($viewType, $date)
     {
@@ -219,5 +218,4 @@ class DateConf
         $newDate->setTime(23, 59, 59);
         return $newDate;
     }
-
 }

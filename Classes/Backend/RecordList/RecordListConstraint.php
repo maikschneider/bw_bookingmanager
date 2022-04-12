@@ -2,14 +2,13 @@
 
 namespace Blueways\BwBookingmanager\Backend\RecordList;
 
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 class RecordListConstraint
 {
-
     const TABLE = 'tx_bwbookingmanager_domain_model_entry';
 
     /**
@@ -110,7 +109,7 @@ class RecordListConstraint
 
         // calendar
         if (isset($arguments['calendarUid']) && $arguments['calendarUid'] !== '0') {
-            $parameters['where'][] = "calendar=" . $arguments['calendarUid'];
+            $parameters['where'][] = 'calendar=' . $arguments['calendarUid'];
         }
     }
 

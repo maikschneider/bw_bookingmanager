@@ -2,26 +2,25 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Extbase\Http\ForwardResponse;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Blueways\BwBookingmanager\Service\AccessControlService;
-use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 
 /**
  * Calendar Controller for list, show view of calendar entries
  * PHP version 7.2
  *
- * @package  BwBookingManager
  * @author   Maik Schneider <m.schneider@blueways.de>
  * @license  MIT https: //opensource.org/licenses/MIT
  * @version  GIT: <git_id />
@@ -29,13 +28,12 @@ use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
  */
 class CalendarController extends ActionController
 {
-
     /**
      * CalendarRepository
      *
      * @var CalendarRepository
      */
-    protected $calendarRepository = null;
+    protected $calendarRepository;
 
     /**
      * @var EntryRepository
@@ -47,7 +45,7 @@ class CalendarController extends ActionController
      *
      * @var TimeslotRepository
      */
-    protected $timeslotRepository = null;
+    protected $timeslotRepository;
 
     /**
      * @var AccessControlService
@@ -105,7 +103,6 @@ class CalendarController extends ActionController
             $feUser = $this->frontendUserRepository->findByIdentifier($this->accessControlService->getFrontendUserUid());
         }
 
-
         // create date from arguments and configuration
         $startDate = new \DateTime('now');
         $startDate->setTime(0, 0, 0);
@@ -127,7 +124,7 @@ class CalendarController extends ActionController
         $this->view->assignMultiple([
             'calendar' => $calendar,
             'configuration' => $configuration,
-            'feUser' => $feUser
+            'feUser' => $feUser,
         ]);
         return $this->htmlResponse();
     }

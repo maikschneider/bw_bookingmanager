@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -16,7 +17,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Holiday extends AbstractEntity
 {
-
     /**
      * startDate
      *
@@ -44,7 +44,7 @@ class Holiday extends AbstractEntity
      * @var ObjectStorage<Calendar>
      * @Extbase\ORM\Lazy
      */
-    protected $calendars = null;
+    protected $calendars;
 
     /**
      * Returns the startDate
@@ -60,7 +60,6 @@ class Holiday extends AbstractEntity
      * Sets the startDate
      *
      * @param \DateTime $startDate
-     * @return void
      */
     public function setStartDate(\DateTime $startDate)
     {
@@ -81,7 +80,6 @@ class Holiday extends AbstractEntity
      * Sets the endDate
      *
      * @param \DateTime $endDate
-     * @return void
      */
     public function setEndDate(\DateTime $endDate)
     {
@@ -102,7 +100,6 @@ class Holiday extends AbstractEntity
      * Sets the name
      *
      * @param string $name
-     * @return void
      */
     public function setReason($name)
     {
@@ -113,7 +110,6 @@ class Holiday extends AbstractEntity
      * Adds a Calendar
      *
      * @param Calendar $calendar
-     * @return void
      */
     public function addCalendar(Calendar $calendar)
     {
@@ -124,7 +120,6 @@ class Holiday extends AbstractEntity
      * Removes a Calendar
      *
      * @param Calendar $calendarToRemove The Calendar to be removed
-     * @return void
      */
     public function removeCalendar(Calendar $calendarToRemove)
     {
@@ -145,11 +140,9 @@ class Holiday extends AbstractEntity
      * Sets the calendars
      *
      * @param ObjectStorage<Calendar> $calendars
-     * @return void
      */
     public function setCalendars(ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
     }
-
 }

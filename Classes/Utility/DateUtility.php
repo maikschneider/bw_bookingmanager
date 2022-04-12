@@ -4,16 +4,15 @@ namespace Blueways\BwBookingmanager\Utility;
 
 class DateUtility
 {
-
     /**
      * @param \DateTime $startDate
-     * @param integer $viewRange is defined in settings.dateRange
+     * @param int $viewRange is defined in settings.dateRange
      * @return \DateTime
      */
     public static function calculateEndDateForView($startDate, $viewRange = 0)
     {
         // view one week
-        if($viewRange === 1) {
+        if ($viewRange === 1) {
             $weekStart = clone $startDate;
             $weekStart->modify('tomorrow');
             $weekStart->modify('last monday');
@@ -21,13 +20,13 @@ class DateUtility
 
             $weekEnd = clone $weekStart;
             $weekEnd->modify('+7 days');
-            $weekEnd->setTime(23,59,59);
+            $weekEnd->setTime(23, 59, 59);
 
             return $weekEnd;
         }
 
         // view range of days
-        if($viewRange === 2) {
+        if ($viewRange === 2) {
             // @TODO make day $dayCount flexible
             $dayCount = 150;
             $dayStart = clone $startDate;
