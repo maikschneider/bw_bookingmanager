@@ -1,5 +1,7 @@
 <?php
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 defined('TYPO3') or die();
 
 // Add HOOKs to TCA selection by using HOOK_ID and HOOK_LABEL from class

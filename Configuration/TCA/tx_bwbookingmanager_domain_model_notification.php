@@ -1,4 +1,5 @@
 <?php
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification',
@@ -57,11 +58,11 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.event.0',
-                        '0'
+                        '0',
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.event.1',
-                        '1'
+                        '1',
                     ],
                 ],
             ],
@@ -84,7 +85,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.template.default', 'default']
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.template.default', 'default'],
                 ],
             ],
         ],
@@ -95,7 +96,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim,required',
-                'default' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email_subject.default'
+                'default' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email_subject.default',
             ],
         ],
         'calendars' => [

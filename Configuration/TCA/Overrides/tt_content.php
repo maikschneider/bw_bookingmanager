@@ -1,6 +1,8 @@
 <?php
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
 defined('TYPO3') or die();
 
 /***************
@@ -24,7 +26,7 @@ ExtensionManagementUtility::addPiFlexFormValue(
  * B add calendar field for textmedia
  */
 // B1. Define new field
-$temporaryColumns = array(
+$temporaryColumns = [
     'calendar' => [
         'exclude' => true,
         'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.tt_content.calendar',
@@ -33,12 +35,12 @@ $temporaryColumns = array(
             'renderType' => 'selectSingle',
             'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
             'items' => [
-                ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.tt_content.none', 0]
+                ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.tt_content.none', 0],
             ],
-            'default' => 0
-        ]
-    ]
-);
+            'default' => 0,
+        ],
+    ],
+];
 
 // B2. Register new field
 ExtensionManagementUtility::addTCAcolumns(
@@ -56,5 +58,5 @@ ExtensionManagementUtility::addToAllTCAtypes(
 
 // B4. Add calendar input to new palette
 $GLOBALS['TCA']['tt_content']['palettes']['calendar_selection'] = [
-    'showitem' => 'calendar'
+    'showitem' => 'calendar',
 ];

@@ -1,6 +1,7 @@
 <?php
 
 use Blueways\BwBookingmanager\Helper\Tca;
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot',
@@ -14,17 +15,17 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'start_date,end_date,repeat_type,holiday_setting,repeat_end,max_weight,entries,is_bookable_hooks,calendars',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.svg'
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_timeslot.svg',
     ],
     'types' => [
         '1' => [
-            'showitem' => 'hidden,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette,max_weight,is_bookable_hooks,calendars,calendar'],
+            'showitem' => 'hidden,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates;datesPalette,max_weight,is_bookable_hooks,calendars,calendar', ],
     ],
     'palettes' => [
         'datesPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.timeslot.palettes.dates',
-            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end, --linebreak--, repeat_days, --linebreak--, holiday_setting'
-        ]
+            'showitem' => 'start_date, end_date, --linebreak--, repeat_type, repeat_end, --linebreak--, repeat_days, --linebreak--, holiday_setting',
+        ],
     ],
     'columns' => [
         'hidden' => [
@@ -34,8 +35,8 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
             ],
         ],
@@ -70,7 +71,7 @@ return [
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly', 3],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.repeat_type.weeklyMultiple', 4],
                 ],
-            ]
+            ],
         ],
         'repeat_days' => [
             'exclude' => false,
@@ -86,9 +87,9 @@ return [
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.4', ''],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.5', ''],
                     ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.6', ''],
-                ]
+                ],
             ],
-            'displayCond' => 'FIELD:repeat_type:=:4'
+            'displayCond' => 'FIELD:repeat_type:=:4',
         ],
         'holiday_setting' => [
             'exclude' => true,
@@ -99,18 +100,18 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting.no_effect',
-                        0
+                        0,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting.not_during',
-                        1
+                        1,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.holiday_setting.only_during',
-                        2
+                        2,
                     ],
                 ],
-            ]
+            ],
         ],
         'max_weight' => [
             'exclude' => true,
@@ -119,8 +120,8 @@ return [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int',
-                'default' => 1
-            ]
+                'default' => 1,
+            ],
         ],
         'is_bookable_hooks' => [
             'exclude' => true,
@@ -129,7 +130,7 @@ return [
                 'type' => 'check',
                 'items' => [
                 ],
-            ]
+            ],
         ],
         'entries' => [
             'exclude' => true,
@@ -144,9 +145,8 @@ return [
                     'levelLinksPosition' => 'top',
                     'showSynchronizationLink' => 1,
                     'showPossibleLocalizationRecords' => 1,
-                    'showAllLocalizationLink' => 1
+                    'showAllLocalizationLink' => 1,
                 ],
-
 
             ],
         ],
@@ -158,7 +158,7 @@ return [
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
                 'items' => [
-                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.noCalendar', 0]
+                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.noCalendar', 0],
                 ],
             ],
         ],

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar',
@@ -17,18 +18,18 @@ return [
     'palettes' => [
         'direct_booking_palette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.direct_booking',
-            'showitem' => 'direct_booking, color, --linebreak--, default_start_time, default_end_time, --linebreak--, min_length, min_offset'
+            'showitem' => 'direct_booking, color, --linebreak--, default_start_time, default_end_time, --linebreak--, min_length, min_offset',
         ],
         'general' => [
-            'showitem' => 'hidden, --linebreak--, name, record_type, --linebreak--, timeslots, --linebreak--, notifications'
+            'showitem' => 'hidden, --linebreak--, name, record_type, --linebreak--, timeslots, --linebreak--, notifications',
         ],
         'exceptions' => [
-            'showitem' => 'blockslots, --linebreak--, holidays'
-        ]
+            'showitem' => 'blockslots, --linebreak--, holidays',
+        ],
     ],
     'types' => [
         'Blueways\BwBookingmanager\Domain\Model\Calendar' => [
-            'showitem' => '--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:general,--palette--;;general,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:exceptions,--palette--;;exceptions,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:advanced,--palette--;;direct_booking_palette'
+            'showitem' => '--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:general,--palette--;;general,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:exceptions,--palette--;;exceptions,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:advanced,--palette--;;direct_booking_palette',
         ],
     ],
     'columns' => [
@@ -40,7 +41,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_calendar.record_type.1',
-                        'Blueways\BwBookingmanager\Domain\Model\Calendar'
+                        'Blueways\BwBookingmanager\Domain\Model\Calendar',
                     ],
                 ],
                 'default' => 'Blueways\BwBookingmanager\Domain\Model\Calendar',
@@ -79,7 +80,7 @@ return [
                 'size' => 10,
                 'maxitems' => 9999,
             ],
-            'displayCond' => 'FIELD:direct_booking:REQ:false'
+            'displayCond' => 'FIELD:direct_booking:REQ:false',
         ],
         'blockslots' => [
             'exclude' => true,
@@ -131,7 +132,7 @@ return [
                 'size' => 10,
                 'maxitems' => 9999,
             ],
-            'displayCond' => 'FIELD:direct_booking:REQ:true'
+            'displayCond' => 'FIELD:direct_booking:REQ:true',
         ],
         'direct_booking' => [
             'exclude' => true,
@@ -152,7 +153,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'eval' => 'time',
-                'default' => 0
+                'default' => 0,
             ],
         ],
         'default_end_time' => [
@@ -162,7 +163,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'eval' => 'time',
-                'default' => 86360
+                'default' => 86360,
             ],
         ],
         'min_length' => [
@@ -172,7 +173,7 @@ return [
                 'type' => 'input',
                 'eval' => 'trim,int',
                 'default' => 1,
-                'size' => 10
+                'size' => 10,
             ],
         ],
         'min_offset' => [
@@ -199,7 +200,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'colorpicker',
                 'size' => 10,
-            ]
-        ]
+            ],
+        ],
     ],
 ];

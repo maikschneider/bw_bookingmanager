@@ -1,4 +1,5 @@
 <?php
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:ics',
@@ -11,33 +12,33 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'name,calendars',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_ics.svg'
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_ics.svg',
     ],
     'palettes' => [
         'general' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.general',
-            'showitem' => 'name,hidden,--linebreak--,start_date, end_date, --linebreak--, secret, --linebreak--, options,--linebreak--,calendars'
+            'showitem' => 'name,hidden,--linebreak--,start_date, end_date, --linebreak--, secret, --linebreak--, options,--linebreak--,calendars',
         ],
         'entry' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.entry',
-            'showitem' => 'entry_title,--linebreak--,entry_location,--linebreak--,entry_description'
+            'showitem' => 'entry_title,--linebreak--,entry_location,--linebreak--,entry_description',
         ],
         'timeslot' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.timeslot',
-            'showitem' => 'timeslot_title,--linebreak--,timeslot_location,--linebreak--,timeslot_description'
+            'showitem' => 'timeslot_title,--linebreak--,timeslot_location,--linebreak--,timeslot_description',
         ],
         'blockslot' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.blockslot',
-            'showitem' => 'blockslot_title, --linebreak--,blockslot_location, --linebreak--,blockslot_description'
+            'showitem' => 'blockslot_title, --linebreak--,blockslot_location, --linebreak--,blockslot_description',
         ],
         'holiday' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.holiday',
-            'showitem' => 'holiday_title, --linebreak--,holiday_location, --linebreak--,holiday_description'
+            'showitem' => 'holiday_title, --linebreak--,holiday_location, --linebreak--,holiday_description',
         ],
     ],
     'types' => [
         '0' => [
-            'showitem' => '--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.general,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.general;general,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:templates,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.entry;entry,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.timeslot;timeslot,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.blockslot;blockslot,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.holiday;holiday'
+            'showitem' => '--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.general,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.general;general,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:templates,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.entry;entry,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.timeslot;timeslot,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.blockslot;blockslot,--palette--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:palette.holiday;holiday',
         ],
     ],
     'columns' => [
@@ -48,8 +49,8 @@ return [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
             ],
         ],
@@ -59,7 +60,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required'
+                'eval' => 'trim,required',
             ],
         ],
         'calendars' => [
@@ -83,31 +84,31 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.0',
-                        ''
+                        '',
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.1',
-                        ''
+                        '',
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.2',
-                        ''
+                        '',
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.3',
-                        ''
+                        '',
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.4',
-                        ''
+                        '',
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:options.5',
-                        ''
+                        '',
                     ],
                 ],
-                'default' => 63
-            ]
+                'default' => 63,
+            ],
         ],
         'entry_title' => [
             'exclude' => true,
@@ -116,7 +117,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => 'FIELD:prename FIELD:name'
+                'default' => 'FIELD:prename FIELD:name',
             ],
         ],
         'entry_location' => [
@@ -126,7 +127,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => 'FIELD:calendar.name'
+                'default' => 'FIELD:calendar.name',
             ],
         ],
         'entry_description' => [
@@ -137,7 +138,7 @@ return [
                 'size' => 30,
                 'max' => 254,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'timeslot_title' => [
@@ -147,7 +148,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => 'FUNC:bookedWeight/FIELD:max_weight'
+                'default' => 'FUNC:bookedWeight/FIELD:max_weight',
             ],
         ],
         'timeslot_location' => [
@@ -157,7 +158,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'timeslot_description' => [
@@ -168,7 +169,7 @@ return [
                 'size' => 30,
                 'max' => 254,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'blockslot_title' => [
@@ -178,7 +179,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => 'FIELD:reason'
+                'default' => 'FIELD:reason',
             ],
         ],
         'blockslot_location' => [
@@ -188,7 +189,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'blockslot_description' => [
@@ -199,7 +200,7 @@ return [
                 'size' => 30,
                 'max' => 254,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'holiday_title' => [
@@ -209,7 +210,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => 'FIELD:name'
+                'default' => 'FIELD:name',
             ],
         ],
         'holiday_location' => [
@@ -219,7 +220,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'holiday_description' => [
@@ -230,7 +231,7 @@ return [
                 'size' => 30,
                 'max' => 254,
                 'eval' => 'trim',
-                'default' => ''
+                'default' => '',
             ],
         ],
         'start_date' => [
@@ -241,23 +242,23 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:startDate.0',
-                        0
+                        0,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:startDate.1',
-                        1
+                        1,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:startDate.2',
-                        2
+                        2,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:startDate.3',
                         3,
-                    ]
+                    ],
                 ],
                 'default' => 0,
-            ]
+            ],
         ],
         'end_date' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:endDate',
@@ -267,7 +268,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:endDate.0',
-                        0
+                        0,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:endDate.1',
@@ -276,17 +277,17 @@ return [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:endDate.2',
                         2,
-                    ]
+                    ],
                 ],
                 'default' => 0,
-            ]
+            ],
         ],
         'secret' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:secret',
             'config' => [
                 'type' => 'user',
-                'renderType' => 'icsSecret'
-            ]
-        ]
-    ]
+                'renderType' => 'icsSecret',
+            ],
+        ],
+    ],
 ];

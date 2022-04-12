@@ -1,6 +1,7 @@
 <?php
 
 use Blueways\BwBookingmanager\Helper\Tca;
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry',
@@ -20,30 +21,30 @@ return [
     ],
     'types' => [
         'Blueways\BwBookingmanager\Domain\Model\Entry' => [
-            'showitem' => '--palette--;;topPalette,--palette--;;generalPalette,--palette--;;contactDataPalette,--palette--;;specialPalette,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.tabs.internal,--palette--;;internalPalette'
+            'showitem' => '--palette--;;topPalette,--palette--;;generalPalette,--palette--;;contactDataPalette,--palette--;;specialPalette,--div--;LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.tabs.internal,--palette--;;internalPalette',
         ],
     ],
     'palettes' => [
         'topPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.topPalette',
-            'showitem' => 'confirmed, record_type, token, hidden,'
+            'showitem' => 'confirmed, record_type, token, hidden,',
         ],
         'generalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.general',
-            'showitem' => 'calendar, send_mail_button, timeslot_dates_select, --linebreak--, timeslot, start_date, end_date'
+            'showitem' => 'calendar, send_mail_button, timeslot_dates_select, --linebreak--, timeslot, start_date, end_date',
         ],
         'contactDataPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.contactData',
-            'showitem' => 'gender, --linebreak--, name, prename, --linebreak--, street, zip, --linebreak--, city, phone, --linebreak--, email, fe_user'
+            'showitem' => 'gender, --linebreak--, name, prename, --linebreak--, street, zip, --linebreak--, city, phone, --linebreak--, email, fe_user',
         ],
         'specialPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.special',
-            'showitem' => 'weight, newsletter, special1, special2'
+            'showitem' => 'weight, newsletter, special1, special2',
         ],
         'internalPalette' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:tca.entry.palettes.internal',
-            'showitem' => 'notes'
-        ]
+            'showitem' => 'notes',
+        ],
     ],
     'columns' => [
         'record_type' => [
@@ -54,11 +55,11 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.record_type.1',
-                        'Blueways\BwBookingmanager\Domain\Model\Entry'
-                    ]
+                        'Blueways\BwBookingmanager\Domain\Model\Entry',
+                    ],
                 ],
                 'default' => 'Blueways\BwBookingmanager\Domain\Model\Entry',
-            ]
+            ],
         ],
         'hidden' => [
             'exclude' => true,
@@ -76,7 +77,7 @@ return [
         'token' => [
             'config' => [
                 'type' => 'passthrough',
-            ]
+            ],
         ],
 
         'start_date' => [
@@ -85,7 +86,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'renderType' => 'hidden',
-                'eval' => 'date,required'
+                'eval' => 'date,required',
             ],
         ],
         'end_date' => [
@@ -219,7 +220,7 @@ return [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int',
-                'default' => 1
+                'default' => 1,
             ],
         ],
         'timeslot' => [
@@ -230,7 +231,7 @@ return [
                 'renderType' => 'hidden',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_timeslot',
                 'foreign_table_where' => ' AND tx_bwbookingmanager_domain_model_timeslot.pid=###CURRENT_PID###',
-                'default' => 0
+                'default' => 0,
             ],
         ],
         'calendar' => [
@@ -249,14 +250,14 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.date',
             'config' => [
                 'type' => 'input',
-                'renderType' => 'selectTimeslotDates'
-            ]
+                'renderType' => 'selectTimeslotDates',
+            ],
         ],
         'send_mail_button' => [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.sendMail.button',
             'config' => [
                 'renderType' => 'sendMailButton',
-                'type' => 'passthrough'
+                'type' => 'passthrough',
             ],
         ],
         'crdate' => [
@@ -279,15 +280,15 @@ return [
                 'suggestOptions' => [
                     'fe_users' => [
                         'searchWholePhrase' => 1,
-                        'additionalSearchFields' => 'name, short_name, first_name, last_name'
-                    ]
+                        'additionalSearchFields' => 'name, short_name, first_name, last_name',
+                    ],
                 ],
                 'fieldWizard' => [
                     'recordsOverview' => [
                         'disabled' => true,
                     ],
                 ],
-            ]
+            ],
         ],
         'gender' => [
             'exclude' => false,
@@ -298,19 +299,19 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.gender.0',
-                        0
+                        0,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.gender.1',
-                        1
+                        1,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.gender.2',
-                        2
-                    ]
+                        2,
+                    ],
                 ],
                 'default' => 0,
-            ]
+            ],
         ],
         'notes' => [
             'exclude' => false,
@@ -318,8 +319,8 @@ return [
             'config' => [
                 'type' => 'text',
                 'rows' => 10,
-                'cols' => 60
-            ]
+                'cols' => 60,
+            ],
         ],
     ],
 ];
