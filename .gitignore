@@ -5,6 +5,7 @@ vendor
 .idea
 public
 !Resources/Public
+!typo3_src/**/Resources/Public
 var
 bin
 .php_cs.cache

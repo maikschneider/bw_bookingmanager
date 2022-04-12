@@ -15,7 +15,7 @@ declare global {
 class BackendCalendarContextMenuActions {
 
   public static getReturnUrl(): string {
-    return top.rawurlencode(top.list_frame.document.location.pathname + top.list_frame.document.location.search);
+    return encodeURIComponent(top.list_frame.document.location.pathname + top.list_frame.document.location.search);
   }
 
   /**

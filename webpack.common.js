@@ -40,8 +40,8 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
-      'TYPO3/CMS/Backend': path.resolve(__dirname, 'public/typo3/sysext/backend/Resources/Private/TypeScript'),
-      'TYPO3/CMS/Core': path.resolve(__dirname, 'public/typo3/sysext/core/Resources/Private/TypeScript'),
+      'TYPO3/CMS/Backend': path.resolve(__dirname, 'typo3_src/TypeScript/backend/Resources/Public/TypeScript'),
+      'TYPO3/CMS/Core': path.resolve(__dirname, 'typo3_src/TypeScript/core/Resources/Public/TypeScript'),
       'TYPO3/CMS/BwBookingmanager': path.resolve(__dirname, 'Resources/Private/TypeScript')
     }
   },
