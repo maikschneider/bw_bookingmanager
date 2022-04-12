@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: Classes/Domain/Model/Dto/BlockslotCalendarEvent.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: Classes/Domain/Model/Dto/EntryCalendarEvent.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: Classes/Domain/Model/Dto/HolidayCalendarEvent.php
+
+		-
+			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			count: 1
+			path: Classes/Domain/Model/Dto/TimeslotCalendarEvent.php
+
+		-
+			message: "#^Class Blueways\\\\BwEmail\\\\Utility\\\\SenderUtility not found\\.$#"
+			count: 1
+			path: Classes/Helper/NotificationManager.php
+
+		-
+			message: "#^Access to an undefined property Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial1IsCheckedHook\\:\\:\\$notification\\.$#"
+			count: 1
+			path: Classes/Hooks/NotificationSpecial1IsCheckedHook.php
+
+		-
+			message: "#^Class Blueways\\\\BwBookingmanager\\\\Task\\\\TableGarbageCollectionTask not found\\.$#"
+			count: 1
+			path: Classes/Task/RecycleEntriesTask.php
+
