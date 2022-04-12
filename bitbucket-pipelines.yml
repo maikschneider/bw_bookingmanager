@@ -19,6 +19,7 @@ definitions:
           - composer
         artifacts:
           - vendor/**
+          - public/**
         script:
           - composer install --prefer-dist --no-ansi --no-interaction --no-progress
     - step: &phpLint
