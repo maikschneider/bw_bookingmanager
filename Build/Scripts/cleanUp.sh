@@ -19,3 +19,4 @@ rm -rf Resources/Private/Scss
 rm -rf rector.php
 rm -rf typo3_src
 rm -rf ENVIRONMENT_VARIABLES.txt
+rm -rf GIT_LOG.txt

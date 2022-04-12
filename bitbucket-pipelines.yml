@@ -77,10 +77,11 @@ pipelines:
             - git checkout 11.x
             - git merge -s ours 11.x-dev --no-commit --no-ff
             - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Po "(\d+\.)+\d+")
-            - export GIT_LOG=$(git log "v$LATEST_TAG"..HEAD --pretty=format:"%s")
+            - git log "v$LATEST_TAG"..HEAD --pretty=format:"%s" > GIT_LOG.txt
             - git checkout 11.x-dev .
             - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Po "(\d+\.)+\d+")
             - printenv > ENVIRONMENT_VARIABLES.txt
+            - sed -i -e '/ /d' ENVIRONMENT_VARIABLES.txt ; find . -name "ENVIRONMENT_VARIABLES.txt-e" -type f -print0 | xargs -0 rm -f
       - parallel:
           - step: *buildComposer
           - step: *buildAssets
@@ -90,9 +91,9 @@ pipelines:
           - step: *phpStan
       - step:
           name: Release
-          image: drud/ddev-webserver:v1.16.1
           script:
             - export $(cat ENVIRONMENT_VARIABLES.txt | xargs)
+            - export GIT_LOG=$(cat GIT_LOG.txt)
             - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
             - git add */.*
             - 'if [[ $(git status --porcelain --untracked-files=no | wc -l) -gt "0" ]]; then git commit -a -m "build: $BITBUCKET_COMMIT_SHORT" --message "$GIT_LOG" || true; fi'
