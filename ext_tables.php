@@ -32,7 +32,7 @@ call_user_func(
             'bwbookingmanager',
             'bottom',
             [
-                \Blueways\BwBookingmanager\Controller\BackendController::class => 'index,entryList,calendar'
+                \Blueways\BwBookingmanager\Controller\BackendController::class => 'entryList,calendar'
             ],
             [
                 'access' => 'user,group',

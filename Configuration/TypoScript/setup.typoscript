@@ -128,6 +128,9 @@ module.tx_bwbookingmanager {
     layoutRootPaths {
       10 = EXT:bw_bookingmanager/Resources/Private/Layouts/Backend/
     }
+    partialRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Partials/Backend/
+    }
   }
   settings {
     tableFields {
