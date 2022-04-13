@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Backend\\\\RecordList\\\\RecordListConstraint\\:\\:getDatabaseConnection\\(\\) has invalid return type Blueways\\\\BwBookingmanager\\\\Backend\\\\RecordList\\\\DatabaseConnection\\.$#"
-			count: 1
-			path: Classes/Backend/RecordList/RecordListConstraint.php
-
-		-
 			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\View\\\\ViewInterface\\:\\:setConfiguration\\(\\)\\.$#"
 			count: 4
 			path: Classes/Controller/ApiController.php
@@ -189,11 +184,6 @@ parameters:
 			message: "#^Cannot call method count\\(\\) on array\\.$#"
 			count: 1
 			path: Classes/Utility/FullCalendarUtility.php
-
-		-
-			message: "#^PHPDoc tag @var has invalid value \\(\\$dblist \\\\TYPO3\\\\CMS\\\\Recordlist\\\\RecordList\\\\DatabaseRecordList\\)\\: Unexpected token \"\\$dblist\", expected type at offset 9$#"
-			count: 1
-			path: Classes/ViewHelpers/Be/BetterTableListViewHelper.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$dataType\\)\\: Unexpected token \"\\$dataType\", expected type at offset 133$#"

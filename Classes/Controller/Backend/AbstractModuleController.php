@@ -39,6 +39,8 @@ abstract class AbstractModuleController
 
     protected int $pid = 0;
 
+    protected array $settings = [];
+
     public function __construct(ModuleTemplateFactory $moduleTemplateFactory, CalendarRepository $calendarRepository, ResponseFactory $responseFactory)
     {
         $this->moduleTemplateFactory = $moduleTemplateFactory;
@@ -96,6 +98,10 @@ abstract class AbstractModuleController
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $currentPid = $this->pid;
+        $returnUrl = (string)$uriBuilder->buildUriFromRoute(
+            'bookingmanager_entry_list',
+            ['id' => $this->pid]
+        );
 
         // New Entry Button
         $buttons = [
@@ -126,10 +132,6 @@ abstract class AbstractModuleController
         ];
 
         if ($this->currentAction === 'entryList') {
-            $returnUrl = (string)$uriBuilder->buildUriFromRoute(
-                'bookingmanager_entry_list',
-                ['id' => $this->pid]
-            );
 
             $buttons = array_merge($buttons, [
                 [
