@@ -48,6 +48,8 @@ class EntryRecordListHook implements RecordListHookInterface
 
             $settings = $this->loadAllTypoScriptSettings();
 
+            unset($cells['view']);
+
             if ($settings['showDeleteButton'] === '0') {
                 unset($cells['delete']);
             }
