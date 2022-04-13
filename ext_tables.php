@@ -26,16 +26,15 @@ call_user_func(
             'EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_notification.xlf');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_bwbookingmanager_domain_model_notification');
 
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'BwBookingmanager',
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
             'web',
-            'bwbookingmanager',
+            'bookingmanager',
             'bottom',
+            'bookingmanager',
             [
-                \Blueways\BwBookingmanager\Controller\BackendController::class => 'entryList,calendar'
-            ],
-            [
+                'routeTarget' => \Blueways\BwBookingmanager\Controller\Backend\EntryListModuleController::class,
                 'access' => 'user,group',
+                'name' => 'web_bookingmanager',
                 'iconIdentifier' => 'backend-module',
                 'labels' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_m1.xlf',
                 'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
