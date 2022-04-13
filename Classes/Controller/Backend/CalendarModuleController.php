@@ -7,13 +7,11 @@ namespace Blueways\BwBookingmanager\Controller\Backend;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CalendarModuleController extends AbstractModuleController
 {
-
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->initializeExtbaseController('calendar', $request);

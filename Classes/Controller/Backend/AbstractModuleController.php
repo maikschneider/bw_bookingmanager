@@ -22,7 +22,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 abstract class AbstractModuleController
 {
-
     protected CalendarRepository $calendarRepository;
 
     protected ModuleTemplateFactory $moduleTemplateFactory;
@@ -132,7 +131,6 @@ abstract class AbstractModuleController
         ];
 
         if ($this->currentAction === 'entryList') {
-
             $buttons = array_merge($buttons, [
                 [
                     'label' => 'administration.filter.buttonTitle',
@@ -267,7 +265,6 @@ abstract class AbstractModuleController
         ];
 
         foreach ($actions as $action) {
-
             $isActive = $this->currentAction === $action['action'];
 
             $item = $menu->makeMenuItem()
