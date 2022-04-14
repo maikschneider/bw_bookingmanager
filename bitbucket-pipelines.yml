@@ -81,6 +81,10 @@ pipelines:
       - parallel:
           - step: *buildComposer
           - step: *buildAssets
+      - parallel:
+          - step: *phpLint
+          - step: *phpCsFixer
+          - step: *phpStan
       - step:
           name: Release
           script:
