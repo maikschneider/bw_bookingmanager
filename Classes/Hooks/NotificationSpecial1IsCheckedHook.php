@@ -22,10 +22,9 @@ class NotificationSpecial1IsCheckedHook
     public function executeHook($notificationManager, $notification)
     {
         $this->notificationManager = $notificationManager;
-        $this->notification = $notification;
 
-        if ($this->notification->getHook() === NotificationSpecial1IsCheckedHook::HOOK_ID && $this->notificationManager->getEntry()->isSpecial1()) {
-            $this->notificationManager->sendNotification($this->notification);
+        if ($notification->getHook() === NotificationSpecial1IsCheckedHook::HOOK_ID && $notificationManager->getEntry()->isSpecial1()) {
+            $notificationManager->sendNotification($notification);
         }
     }
 }

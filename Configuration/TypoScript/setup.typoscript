@@ -121,6 +121,17 @@ BOOKINGMANAGERICS {
 ### BACKEND MODULE ###
 ######################
 module.tx_bwbookingmanager {
+  view {
+    templateRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Templates/Backend/
+    }
+    layoutRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Layouts/Backend/
+    }
+    partialRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Partials/Backend/
+    }
+  }
   settings {
     tableFields {
       1 = name

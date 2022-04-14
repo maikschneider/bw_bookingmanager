@@ -8,8 +8,14 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
 
-  Blueways\BwBookingmanager\Controller\BackendController:
-    public: true
+  Blueways\BwBookingmanager\Controller\Backend\AbstractModuleController:
+    tags: [ 'backend.controller' ]
+
+  Blueways\BwBookingmanager\Controller\Backend\EntryListModuleController:
+    tags: [ 'backend.controller' ]
+
+  Blueways\BwBookingmanager\Controller\Backend\CalendarModuleController:
+    tags: [ 'backend.controller' ]
 
   Blueways\BwBookingmanager\Utility\FullCalendarUtility:
     public: true

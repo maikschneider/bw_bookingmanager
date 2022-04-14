@@ -29,12 +29,12 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 					<f:form id="entryListForm" class="settings" method="GET" name="demand" object="{demand}">
 
 						<div class="row form-horizontal">
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<label for="calendarUid" class="col-xs-4 control-label">
+									<label for="calendarUid">
 										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.calendar"/>
 									</label>
-									<div class="col-xs-8">
+									<div class="col-8">
 										<div class="input">
 											<f:form.select prependOptionLabel="{f:translate(key:'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.allCalendars')}"
 																		 prependOptionValue="0"
@@ -49,21 +49,22 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 							</div>
 						</div>
 						<div class="row form-horizontal">
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<label for="searchWord" class="col-xs-4 control-label">
+									<label for="searchWord">
 										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.searchWord"/>
 									</label>
-									<div class="col-xs-8">
+									<div class="col-8">
 										<div class="input">
 											<f:form.textfield class="form-control t3js-clearable" id="searchWord" property="searchWord"/>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<div class="col-xs-11 col-xs-offset-1 form-check">
+									<label>&nbsp;</label>
+									<div class="col-11 col-offset-1 form-check">
 										<f:form.checkbox class="form-check-input" property="hidden" value="1" id="hidden"/>
 										<label for="hidden" class="form-check-label">
 											<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.hidden"/>
@@ -73,13 +74,13 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 							</div>
 						</div>
 						<div class="row form-horizontal">
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<label for="sortingField" class="col-xs-4 control-label">
+									<label for="sortingField">
 										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortingField"/>
 									</label>
 
-									<div class="col-xs-8">
+									<div class="col-8">
 										<f:form.select class="form-control" id="sortingField" property="sortingField" options="{
                                         start_date:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.startDate\')}',
                                         end_date:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortField.endDate\')}',
@@ -92,10 +93,10 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<label for="sortingDirection" class="col-xs-1 control-label"> - </label>
-									<div class="col-xs-8">
+									<label for="sortingDirection" class="col-1 control-label"> &nbsp; </label>
+									<div class="col-8">
 										<f:form.select class="form-control" property="sortingDirection" id="sortingDirection" options="{ asc:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortingDirection.asc\')}',
                                                                         desc:'{f:translate(key: \'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.sortingDirection.desc\')}' }"/>
 									</div>
@@ -104,13 +105,13 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 
 						</div>
 						<div class="row form-horizontal">
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<label for="startDate" class="col-xs-4 control-label">
+									<label for="startDate">
 										<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.timerange"/>
 									</label>
 
-									<div class="col-xs-8">
+									<div class="col-8">
 										<div class="input-group">
 											<f:form.textfield type="datetime"
 																				property="startDate"
@@ -118,18 +119,18 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 																				class="form-control t3js-datetimepicker t3js-clearable"
 																				data="{date-type:'date',date-offset:'0',date-format:'DD.MM.YYYY'}"/>
 											<span class="input-group-btn">
-												<label class="btn btn-default" for="startDate">
+												<span class="btn btn-default" for="startDate">
 													<span class="fa fa-calendar"></span>
-												</label>
+												</span>
 											</span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-6">
+							<div class="col-6">
 								<div class="form-group">
-									<label for="endDate" class="col-xs-1 control-label"> - </label>
-									<div class="col-xs-8">
+									<label for="endDate" class="col-1 control-label"> &nbsp; </label>
+									<div class="col-8">
 										<div class="input-group">
 											<f:form.textfield type="datetime"
 																				property="endDate"
@@ -137,9 +138,9 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 																				class="form-control t3js-datetimepicker t3js-clearable"
 																				data="{date-type:'date',date-offset:'0',date-format:'DD.MM.YYYY'}"/>
 											<span class="input-group-btn">
-												<label class="btn btn-default" for="endDate">
+												<span class="btn btn-default" for="endDate">
 													<span class="fa fa-calendar"></span>
-												</label>
+												</span>
 											</span>
 										</div>
 									</div>
@@ -148,13 +149,13 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 						</div>
 						<f:if condition="{settings.showConfirmButton}">
 							<div class="row form-horizontal">
-								<div class="col-xs-6">
+								<div class="col-6">
 									<div class="form-group">
-										<label class="col-xs-4 control-label">
+										<label>
 											<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.confirmation"/>
 										</label>
 
-										<div class="col-xs-8 form-check">
+										<div class="col-8 form-check">
 											<f:form.checkbox class="form-check-input" property="showConfirmed" value="1" id="showConfirmed"/>
 											<label for="showConfirmed" class="form-check-label">
 												<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.showConfirmed"/>
@@ -173,7 +174,7 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 							</div>
 						</f:if>
 						<div class="row form-horizontal">
-							<div class="col-xs-9 col-xs-offset-2">
+							<div class="col-9 col-offset-2">
 								<f:form.button class="btn btn-primary" type="submit">
 									<i class="fa fa-refresh"></i>
 									<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.filter.submit"/>
@@ -186,10 +187,11 @@ TPO3\CMS\Beuser\ViewHelpers} {namespace core =TYPO3\CMS\Core\ViewHelpers}
 
 
 			<f:be.tableList tableName="tx_bwbookingmanager_domain_model_entry"
-														 fieldList="{settings.tableFields}"
-														 recordsPerPage="100"
-														 enableClickMenu="false"
-														 clickTitleMode="edit"/>
+											fieldList="{settings.tableFields}"
+											recordsPerPage="100"
+											enableClickMenu="true"
+											enableControlPanels="true"
+											clickTitleMode="edit"/>
 		</f:else>
 	</f:if>
 </f:section>

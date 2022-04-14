@@ -59,7 +59,7 @@ class NotificationManager
         $this->notifications = $entry->getCalendar()->getNotifications();
         $this->configurationManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Configuration\ConfigurationManager');
         $this->extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-        $this->senderUtility = GeneralUtility::makeInstance(SenderUtility::class);
+        //$this->senderUtility = GeneralUtility::makeInstance(SenderUtility::class);
     }
 
     /**

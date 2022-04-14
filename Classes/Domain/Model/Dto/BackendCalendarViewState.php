@@ -8,7 +8,6 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class BackendCalendarViewState
 {
@@ -187,9 +186,8 @@ class BackendCalendarViewState
 
     public function addTypoScriptOptionOverrides(): void
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $tsService = $objectManager->get(TypoScriptService::class);
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         if (isset($settings['module.']['tx_bwbookingmanager.']['settings.']['calendarOptions.'])) {
             $settings = $settings['module.']['tx_bwbookingmanager.']['settings.']['calendarOptions.'];

@@ -1,14 +1,14 @@
 <?php
 
-use Blueways\BwBookingmanager\Controller\BackendController;
+use Blueways\BwBookingmanager\Controller\Backend;
 
 return [
     'bookingmanager_calendar' => [
         'path' => '/bookingmanager/calendar',
-        'target' => BackendController::class . '::calendarAction',
+        'target' => Backend\CalendarModuleController::class,
     ],
     'bookingmanager_entry_list' => [
         'path' => '/bookingmanager/entry/list',
-        'target' => BackendController::class . '::entryListAction',
+        'target' => Backend\EntryListModuleController::class,
     ],
 ];

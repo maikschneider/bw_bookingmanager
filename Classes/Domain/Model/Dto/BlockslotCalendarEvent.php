@@ -15,7 +15,7 @@ class BlockslotCalendarEvent extends CalendarEvent
 
     public static function createFromEntity(Blockslot $blockslot)
     {
-        $event = new static();
+        $event = new self();
         $event->setTitle($blockslot->getReason());
         $event->setStart($blockslot->getStartDate());
         $event->setEnd($blockslot->getEndDate());

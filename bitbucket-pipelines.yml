@@ -70,32 +70,26 @@ pipelines:
           artifacts:
             - '**'
           script:
-            - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
+            - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Po "(\d+\.)+\d+")
             - git fetch --unshallow
             - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
             - git fetch origin
             - git checkout 11.x
-            - git merge -s ours 11.x-dev --no-commit --no-ff
             - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Po "(\d+\.)+\d+")
             - git log "v$LATEST_TAG"..HEAD --pretty=format:"%s" > GIT_LOG.txt
-            - git checkout 11.x-dev .
-            - export TYPO3_EXT_VERSION=$(cat ext_emconf.php | grep version* | grep -Po "(\d+\.)+\d+")
-            - printenv > ENVIRONMENT_VARIABLES.txt
-            - sed -i -e '/ /d' ENVIRONMENT_VARIABLES.txt ; find . -name "ENVIRONMENT_VARIABLES.txt-e" -type f -print0 | xargs -0 rm -f
+            - 'if [ "$TYPO3_EXT_VERSION" != "$LATEST_TAG" ]; then git checkout -b release-$TYPO3_EXT_VERSION 11.x-dev; fi'
       - parallel:
           - step: *buildComposer
           - step: *buildAssets
-      - parallel:
-          - step: *phpLint
-          - step: *phpCsFixer
-          - step: *phpStan
       - step:
           name: Release
           script:
-            - export $(cat ENVIRONMENT_VARIABLES.txt | xargs)
             - export GIT_LOG=$(cat GIT_LOG.txt)
-            - chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh
-            - git add */.*
-            - 'if [[ $(git status --porcelain --untracked-files=no | wc -l) -gt "0" ]]; then git commit -a -m "build: $BITBUCKET_COMMIT_SHORT" --message "$GIT_LOG" || true; fi'
-            - 'if [ "$TYPO3_EXT_VERSION" != "$LATEST_TAG" ]; then git tag -a "v$TYPO3_EXT_VERSION" -m ""; fi'
-            - git push origin 11.x --tags
+            - 'if [[ $(git rev-parse --abbrev-ref HEAD | cut -c 1-7) == "release" ]]; then export RELEASE_BRANCH=$(git rev-parse --abbrev-ref HEAD); fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: $(echo $BITBUCKET_COMMIT | cut -c1-7)" --message "$GIT_LOG" || true; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git checkout 11.x; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git merge $RELEASE_BRANCH; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git tag -a "v$(git rev-parse --abbrev-ref HEAD | cut -c 9-)" -m ""; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git push origin 11.x --tags; fi'

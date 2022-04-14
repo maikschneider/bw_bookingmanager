@@ -7,13 +7,14 @@
 	display: none;
 }
 
-tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"] {
-	background-color: #ffdcdc !important;
-	transition: background-color 0.3s ease;
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:not(.success) {
+	--bs-table-bg: #ffdcdc !important;
+	--bs-table-accent-bg: #f1cccc !important;
 }
 
-tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:hover{
-	background-color: #f1cccc !important;
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:not(.success):hover {
+	--bs-table-bg: #f1cccc !important;
+	--bs-table-accent-bg: #e7c2c2 !important;
 }
 
 

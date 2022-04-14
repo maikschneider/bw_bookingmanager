@@ -26,7 +26,7 @@ class EntryCalendarEvent extends CalendarEvent
     {
         $title = $entry->getPrename() . ' ' . $entry->getName();
 
-        $event = new static();
+        $event = new self();
         $event->pid = (int)$entry->getPid();
         $event->setUid($entry->getUid());
         $event->setTitle($title);
