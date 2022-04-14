@@ -94,6 +94,6 @@ pipelines:
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: $(echo $BITBUCKET_COMMIT | cut -c1-7)" --message "$GIT_LOG" || true; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git checkout 11.x; fi'
-            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git merge $RELEASE_BRANCH --no-ff; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git merge $RELEASE_BRANCH --log; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git tag -a "v$(echo $RELEASE_BRANCH | cut -c 9-99)" -m ""; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git push origin 11.x --tags; fi'
