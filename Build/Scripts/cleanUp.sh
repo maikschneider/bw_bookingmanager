@@ -11,7 +11,7 @@ rm webpack.*.js
 rm -rf vendor
 rm -rf public
 rm -rf Build
-rm package-lock.json
+rm -rf package-lock.json
 rm -rf bin
 rm -rf node_modules
 rm -rf Resources/Private/TypeScript
