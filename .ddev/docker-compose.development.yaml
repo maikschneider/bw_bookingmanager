@@ -1,7 +1,0 @@
-version: '3.6'
-
-services:
-  web:
-    environment:
-      - TYPO3_CONTEXT=Development/Local
-      - PHP_IDE_CONFIG=serverName=bw-bookingmanager.ddev.site
