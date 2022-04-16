@@ -11,7 +11,6 @@ use TYPO3\CMS\Recordlist\Event\ModifyRecordListRecordActionsEvent;
 
 class ModifyEntryListTableListener
 {
-
     protected array $settings;
 
     public function __construct(ConfigurationManager $configurationManager)
@@ -26,7 +25,6 @@ class ModifyEntryListTableListener
         $row = $event->getRecord();
 
         if ($table === 'tx_bwbookingmanager_domain_model_entry') {
-
             $settings = $this->settings;
 
             $event->removeAction('view');

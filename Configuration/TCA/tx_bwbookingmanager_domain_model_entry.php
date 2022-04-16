@@ -170,7 +170,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
-                        1
+                        1,
                     ],
                 ],
                 'default' => 0,
@@ -197,7 +197,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
-                        1
+                        1,
                     ],
                 ],
                 'default' => 0,
@@ -211,7 +211,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
-                        1
+                        1,
                     ],
                 ],
                 'default' => 0,
