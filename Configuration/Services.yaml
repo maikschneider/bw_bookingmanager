@@ -25,3 +25,10 @@ services:
       - name: 'console.command'
         command: 'bookingmanager:timeslotUpdate'
         schedulable: false
+
+  Blueways\BwBookingmanager\Events\ModifyEntryListTableListener:
+    tags:
+      - name: event.listener
+        identifier: 'bookingmanager/recordlist/modify-entry-list-table'
+        method: 'modifyRecordActions'
+

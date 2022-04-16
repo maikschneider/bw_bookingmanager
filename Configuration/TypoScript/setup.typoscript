@@ -139,6 +139,7 @@ module.tx_bwbookingmanager {
       3 = email
       4 = phone
       5 = weight
+      1650098229 = confirmed
     }
     showConfirmButton = 1
     showEditButton = 1
