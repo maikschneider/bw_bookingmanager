@@ -76,7 +76,6 @@ pipelines:
             - git fetch origin
             - git checkout 11.x
             - export LATEST_TAG=$(git describe --abbrev=0 --tags | grep -Po "(\d+\.)+\d+")
-            - git log "v$LATEST_TAG"..HEAD --pretty=format:"%s" > GIT_LOG.txt
             - 'if [ "$TYPO3_EXT_VERSION" != "$LATEST_TAG" ]; then git checkout -b release-$TYPO3_EXT_VERSION 11.x-dev; fi'
       - parallel:
           - step: *buildComposer
@@ -90,9 +89,11 @@ pipelines:
           script:
             - export GIT_LOG=$(cat GIT_LOG.txt)
             - 'if [[ $(git rev-parse --abbrev-ref HEAD | cut -c 1-7) == "release" ]]; then export RELEASE_BRANCH=$(git rev-parse --abbrev-ref HEAD); fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: $(echo $BITBUCKET_COMMIT | cut -c1-7)" || true; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
-            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: $(echo $BITBUCKET_COMMIT | cut -c1-7)" --message "$GIT_LOG" || true; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: clean up" || true; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git checkout 11.x; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git merge $RELEASE_BRANCH --log; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git tag -a "v$(echo $RELEASE_BRANCH | cut -c 9-99)" -m ""; fi'
