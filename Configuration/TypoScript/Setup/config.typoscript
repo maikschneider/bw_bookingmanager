@@ -1,5 +1,0 @@
-config.tx_extbase.persistence.classes {
-  Blueways\BwBookingmanager\Domain\Model\Entry {
-    mapping.recordType = Blueways\BwBookingmanager\Domain\Model\Entry
-  }
-}

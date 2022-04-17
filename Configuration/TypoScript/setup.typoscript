@@ -10,11 +10,12 @@ plugin.tx_bwbookingmanager {
 
   persistence {
     storagePid = {$plugin.tx_bwbookingmanager_pi1.persistence.storagePid}
-    #recursive = 1
   }
+
   mvc {
     callDefaultActionIfActionCantBeResolved = 1
   }
+
   view {
     templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
     templateRootPaths.1 = {$plugin.tx_bwbookingmanager.view.templateRootPath}
@@ -23,6 +24,7 @@ plugin.tx_bwbookingmanager {
     layoutRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Layouts/
     layoutRootPaths.1 = {$plugin.tx_bwbookingmanager.view.layoutRootPath}
   }
+
   settings {
     cancelTime = {$plugin.tx_bwbookingmanager.settings.cancelTime}
     userStoragePid = {$plugin.tx_bwbookingmanager.settings.userStoragePid}
@@ -35,6 +37,7 @@ plugin.tx_bwbookingmanager {
       showUid = {$plugin.tx_bwbookingmanager.settings.mail.showUid}
       doSendConfirmation = {$plugin.tx_bwbookingmanager.settings.mail.doSendConfirmation}
     }
+
     directBooking {
       defaultStartTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultStartTime}
       defaultEndTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultEndTime}
@@ -56,6 +59,7 @@ plugin.tx_bwbookingmanager_pi1 {
     # Should be on by default, but can be disabled if all action in the plugin are uncached
     requireCHashArgumentForActionArguments = 1
   }
+
   settings {
     showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
     calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
@@ -87,6 +91,7 @@ BOOKINGMANAGER {
     additionalHeaders.10.header = Content-type:application/json
     debug = 0
   }
+
   10 = USER
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
@@ -125,13 +130,16 @@ module.tx_bwbookingmanager {
     templateRootPaths {
       10 = EXT:bw_bookingmanager/Resources/Private/Templates/Backend/
     }
+
     layoutRootPaths {
       10 = EXT:bw_bookingmanager/Resources/Private/Layouts/Backend/
     }
+
     partialRootPaths {
       10 = EXT:bw_bookingmanager/Resources/Private/Partials/Backend/
     }
   }
+
   settings {
     tableFields {
       1 = name
@@ -141,6 +149,7 @@ module.tx_bwbookingmanager {
       5 = weight
       1650098229 = confirmed
     }
+
     showConfirmButton = 1
     showEditButton = 1
     showDeleteButton = 0
@@ -150,10 +159,22 @@ module.tx_bwbookingmanager {
     showViewBigButton = 0
 
     calendarOptions {
+
     }
   }
 }
 
-@import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/config.typoscript'
-@import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/ext.bw_email.typoscript'
-@import 'EXT:bw_bookingmanager/Configuration/TypoScript/Setup/ddev.typoscript'
+#################################
+### EMAIL EXTENSION OVERRIDES ###
+#################################
+plugin.tx_bwemail {
+  settings {
+    tableOverrides {
+      tx_bwbookingmanager_domain_model_entry {
+        recipientAddress = FIELD:email
+        recipientName = FIELD:prename FIELD:name
+        subject = New booking in FIELD:calendar.name
+      }
+    }
+  }
+}
