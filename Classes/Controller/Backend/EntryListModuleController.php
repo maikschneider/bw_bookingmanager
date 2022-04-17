@@ -7,6 +7,7 @@ namespace Blueways\BwBookingmanager\Controller\Backend;
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EntryListModuleController extends AbstractModuleController
@@ -45,6 +46,13 @@ class EntryListModuleController extends AbstractModuleController
 
         $calendars = $this->calendarRepository->findAll();
         $calendar = $calendars && $calendars->count() ? $calendars->getFirst() : [];
+
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
+        if ((int)$this->settings['showConfirmButton']) {
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendEntryListConfirmation');
+        }
 
         // save selected route
         $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->pid;

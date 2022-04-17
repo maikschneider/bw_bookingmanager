@@ -9,6 +9,7 @@ module.exports = {
     BackendModuleCalendar: './Resources/Private/TypeScript/BackendModuleCalendar.ts',
     BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts',
     BackendCalendarContextMenuActions: './Resources/Private/TypeScript/BackendCalendarContextMenuActions.ts',
+    BackendEntryListConfirmation: './Resources/Private/TypeScript/BackendEntryListConfirmation.ts',
     SelectTimeslotDatesElement: './Resources/Private/TypeScript/SelectTimeslotDatesElement.ts'
   },
   output: {
@@ -48,6 +49,7 @@ module.exports = {
   externals: {
     'TYPO3/CMS/Backend/Modal': 'TYPO3/CMS/Backend/Modal',
     'TYPO3/CMS/Backend/Icons': 'TYPO3/CMS/Backend/Icons',
+    'TYPO3/CMS/Backend/Notification': 'TYPO3/CMS/Backend/Notification',
     'jquery': 'jquery'
   }
 };

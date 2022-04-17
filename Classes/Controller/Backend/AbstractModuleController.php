@@ -78,14 +78,6 @@ abstract class AbstractModuleController
             $this->view->setTemplate($this->currentAction);
         }
 
-        // include javascript
-        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
-        if ((int)$this->settings['showConfirmButton']) {
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BetterRecordlist');
-        }
-
         // generate navigation components
         $this->generateMenu();
         $this->createButtons();
