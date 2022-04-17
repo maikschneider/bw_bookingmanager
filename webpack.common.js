@@ -10,6 +10,7 @@ module.exports = {
     BackendModalCalendar: './Resources/Private/TypeScript/BackendModalCalendar.ts',
     BackendCalendarContextMenuActions: './Resources/Private/TypeScript/BackendCalendarContextMenuActions.ts',
     BackendEntryListConfirmation: './Resources/Private/TypeScript/BackendEntryListConfirmation.ts',
+    BackendEntryListButtons: './Resources/Private/TypeScript/BackendEntryListButtons.ts',
     SelectTimeslotDatesElement: './Resources/Private/TypeScript/SelectTimeslotDatesElement.ts'
   },
   output: {

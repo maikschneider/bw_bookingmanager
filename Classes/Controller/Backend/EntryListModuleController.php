@@ -48,7 +48,7 @@ class EntryListModuleController extends AbstractModuleController
         $calendar = $calendars && $calendars->count() ? $calendars->getFirst() : [];
 
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendEntryListButtons');
         if ((int)$this->settings['showConfirmButton']) {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendEntryListConfirmation');
