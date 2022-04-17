@@ -87,7 +87,6 @@ pipelines:
       - step:
           name: Release
           script:
-            - export GIT_LOG=$(cat GIT_LOG.txt)
             - 'if [[ $(git rev-parse --abbrev-ref HEAD | cut -c 1-7) == "release" ]]; then export RELEASE_BRANCH=$(git rev-parse --abbrev-ref HEAD); fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: $(echo $BITBUCKET_COMMIT | cut -c1-7)" || true; fi'
