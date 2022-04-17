@@ -11,6 +11,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EntryListModuleController extends AbstractModuleController
 {
+
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->initializeExtbaseController('entryList', $request);
@@ -28,6 +29,19 @@ class EntryListModuleController extends AbstractModuleController
                 }
             }
         }
+
+//        // check redirect
+//        // @TODO: currently only working for one route
+//        $selectableRoutes = ['entryListAction', 'calendarAction'];
+//        $selectableRoutePaths = ['bookingmanager_entry_list', 'bookingmanager_calendar'];
+//        $selectedRoute = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/selectedRoute-' . $this->pid);
+//        if ($selectedRoute && $selectedRoute < 2 && $selectableRoutes[$selectedRoute] !== $this->currentAction . 'Action') {
+//            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+//            $path = $selectableRoutePaths[$selectedRoute];
+//            $url = $uriBuilder->buildUriFromRoute($path, ['id' => $this->pid]);
+//            $GLOBALS['BE_USER']->pushModuleData('bwbookingmanager/selectedRoute-' . $this->pid, 3);
+//            return (new RedirectResponse($url));
+//        }
 
         $calendars = $this->calendarRepository->findAll();
         $calendar = $calendars && $calendars->count() ? $calendars->getFirst() : [];
@@ -49,4 +63,5 @@ class EntryListModuleController extends AbstractModuleController
         $response->getBody()->write($this->moduleTemplate->renderContent());
         return $response;
     }
+
 }
