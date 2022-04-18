@@ -88,7 +88,7 @@ pipelines:
           name: Release
           script:
             - 'if [[ $(git rev-parse --abbrev-ref HEAD | cut -c 1-7) == "release" ]]; then export RELEASE_BRANCH=$(git rev-parse --abbrev-ref HEAD); fi'
-            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
+            - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.* || true; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git commit -a -m "build: $(echo $BITBUCKET_COMMIT | cut -c1-7)" || true; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then chmod +x Build/Scripts/cleanUp.sh && ./Build/Scripts/cleanUp.sh; fi'
             - 'if [[ ! -z $RELEASE_BRANCH ]]; then git add */.*; fi'
