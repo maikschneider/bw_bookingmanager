@@ -71,16 +71,6 @@ parameters:
 			path: Classes/Controller/EntryController.php
 
 		-
-			message: "#^PHPDoc tag @return with type string is incompatible with native type Psr\\\\Http\\\\Message\\\\ResponseInterface\\.$#"
-			count: 1
-			path: Classes/Controller/IcsController.php
-
-		-
-			message: "#^PHPDoc tag @throws with type TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Exception\\\\StopActionException\\|TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Exception\\\\UnsupportedRequestTypeException is not subtype of Throwable$#"
-			count: 1
-			path: Classes/Controller/IcsController.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$NotificationToRemove$#"
 			count: 1
 			path: Classes/Domain/Model/Calendar.php
