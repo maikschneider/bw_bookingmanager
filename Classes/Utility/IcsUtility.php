@@ -8,10 +8,10 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use DateTime;
 
 class IcsUtility
 {
-
     protected EntryRepository $entryRepository;
 
     protected TimeslotRepository $timeslotRepository;
@@ -22,7 +22,7 @@ class IcsUtility
         $this->timeslotRepository = $timeslotRepository;
     }
 
-    public static function compileTemplate(string $templateString, CalendarEvent $object)
+    public static function compileTemplate(string $templateString, CalendarEvent $object): string
     {
         // look for FIELD:point
         // @TODO: look for relations
@@ -54,7 +54,7 @@ class IcsUtility
         return utf8_decode($templateString);
     }
 
-    public static function getIcsDates(\DateTime $startDate, \DateTime $endDate): string
+    public static function getIcsDates(DateTime $startDate, DateTime $endDate): string
     {
         if (CalendarEvent::isFullDay($startDate, $endDate)) {
             return 'DTSTART;VALUE=DATE:' . $startDate->format('Ymd') . '

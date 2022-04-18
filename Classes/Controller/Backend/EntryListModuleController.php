@@ -12,7 +12,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EntryListModuleController extends AbstractModuleController
 {
-
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->initializeExtbaseController('entryList', $request);
@@ -71,5 +70,4 @@ class EntryListModuleController extends AbstractModuleController
         $response->getBody()->write($this->moduleTemplate->renderContent());
         return $response;
     }
-
 }

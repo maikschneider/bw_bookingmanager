@@ -9,14 +9,13 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class IcsController extends ActionController
 {
-
     protected IcsUtility $icsUtility;
 
     public function __construct(IcsUtility $icsUtility)
     {
         $this->icsUtility = $icsUtility;
     }
-    
+
     public function showAction(Ics $ics, string $secret = ''): ResponseInterface
     {
         if ($ics->getSecret() !== $secret) {
