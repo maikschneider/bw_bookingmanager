@@ -13,7 +13,6 @@ use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
@@ -369,10 +368,6 @@ class ApiController extends ActionController
             $GLOBALS['TSFE']->fe_user->loginUser = 1;
         }
 
-        // delete calendar cache
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
-        $cache->flushByTag('calendar' . $newEntry->getCalendar()->getUid());
-
         // send mails
         $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);
         $notificationManager->notify();
@@ -462,11 +457,6 @@ class ApiController extends ActionController
         return $this->htmlResponse();
     }
 
-    /**
-     * @return string|void
-     * @throws StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     */
     public function errorAction(): ResponseInterface
     {
         if ($this->request->getControllerActionName() === 'entryCreate') {
