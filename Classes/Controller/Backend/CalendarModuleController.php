@@ -29,10 +29,6 @@ class CalendarModuleController extends AbstractModuleController
         $this->view->assign('calendars', $calendars);
         $this->view->assign('viewState', json_encode($viewState, JSON_THROW_ON_ERROR));
 
-        // save selected route
-        $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->pid;
-        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 1);
-
         $this->moduleTemplate->setContent($this->view->render());
         $response = $this->responseFactory->createResponse()
             ->withHeader('Content-Type', 'text/html; charset=utf-8');

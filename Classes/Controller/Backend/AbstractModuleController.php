@@ -62,6 +62,12 @@ abstract class AbstractModuleController
         $params = $this->request->getQueryParams();
         $this->pid = (int)$params['id'];
 
+        // save selected route for onload redirect
+        if (isset($params['saveRoute'])) {
+            $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->pid;
+            $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, (int)$params['saveRoute']);
+        }
+
         // set typoscript settings
         $typoscript = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
@@ -255,12 +261,13 @@ abstract class AbstractModuleController
             ['action' => 'calendar', 'label' => 'calendar', 'route' => 'bookingmanager_calendar'],
         ];
 
-        foreach ($actions as $action) {
+        foreach ($actions as $key => $action) {
             $isActive = $this->currentAction === $action['action'];
+            $href = (string)$uriBuilder->buildUriFromRoute($action['route'], ['id' => $this->pid, 'saveRoute' => $key]);
 
             $item = $menu->makeMenuItem()
                 ->setTitle($GLOBALS['LANG']->sL($llPrefix . $action['label']))
-                ->setHref((string)$uriBuilder->buildUriFromRoute($action['route'], ['id' => $this->pid]))
+                ->setHref($href)
                 ->setActive($isActive);
             $menu->addMenuItem($item);
         }
