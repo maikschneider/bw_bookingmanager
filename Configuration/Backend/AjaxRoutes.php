@@ -1,6 +1,6 @@
 <?php
 
-use Blueways\BwBookingmanager\Controller\Ajax\ApiController;
+use Blueways\BwBookingmanager\Controller\Backend\ApiController;
 
 return [
     'api_calendar_show' => [

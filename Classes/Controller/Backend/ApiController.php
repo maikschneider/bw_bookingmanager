@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Blueways\BwBookingmanager\Controller\Ajax;
+namespace Blueways\BwBookingmanager\Controller\Backend;
 
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Utility\FullCalendarUtility;
