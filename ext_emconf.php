@@ -7,10 +7,10 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Maik Schneider',
     'author_email' => 'm.schneider@blueways.de',
     'state' => 'stable',
-    'version' => '11.0.3',
+    'version' => '11.0.4',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-11.99.99'
+            'typo3' => '11.5.0-11.99.99',
         ],
         'conflicts' => [],
         'suggests' => [],

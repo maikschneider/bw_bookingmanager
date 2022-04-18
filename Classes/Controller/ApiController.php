@@ -13,15 +13,12 @@ use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -369,10 +366,6 @@ class ApiController extends ActionController
             $GLOBALS['TSFE']->fe_user->loginUser = 1;
         }
 
-        // delete calendar cache
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
-        $cache->flushByTag('calendar' . $newEntry->getCalendar()->getUid());
-
         // send mails
         $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);
         $notificationManager->notify();
@@ -383,11 +376,6 @@ class ApiController extends ActionController
         return $this->htmlResponse();
     }
 
-    /**
-     * @throws InvalidPasswordHashException
-     * @throws StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     */
     public function loginAction(): ResponseInterface
     {
         if ($this->accessControlService->hasLoggedInFrontendUser()) {
@@ -447,26 +435,16 @@ class ApiController extends ActionController
         $GLOBALS['TSFE']->fe_user->loginUser = 0;
     }
 
-    /**
-     * @throws StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     */
     public function logoutAction(): ResponseInterface
     {
         $this->performLogout();
-        $this->throwStatus(
-            200,
-            'Logout successful',
-            json_encode(['title' => 'Logout successful', 'message' => 'You have been successfully logged out.'])
-        );
-        return $this->htmlResponse();
+
+        return $this->jsonResponse(json_encode([
+            'title' => 'Logout successful',
+            'message' => 'You have been successfully logged out.',
+        ], JSON_THROW_ON_ERROR));
     }
 
-    /**
-     * @return string|void
-     * @throws StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     */
     public function errorAction(): ResponseInterface
     {
         if ($this->request->getControllerActionName() === 'entryCreate') {

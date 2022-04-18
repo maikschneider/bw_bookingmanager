@@ -3,18 +3,16 @@
 defined('TYPO3') || die('Access denied.');
 
 call_user_func(
-    function () {
+    static function () {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'BwBookingmanager',
             'Pi1',
             [
                 \Blueways\BwBookingmanager\Controller\CalendarController::class => 'list, show',
-                \Blueways\BwBookingmanager\Controller\EntryController::class => 'list, new, show, delete, create'
+                \Blueways\BwBookingmanager\Controller\EntryController::class => 'list, new, show, delete, create',
             ],
-            // non-cacheable actions
             [
                 \Blueways\BwBookingmanager\Controller\CalendarController::class => 'show',
-                \Blueways\BwBookingmanager\Controller\TimeslotController::class => '',
                 \Blueways\BwBookingmanager\Controller\EntryController::class => 'create, list, delete',
             ]
         );
@@ -23,11 +21,10 @@ call_user_func(
             'BwBookingmanager',
             'Api',
             [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout'
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout',
             ],
-            // non-cacheable actions
             [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow'
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow',
             ]
         );
 
@@ -35,9 +32,8 @@ call_user_func(
             'BwBookingmanager',
             'Ics',
             [
-                \Blueways\BwBookingmanager\Controller\IcsController::class => 'show'
+                \Blueways\BwBookingmanager\Controller\IcsController::class => 'show',
             ],
-            // non-cacheable actions
             []
         );
 
@@ -53,16 +49,14 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/notification']['sendNotification'][] = 'Blueways\BwBookingmanager\Hooks\NotificationSpecial2IsCheckedHook';
         // entry validation hook
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][] = 'Blueways\BwBookingmanager\Hooks\TimeslotIsBookableHook';
-        // table list hook
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/class.db_list_extra.inc']['actions'][] = 'Blueways\BwBookingmanager\Hooks\EntryRecordListHook';
 
         // Register hook for EntryList query modification
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class]['modifyQuery'][] = \Blueways\BwBookingmanager\Hooks\TableListHook::class;
 
         // entry validation hook
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = array(
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = [
             'className' => 'Blueways\\BwBookingmanager\\Xclass\\Extbase\\Mvc\\Controller\\Argument',
-        );
+        ];
 
         // register custom TCA node field
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1533721566] = [
@@ -73,7 +67,7 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1607520481] = [
             'nodeName' => 'icsSecret',
             'priority' => '70',
-            'class' => \Blueways\BwBookingmanager\Form\Element\IcsSecret::class
+            'class' => \Blueways\BwBookingmanager\Form\Element\IcsSecret::class,
         ];
 
         // register recycler task
@@ -81,18 +75,8 @@ call_user_func(
             'extension' => 'bw_bookingmanager',
             'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:recyclertask.name',
             'description' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:recyclertask.description',
-            'additionalFields' => \Blueways\BwBookingmanager\Task\RecycleEntriesAdditionalFieldProvider::class
-
+            'additionalFields' => \Blueways\BwBookingmanager\Task\RecycleEntriesAdditionalFieldProvider::class,
         ];
-
-        // register caching frontend
-        if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['bwbookingmanager_calendar'])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['bwbookingmanager_calendar'] = array();
-        }
-
-        // register hooks to delete cache
-        $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['extkey'] = 'Blueways\\BwBookingmanager\\Hooks\\TCEmainHook';
-        $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['extkey'] = 'Blueways\\BwBookingmanager\\Hooks\\TCEmainHook';
 
         // register backend js
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['constructPostProcess'][] = \Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook::class . '->addFullCalendarJs';

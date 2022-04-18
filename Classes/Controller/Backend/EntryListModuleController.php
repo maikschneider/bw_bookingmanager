@@ -7,6 +7,9 @@ namespace Blueways\BwBookingmanager\Controller\Backend;
 use Blueways\BwBookingmanager\Domain\Model\Dto\AdministrationDemand;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class EntryListModuleController extends AbstractModuleController
@@ -29,12 +32,26 @@ class EntryListModuleController extends AbstractModuleController
             }
         }
 
+        // redirect to saved route
+        $selectableRoutes = ['entryListAction', 'calendarAction'];
+        $selectableRoutePaths = ['bookingmanager_entry_list', 'bookingmanager_calendar'];
+        $selectedRoute = $GLOBALS['BE_USER']->getModuleData('bwbookingmanager/selectedRoute-' . $this->pid);
+        if ($selectedRoute && $selectableRoutes[$selectedRoute] !== $this->currentAction . 'Action') {
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $path = $selectableRoutePaths[$selectedRoute];
+            $url = $uriBuilder->buildUriFromRoute($path, ['id' => $this->pid]);
+            return new RedirectResponse($url);
+        }
+
         $calendars = $this->calendarRepository->findAll();
         $calendar = $calendars && $calendars->count() ? $calendars->getFirst() : [];
 
-        // save selected route
-        $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->pid;
-        $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, 0);
+        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendEntryListButtons');
+        if ((int)$this->settings['showConfirmButton']) {
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BackendEntryListConfirmation');
+        }
 
         $this->view->assign('hideForm', $hideForm);
         $this->view->assign('page', $this->pid);

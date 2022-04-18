@@ -66,14 +66,15 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.hidden',
             'config' => [
                 'type' => 'check',
+                'renderType' => 'checkboxToggle',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.confirmed.yes',
+                    [
+                        0 => '',
+                        'invertStateDisplay' => true,
                     ],
                 ],
             ],
         ],
-
         'token' => [
             'config' => [
                 'type' => 'passthrough',
@@ -167,8 +168,9 @@ return [
             'config' => [
                 'type' => 'check',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                    [
+                        'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                        1,
                     ],
                 ],
                 'default' => 0,
@@ -179,12 +181,12 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.confirmed',
             'config' => [
                 'type' => 'check',
+                'renderType' => 'checkboxToggle',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.confirmed.yes',
+                    [
+                        0 => '',
                     ],
                 ],
-                'default' => 0,
             ],
         ],
         'special1' => [
@@ -193,8 +195,9 @@ return [
             'config' => [
                 'type' => 'check',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                    [
+                        'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                        1,
                     ],
                 ],
                 'default' => 0,
@@ -206,8 +209,9 @@ return [
             'config' => [
                 'type' => 'check',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                    [
+                        'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                        1,
                     ],
                 ],
                 'default' => 0,

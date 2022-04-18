@@ -8,12 +8,21 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\TimeslotCalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Ics;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use DateTime;
 
 class IcsUtility
 {
-    public static function compileTemplate(string $templateString, CalendarEvent $object)
+    protected EntryRepository $entryRepository;
+
+    protected TimeslotRepository $timeslotRepository;
+
+    public function __construct(EntryRepository $entryRepository, TimeslotRepository $timeslotRepository)
+    {
+        $this->entryRepository = $entryRepository;
+        $this->timeslotRepository = $timeslotRepository;
+    }
+
+    public static function compileTemplate(string $templateString, CalendarEvent $object): string
     {
         // look for FIELD:point
         // @TODO: look for relations
@@ -45,7 +54,7 @@ class IcsUtility
         return utf8_decode($templateString);
     }
 
-    public static function getIcsDates(\DateTime $startDate, \DateTime $endDate): string
+    public static function getIcsDates(DateTime $startDate, DateTime $endDate): string
     {
         if (CalendarEvent::isFullDay($startDate, $endDate)) {
             return 'DTSTART;VALUE=DATE:' . $startDate->format('Ymd') . '
@@ -80,14 +89,11 @@ class IcsUtility
         $startDate = $ics->getStartDate();
         $endDate = $ics->getEndDate();
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
         $feed = '';
 
         // Ics for Timeslots
         if ($options[0] || $options[1]) {
-            $timeslotRepository = $objectManager->get(TimeslotRepository::class);
-            $timeslotEvents = $timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+            $timeslotEvents = $this->timeslotRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
 
             /** @var TimeslotCalendarEvent $timeslotEvent */
             foreach ($timeslotEvents as $timeslotEvent) {
@@ -99,8 +105,7 @@ class IcsUtility
 
         // Ics for Entries
         if ($options[2] || $options[3]) {
-            $entryRepository = $objectManager->get(EntryRepository::class);
-            $entryEvents = $entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
+            $entryEvents = $this->entryRepository->getCalendarEventsInCalendar($calendars, $startDate, $endDate);
 
             /** @var EntryCalendarEvent $entryEvent */
             foreach ($entryEvents as $entryEvent) {

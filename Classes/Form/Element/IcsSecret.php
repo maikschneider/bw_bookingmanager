@@ -34,7 +34,7 @@ class IcsSecret extends AbstractFormElement
                 <div class="form-control-wrap" id="t3js-form-field-secret">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 3rem;">
 
-                <div class="input-group" style="display: grid; grid-template-columns: auto min-content">
+                <div class="input-group" style="display: flex;">
 
                 <input type="text" data-url-start="' . $urlStart . '" value="' . $url . '" id="inputUrl" class="form-control t3js-form-field" readonly />
 
@@ -49,7 +49,7 @@ class IcsSecret extends AbstractFormElement
 
                 </div>
 
-                <div class="input-group" style="display: grid; grid-template-columns: auto min-content;">
+                <div class="input-group" style="display: flex;">
 
                     <div class="form-control-clearable">
                         <input class="form-control t3js-form-field" id="inputSecret" value="' . $value . '" name="' . $name . '">

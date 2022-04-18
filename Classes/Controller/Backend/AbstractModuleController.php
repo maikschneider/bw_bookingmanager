@@ -12,7 +12,6 @@ use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -63,6 +62,12 @@ abstract class AbstractModuleController
         $params = $this->request->getQueryParams();
         $this->pid = (int)$params['id'];
 
+        // save selected route for onload redirect
+        if (isset($params['saveRoute'])) {
+            $moduleDataIdentifier = 'bwbookingmanager/selectedRoute-' . $this->pid;
+            $GLOBALS['BE_USER']->pushModuleData($moduleDataIdentifier, (int)$params['saveRoute']);
+        }
+
         // set typoscript settings
         $typoscript = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
@@ -76,14 +81,6 @@ abstract class AbstractModuleController
             $this->view->setTemplateRootPaths($settings['module']['tx_bwbookingmanager']['view']['templateRootPaths']);
             $this->view->setPartialRootPaths($settings['module']['tx_bwbookingmanager']['view']['partialRootPaths']);
             $this->view->setTemplate($this->currentAction);
-        }
-
-        // include javascript
-        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/AdministrationModule');
-        if ((int)$this->settings['showConfirmButton']) {
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Tooltip');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BwBookingmanager/BetterRecordlist');
         }
 
         // generate navigation components
@@ -264,12 +261,13 @@ abstract class AbstractModuleController
             ['action' => 'calendar', 'label' => 'calendar', 'route' => 'bookingmanager_calendar'],
         ];
 
-        foreach ($actions as $action) {
+        foreach ($actions as $key => $action) {
             $isActive = $this->currentAction === $action['action'];
+            $href = (string)$uriBuilder->buildUriFromRoute($action['route'], ['id' => $this->pid, 'saveRoute' => $key]);
 
             $item = $menu->makeMenuItem()
                 ->setTitle($GLOBALS['LANG']->sL($llPrefix . $action['label']))
-                ->setHref((string)$uriBuilder->buildUriFromRoute($action['route'], ['id' => $this->pid]))
+                ->setHref($href)
                 ->setActive($isActive);
             $menu->addMenuItem($item);
         }
