@@ -11,6 +11,7 @@ module.exports = {
     BackendCalendarContextMenuActions: './Resources/Private/TypeScript/BackendCalendarContextMenuActions.ts',
     BackendEntryListConfirmation: './Resources/Private/TypeScript/BackendEntryListConfirmation.ts',
     BackendEntryListButtons: './Resources/Private/TypeScript/BackendEntryListButtons.ts',
+    BackendFormElementIcsSecret: './Resources/Private/TypeScript/BackendFormElementIcsSecret.ts',
     SelectTimeslotDatesElement: './Resources/Private/TypeScript/SelectTimeslotDatesElement.ts'
   },
   output: {

@@ -8,11 +8,11 @@ declare global {
 
 
 /**
- * Module: TYPO3/CMS/BwBookingmanager/IcsSecret
+ * Module: TYPO3/CMS/BwBookingmanager/BackendFormElementIcsSecret
  *
- * @exports TYPO3/CMS/BwBookingmanager/IcsSecret
+ * @exports TYPO3/CMS/BwBookingmanager/BackendFormElementIcsSecret
  */
-class IcsSecret {
+class BackendFormElementIcsSecret {
 
   $resetButton: JQuery;
   $copyButton: JQuery;
@@ -84,4 +84,4 @@ class IcsSecret {
 
 }
 
-export = new IcsSecret();
+export = new BackendFormElementIcsSecret();
