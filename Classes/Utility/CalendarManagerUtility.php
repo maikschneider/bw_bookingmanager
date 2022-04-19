@@ -53,14 +53,7 @@ class CalendarManagerUtility
      */
     public function getConfiguration(DateConf $dateConf)
     {
-        $cacheIdentifier = sha1($this->calendar->getUid() . $dateConf->start->getTimestamp() . $dateConf->end->getTimestamp());
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
-
-        if (($configuration = $cache->get($cacheIdentifier)) === false) {
-            $configuration = $this->buildAndCacheConfiguration($dateConf);
-        }
-
-        return $configuration;
+        return $this->buildAndCacheConfiguration($dateConf);
     }
 
     /**
@@ -71,24 +64,7 @@ class CalendarManagerUtility
      */
     private function buildAndCacheConfiguration(DateConf $dateConf)
     {
-        $configuration = $this->buildConfiguration($dateConf);
-        $cacheTags = ['calendar' . $this->calendar->getUid()];
-
-        foreach ($configuration['timeslots'] as $key => $timeslot) {
-            $cacheTags[] = 'timeslot' . $timeslot->getUid();
-            $configuration['timeslots'][$key] = $timeslot->getApiOutput();
-        }
-
-        foreach ($configuration['entries'] as $key => $entry) {
-            $cacheTags[] = 'entry' . $entry->getUid();
-            $configuration['entries'][$key] = $entry->getApiOutput();
-        }
-
-        $cacheIdentifier = sha1($this->calendar->getUid() . $dateConf->start->getTimestamp() . $dateConf->end->getTimestamp());
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
-        $cache->set($cacheIdentifier, $configuration, array_unique($cacheTags), 2592000);
-
-        return $configuration;
+        return $this->buildConfiguration($dateConf);
     }
 
     /**
