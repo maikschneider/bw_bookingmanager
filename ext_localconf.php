@@ -8,12 +8,7 @@ call_user_func(
             'BwBookingmanager',
             'Pi1',
             [
-                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'list, show',
-                \Blueways\BwBookingmanager\Controller\EntryController::class => 'list, new, show, delete, create',
-            ],
-            [
-                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'show',
-                \Blueways\BwBookingmanager\Controller\EntryController::class => 'create, list, delete',
+                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'list',
             ]
         );
 
