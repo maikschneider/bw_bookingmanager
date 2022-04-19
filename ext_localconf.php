@@ -62,7 +62,7 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1533721566] = [
             'nodeName' => 'selectTimeslotDates',
             'priority' => '70',
-            'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslotDatesElement::class,
+            'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslot::class,
         ];
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1607520481] = [
             'nodeName' => 'icsSecret',

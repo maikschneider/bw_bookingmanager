@@ -12,7 +12,7 @@ module.exports = {
     BackendEntryListConfirmation: './Resources/Private/TypeScript/BackendEntryListConfirmation.ts',
     BackendEntryListButtons: './Resources/Private/TypeScript/BackendEntryListButtons.ts',
     BackendFormElementIcsSecret: './Resources/Private/TypeScript/BackendFormElementIcsSecret.ts',
-    SelectTimeslotDatesElement: './Resources/Private/TypeScript/SelectTimeslotDatesElement.ts'
+    BackendFormElementSelectTimeslot: './Resources/Private/TypeScript/BackendFormElementSelectTimeslot.ts'
   },
   output: {
     filename: 'Resources/Public/JavaScript/[name].js',

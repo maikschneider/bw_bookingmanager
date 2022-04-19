@@ -10,11 +10,11 @@ declare global {
 
 
 /**
- * Module: TYPO3/CMS/BwBookingmanager/SelectTimeslotDatesElement
+ * Module: TYPO3/CMS/BwBookingmanager/BackendFormElementSelectTimeslot
  *
- * @exports TYPO3/CMS/BwBookingmanager/SelectTimeslotDatesElement
+ * @exports TYPO3/CMS/BwBookingmanager/BackendFormElementSelectTimeslot
  */
-class SelectTimeslotDatesElement {
+class BackendFormElementSelectTimeslot {
 
   public constructor() {
 
@@ -69,4 +69,4 @@ class SelectTimeslotDatesElement {
 
 }
 
-export = new SelectTimeslotDatesElement();
+export = new BackendFormElementSelectTimeslot();

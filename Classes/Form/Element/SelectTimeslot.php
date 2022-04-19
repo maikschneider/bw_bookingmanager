@@ -11,20 +11,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class SelectTimeslotDatesElement extends AbstractFormElement
+class SelectTimeslot extends AbstractFormElement
 {
-    /**
-     * @var StandaloneView
-     */
-    protected $templateView;
+    protected StandaloneView $templateView;
 
-    /**
-     * @param NodeFactory $nodeFactory
-     * @param array $data
-     */
-    public function __construct(NodeFactory $nodeFactory, array $data)
+    protected CalendarRepository $calendarRepository;
+
+    public function __construct(NodeFactory $nodeFactory, array $data = [])
     {
         parent::__construct($nodeFactory, $data);
+
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->calendarRepository = $objectManager->get(CalendarRepository::class);
+
         $this->templateView = GeneralUtility::makeInstance(StandaloneView::class);
         $this->templateView->setLayoutRootPaths(['EXT:bw_bookingmanager/Resources/Private/Layouts/Backend']);
         $this->templateView->setPartialRootPaths(['EXT:bw_bookingmanager/Resources/Private/Partials/Backend']);
@@ -36,10 +35,10 @@ class SelectTimeslotDatesElement extends AbstractFormElement
      *
      * @return array As defined in initializeResultArray() of AbstractNode
      */
-    public function render()
+    public function render(): array
     {
         $resultArray = [];
-        $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/SelectTimeslotDatesElement';
+        $resultArray['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/BackendFormElementSelectTimeslot';
 
         $savedData = $this->getSavedData();
 
@@ -73,9 +72,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $calendar = $this->data['databaseRow']['calendar'][0];
         $entryUid = $this->data['databaseRow']['uid'];
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $calendarRepo = $objectManager->get(CalendarRepository::class);
-        $calendars = $calendarRepo->findAllByPid($savedData['pid']);
+        $calendars = $this->calendarRepository->findAllByPid($savedData['pid']);
 
         $viewState = new BackendCalendarViewState($savedData['pid']);
         $viewState->addCalendars($calendars);
@@ -98,12 +95,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         return $resultArray;
     }
 
-    protected function getLanguageService()
-    {
-        return $GLOBALS['LANG'];
-    }
-
-    private function getSavedData()
+    private function getSavedData(): array
     {
         $row = $this->data['databaseRow'];
 
@@ -111,7 +103,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
         $endDate = null;
         $pid = 0;
 
-        if ($this->data['defaultValues'] && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']) && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate']) && isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'])) {
+        if (isset($this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate'], $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate']) && $this->data['defaultValues']) {
             $startDate = $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['startDate'];
             $endDate = $this->data['defaultValues']['tx_bwbookingmanager_domain_model_entry']['endDate'];
         }
@@ -127,7 +119,7 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             $pid = $row['pid'];
         }
 
-        $savedData = [
+        return [
             'entryUid' => $row['uid'],
             'calendar' => !empty($row['calendar']) ? (int)$row['calendar'][0] : null,
             'timeslot' => !empty($row['timeslot']) ? $row['timeslot'] : null,
@@ -135,7 +127,5 @@ class SelectTimeslotDatesElement extends AbstractFormElement
             'endDate' => $endDate,
             'pid' => $pid,
         ];
-
-        return $savedData;
     }
 }

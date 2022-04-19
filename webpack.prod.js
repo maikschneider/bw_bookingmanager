@@ -6,6 +6,6 @@ module.exports = merge(common, {
   mode: 'production',
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin({extractComments: false})],
+    minimizer: [new TerserPlugin({extractComments: true})],
   },
 });

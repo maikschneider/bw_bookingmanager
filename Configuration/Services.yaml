@@ -32,3 +32,5 @@ services:
         identifier: 'bookingmanager/recordlist/modify-entry-list-table'
         method: 'modifyRecordActions'
 
+  Blueways\BwBookingmanager\Form\Element\SelectTimeslot:
+    public: true
