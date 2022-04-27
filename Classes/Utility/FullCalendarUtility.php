@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Utility;
 use Blueways\BwBookingmanager\Domain\Model\Dto\BackendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Model\Dto\CalendarEvent;
 use Blueways\BwBookingmanager\Domain\Model\Dto\EntryCalendarEvent;
+use Blueways\BwBookingmanager\Domain\Model\Dto\FrontendCalendarViewState;
 use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
@@ -50,7 +51,23 @@ class FullCalendarUtility
         $this->entryRepository = $entryRepository;
     }
 
-    public function getEvents(BackendCalendarViewState $viewState): array
+    public function getEventsForFrontend(FrontendCalendarViewState $viewState): array
+    {
+        $startDate = $viewState->getStartDate();
+        $endDate = $viewState->getEndDate();
+
+        $calendar = $this->calendarRepository->findByUid($viewState->calendar);
+
+        if (!$calendar) {
+            return [];
+        }
+
+        $timeslotEvents = $this->timeslotRepository->getCalendarEventsInCalendar([$calendar], $startDate, $endDate);
+
+        return $this->getOutputForFrontend($timeslotEvents, $viewState);
+    }
+
+    public function getEventsForBackend(BackendCalendarViewState $viewState): array
     {
         $startDate = $viewState->getStartDate();
         $endDate = $viewState->getEndDate();
@@ -137,6 +154,25 @@ class FullCalendarUtility
             $event->addBackendEditActionLink($this->uriBuilder);
             $event->addBackendModuleToolTip();
             $fullCalendarEvents[] = $event->getFullCalendarOutput();
+        }
+
+        return $fullCalendarEvents;
+    }
+
+    private function getOutputForFrontend(array $events, FrontendCalendarViewState $viewState): array
+    {
+        $fullCalendarEvents = [];
+
+        /** @var CalendarEvent $event */
+        foreach ($events as $event) {
+            $calEvent = $event->getFullCalendarOutput();
+            if (!$calEvent['extendedProps']['isBookable']) {
+                continue;
+            }
+            $calEvent['display'] = 'background';
+            $calEvent['allDay'] = true;
+            $calEvent['title'] = '';
+            $fullCalendarEvents[] = $calEvent;
         }
 
         return $fullCalendarEvents;

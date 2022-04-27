@@ -17,6 +17,7 @@ call_user_func(
             'Api',
             [
                 \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout',
+                \Blueways\BwBookingmanager\Controller\ApiV2Controller::class => 'calendarShow',
             ],
             [
                 \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow',

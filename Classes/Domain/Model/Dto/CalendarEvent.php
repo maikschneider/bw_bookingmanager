@@ -7,6 +7,7 @@ use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CalendarEvent
 {
@@ -65,6 +66,7 @@ class CalendarEvent
         if (property_exists($this, $name)) {
             return $this->$name;
         }
+        return null;
     }
 
     public function getFullCalendarOutput(): array
@@ -246,7 +248,7 @@ class CalendarEvent
 
     protected function getLanguageService(): LanguageService
     {
-        return $GLOBALS['LANG'];
+        return $GLOBALS['LANG'] ?? GeneralUtility::makeInstance(LanguageService::class);
     }
 
     public function addBackendModalSettings(UriBuilder $uriBuilder, BackendCalendarViewState $viewState): void

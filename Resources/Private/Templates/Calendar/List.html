@@ -1,28 +1,14 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 <f:layout name="Default"/>
 
-This Template is responsible for creating a table of domain objects.
-
-If you modify this template, do not forget to change the overwrite settings in
-/Configuration/ExtensionBuilder/settings.yaml: Resources: Private: Templates: List.html: keep
-
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
-
 <f:section name="main">
 	<f:flashMessages/>
-
-	<f:link.action action="calendarList" controller="Api" pageType="1556190329">API-Link</f:link.action>
 
 	<ul class="tx-bw-bookingmanager-calendar-list">
 		<f:for each="{calendars}" as="calendar">
 			<li>
-				<f:link.action action="show" controller="Calendar" arguments="{calendar : calendar}"> {calendar.name}
-				</f:link.action>
-				(
-				<f:link.action action="calendarShow" pageType="1556190329" controller="Api" arguments="{calendar : calendar}">
-					API
-				</f:link.action>
-				)
+				<h2>{calendar.name}</h2>
+				<booking-calendar url="{f:uri.action(action:'calendarShow', pageType: '1556190329', controller: 'ApiV2', arguments: {calendar: calendar}, absolute: 'true')}"></booking-calendar>
 			</li>
 		</f:for>
 	</ul>

@@ -28,8 +28,17 @@ routeEnhancers:
         _controller: 'Api::login'
       - routePath: /api/logout
         _controller: 'Api::logout'
+      - routePath: /api/v2/calendar/{calendar}
+        _controller: 'ApiV2::calendarShow'
+        _arguments:
+          - calendar: calendar
     requirements:
       calendar: \d+
       day: \d+
       month: \d+
       year: \d+
+    aspects:
+      calendar:
+        type: PersistedAliasMapper
+        tableName: tx_bwbookingmanager_domain_model_calendar
+        routeFieldName: uid
