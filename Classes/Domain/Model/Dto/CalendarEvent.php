@@ -141,6 +141,8 @@ class CalendarEvent
             'calendar' => $this->calendar,
             'isSelected' => false,
             'uniqueId' => $this->getUniqueId(),
+            'start' => $this->start->format('Y-m-d\TH:i:s.v\Z'),
+            'end' => $this->end->format('Y-m-d\TH:i:s.v\Z'),
         ];
     }
 

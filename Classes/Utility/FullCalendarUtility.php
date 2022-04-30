@@ -166,12 +166,16 @@ class FullCalendarUtility
         /** @var CalendarEvent $event */
         foreach ($events as $event) {
             $calEvent = $event->getFullCalendarOutput();
-            if (!$calEvent['extendedProps']['isBookable']) {
+            // exclude past events
+            if ($calEvent['extendedProps']['isInPast']) {
                 continue;
             }
             $calEvent['display'] = 'background';
             $calEvent['allDay'] = true;
             $calEvent['title'] = '';
+            if (!$calEvent['extendedProps']['isBookable']) {
+                $calEvent['display'] = 'none';
+            }
             $fullCalendarEvents[] = $calEvent;
         }
 
