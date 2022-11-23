@@ -1,4 +1,5 @@
 
+### DDEV-injected base Dockerfile contents
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 
