@@ -50,9 +50,9 @@
 		"typo3/cms-setup": "^11.4",
 		"typo3/cms-tstemplate": "^11.4",
 		"typo3/cms-viewpage": "^11.4",
-		"rector/rector": "^0.12.20",
 		"typo3/testing-framework": "^6.0",
-		"helhum/typo3-console": "^7.0"
+		"helhum/typo3-console": "^7.0",
+		"ssch/typo3-rector": "dev-main"
 	},
 	"extra": {
 		"typo3/cms": {
