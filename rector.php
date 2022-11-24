@@ -35,26 +35,20 @@ return static function (RectorConfig $rectorConfig): void {
 
     // If you use importNames(), you should consider excluding some TYPO3 files.
     $rectorConfig->skip([
-        // @see https://github.com/sabbelasichon/typo3-rector/issues/2536
-        __DIR__ . '/**/Configuration/ExtensionBuilder/*',
-        // We skip those directories on purpose as there might be node_modules or similar
-        // that include typescript which would result in false positive processing
-        __DIR__ . '/**/Resources/**/node_modules/*',
-        __DIR__ . '/**/Resources/**/NodeModules/*',
-        __DIR__ . '/**/Resources/**/BowerComponents/*',
-        __DIR__ . '/**/Resources/**/bower_components/*',
-        __DIR__ . '/**/Resources/**/build/*',
+        __DIR__ . '/node_modules/*',
         __DIR__ . '/vendor/*',
         __DIR__ . '/Build/*',
         __DIR__ . '/public/*',
         __DIR__ . '/.github/*',
         __DIR__ . '/.Build/*',
+        __DIR__ . '/.ddev/*',
+        __DIR__ . '/typo3_src/*',
         NameImportingPostRector::class => [
             'ext_localconf.php',
             'ext_tables.php',
             'ClassAliasMap.php',
-            __DIR__ . '/**/Configuration/*.php',
-            __DIR__ . '/**/Configuration/**/*.php',
+            __DIR__ . '/Configuration/*.php',
+            __DIR__ . '/Configuration/**/*.php',
         ]
     ]);
 
