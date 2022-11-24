@@ -12,7 +12,6 @@ use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
-
     // If you want to override the number of spaces for your typoscript files you can define it here, the default value is 4
     // $parameters = $rectorConfig->parameters();
     // $parameters->set(Typo3Option::TYPOSCRIPT_INDENT_SIZE, 2);
@@ -49,7 +48,7 @@ return static function (RectorConfig $rectorConfig): void {
             'ClassAliasMap.php',
             __DIR__ . '/Configuration/*.php',
             __DIR__ . '/Configuration/**/*.php',
-        ]
+        ],
     ]);
 
     // If you have trouble that rector cannot run because some TYPO3 constants are not defined add an additional constants file
@@ -80,7 +79,7 @@ return static function (RectorConfig $rectorConfig): void {
     // Add some general TYPO3 rules
     $rectorConfig->rule(ConvertImplicitVariablesToExplicitGlobalsRector::class);
     $rectorConfig->ruleWithConfiguration(ExtEmConfRector::class, [
-        ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => []
+        ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => [],
     ]);
 
     // Modernize your TypoScript include statements for files and move from <INCLUDE /> to @import use the FileIncludeToImportStatementVisitor (introduced with TYPO3 9.0)

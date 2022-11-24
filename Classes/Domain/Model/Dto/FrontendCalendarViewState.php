@@ -6,7 +6,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FrontendCalendarViewState
 {
-
     public ?string $start;
 
     public ?string $end;

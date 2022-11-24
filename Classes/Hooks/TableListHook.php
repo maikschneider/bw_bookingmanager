@@ -22,7 +22,6 @@ class TableListHook
     ) {
         $isBookingManagerRoute = GeneralUtility::_GET('route') === '/bookingmanager/entry/list' || GeneralUtility::_GET('route') === '/module/web/bookingmanager';
         if ($isBookingManagerRoute) {
-
             // Fix for TYPO3 v9+: After the where parameter gets extended, the default parameter for storagePid gets lost
             $parameters['where'][] = 'pid=' . $pageId;
 

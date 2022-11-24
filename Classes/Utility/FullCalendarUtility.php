@@ -28,12 +28,12 @@ class FullCalendarUtility
     protected EntryRepository $entryRepository;
 
     /**
-     * @param \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder
-     * @param \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
-     * @param \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
-     * @param \Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository $blockslotRepository
-     * @param \Blueways\BwBookingmanager\Domain\Repository\HolidayRepository $holidayRepository
-     * @param \Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository
+     * @param UriBuilder $uriBuilder
+     * @param CalendarRepository $calendarRepository
+     * @param TimeslotRepository $timeslotRepository
+     * @param BlockslotRepository $blockslotRepository
+     * @param HolidayRepository $holidayRepository
+     * @param EntryRepository $entryRepository
      */
     public function __construct(
         UriBuilder $uriBuilder,

@@ -8,7 +8,6 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class CalendarController extends ActionController
 {
-
     protected CalendarRepository $calendarRepository;
 
     public function __construct(CalendarRepository $calendarRepository)
