@@ -11,6 +11,9 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class ApiV2Controller extends ActionController
 {
+    /**
+     * @throws \JsonException
+     */
     public function calendarShowAction(Calendar $calendar): ResponseInterface
     {
         $calendarUtil = GeneralUtility::makeInstance(FullCalendarUtility::class);

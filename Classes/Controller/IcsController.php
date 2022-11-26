@@ -16,6 +16,9 @@ class IcsController extends ActionController
         $this->icsUtility = $icsUtility;
     }
 
+    /**
+     * @throws \TYPO3\CMS\Core\Http\PropagateResponseException
+     */
     public function showAction(Ics $ics, string $secret = ''): ResponseInterface
     {
         if ($ics->getSecret() !== $secret) {
