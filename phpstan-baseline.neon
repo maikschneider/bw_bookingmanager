@@ -21,7 +21,7 @@ parameters:
 			path: Classes/Command/TimeslotUpdateCommand.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
+			message: "#^Cannot call method fetchAllAssociative\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
 			count: 1
 			path: Classes/Command/TimeslotUpdateCommand.php
 
@@ -141,11 +141,6 @@ parameters:
 			path: Classes/Controller/ApiController.php
 
 		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:initializeEntryCreateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
 			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:injectAccessControlService\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
@@ -236,6 +231,16 @@ parameters:
 			path: Classes/Controller/ApiController.php
 
 		-
+			message: "#^Parameter \\#1 \\$validator of method TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\AbstractCompositeValidator\\:\\:addValidator\\(\\) expects TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\ValidatorInterface, Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\EntryCreateValidator\\|null given\\.$#"
+			count: 1
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Parameter \\#1 \\$validator of method TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\AbstractCompositeValidator\\:\\:addValidator\\(\\) expects TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\ValidatorInterface, Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\FeUserCreateValidator\\|null given\\.$#"
+			count: 1
+			path: Classes/Controller/ApiController.php
+
+		-
 			message: "#^Parameter \\#2 \\$date of class Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Dto\\\\DateConf constructor expects DateTime, DateTime\\|false given\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
@@ -247,7 +252,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$content of method TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Controller\\\\ActionController\\:\\:throwStatus\\(\\) expects string\\|null, string\\|false given\\.$#"
-			count: 6
+			count: 5
 			path: Classes/Controller/ApiController.php
 
 		-

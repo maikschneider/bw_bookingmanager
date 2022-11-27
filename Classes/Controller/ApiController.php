@@ -8,6 +8,8 @@ use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator;
+use Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
 use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
@@ -168,7 +170,13 @@ class ApiController extends ActionController
         return $this->htmlResponse();
     }
 
-    public function initializeEntryCreateAction()
+    /**
+     * @throws \TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException
+     * @throws \TYPO3\CMS\Core\Http\PropagateResponseException
+     * @throws \JsonException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     */
+    public function initializeEntryCreateAction(): void
     {
         if (!$this->arguments->hasArgument('newEntry')) {
             $content = ['errors' => ['entry' => 'no data for new entry given']];
@@ -189,7 +197,7 @@ class ApiController extends ActionController
         $calendar = $this->calendarRepository->findByIdentifier((int)$newEntry['calendar']);
         if (!$calendar) {
             $content = ['errors' => ['calendar' => 'calendar not found']];
-            $this->throwStatus(406, 'Validation failed', json_encode($content));
+            $this->throwStatus(406, 'Validation failed', json_encode($content, JSON_THROW_ON_ERROR));
         }
         $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
         $propertyMappingConfiguration->setTypeConverterOption(
@@ -215,9 +223,9 @@ class ApiController extends ActionController
         $propertyMappingConfiguration->skipUnknownProperties();
 
         // set validator
-        $validatorResolver = $this->objectManager->get(ValidatorResolver::class);
+        $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
         $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
-        $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
+        $entryValidator = $validatorResolver->createValidator(EntryCreateValidator::class);
         $validatorConjunction->addValidator($entryValidator);
         $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
 
@@ -268,9 +276,9 @@ class ApiController extends ActionController
             $propertyMappingConfiguration->skipUnknownProperties();
 
             // set user validator
-            $validatorResolver = $this->objectManager->get(ValidatorResolver::class);
+            $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
             $validatorConjunction = $validatorResolver->getBaseValidatorConjunction(FrontendUser::class);
-            $userValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator');
+            $userValidator = $validatorResolver->createValidator(FeUserCreateValidator::class);
             $validatorConjunction->addValidator($userValidator);
             $this->arguments->getArgument('user')->setValidator($validatorConjunction);
         }
