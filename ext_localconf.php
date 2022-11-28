@@ -49,9 +49,9 @@ call_user_func(
         // Register hook for EntryList query modification
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class]['modifyQuery'][] = \Blueways\BwBookingmanager\Hooks\TableListHook::class;
 
-        // entry validation hook
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = [
-            'className' => 'Blueways\\BwBookingmanager\\Xclass\\Extbase\\Mvc\\Controller\\Argument',
+        // xclass to make overrides of controller arguments possible in 3rd party extensions
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Mvc\Controller\Argument::class] = [
+            'className' => \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument::class,
         ];
 
         // register custom TCA node field
