@@ -142,12 +142,11 @@ class EntryCreateValidator extends AbstractValidator
 
         $this->timeslot = clone $this->entry->getTimeslot();
 
-        // timezone fix
-        $this->timeslot_startDate = $this->timeslot->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
-        $this->timeslot_endDate = $this->timeslot->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->timeslot_startDate = $this->timeslot->getStartDate();
+        $this->timeslot_endDate = $this->timeslot->getEndDate();
 
-        $this->entry_startDate = $this->entry->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
-        $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->entry_startDate = $this->entry->getStartDate();
+        $this->entry_endDate = $this->entry->getEndDate();
 
         $this->validateDates();
         $this->validateWeight();
