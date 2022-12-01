@@ -1,6 +1,6 @@
 <?php
 
-namespace Blueways\BwBookingmanager\Events;
+namespace Blueways\BwBookingmanager\EventListener;
 
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -9,7 +9,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Recordlist\Event\ModifyRecordListRecordActionsEvent;
 
-class ModifyEntryListTableListener
+class ModifyEntryListTable
 {
     protected array $settings;
 
@@ -19,7 +19,7 @@ class ModifyEntryListTableListener
         $this->settings = $typoScript['module.']['tx_bwbookingmanager.']['settings.'];
     }
 
-    public function modifyRecordActions(ModifyRecordListRecordActionsEvent $event): void
+    public function __invoke(ModifyRecordListRecordActionsEvent $event): void
     {
         $table = $event->getTable();
         $row = $event->getRecord();
