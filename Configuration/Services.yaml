@@ -32,5 +32,10 @@ services:
         identifier: 'bookingmanager/recordlist/modify-entry-list-table'
         method: 'modifyRecordActions'
 
+  Blueways\BwBookingmanager\EventListener\NotificationsAfterEntryCreate:
+    tags:
+      - name: event.listener
+        identifier: 'bookingmanager/notifications-after-create'
+
   Blueways\BwBookingmanager\Form\Element\SelectTimeslot:
     public: true

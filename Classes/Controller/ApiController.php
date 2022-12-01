@@ -10,6 +10,7 @@ use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
 use Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator;
 use Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator;
+use Blueways\BwBookingmanager\Event\AfterEntryCreationEvent;
 use Blueways\BwBookingmanager\Helper\NotificationManager;
 use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
@@ -25,6 +26,7 @@ use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
@@ -356,15 +358,14 @@ class ApiController extends ActionController
         }
 
         // persist by hand to get uid field and make redirect possible
-        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
         $persistenceManager->persistAll();
 
         // login the newly created user
         if ($user && !$user->getLastlogin()) {
             $GLOBALS['TSFE']->fe_user->checkPid = 0;
             $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
-            /** @var FrontendUserAuthentication $userAuth */
-            $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+            $userAuth = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
             $userAuth->checkPid = false;
             $tempUser = $userAuth->fetchUserRecord($info['db_user'], $user->getUsername());
 
@@ -376,8 +377,7 @@ class ApiController extends ActionController
         }
 
         // send mails
-        $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);
-        $notificationManager->notify();
+        $this->eventDispatcher->dispatch(new AfterEntryCreationEvent($newEntry));
 
         $this->view->setConfiguration($this->configuration);
         $this->view->assign('newEntry', $newEntry);
