@@ -14,7 +14,7 @@ use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * @deprecated 
+ * @deprecated
  */
 class NotificationManager
 {
