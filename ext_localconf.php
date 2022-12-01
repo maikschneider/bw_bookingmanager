@@ -76,5 +76,8 @@ call_user_func(
 
         // register backend js
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['constructPostProcess'][] = \Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook::class . '->addFullCalendarJs';
+
+        // Register Mail Templates
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][107] = 'EXT:bw_bookingmanager/Resources/Private/Templates/Email';
     }
 );
