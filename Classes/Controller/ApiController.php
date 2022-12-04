@@ -205,6 +205,7 @@ class ApiController extends ActionController
             PersistentObjectConverter::CONFIGURATION_TARGET_TYPE,
             $entityClass
         );
+        $this->arguments->getArgument('newEntry')->setDataType($entityClass);
 
         // convert timestamps
         $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(
