@@ -454,18 +454,22 @@ class ApiController extends ActionController
         ], JSON_THROW_ON_ERROR));
     }
 
+    /**
+     * @throws \TYPO3\CMS\Core\Http\PropagateResponseException
+     */
     public function errorAction(): ResponseInterface
     {
         if ($this->request->getControllerActionName() === 'entryCreate') {
-            $errors = $this->arguments->validate()->forProperty('newEntry')->getFlattenedErrors();
-            $errors = array_merge($errors, $this->arguments->validate()->forProperty('user')->getFlattenedErrors());
+            $newEntryErrors = $this->arguments->validate()->forProperty('newEntry')->getErrors();
+            $userErrors = $this->arguments->validate()->forProperty('user')->getErrors();
+            $allErrors = array_merge($newEntryErrors, $userErrors);
 
-            $errors = array_map(function ($error) {
-                return $this->htmlResponse($error[0]->getMessage());
-            }, $errors);
+            $allErrors = array_map(function ($error) {
+                return $error->getMessage();
+            }, $allErrors);
 
             $content = [
-                'errors' => $errors,
+                'errors' => $allErrors,
             ];
 
             $this->throwStatus(406, 'Validation failed', json_encode($content));
