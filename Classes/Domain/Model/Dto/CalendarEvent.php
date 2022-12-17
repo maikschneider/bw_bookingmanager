@@ -75,7 +75,7 @@ class CalendarEvent
             'title' => $this->getTitle(),
             'start' => $this->start->format('Y-m-d\TH:i:s.v\Z'),
             'end' => $this->end->format('Y-m-d\TH:i:s.v\Z'),
-            'allDay' => static::isFullDay($this->start, $this->end),
+            'allDay' => $this->isAllDay(),
             'color' => $this->getColor(),
             'display' => $this->getDisplay(),
             'url' => $this->getUrl(),
@@ -259,6 +259,6 @@ class CalendarEvent
 
     public function isAllDay(): bool
     {
-        return $this->allDay;
+        return static::isFullDay($this->start, $this->end);
     }
 }
