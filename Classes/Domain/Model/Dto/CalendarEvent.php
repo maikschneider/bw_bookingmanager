@@ -256,4 +256,9 @@ class CalendarEvent
     public function addBackendModalSettings(UriBuilder $uriBuilder, BackendCalendarViewState $viewState): void
     {
     }
+
+    public function isAllDay(): bool
+    {
+        return $this->allDay;
+    }
 }

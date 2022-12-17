@@ -176,6 +176,7 @@ class FullCalendarUtility
             if (!$calEvent['extendedProps']['isBookable']) {
                 $calEvent['display'] = 'none';
             }
+            $calEvent['extendedProps']['allDay'] = $event->isAllDay();
             $fullCalendarEvents[] = $calEvent;
         }
 
