@@ -73,7 +73,6 @@ class IcsUtility
 
         $feed .= 'END:VCALENDAR';
         $feed = str_replace('  ', '', $feed);
-        $feed = preg_replace('~\R~u', "\r\n", $feed);
 
         return $feed;
     }
