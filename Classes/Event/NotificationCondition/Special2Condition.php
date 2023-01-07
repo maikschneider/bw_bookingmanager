@@ -9,6 +9,6 @@ class Special2Condition implements NotificationConditionInterface
 
     public function doSend(Entry $entry): bool
     {
-        return false;
+        return $entry->getSpecial2();
     }
 }

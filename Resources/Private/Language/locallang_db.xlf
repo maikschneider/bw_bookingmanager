@@ -255,10 +255,10 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions">
 				<source>Conditions</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special1IsChecked">
 				<source>Special 1 is checked</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special2IsChecked">
 				<source>Special 2 is checked</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">

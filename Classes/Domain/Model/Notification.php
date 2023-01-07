@@ -3,6 +3,7 @@
 namespace Blueways\BwBookingmanager\Domain\Model;
 
 use Blueways\BwBookingmanager\Event\NotificationConditionInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -28,17 +29,19 @@ class Notification extends AbstractEntity
 
     protected string $emailSubject = '';
 
-    /**
-     * @var string[]
-     */
-    protected array $conditions = [];
+    protected string $conditions = '';
+
+    public function setConditions(string $conditions): void
+    {
+        $this->conditions = $conditions;
+    }
 
     /**
      * @return string[]
      */
     public function getConditions(): array
     {
-        return $this->conditions;
+        return GeneralUtility::trimExplode(',', $this->conditions, true);
     }
 
     public function getEvent(): int
