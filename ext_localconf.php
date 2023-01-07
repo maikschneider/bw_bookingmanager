@@ -6,14 +6,6 @@ call_user_func(
     static function () {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'BwBookingmanager',
-            'Pi1',
-            [
-                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'list',
-            ]
-        );
-
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'BwBookingmanager',
             'Api',
             [
                 \Blueways\BwBookingmanager\Controller\ApiController::class => 'entryCreate, login, logout',

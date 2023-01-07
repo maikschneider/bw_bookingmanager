@@ -1,27 +1,8 @@
 <?php
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') or die();
-
-/***************
- * A add Pi1 Plugin
- */
-ExtensionUtility::registerPlugin(
-    'BwBookingmanager',
-    'Pi1',
-    'Booking Manager',
-    'apps-pagetree-folder-contains-bm'
-);
-// Add flexform for pi1
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['bwbookingmanager_pi1'] = 'recursive,select_key,pages';
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['bwbookingmanager_pi1'] = 'pi_flexform';
-ExtensionManagementUtility::addPiFlexFormValue(
-    'bwbookingmanager_pi1',
-    'FILE:EXT:bw_bookingmanager/Configuration/FlexForms/flexform_bwbookingmanager.xml'
-);
-
 /**
  * B add calendar field for textmedia
  */
