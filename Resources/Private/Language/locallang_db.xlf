@@ -277,7 +277,7 @@
 				<source>Email Subject</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
-				<source>New Booking</source>
+				<source>About your booking</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
 				<source>Event</source>

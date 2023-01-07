@@ -355,8 +355,8 @@
 				<target>E-Mail Betreff</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
-				<source>New Booking</source>
-				<target>Neue Buchung</target>
+				<source>About your booking</source>
+				<target>Ihre Buchung</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
 				<source>Event</source>
