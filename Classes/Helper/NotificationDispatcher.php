@@ -31,7 +31,7 @@ class NotificationDispatcher
         $configuration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 
         $from = $configuration['settings']['mail']['senderAddress'] ?? MailUtility::getSystemFrom();
-        $to = $notification->getEmail();
+        $to = $notification->getEmail() ?: $entry->getEmail();
         $subject = $notification->getEmailSubject();
         $template = $notification->getTemplate();
 

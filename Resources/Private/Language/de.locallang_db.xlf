@@ -314,6 +314,14 @@
 				<source>Email</source>
 				<target>E-Mail</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.placeholder">
+				<source>Email of booking entry</source>
+				<target>E-Mail der Buchung</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.description">
+				<source>Defaults to the email address of the incoming booking</source>
+				<target>Standardmäßig wird die E-Mail-Adresse der eingehenden Buchung verwendet.</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
 				<source>Hook</source>
 				<target>Hook</target>

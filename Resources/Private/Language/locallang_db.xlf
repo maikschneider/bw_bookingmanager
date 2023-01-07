@@ -246,6 +246,12 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email">
 				<source>Email</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.placeholder">
+				<source>Email of booking entry</source>
+			</trans-unit>
+            <trans-unit id="tx_bwbookingmanager_domain_model_notification.email.description">
+				<source>Defaults to the email address of the incoming booking</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
 				<source>Hook</source>
 			</trans-unit>
