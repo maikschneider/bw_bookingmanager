@@ -12,10 +12,6 @@ plugin.tx_bwbookingmanager {
     storagePid = {$plugin.tx_bwbookingmanager_pi1.persistence.storagePid}
   }
 
-  mvc {
-    callDefaultActionIfActionCantBeResolved = 1
-  }
-
   view {
     templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
     templateRootPaths.1 = {$plugin.tx_bwbookingmanager.view.templateRootPath}
@@ -26,45 +22,10 @@ plugin.tx_bwbookingmanager {
   }
 
   settings {
-    cancelTime = {$plugin.tx_bwbookingmanager.settings.cancelTime}
     userStoragePid = {$plugin.tx_bwbookingmanager.settings.userStoragePid}
     mail {
       senderAddress = {$plugin.tx_bwbookingmanager.settings.mail.senderAddress}
-      senderName = {$plugin.tx_bwbookingmanager.settings.mail.senderName}
-      replytoAddress = {$plugin.tx_bwbookingmanager.settings.mail.replytoAddress}
-      subject = {$plugin.tx_bwbookingmanager.settings.mail.subject}
-      template = {$plugin.tx_bwbookingmanager.settings.mail.template}
-      showUid = {$plugin.tx_bwbookingmanager.settings.mail.showUid}
-      doSendConfirmation = {$plugin.tx_bwbookingmanager.settings.mail.doSendConfirmation}
     }
-
-    directBooking {
-      defaultStartTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultStartTime}
-      defaultEndTime = {$plugin.tx_bwbookingmanager.settings.directBooking.defaultEndTime}
-      minOffset = {$plugin.tx_bwbookingmanager.settings.directBooking.minOffset}
-      minLength = {$plugin.tx_bwbookingmanager.settings.directBooking.minLength}
-    }
-  }
-}
-
-######################
-### CONTENT PLUGIN ###
-######################
-plugin.tx_bwbookingmanager_pi1 {
-
-  features {
-    skipDefaultArguments = 0
-    # if set to 1, the enable fields are ignored in BE context
-    ignoreAllEnableFieldsInBe = 0
-    # Should be on by default, but can be disabled if all action in the plugin are uncached
-    requireCHashArgumentForActionArguments = 1
-  }
-
-  settings {
-    showPid = {$plugin.tx_bwbookingmanager_pi1.settings.showPid}
-    calendarPid = {$plugin.tx_bwbookingmanager_pi1.settings.calendarPid}
-    entryPid = {$plugin.tx_bwbookingmanager_pi1.settings.entryPid}
-    backPid = {$plugin.tx_bwbookingmanager_pi1.settings.backPid}
   }
 }
 
@@ -160,21 +121,6 @@ module.tx_bwbookingmanager {
 
     calendarOptions {
 
-    }
-  }
-}
-
-#################################
-### EMAIL EXTENSION OVERRIDES ###
-#################################
-plugin.tx_bwemail {
-  settings {
-    tableOverrides {
-      tx_bwbookingmanager_domain_model_entry {
-        recipientAddress = FIELD:email
-        recipientName = FIELD:prename FIELD:name
-        subject = New booking in FIELD:calendar.name
-      }
     }
   }
 }
