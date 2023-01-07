@@ -252,11 +252,8 @@
             <trans-unit id="tx_bwbookingmanager_domain_model_notification.email.description">
 				<source>Defaults to the email address of the incoming booking</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
-				<source>Hook</source>
-			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
-				<source>None</source>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions">
+				<source>Conditions</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
 				<source>Special 1 is checked</source>

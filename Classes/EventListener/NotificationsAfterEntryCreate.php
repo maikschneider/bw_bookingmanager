@@ -4,7 +4,11 @@ namespace Blueways\BwBookingmanager\EventListener;
 
 use Blueways\BwBookingmanager\Domain\Model\Notification;
 use Blueways\BwBookingmanager\Event\AfterEntryCreationEvent;
+use Blueways\BwBookingmanager\Event\NotificationCondition\NotificationConditionInterface;
 use Blueways\BwBookingmanager\Helper\NotificationDispatcher;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
 class NotificationsAfterEntryCreate
 {
@@ -15,6 +19,10 @@ class NotificationsAfterEntryCreate
         $this->notificationDispatcher = $notificationDispatcher;
     }
 
+    /**
+     * @throws InvalidConfigurationTypeException
+     * @throws TransportExceptionInterface
+     */
     public function __invoke(AfterEntryCreationEvent $event): void
     {
         $entry = $event->getEntry();
@@ -22,9 +30,26 @@ class NotificationsAfterEntryCreate
         $notifications = $entry->getCalendar()->getNotifications();
 
         foreach ($notifications as $notification) {
-            if ($notification->getEvent() === Notification::EVENT_CREATION) {
-                $this->notificationDispatcher->dispatchEntryNotification($notification, $entry);
+            if ($notification->getEvent() !== Notification::EVENT_CREATION) {
+                continue;
             }
+
+            $conditions = $notification->getConditions();
+
+            foreach ($conditions as $conditionName) {
+
+                if (!is_subclass_of($conditionName, NotificationConditionInterface::class)) {
+                    throw new \RuntimeException('Class ' . $conditionName . ' does not implement NotificationConditionInterface::class');
+                }
+
+                /** @var NotificationConditionInterface $condition */
+                $condition = GeneralUtility::makeInstance($conditionName);
+                if (!$condition->doSend($entry)) {
+                    continue 2;
+                }
+            }
+
+            $this->notificationDispatcher->dispatchEntryNotification($notification, $entry);
         }
     }
 }

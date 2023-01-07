@@ -2,6 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use Blueways\BwBookingmanager\Event\NotificationConditionInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -26,6 +27,19 @@ class Notification extends AbstractEntity
     protected string $template = '';
 
     protected string $emailSubject = '';
+
+    /**
+     * @var string[]
+     */
+    protected array $conditions = [];
+
+    /**
+     * @return string[]
+     */
+    public function getConditions(): array
+    {
+        return $this->conditions;
+    }
 
     public function getEvent(): int
     {
