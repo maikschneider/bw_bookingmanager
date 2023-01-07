@@ -44,24 +44,39 @@ Emails are send through the [TYPO3 Mail API](https://docs.typo3.org/m/typo3/refe
 
 ### Conditional notifications
 
-Conditions for notifications can be modified by using [PSR-14 events](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Events/EventDispatcher/Index.html).
+To add a new condition in the backend, register a new checkbox item via TCA:
 
-To add a new condition in the backend, insert a new checkbox item via TCA (optional)
 ```php
-$GLOBALS['TCA']['tx_bwbookingmanager_domain_model_notification']['columns']['conditions']['items'][] = ['New condition name', 'condition-value'];
+$GLOBALS['TCA']['tx_bwbookingmanager_domain_model_notification']['columns']['conditions']['items'][] = [
+    'New condition name', \Vendor\Extension\NotificationCondition\TheNewCondition::class
+];
 ```
 
-Add an EventListener for the `DispatchEntryNotificationEvent` event and modify the `doDispatch` property:
+The value of the item should be a class name that implements the ```NotificationConditionInterface```.
 
 ```
-class NewNotificationCondition
+class TheNewCondition implements NotificationConditionInterface
 {
-    public function __invoke(DispatchEntryNotificationEvent $event)
+
+    public function doSend(Entry $entry): bool
     {
-        // ... some checks
-        $event->setDoDispatch(false);
+        // ...logic
+
+        // prevent sending of email
+        return false;
     }
+}
 ```
+
+## API
+
+There a various ways to extend or modify the behavior of the booking manager.
+
+### Events
+
+There are [PSR-14 events](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Events/EventDispatcher/Index.html) dispatched which offer a way to execute custom functionality
+
+* AfterEntryCreationEvent
 
 ## Changelog
 
