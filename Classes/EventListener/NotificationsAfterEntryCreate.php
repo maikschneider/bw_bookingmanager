@@ -44,7 +44,7 @@ class NotificationsAfterEntryCreate
 
                 /** @var NotificationConditionInterface $condition */
                 $condition = GeneralUtility::makeInstance($conditionName);
-                if (!$condition->doSend($entry)) {
+                if (!$condition->doSend($entry, $notification)) {
                     continue 2;
                 }
             }
