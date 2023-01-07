@@ -25,7 +25,7 @@ return [
             'config' => [
                 'type' => 'check',
                 'items' => [
-                    ['LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled', '1']
+                    ['LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled', '1'],
                 ],
             ],
         ],
@@ -46,7 +46,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'placeholder' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email.placeholder'
+                'placeholder' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email.placeholder',
             ],
         ],
         'event' => [
@@ -76,12 +76,12 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.conditions.special1IsChecked',
-                        \Blueways\BwBookingmanager\Event\NotificationCondition\Special1Condition::class
+                        \Blueways\BwBookingmanager\Event\NotificationCondition\Special1Condition::class,
                     ],
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.conditions.special2IsChecked',
-                        \Blueways\BwBookingmanager\Event\NotificationCondition\Special2Condition::class
-                    ]
+                        \Blueways\BwBookingmanager\Event\NotificationCondition\Special2Condition::class,
+                    ],
                 ],
             ],
         ],
@@ -94,7 +94,7 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.template.default',
-                        'default'
+                        'default',
                     ],
                 ],
             ],

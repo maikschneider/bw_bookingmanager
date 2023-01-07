@@ -28,7 +28,6 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ApiController extends ActionController
 {
-
     protected $defaultViewObjectName = JsonView::class;
 
     protected array $configuration = [
