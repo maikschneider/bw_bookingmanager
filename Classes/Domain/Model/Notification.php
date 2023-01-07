@@ -2,206 +2,111 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
-use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-/***
- *
- * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
- ***/
-/**
- * Notification
- */
 class Notification extends AbstractEntity
 {
     const EVENT_CREATION = 0;
 
     const EVENT_DELETION = 1;
 
-    /**
-     * name
-     *
-     * @var string
-     */
-    protected $name = '';
+    protected int $event = 0;
+
+    protected string $name = '';
+
+    protected string $email = '';
 
     /**
-     * email
-     *
      * @var string
+     * @deprecated
      */
-    protected $email = '';
+    protected string $hook = '';
 
-    /**
-     * hook
-     *
-     * @var string
-     */
-    protected $hook = '';
+    protected string $template = '';
 
-    /**
-     * template
-     *
-     * @var string
-     */
-    protected $template = '';
+    protected string $emailSubject = '';
 
-    /**
-     * emailSubject
-     *
-     * @var string
-     */
-    protected $emailSubject = '';
-
-    /**
-     * @return int
-     */
     public function getEvent(): int
     {
         return $this->event;
     }
 
-    /**
-     * @param int $event
-     */
-    public function setEvent(int $event)
+    public function setEvent(int $event): void
     {
         $this->event = $event;
     }
 
-    /**
-     * @var int
-     */
-    protected $event = self::EVENT_CREATION;
-
-    /**
-     * Returns the name
-     *
-     * @return string $name
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Sets the name
-     *
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * Returns the emailSubject
-     *
-     * @return string $emailSubject
-     */
-    public function getEmailSubject()
+    public function getEmailSubject(): string
     {
         return $this->emailSubject;
     }
 
-    /**
-     * Sets the emailSubject
-     *
-     * @param string $emailSubject
-     */
-    public function setEmailSubject($emailSubject)
+    public function setEmailSubject(string $emailSubject): void
     {
         $this->emailSubject = $emailSubject;
     }
 
-    /**
-     * Returns the email
-     *
-     * @return string $email
-     */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * Sets the email
-     *
-     * @param string $email
-     */
-    public function setEmail($email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
     /**
-     * Returns the hook
-     *
-     * @return int $hook
+     * @deprecated
      */
-    public function getHook()
+    public function getHook(): string
     {
         return $this->hook;
     }
 
     /**
-     * Sets the hook
-     *
-     * @param int $hook
+     * @deprecated
      */
-    public function setHook($hook)
+    public function setHook(string $hook): void
     {
         $this->hook = $hook;
     }
 
     /**
-     * calendars
-     *
      * @var ObjectStorage<Calendar>
-     * @Extbase\ORM\Lazy
      */
-    protected $calendars;
+    protected ObjectStorage $calendars;
 
-    /**
-     * Adds a Calendar
-     *
-     * @param Calendar $calendar
-     */
     public function addCalendar(Calendar $calendar)
     {
         $this->calendars->attach($calendar);
     }
 
-    /**
-     * Removes a Calendar
-     *
-     * @param Calendar $calendarToRemove The Calendar to be removed
-     */
-    public function removeCalendar(Calendar $calendarToRemove)
+    public function removeCalendar(Calendar $calendarToRemove): void
     {
         $this->calendars->detach($calendarToRemove);
     }
 
     /**
-     * Returns the calendars
-     *
      * @return ObjectStorage<Calendar> $calendars
      */
-    public function getCalendars()
+    public function getCalendars(): ObjectStorage
     {
         return $this->calendars;
     }
 
     /**
-     * Sets the calendars
-     *
      * @param ObjectStorage<Calendar> $calendars
      */
     public function setCalendars(ObjectStorage $calendars)
@@ -209,31 +114,22 @@ class Notification extends AbstractEntity
         $this->calendars = $calendars;
     }
 
-    /**
-     * Returns the template
-     *
-     * @return string $template
-     */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * Sets the template
-     *
-     * @param string $template
-     */
-    public function setTemplate($template)
+    public function setTemplate(string $template): void
     {
         $this->template = $template;
     }
 
     /**
      * checks if a hook is set and not default (=NONE)
-     * @return bool
+     *
+     * @deprecated
      */
-    public function hasHook()
+    public function hasHook(): bool
     {
         return $this->hook && $this->hook != '' && $this->hook != '0';
     }
