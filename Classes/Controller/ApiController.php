@@ -225,13 +225,6 @@ class ApiController extends ActionController
         $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields($entityClass));
         $propertyMappingConfiguration->skipUnknownProperties();
 
-        // set validator
-        $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
-        $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
-        $entryValidator = $validatorResolver->createValidator(EntryCreateValidator::class);
-        $validatorConjunction->addValidator($entryValidator);
-        $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
-
         // add fe_user if logged in
         $userId = $this->accessControlService->getFrontendUserUid();
         if ($userId) {
@@ -342,6 +335,7 @@ class ApiController extends ActionController
 
     /**
      * @param Entry $newEntry
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
      * @param FrontendUser|null $user
      * @throws IllegalObjectTypeException
      * @throws NoSuchCacheException
