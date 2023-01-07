@@ -3,14 +3,14 @@
 ## Install
 
 * via composer
-```
+```bash
 composer require blueways/bw-bookingmanager
 ```
 
 * include TypoScript setup and constants
 * include route enhancer in site config:
 
-```
+```yaml
 imports:
   - resource: 'EXT:bw_bookingmanager/Configuration/Routing/Api.yaml'
   - resource: 'EXT:bw_bookingmanager/Configuration/Routing/Ics.yaml'
@@ -32,7 +32,7 @@ To send automated emails, add a new Notification record inside a SysFolder and s
 
 The template can be selected in the Notification settings. To modify the available templates, use PageTS:
 
-```
+```typo3_typoscript
 TCEFORM.tx_bwbookingmanager_domain_model_notification {
   template.addItems {
     welcome = Welcome Template
@@ -40,7 +40,11 @@ TCEFORM.tx_bwbookingmanager_domain_model_notification {
 }
 ```
 
-Emails are send through the [TYPO3 Mail API](https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/ApiOverview/Mail/Index.html). To use custom email templates, add your template directory to the TYPO3 configuration and make sure the configured template name exists.
+Emails are send through the [TYPO3 Mail API](https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/ApiOverview/Mail/Index.html). To use custom email templates, add your template directory to the TYPO3 configuration and make sure the configured template name exists:
+
+```php
+$GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][107] = 'EXT:extension/Resources/Private/Templates/Email';
+```
 
 ### Conditional notifications
 
@@ -54,7 +58,7 @@ $GLOBALS['TCA']['tx_bwbookingmanager_domain_model_notification']['columns']['con
 
 The value of the item should be a class name that implements the ```NotificationConditionInterface```.
 
-```
+```php
 class TheNewCondition implements NotificationConditionInterface
 {
 
