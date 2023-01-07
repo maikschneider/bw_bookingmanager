@@ -34,9 +34,9 @@ class NotificationsAfterEntryCreate
                 continue;
             }
 
-            $conditions = $notification->getConditions();
+            $conditionNames = GeneralUtility::trimExplode(',', $notification->getConditions(), true);
 
-            foreach ($conditions as $conditionName) {
+            foreach ($conditionNames as $conditionName) {
 
                 if (!is_subclass_of($conditionName, NotificationConditionInterface::class)) {
                     throw new \RuntimeException('Class ' . $conditionName . ' does not implement NotificationConditionInterface::class');

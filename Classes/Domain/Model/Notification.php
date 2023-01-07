@@ -36,12 +36,9 @@ class Notification extends AbstractEntity
         $this->conditions = $conditions;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getConditions(): array
+    public function getConditions(): string
     {
-        return GeneralUtility::trimExplode(',', $this->conditions, true);
+        return $this->conditions;
     }
 
     public function getEvent(): int
