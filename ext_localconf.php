@@ -16,12 +16,9 @@ call_user_func(
             'BwBookingmanager',
             'Api',
             [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout',
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'entryCreate, login, logout',
                 \Blueways\BwBookingmanager\Controller\ApiV2Controller::class => 'calendarShow',
             ],
-            [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow',
-            ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
