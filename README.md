@@ -26,6 +26,24 @@ To create a new calendar
 
 ## Notifications
 
+To send automated emails, add a new Notification record inside a SysFolder and select the event and calendars you want to be notified about.
+
+### E-Mail Templates
+
+The template can be selected in the Notification settings. To modify the available templates, use PageTS:
+
+```
+TCEFORM.tx_bwbookingmanager_domain_model_notification {
+  template.addItems {
+    welcome = Welcome Template
+  }
+}
+```
+
+Emails are send through the [TYPO3 Mail API](https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/ApiOverview/Mail/Index.html). To use custom email templates, add your template directory to the TYPO3 configuration and make sure the configured template name exists.
+
+### Conditional notifications
+
 Conditions for notifications can be modified by using [PSR-14 events](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Events/EventDispatcher/Index.html).
 
 To add a new condition in the backend, insert a new checkbox item via TCA (optional)
@@ -44,11 +62,6 @@ class NewNotificationCondition
         $event->setDoDispatch(false);
     }
 ```
-
-## E-Mails
-
-Emails are send through the [TYPO3 Mail API](https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/ApiOverview/Mail/Index.html). To use custom email templates, add your template directory to the TYPO3 configuration and make sure the configured template name exists.
-
 
 ## Changelog
 
