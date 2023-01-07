@@ -2,8 +2,6 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
-use Blueways\BwBookingmanager\Event\NotificationConditionInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
