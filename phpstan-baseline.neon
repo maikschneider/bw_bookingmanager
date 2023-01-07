@@ -101,18 +101,18 @@ parameters:
 			path: Classes/ContextMenu/CalendarItemProvider.php
 
 		-
-			message: "#^Call to an undefined method T of object\\:\\:persistAll\\(\\)\\.$#"
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Controller\\\\Argument\\:\\:setDataType\\(\\)\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
 
 		-
 			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\View\\\\ViewInterface\\:\\:setConfiguration\\(\\)\\.$#"
-			count: 4
+			count: 2
 			path: Classes/Controller/ApiController.php
 
 		-
 			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\View\\\\ViewInterface\\:\\:setVariablesToRender\\(\\)\\.$#"
-			count: 5
+			count: 2
 			path: Classes/Controller/ApiController.php
 
 		-
@@ -132,36 +132,6 @@ parameters:
 
 		-
 			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:getAllowedEntryFields\\(\\) has parameter \\$entityClass with no type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:initializeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:injectAccessControlService\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:injectCalendarRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:injectEntryRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:injectFrontendUserRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Controller\\\\ApiController\\:\\:injectTimeslotRepository\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
 
@@ -231,17 +201,7 @@ parameters:
 			path: Classes/Controller/ApiController.php
 
 		-
-			message: "#^Parameter \\#1 \\$validator of method TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\AbstractCompositeValidator\\:\\:addValidator\\(\\) expects TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\ValidatorInterface, Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\EntryCreateValidator\\|null given\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
 			message: "#^Parameter \\#1 \\$validator of method TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\AbstractCompositeValidator\\:\\:addValidator\\(\\) expects TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\ValidatorInterface, Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\FeUserCreateValidator\\|null given\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
-			message: "#^Parameter \\#2 \\$date of class Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Dto\\\\DateConf constructor expects DateTime, DateTime\\|false given\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
 
@@ -1061,52 +1021,12 @@ parameters:
 			path: Classes/Domain/Model/Notification.php
 
 		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:getHook\\(\\) should return int but returns string\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:removeCalendar\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
 			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setCalendars\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: Classes/Domain/Model/Notification.php
 
 		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setEmail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setEmailSubject\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setEvent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setHook\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Model/Notification.php
-
-		-
-			message: "#^Property Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:\\$hook \\(string\\) does not accept int\\.$#"
+			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\:\\:setName\\(\\) has parameter \\$name with no type specified\\.$#"
 			count: 1
 			path: Classes/Domain/Model/Notification.php
 
@@ -1596,9 +1516,9 @@ parameters:
 			path: Classes/Domain/Validator/FeUserCreateValidator.php
 
 		-
-			message: "#^Property Blueways\\\\BwBookingmanager\\\\Events\\\\ModifyEntryListTableListener\\:\\:\\$settings type has no value type specified in iterable type array\\.$#"
+			message: "#^Property Blueways\\\\BwBookingmanager\\\\EventListener\\\\ModifyEntryListTable\\:\\:\\$settings type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: Classes/Events/ModifyEntryListTableListener.php
+			path: Classes/EventListener/ModifyEntryListTable.php
 
 		-
 			message: "#^Method Blueways\\\\BwBookingmanager\\\\Form\\\\Element\\\\IcsSecret\\:\\:render\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -1721,154 +1641,9 @@ parameters:
 			path: Classes/Helper/DashboardCharts.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:executeHook\\(\\)\\.$#"
+			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationDispatcher\\:\\:dispatchEntryNotification\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Call to method assign\\(\\) on an unknown class Blueways\\\\BwEmail\\\\View\\\\EmailView\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Call to method getRenderingContext\\(\\) on an unknown class Blueways\\\\BwEmail\\\\View\\\\EmailView\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Call to method render\\(\\) on an unknown class Blueways\\\\BwEmail\\\\View\\\\EmailView\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Call to method setTemplate\\(\\) on an unknown class Blueways\\\\BwEmail\\\\View\\\\EmailView\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:getEntry\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:getMailBody\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:getMailBody\\(\\) has parameter \\$templateName with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:notify\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:notifyDeletion\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendConfirmation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendMail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendMail\\(\\) has parameter \\$body with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendMail\\(\\) has parameter \\$from with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendMail\\(\\) has parameter \\$replyTo with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendMail\\(\\) has parameter \\$subject with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendMail\\(\\) has parameter \\$to with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendNotification\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendNotifications\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:sendNotifications\\(\\) has parameter \\$eventType with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:setSettings\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:setSettings\\(\\) has parameter \\$settings with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:triggerHook\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:triggerHook\\(\\) has parameter \\$notification with no type specified\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Method Symfony\\\\Component\\\\Mime\\\\Message\\:\\:setBody\\(\\) invoked with 2 parameters, 0\\-1 required\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$className of static method TYPO3\\\\CMS\\\\Core\\\\Utility\\\\GeneralUtility\\:\\:makeInstance\\(\\) expects class\\-string\\<Blueways\\\\BwEmail\\\\View\\\\EmailView\\>, string given\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Property Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:\\$extbaseFrameworkConfiguration type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Property Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:\\$notifications \\(array\\<Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\>\\) does not accept TYPO3\\\\CMS\\\\Extbase\\\\Persistence\\\\ObjectStorage\\<Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Notification\\>\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Property Blueways\\\\BwBookingmanager\\\\Helper\\\\NotificationManager\\:\\:\\$senderUtility has unknown class Blueways\\\\BwEmail\\\\Utility\\\\SenderUtility as its type\\.$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
-
-		-
-			message: "#^Unable to resolve the template type T in call to method static method TYPO3\\\\CMS\\\\Core\\\\Utility\\\\GeneralUtility\\:\\:makeInstance\\(\\)$#"
-			count: 1
-			path: Classes/Helper/NotificationManager.php
+			path: Classes/Helper/NotificationDispatcher.php
 
 		-
 			message: "#^Method Blueways\\\\BwBookingmanager\\\\Helper\\\\RenderConfiguration\\:\\:getDayArray\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -2191,46 +1966,6 @@ parameters:
 			path: Classes/Helper/TimeslotManager.php
 
 		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial1IsCheckedHook\\:\\:executeHook\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial1IsCheckedHook.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial1IsCheckedHook\\:\\:executeHook\\(\\) has parameter \\$notification with no type specified\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial1IsCheckedHook.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial1IsCheckedHook\\:\\:executeHook\\(\\) has parameter \\$notificationManager with no type specified\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial1IsCheckedHook.php
-
-		-
-			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial1IsCheckedHook.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial2IsCheckedHook\\:\\:executeHook\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial2IsCheckedHook.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial2IsCheckedHook\\:\\:executeHook\\(\\) has parameter \\$notification with no type specified\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial2IsCheckedHook.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Hooks\\\\NotificationSpecial2IsCheckedHook\\:\\:executeHook\\(\\) has parameter \\$notificationManager with no type specified\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial2IsCheckedHook.php
-
-		-
-			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
-			count: 1
-			path: Classes/Hooks/NotificationSpecial2IsCheckedHook.php
-
-		-
 			message: "#^Cannot call method getTimestamp\\(\\) on DateTime\\|false\\.$#"
 			count: 4
 			path: Classes/Hooks/TableListHook.php
@@ -2416,29 +2151,9 @@ parameters:
 			path: Classes/Utility/FullCalendarUtility.php
 
 		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Utility\\\\IcsUtility\\:\\:getFromIcs\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: Classes/Utility/IcsUtility.php
-
-		-
 			message: "#^Method Blueways\\\\BwBookingmanager\\\\Xclass\\\\Extbase\\\\Mvc\\\\Controller\\\\Argument\\:\\:setDataType\\(\\) has parameter \\$dataType with no type specified\\.$#"
 			count: 1
 			path: Classes/Xclass/Extbase/Mvc/Controller/Argument.php
-
-		-
-			message: "#^Access to undefined constant object\\:\\:HOOK_ID\\.$#"
-			count: 1
-			path: Configuration/TCA/Overrides/tx_bwbookingmanager_domain_model_notification.php
-
-		-
-			message: "#^Access to undefined constant object\\:\\:HOOK_LABEL\\.$#"
-			count: 1
-			path: Configuration/TCA/Overrides/tx_bwbookingmanager_domain_model_notification.php
-
-		-
-			message: "#^Unable to resolve the template type T in call to method static method TYPO3\\\\CMS\\\\Core\\\\Utility\\\\GeneralUtility\\:\\:makeInstance\\(\\)$#"
-			count: 1
-			path: Configuration/TCA/Overrides/tx_bwbookingmanager_domain_model_notification.php
 
 		-
 			message: "#^Access to undefined constant object\\:\\:HOOK_LABEL\\.$#"
