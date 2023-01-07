@@ -1,1 +1,1 @@
-@import 'EXT:bw_bookingmanager/Configuration/TSconfig/User/*.tsconfig'
+options.contextMenu.table.tx_bwbookingmanager_domain_model_calendar.calendar.disableItems = edit, view, new, info, copy, copyRelease, cut, cutRelease, pasteAfter, pasteInto, newWizard, pagesSort, pagesNewMultiple, openListModule, mountAsTreeRoot, hideInMenus, showInMenus, permissions, enable, disable, delete, history, clearCache, more, exportT3d
