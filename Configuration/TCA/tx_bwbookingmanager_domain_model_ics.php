@@ -148,7 +148,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-                'default' => 'FUNC:bookedWeight/FIELD:max_weight',
+                'default' => 'FIELD:bookedWeight/FIELD:maxWeight',
             ],
         ],
         'timeslot_location' => [
