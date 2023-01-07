@@ -25,9 +25,7 @@ return [
             'config' => [
                 'type' => 'check',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
-                    ],
+                    ['LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled', '1']
                 ],
             ],
         ],
