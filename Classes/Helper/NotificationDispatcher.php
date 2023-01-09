@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Helper;
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Model\Notification;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -28,9 +29,15 @@ class NotificationDispatcher
      */
     public function dispatchEntryNotification(Notification $notification, Entry $entry)
     {
-        $configuration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $configuration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
-        $from = $configuration['settings']['mail']['senderAddress'] ?? MailUtility::getSystemFrom();
+        $fromAddress = $configuration['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['senderAddress'] ?? '';
+        $fromName = $configuration['plugin.']['tx_bwbookingmanager.']['settings.']['mail.']['senderName'] ?? '';
+        if (!$fromAddress) {
+            $fromAddress = MailUtility::getSystemFrom()[0];
+            $fromName = MailUtility::getSystemFrom()[1] ?? '';
+        }
+        $from = new Address($fromAddress, $fromName);
         $to = $notification->getEmail() ?: $entry->getEmail();
         $subject = $notification->getEmailSubject();
         $template = $notification->getTemplate();

@@ -13,7 +13,8 @@ plugin.tx_bwbookingmanager {
 
   settings {
     mail {
-      senderAddress = noreply@example.com
+      senderAddress =
+      senderName =
     }
 
     userStoragePid =
