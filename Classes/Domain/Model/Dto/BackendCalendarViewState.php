@@ -166,8 +166,10 @@ class BackendCalendarViewState
         if (!$this->entryStart) {
             return null;
         }
-
-        return (new \DateTime())->setTimestamp((int)$this->entryStart);
+        $eventTomezoneOffset = (new \DateTime(gmdate("Y-m-d\TH:i:s", $this->entryStart), new \DateTimeZone('Europe/Berlin')))->getOffset();
+        $newEntryStart = (new \DateTime())->setTimestamp((int)$this->entryStart);
+        $newEntryStart->modify('- '.($eventTomezoneOffset.'seconds'));
+        return ($newEntryStart);
     }
 
     public function getEntryEndDate()
@@ -175,8 +177,10 @@ class BackendCalendarViewState
         if (!$this->entryEnd) {
             return null;
         }
-
-        return (new \DateTime())->setTimestamp((int)$this->entryEnd);
+        $eventTomezoneOffset = (new \DateTime(gmdate("Y-m-d\TH:i:s", $this->entryEnd), new \DateTimeZone('Europe/Berlin')))->getOffset();
+        $newEntryEnd = (new \DateTime())->setTimestamp((int)$this->entryEnd);
+        $newEntryEnd->modify('- '.($eventTomezoneOffset.'seconds'));
+        return ($newEntryEnd);
     }
 
     public function isNewModalView(): bool

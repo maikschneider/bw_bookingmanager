@@ -205,6 +205,13 @@ class ApiController extends ActionController
     {
         $newEntry->generateToken();
         // override PID (just in case the storage PID differs from current calendar)
+        $eventTomezoneOffset = (new \DateTime($newEntry->getStartDate()->format('D jS M y'), new \DateTimeZone('Europe/Berlin')))->getOffset();
+        $x = $newEntry->getStartDate();
+        $newstart = $x->modify('- '.($eventTomezoneOffset.'seconds'));
+        $y = $newEntry->getEndDate();
+        $newend = $y->modify('- '.($eventTomezoneOffset.'seconds'));
+        $newEntry->setStartDate($newstart);
+        $newEntry->setEndDate($newend);
         $newEntry->setPid($newEntry->getCalendar()->getPid());
         $this->entryRepository->add($newEntry);
 
