@@ -5,6 +5,7 @@ namespace Blueways\BwBookingmanager\Domain\Validator;
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Utility\DstFixUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
@@ -57,6 +58,7 @@ class EntryCreateValidator extends AbstractValidator
      */
     public function isValid($entry)
     {
+        DstFixUtility::adjustEntryDates($entry);
         $this->entry = clone $entry;
 
         if (!$this->entry->getTimeslot() && !$this->entry->getCalendar()->isDirectBooking()) {
@@ -142,11 +144,12 @@ class EntryCreateValidator extends AbstractValidator
 
         $this->timeslot = clone $this->entry->getTimeslot();
 
-        $this->timeslot_startDate = $this->timeslot->getStartDate();
-        $this->timeslot_endDate = $this->timeslot->getEndDate();
+        // timezone fix
+        $this->timeslot_startDate = $this->timeslot->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->timeslot_endDate = $this->timeslot->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
 
-        $this->entry_startDate = $this->entry->getStartDate();
-        $this->entry_endDate = $this->entry->getEndDate();
+        $this->entry_startDate = $this->entry->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
 
         $this->validateDates();
         $this->validateWeight();
