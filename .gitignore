@@ -6,6 +6,7 @@ vendor
 public
 !Resources/Public
 !typo3_src/**/Resources/Public
+*LICENSE*
 var
 bin
 .php_cs.cache
