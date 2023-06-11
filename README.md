@@ -43,7 +43,7 @@ TCEFORM.tx_bwbookingmanager_domain_model_notification {
 Emails are send through the [TYPO3 Mail API](https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/ApiOverview/Mail/Index.html). To use custom email templates, add your template directory to the TYPO3 configuration and make sure the configured template name exists:
 
 ```php
-$GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][107] = 'EXT:extension/Resources/Private/Templates/Email';
+$GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][108] = 'EXT:extension/Resources/Private/Templates/Email';
 ```
 
 ### Conditional notifications
