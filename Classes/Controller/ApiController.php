@@ -4,28 +4,37 @@ namespace Blueways\BwBookingmanager\Controller;
 
 use Blueways\BwBookingmanager\Domain\Model\Calendar;
 use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
-use Blueways\BwBookingmanager\Helper\NotificationManager;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
+use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
+use Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator;
+use Blueways\BwBookingmanager\Event\AfterEntryCreationEvent;
+use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
+use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
+use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ApiController extends ActionController
 {
-
-    /**
-     * @var string
-     */
     protected $defaultViewObjectName = JsonView::class;
 
-    /**
-     * @var array
-     */
-    protected $configuration = [
+    protected array $configuration = [
         'newEntry' => [
             '_exclude' => ['token', 'confirmed'],
             '_descend' => [
@@ -35,47 +44,40 @@ class ApiController extends ActionController
                 'startDate' => [],
                 'displayStartDate' => [],
                 'displayEndDate' => [],
+                'feUser' => [
+                    '_exclude' => ['password'],
+                ],
             ],
+        ],
+        'user' => [
+            '_exclude' => ['password'],
         ],
     ];
 
-    /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository
-     *
-     */
-    protected $calendarRepository;
+    protected CalendarRepository $calendarRepository;
 
-    /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     *
-     */
-    protected $timeslotRepository;
+    protected EntryRepository $entryRepository;
 
-    /**
-     * @var \Blueways\BwBookingmanager\Domain\Repository\EntryRepository
-     *
-     */
-    protected $entryRepository;
+    protected AccessControlService $accessControlService;
 
-    /**
-     * @var UriBuilder
-     */
-    protected $uriBuilder;
+    protected FrontendUserRepository $frontendUserRepository;
 
-    public function calendarListAction()
-    {
-        $calendars = $this->calendarRepository->findAllIgnorePid();
+    protected CalendarManagerUtility $calendarManagerUtility;
 
-        $this->view->assign('calendars', $calendars);
-        $this->view->setVariablesToRender(array('calendars'));
+    public function __construct(
+        CalendarRepository $calendarRepository,
+        EntryRepository $entryRepository,
+        AccessControlService $accessControlService,
+        FrontendUserRepository $frontendUserRepository,
+        CalendarManagerUtility $calendarManagerUtility
+    ) {
+        $this->calendarRepository = $calendarRepository;
+        $this->entryRepository = $entryRepository;
+        $this->accessControlService = $accessControlService;
+        $this->frontendUserRepository = $frontendUserRepository;
+        $this->calendarManagerUtility = $calendarManagerUtility;
     }
 
-    /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \Exception
-     */
     public function calendarShowAction(Calendar $calendar)
     {
         $startDate = new \DateTime('now');
@@ -83,44 +85,56 @@ class ApiController extends ActionController
 
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
-        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
-        $configuration = $calendarManager->getConfiguration($dateConf);
+        $this->calendarManagerUtility->setCalendar($calendar);
+        $configuration = $this->calendarManagerUtility->getConfiguration($dateConf);
+
+        if ($user = $this->accessControlService->getFrontendUserUid()) {
+            $user = $this->frontendUserRepository->findByIdentifier($user);
+        }
 
         $this->view->assignMultiple([
+            'title' => $calendar->getName(),
+            'message' => 'Calendar listing from ' . $dateConf->start->format('d.m.Y') . ' to ' . $dateConf->end->format('d.m.Y'),
             'configuration' => $configuration,
-            'calendar' => $calendar
+            'calendar' => $calendar,
+            'user' => $user,
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar'));
+        $this->view->setVariablesToRender(['configuration', 'calendar', 'user', 'title', 'message']);
     }
 
-    /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @param int $day
-     * @param int $month
-     * @param int $year
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
     public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year)
     {
         $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
         $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
 
-        $calendarManager = $this->objectManager->get(CalendarManagerUtility::class, $calendar);
-        $configuration = $calendarManager->getConfiguration($dateConf);
+        $this->calendarManagerUtility->setCalendar($calendar);
+        $configuration = $this->calendarManagerUtility->getConfiguration($dateConf);
+
+        if ($user = $this->accessControlService->getFrontendUserUid()) {
+            $user = $this->frontendUserRepository->findByIdentifier($user);
+        }
 
         $this->view->assignMultiple([
+            'title' => $calendar->getName(),
+            'message' => 'Calendar listing from ' . $dateConf->start->format('d.m.Y') . ' to ' . $dateConf->end->format('d.m.Y'),
             'configuration' => $configuration,
-            'calendar' => $calendar
+            'calendar' => $calendar,
+            'user' => $user,
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar'));
+        $this->view->setVariablesToRender(['configuration', 'calendar', 'user', 'title', 'message']);
     }
 
-    public function initializeEntryCreateAction()
+    /**
+     * @throws InvalidPasswordHashException
+     * @throws PropagateResponseException
+     * @throws \JsonException
+     * @throws NoSuchArgumentException
+     */
+    public function initializeEntryCreateAction(): void
     {
         if (!$this->arguments->hasArgument('newEntry')) {
             $content = ['errors' => ['entry' => 'no data for new entry given']];
@@ -129,9 +143,11 @@ class ApiController extends ActionController
 
         // allow creation of Entry
         $propertyMappingConfiguration = $this->arguments->getArgument('newEntry')->getPropertyMappingConfiguration();
-        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
+        $propertyMappingConfiguration->setTypeConverterOption(
+            PersistentObjectConverter::class,
             PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
-            true);
+            true
+        );
 
         // set Entry class name from calendar constant
         /** @var array $newEntry */
@@ -139,18 +155,24 @@ class ApiController extends ActionController
         $calendar = $this->calendarRepository->findByIdentifier((int)$newEntry['calendar']);
         if (!$calendar) {
             $content = ['errors' => ['calendar' => 'calendar not found']];
-            $this->throwStatus(406, 'Validation failed', json_encode($content));
+            $this->throwStatus(406, 'Validation failed', json_encode($content, JSON_THROW_ON_ERROR));
         }
         $entityClass = $calendar::ENTRY_TYPE_CLASSNAME;
-        $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class,
-            PersistentObjectConverter::CONFIGURATION_TARGET_TYPE, $entityClass);
+        $propertyMappingConfiguration->setTypeConverterOption(
+            PersistentObjectConverter::class,
+            PersistentObjectConverter::CONFIGURATION_TARGET_TYPE,
+            $entityClass
+        );
+        $this->arguments->getArgument('newEntry')->setDataType($entityClass);
 
         // convert timestamps
-        $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(DateTimeConverter::class,
+        $propertyMappingConfiguration->forProperty('startDate')->setTypeConverterOption(
+            DateTimeConverter::class,
             DateTimeConverter::CONFIGURATION_DATE_FORMAT,
             'U'
         );
-        $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(DateTimeConverter::class,
+        $propertyMappingConfiguration->forProperty('endDate')->setTypeConverterOption(
+            DateTimeConverter::class,
             DateTimeConverter::CONFIGURATION_DATE_FORMAT,
             'U'
         );
@@ -159,38 +181,67 @@ class ApiController extends ActionController
         $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields($entityClass));
         $propertyMappingConfiguration->skipUnknownProperties();
 
-        // set validator
-        $validatorResolver = $this->objectManager->get(\TYPO3\CMS\Extbase\Validation\ValidatorResolver::class);
-        $validatorConjunction = $validatorResolver->getBaseValidatorConjunction($entityClass);
-        $entryValidator = $validatorResolver->createValidator('\Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator');
-        $validatorConjunction->addValidator($entryValidator);
-        $this->arguments->getArgument('newEntry')->setValidator($validatorConjunction);
-    }
+        // add fe_user if logged in
+        $userId = $this->accessControlService->getFrontendUserUid();
+        if ($userId) {
+            $this->arguments->addNewArgument('user', FrontendUser::class);
+            $this->request->setArgument('user', (string)$userId);
+        }
 
-    public function injectCalendarRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\CalendarRepository $calendarRepository
-    ) {
-        $this->calendarRepository = $calendarRepository;
-    }
+        // create fe_user from entry
+        $doCreateUser = (int)GeneralUtility::_POST('createUserAccount') === 1 || GeneralUtility::_POST('createUserAccount') === 'on';
+        if ($doCreateUser && (int)$this->settings['userStoragePid']) {
+            $newEntry = $this->request->getArgument('newEntry');
 
-    public function injectEntryRepository(\Blueways\BwBookingmanager\Domain\Repository\EntryRepository $entryRepository)
-    {
-        $this->entryRepository = $entryRepository;
-    }
+            $feUser = [];
+            $feUser['pid'] = (int)$this->settings['userStoragePid'];
+            $feUser['username'] = $newEntry['email'];
+            $feUser['email'] = $newEntry['email'];
+            $feUser['firstName'] = $newEntry['prename'];
+            $feUser['lastName'] = $newEntry['name'];
+            $feUser['address'] = $newEntry['street'];
+            $feUser['zip'] = $newEntry['zip'];
+            $feUser['telephone'] = $newEntry['phone'];
+            $feUser['city'] = $newEntry['city'];
 
-    public function injectTimeslotRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
-    ) {
-        $this->timeslotRepository = $timeslotRepository;
+            // generate hashed password
+            $userPassword = GeneralUtility::_POST('createUserAccountPassword');
+            if ($userPassword) {
+                $passwordHashFactory = $this->objectManager->get(PasswordHashFactory::class);
+                $passwordHashInstance = $passwordHashFactory->getDefaultHashInstance('FE');
+                $password = $passwordHashInstance->getHashedPassword($userPassword);
+                $feUser['password'] = $password;
+            }
+
+            // set the user parameter with newly created feUer
+            $this->arguments->addNewArgument('user', FrontendUser::class);
+            $this->request->setArgument('user', $feUser);
+
+            // allow creation of fe_user
+            $propertyMappingConfiguration = $this->arguments->getArgument('user')->getPropertyMappingConfiguration();
+            $propertyMappingConfiguration->setTypeConverterOption(
+                PersistentObjectConverter::class,
+                PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED,
+                true
+            );
+            $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields(FrontendUser::class));
+            $propertyMappingConfiguration->skipUnknownProperties();
+
+            // set user validator
+            $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
+            $validatorConjunction = $validatorResolver->getBaseValidatorConjunction(FrontendUser::class);
+            $userValidator = $validatorResolver->createValidator(FeUserCreateValidator::class);
+            $validatorConjunction->addValidator($userValidator);
+            $this->arguments->getArgument('user')->setValidator($validatorConjunction);
+        }
     }
 
     private function getAllowedEntryFields($entityClass)
     {
-        $reflectionClass = $this->objectManager->get(ReflectionClass::class, $entityClass);
+        $reflectionClass = GeneralUtility::makeInstance(ReflectionClass::class, $entityClass);
         $entryFields = $reflectionClass->getProperties();
         $entryFields = array_filter($entryFields, function ($obj) {
             $excludeFields = [
-                'pid',
                 'uid',
                 '_localizedUid',
                 '_languageUid',
@@ -202,61 +253,144 @@ class ApiController extends ActionController
             return !in_array($obj->name, $excludeFields);
         });
 
-        $entryFields = array_map(function ($field) {
+        return array_map(function ($field) {
             return $field->name;
         }, $entryFields);
-
-        return $entryFields;
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $newEntry
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @TYPO3\CMS\Extbase\Annotation\Validate("Blueways\BwBookingmanager\Domain\Validator\EntryCreateValidator", param="newEntry")
+     * @throws IllegalObjectTypeException
+     * @throws NoSuchCacheException
      */
-    public function entryCreateAction($newEntry)
+    public function entryCreateAction(Entry $newEntry, ?FrontendUser $user = null): ResponseInterface
     {
         $newEntry->generateToken();
         // override PID (just in case the storage PID differs from current calendar)
         $newEntry->setPid($newEntry->getCalendar()->getPid());
         $this->entryRepository->add($newEntry);
 
+        if ($user) {
+            $newEntry->setFeUser($user);
+        }
+
         // persist by hand to get uid field and make redirect possible
-        $persistenceManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
         $persistenceManager->persistAll();
 
-        // delete calendar cache
-        $cache = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class)->getCache('bwbookingmanager_calendar');
-        $cache->flushByTag('calendar' . $newEntry->getCalendar()->getUid());
+        // login the newly created user
+        if ($user && !$user->getLastlogin()) {
+            $GLOBALS['TSFE']->fe_user->checkPid = 0;
+            $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
+            $userAuth = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
+            $userAuth->checkPid = false;
+            $tempUser = $userAuth->fetchUserRecord($info['db_user'], $user->getUsername());
+
+            $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
+            $GLOBALS['TSFE']->fe_user->dontSetCookie = false;
+            $GLOBALS['TSFE']->fe_user->start();
+            $GLOBALS['TSFE']->fe_user->createUserSession($tempUser);
+            $GLOBALS['TSFE']->fe_user->loginUser = 1;
+        }
 
         // send mails
-        $notificationManager = $this->objectManager->get(NotificationManager::class, $newEntry);
-        $notificationManager->notify();
+        $this->eventDispatcher->dispatch(new AfterEntryCreationEvent($newEntry));
 
         $this->view->setConfiguration($this->configuration);
         $this->view->assign('newEntry', $newEntry);
-        $this->view->setVariablesToRender(array('newEntry'));
+        $this->view->setVariablesToRender(['newEntry']);
+        return $this->htmlResponse();
+    }
+
+    public function loginAction(): ResponseInterface
+    {
+        if ($this->accessControlService->hasLoggedInFrontendUser()) {
+            $this->performLogout();
+        }
+
+        $loginData = [
+            'uname' => GeneralUtility::_POST('username'),
+            'uident_text' => GeneralUtility::_POST('password'),
+        ];
+
+        if (!$loginData['uname'] || !$loginData['uident_text']) {
+            $this->throwStatus(
+                403,
+                'Login failed',
+                json_encode(['errors' => ['username' => 'no username or password given']])
+            );
+        }
+
+        $GLOBALS['TSFE']->fe_user->checkPid = 0;
+        $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
+        /** @var FrontendUserAuthentication $userAuth */
+        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+        $userAuth->checkPid = false;
+        $user = $userAuth->fetchUserRecord($info['db_user'], $loginData['uname']);
+
+        if (!$user) {
+            $this->throwStatus(404, 'User not found', json_encode(['errors' => ['username' => 'user not found']]));
+        }
+
+        $passwordHashFactory = $this->objectManager->get(
+            PasswordHashFactory::class
+        );
+        $passwordHash = $passwordHashFactory->getDefaultHashInstance('FE');
+        $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user['password']);
+
+        if (!$isValidLoginData) {
+            $this->throwStatus(403, 'Login failed', json_encode(['errors' => ['password' => 'wrong password']]));
+        }
+
+        $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
+        $GLOBALS['TSFE']->fe_user->dontSetCookie = false;
+        $GLOBALS['TSFE']->fe_user->start();
+        $GLOBALS['TSFE']->fe_user->createUserSession($user);
+        $GLOBALS['TSFE']->fe_user->loginUser = 1;
+
+        $this->view->assign('user', $user);
+        $this->view->setConfiguration($this->configuration);
+        $this->view->setVariablesToRender(['user']);
+        return $this->htmlResponse();
+    }
+
+    protected function performLogout()
+    {
+        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
+        $userAuth->removeCookie('fe_typo_user');
+        $GLOBALS['TSFE']->fe_user->loginUser = 0;
+    }
+
+    public function logoutAction(): ResponseInterface
+    {
+        $this->performLogout();
+
+        return $this->jsonResponse(json_encode([
+            'title' => 'Logout successful',
+            'message' => 'You have been successfully logged out.',
+        ], JSON_THROW_ON_ERROR));
     }
 
     /**
-     * @return string|void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws PropagateResponseException
      */
-    public function errorAction()
+    public function errorAction(): ResponseInterface
     {
-        if ($this->request->getControllerActionName() === "entryCreate") {
-            $errors = $this->arguments->validate()->forProperty('newEntry')->getFlattenedErrors();
+        if ($this->request->getControllerActionName() === 'entryCreate') {
+            $newEntryErrors = $this->arguments->validate()->forProperty('newEntry')->getErrors();
+            $userErrors = $this->arguments->validate()->forProperty('user')->getErrors();
+            $allErrors = array_merge($newEntryErrors, $userErrors);
 
-            $errors = array_map(function ($error) {
-                return $error[0]->getMessage();
-            }, $errors);
+            $allErrors = array_map(function ($error) {
+                return $error->getMessage();
+            }, $allErrors);
 
             $content = [
-                'errors' => $errors
+                'errors' => $allErrors,
             ];
 
             $this->throwStatus(406, 'Validation failed', json_encode($content));
         }
+        return $this->htmlResponse();
     }
 }

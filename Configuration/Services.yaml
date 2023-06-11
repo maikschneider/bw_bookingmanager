@@ -1,0 +1,40 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Blueways\BwBookingmanager\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  Blueways\BwBookingmanager\Controller\Backend\AbstractModuleController:
+    tags: [ 'backend.controller' ]
+
+  Blueways\BwBookingmanager\Controller\Backend\EntryListModuleController:
+    tags: [ 'backend.controller' ]
+
+  Blueways\BwBookingmanager\Controller\Backend\CalendarModuleController:
+    tags: [ 'backend.controller' ]
+
+  Blueways\BwBookingmanager\Utility\FullCalendarUtility:
+    public: true
+
+  Blueways\BwBookingmanager\Command\TimeslotUpdateCommand:
+    tags:
+      - name: 'console.command'
+        command: 'bookingmanager:timeslotUpdate'
+        schedulable: false
+
+  Blueways\BwBookingmanager\EventListener\ModifyEntryListTable:
+    tags:
+      - name: event.listener
+        identifier: 'bookingmanager/modify-entry-list-table'
+
+  Blueways\BwBookingmanager\EventListener\NotificationsAfterEntryCreate:
+    tags:
+      - name: event.listener
+        identifier: 'bookingmanager/notifications-after-create'
+
+  Blueways\BwBookingmanager\Form\Element\SelectTimeslot:
+    public: true

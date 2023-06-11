@@ -40,8 +40,28 @@
 				<target>Einträge</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.direct_booking">
+				<source>Direct booking</source>
+				<target>Direktbuchung</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.allow_direct_booking">
 				<source>Allow direct bookings</source>
 				<target>Direktbuchungen erlauben</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_start_time">
+				<source>Default start time</source>
+				<target>Standardmäßige Startzeit</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_end_time">
+				<source>Default end time</source>
+				<target>Standardmäßige Endzeit</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_length">
+				<source>Minimal booking length</source>
+				<target>Mindestlänge</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_offset">
+				<source>Min. time between</source>
+				<target>Minimaler Zeitabstand</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
@@ -105,6 +125,14 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
 				<source>Calendars</source>
 				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendar">
+				<source>Calendar</source>
+				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.noCalendar">
+				<source>No calendar</source>
+				<target>Kein Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
 				<source>Repeat End</source>
@@ -226,6 +254,26 @@
 				<source>Frontend user</source>
 				<target>Benutzer</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender">
+				<source>Salutation</source>
+				<target>Anrede</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.0">
+				<source>None</source>
+				<target>Keine</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.1">
+				<source>Mr.</source>
+				<target>Herr</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.2">
+				<source>Mrs.</source>
+				<target>Frau</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.notes">
+				<source>Notes</source>
+				<target>Notizen</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
 				<target>Blockslot</target>
@@ -266,19 +314,23 @@
 				<source>Email</source>
 				<target>E-Mail</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
-				<source>Hook</source>
-				<target>Hook</target>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.placeholder">
+				<source>Email of booking entry</source>
+				<target>E-Mail der Buchung</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
-				<source>None</source>
-				<target>keine</target>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.description">
+				<source>Defaults to the email address of the incoming booking</source>
+				<target>Standardmäßig wird die E-Mail-Adresse der eingehenden Buchung verwendet.</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions">
+				<source>Conditions</source>
+				<target>Bedingungen</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special1IsChecked">
 				<source>Special 1 is checked</source>
 				<target>Special 1 ist ausgewählt</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special2IsChecked">
 				<source>Special 2 is checked</source>
 				<target>Special 2 ist ausgewählt</target>
 			</trans-unit>
@@ -299,8 +351,8 @@
 				<target>E-Mail Betreff</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
-				<source>New Booking</source>
-				<target>Neue Buchung</target>
+				<source>About your booking</source>
+				<target>Ihre Buchung</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
 				<source>Event</source>
@@ -485,6 +537,18 @@
 			<trans-unit id="date.oclock">
 				<source>o'clock</source>
 				<target>Uhr</target>
+			</trans-unit>
+			<trans-unit id="advanced">
+				<source>Advanced</source>
+				<target>Erweitert</target>
+			</trans-unit>
+			<trans-unit id="general">
+				<source>General</source>
+				<target>Allgemein</target>
+			</trans-unit>
+			<trans-unit id="exceptions">
+				<source>Exceptions</source>
+				<target>Ausnahmen</target>
 			</trans-unit>
 		</body>
 	</file>

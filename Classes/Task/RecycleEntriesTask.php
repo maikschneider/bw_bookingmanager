@@ -5,10 +5,10 @@ namespace Blueways\BwBookingmanager\Task;
 use Doctrine\DBAL\DBALException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
-class RecycleEntriesTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
+class RecycleEntriesTask extends AbstractTask
 {
-
     /**
      * @var int Number of days before deleting old entries
      */
@@ -26,7 +26,7 @@ class RecycleEntriesTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
             $queryBuilder = $connection->createQueryBuilder();
 
             $deleteDate = new \DateTime();
-            $deleteDate->modify('-' . $this->numberOfDays.'days');
+            $deleteDate->modify('-' . $this->numberOfDays . 'days');
 
             $result = $queryBuilder
                 ->delete('tx_bwbookingmanager_domain_model_entry')
@@ -34,10 +34,9 @@ class RecycleEntriesTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
                     $queryBuilder->expr()->lte('end_date', $deleteDate->getTimestamp())
                 )
                 ->execute();
-
         } catch (DBALException $e) {
             throw new \RuntimeException(
-                TableGarbageCollectionTask::class . ' failed: ' .
+                self::class . ' failed: ' .
                 $e->getPrevious()->getMessage(),
                 1441390263
             );
@@ -48,8 +47,9 @@ class RecycleEntriesTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 
     public function getAdditionalInformation()
     {
-        return sprintf($GLOBALS['LANG']->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:recyclertask.additionalInformation'),
-            $this->numberOfDays);
+        return sprintf(
+            $GLOBALS['LANG']->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang.xlf:recyclertask.additionalInformation'),
+            $this->numberOfDays
+        );
     }
-
 }

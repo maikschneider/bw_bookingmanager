@@ -2,13 +2,16 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use Blueways\BwBookingmanager\Domain\Model\Blockslot;
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Model\Timeslot;
 
 /**
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * PHP version 7.2
  *
- * @package  BwBookingManager
  * @author   Maik Schneider <m.schneider@blueways.de>
  * @license  MIT https://opensource.org/licenses/MIT
  * @version  GIT: <git_id />
@@ -16,32 +19,36 @@ use Blueways\BwBookingmanager\Domain\Model\Timeslot;
  */
 class RenderConfiguration
 {
-
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot[]
+     * @var Timeslot[]
      */
     protected $timeslots;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Entry[]
+     * @var Entry[]
      */
     protected $entries;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf
+     * @var Blockslot[]
+     */
+    protected $blockslots;
+
+    /**
+     * @var DateConf
      */
     protected $dateConf;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Calendar
+     * @var Calendar
      */
     protected $calendar;
 
     /**
      * RenderConfiguration constructor.
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
+     * @param DateConf $dateConf
+     * @param Calendar $calendar
      */
     public function __construct($dateConf, $calendar)
     {
@@ -92,7 +99,7 @@ class RenderConfiguration
             'link' => '/api/calendar/' . $this->calendar->getUid() . '/' .
                 $this->dateConf->next->format('j') . '-' .
                 $this->dateConf->next->format('m') . '-' .
-                $this->dateConf->next->format('Y') . '.json'
+                $this->dateConf->next->format('Y') . '.json',
         ];
         $configuration['prev'] = [
             'date' => $this->dateConf->prev,
@@ -102,7 +109,7 @@ class RenderConfiguration
             'link' => '/api/calendar/' . $this->calendar->getUid() . '/' .
                 $this->dateConf->prev->format('j') . '-' .
                 $this->dateConf->prev->format('m') . '-' .
-                $this->dateConf->prev->format('Y') . '.json'
+                $this->dateConf->prev->format('Y') . '.json',
         ];
 
         return $configuration;
@@ -110,7 +117,7 @@ class RenderConfiguration
 
     /**
      * @param \DateTime $startDate
-     * @param integer $daysCount
+     * @param int $daysCount
      * @param bool $returnOffsets
      * @return array
      * @throws \Exception
@@ -138,7 +145,8 @@ class RenderConfiguration
         $entries = $this->getEntriesForDay($date);
 
         $day = [];
-        $day['date'] = $date->getTimestamp();
+        $day['date'] = $date->getTimestamp() + $this->calendar->getDefaultStartTime();
+        $day['endDate'] = $date->getTimestamp() + $this->calendar->getDefaultEndTime();
         $day['entries'] = $this->getEntryOffsets($entries);
         $day['timeslots'] = $this->getTimeslotOffsets($timeslots);
         $day['isCurrentDay'] = $this->isCurrentDay($date);
@@ -149,6 +157,18 @@ class RenderConfiguration
         $day['hasBookableTimeslots'] = (boolean)$day['bookableTimeslotsStatus'];
         $day['isDirectBookable'] = $this->isDirectBookable($entries);
         $day['isBookable'] = ((!$day['isInPast'] || $day['isCurrentDay']) && ($day['hasBookableTimeslots'] || $day['isDirectBookable']));
+
+        // check if blockslot in this day
+        // @TODO: current check is only for whole day
+        // (if blockslots goes until 12:00, bookins are possible - even at 10:00)
+        if ($day['isDirectBookable']) {
+            foreach ($this->blockslots ?? [] as $blockslot) {
+                if ($blockslot->getStartDate() <= $date && $blockslot->getEndDate() > $date) {
+                    $day['isBookable'] = false;
+                    break;
+                }
+            }
+        }
 
         return $day;
     }
@@ -254,12 +274,12 @@ class RenderConfiguration
     }
 
     /**
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot[] $timeslots
+     * @param Timeslot[] $timeslots
      * @return float|int
      */
     private function getBookableTimeslotsStatus($timeslots)
     {
-        if (!sizeof($timeslots)) {
+        if (!count($timeslots)) {
             return 0;
         }
 
@@ -270,7 +290,7 @@ class RenderConfiguration
             }
         }
 
-        return $bookableCount / sizeof($timeslots);
+        return $bookableCount / count($timeslots);
     }
 
     /**
@@ -279,7 +299,7 @@ class RenderConfiguration
      */
     private function isDirectBookable($entries)
     {
-        return $this->calendar->isDirectBooking() && !sizeof($entries);
+        return $this->calendar->isDirectBooking() && !count($entries);
     }
 
     /**
@@ -293,7 +313,6 @@ class RenderConfiguration
         $dayOffset = 0;
 
         while ($dayOffset < $daysCount) {
-
             $week = [];
 
             for ($j = 0; $j < 7; $j++) {
@@ -305,5 +324,10 @@ class RenderConfiguration
         }
 
         return $weeks;
+    }
+
+    public function setBlockslots($blockslots)
+    {
+        $this->blockslots = $blockslots;
     }
 }

@@ -1,0 +1,27 @@
+routeEnhancers:
+  PageTypeSuffix:
+    type: PageType
+    default: ''
+    map:
+      .ics: 1556190330
+  BookingManagerIcs:
+    type: Extbase
+    extension: BwBookingmanager
+    plugin: Ics
+    routes:
+      - routePath: '/ics/{ics}'
+        _controller: 'Ics::show'
+        _arguments:
+          - ics: ics
+      - routePath: '/ics/{ics}/{secret}'
+        _controller: 'Ics::show'
+        _arguments:
+          - ics: ics
+          - secret: secret
+    requirements:
+      ics: \d+
+    aspects:
+      ics:
+        type: PersistedAliasMapper
+        tableName: tx_bwbookingmanager_domain_model_ics
+        routeFieldName: uid

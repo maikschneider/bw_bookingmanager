@@ -5,9 +5,11 @@ vendor
 .idea
 public
 !Resources/Public
+!typo3_src/**/Resources/Public
 var
-config
 bin
 .php_cs.cache
 yarn.lock
-composer.lock
+.env
+psalm.xml
+.php-cs-fixer.cache

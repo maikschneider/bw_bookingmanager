@@ -2,6 +2,11 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
@@ -12,17 +17,22 @@ namespace Blueways\BwBookingmanager\Domain\Model;
 /**
  * Timeslot
  */
-class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Timeslot extends AbstractEntity
 {
-
     const REPEAT_NO = 0;
+
     const REPEAT_DAILY = 1;
+
     const REPEAT_WEEKLY = 2;
+
     const REPEAT_MONTHLY = 3;
+
     const REPEAT_MULTIPLE_WEEKLY = 4;
 
     const HOLIDAY_NO_EFFECT = 0;
+
     const HOLIDAY_NOT_DURING = 1;
+
     const HOLIDAY_ONLY_DURING = 2;
 
     /**
@@ -63,18 +73,14 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * entries
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry>
-     * @lazy
+     * @var ObjectStorage<Entry>
      */
-    protected $entries = null;
+    protected $entries;
 
     /**
-     * calendars
-     *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
-     * @lazy
+     * @var Calendar
      */
-    protected $calendars = null;
+    protected $calendar;
 
     /**
      * repeatEnd
@@ -109,13 +115,178 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Do not modify this method!
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
-     *
-     * @return void
      */
     protected function initStorageObjects()
     {
-        $this->entries = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->calendars = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->entries = new ObjectStorage();
+    }
+
+    public static function getConsecutiveRepeatingDaysString(int $repeatDays)
+    {
+        $llService = GeneralUtility::makeInstance(LanguageService::class);
+        $llPrefix = 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:date.dayNames.short.';
+        $repeatingArray = self::getConsecutiveRepeatingDaysArray($repeatDays);
+
+        $repeatingArray = array_map(function ($repeatingEntry) use ($llPrefix, $llService) {
+            if (is_array($repeatingEntry)) {
+                return $llService->sL($llPrefix . $repeatingEntry[0]) . '-' . $llService->sL($llPrefix . $repeatingEntry[1]);
+            }
+            return $llService->sL($llPrefix . $repeatingEntry);
+        }, $repeatingArray);
+
+        return implode(', ', $repeatingArray);
+    }
+
+    public static function getConsecutiveRepeatingDaysArray(int $repeatDays)
+    {
+        $repeatMapping = [
+            127 => [[1, 0]],
+            126 => [[1, 6]],
+            125 => [[2, 0]],
+            124 => [[2, 6]],
+            123 => [1, [3, 0]],
+            122 => [1, [3, 6]],
+            121 => [[3, 0]],
+            120 => [[3, 6]],
+            119 => [1, 2, [4, 0]],
+            118 => [1, 2, [4, 6]],
+            117 => [2, [4, 0]],
+            116 => [2, [4, 6]],
+            115 => [1, [4, 0]],
+            114 => [1, [4, 6]],
+            113 => [[4, 0]],
+            112 => [[4, 6]],
+            111 => [[1, 3], [5, 0]],
+            110 => [[1, 3], 5, 6],
+            109 => [2, 3, [5, 0]],
+            108 => [2, 3, 5, 6],
+            107 => [1, 3, [5, 0]],
+            106 => [1, 3, 5, 6],
+            105 => [3, [5, 0]],
+            104 => [3, 5, 6],
+            103 => [1, 2, [5, 0]],
+            102 => [1, 2, 5, 6],
+            101 => [2, [5, 0]],
+            100 => [2, 5, 6],
+            99 => [1, [5, 0]],
+            98 => [1, 5, 6],
+            97 => [[5, 0]],
+            96 => [5, 6],
+            95 => [[1, 4], 6, 0],
+            94 => [[1, 4], 6],
+            93 => [[2, 4], 6, 0],
+            92 => [[2, 4], 6],
+            91 => [1, 3, 4, 6, 0],
+            90 => [1, 3, 4, 6],
+            89 => [3, 4, 6, 0],
+            88 => [3, 4, 6],
+            87 => [1, 2, 4, 6, 0],
+            86 => [1, 2, 4, 6],
+            85 => [2, 4, 6, 0],
+            84 => [2, 4, 6],
+            83 => [1, 4, 6, 0],
+            82 => [1, 4, 6],
+            81 => [4, 6, 0],
+            80 => [4, 6],
+            79 => [[1, 3], 6, 0],
+            78 => [[1, 3], 6],
+            77 => [2, 3, 6, 0],
+            76 => [2, 3, 6],
+            75 => [1, 3, 6, 0],
+            74 => [1, 3, 6],
+            73 => [3, 6, 0],
+            72 => [3, 6],
+            71 => [1, 2, 6],
+            70 => [1, 2, 6],
+            69 => [2, 6, 0],
+            68 => [2, 6],
+            67 => [1, 6, 0],
+            66 => [1, 6],
+            65 => [[6, 0]],
+            64 => [6],
+            63 => [[1, 5], 0],
+            62 => [[1, 5]],
+            61 => [[2, 5], 0],
+            60 => [[2, 5]],
+            59 => [1, [3, 5], 0],
+            58 => [1, [3, 5]],
+            57 => [[3, 5], 0],
+            56 => [[3, 5]],
+            55 => [1, 2, 4, 5, 0],
+            54 => [1, 2, 4, 5],
+            53 => [2, 4, 5, 0],
+            52 => [2, 4, 5],
+            51 => [1, 4, 5, 0],
+            50 => [1, 4, 5],
+            49 => [4, 5, 0],
+            48 => [4, 5],
+            47 => [[1, 3], 5, 0],
+            46 => [[1, 3], 5],
+            45 => [2, 3, 5, 0],
+            44 => [2, 3, 5],
+            43 => [1, 3, 5, 0],
+            42 => [1, 3, 5],
+            41 => [3, 5, 0],
+            40 => [3, 5],
+            39 => [1, 2, 5, 0],
+            38 => [1, 2, 5],
+            37 => [2, 5, 0],
+            36 => [2, 5],
+            35 => [1, 5, 0],
+            34 => [1, 5],
+            33 => [5, 0],
+            32 => [5],
+            31 => [[1, 4], 0],
+            30 => [[1, 4]],
+            29 => [[2, 4], 0],
+            28 => [[2, 4]],
+            27 => [1, 3, 4, 0],
+            26 => [1, 3, 4],
+            25 => [3, 4, 0],
+            24 => [3, 4],
+            23 => [1, 2, 4, 0],
+            22 => [1, 2, 4],
+            21 => [2, 4, 0],
+            20 => [2, 4],
+            19 => [1, 4, 0],
+            18 => [1, 4],
+            17 => [4, 0],
+            16 => [4],
+            15 => [[1, 3], 0],
+            14 => [[1, 3]],
+            13 => [2, 3, 0],
+            12 => [2, 3],
+            11 => [1, 3, 0],
+            10 => [1, 3],
+            9 => [3, 0],
+            8 => [3],
+            7 => [1, 2, 0],
+            6 => [1, 2],
+            5 => [2, 0],
+            4 => [2],
+            3 => [1, 0],
+            2 => [1],
+            1 => [0],
+            0 => [],
+        ];
+
+        return $repeatMapping[$repeatDays] ?? [];
+    }
+
+    /**
+     * @return Calendar
+     */
+    public function getCalendar(): Calendar
+    {
+        return $this->calendar;
+    }
+
+    /**
+     * @param Calendar $calendar
+     */
+    public function setCalendar(Calendar $calendar): void
+    {
+        $this->calendar = $calendar;
     }
 
     /**
@@ -148,7 +319,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the repeatType
      *
      * @param int $repeatType
-     * @return void
      */
     public function setRepeatType($repeatType)
     {
@@ -169,7 +339,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the maxWeight
      *
      * @param int $maxWeight
-     * @return void
      */
     public function setMaxWeight($maxWeight)
     {
@@ -213,10 +382,9 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Adds a Entry
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entry
-     * @return void
+     * @param Entry $entry
      */
-    public function addEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entry)
+    public function addEntry(Entry $entry)
     {
         $this->entries->attach($entry);
     }
@@ -224,55 +392,11 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Entry
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove The Entry to be removed
-     * @return void
+     * @param Entry $entryToRemove The Entry to be removed
      */
-    public function removeEntry(\Blueways\BwBookingmanager\Domain\Model\Entry $entryToRemove)
+    public function removeEntry(Entry $entryToRemove)
     {
         $this->entries->detach($entryToRemove);
-    }
-
-    /**
-     * Adds a Calendar
-     *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @return void
-     */
-    public function addCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
-    {
-        $this->calendars->attach($calendar);
-    }
-
-    /**
-     * Removes a Calendar
-     *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove The Calendar to be removed
-     * @return void
-     */
-    public function removeCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove)
-    {
-        $this->calendars->detach($calendarToRemove);
-    }
-
-    /**
-     * Returns the calendars
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     */
-    public function getCalendars()
-    {
-        return $this->calendars;
-    }
-
-    /**
-     * Sets the calendars
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     * @return void
-     */
-    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
-    {
-        $this->calendars = $calendars;
     }
 
     /**
@@ -289,7 +413,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the repeatEnd
      *
      * @param \DateTime $repeatEnd
-     * @return void
      */
     public function setRepeatEnd(\DateTime $repeatEnd)
     {
@@ -308,6 +431,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getStartDate()
     {
+        $now = new \DateTime();
+        $this->startDate->setTimezone($now->getTimezone());
         return $this->startDate;
     }
 
@@ -315,7 +440,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the startDate
      *
      * @param \DateTime $startDate
-     * @return void
      */
     public function setStartDate(\DateTime $startDate)
     {
@@ -329,6 +453,8 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getEndDate()
     {
+        $now = new \DateTime();
+        $this->endDate->setTimezone($now->getTimezone());
         return $this->endDate;
     }
 
@@ -336,7 +462,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the endDate
      *
      * @param \DateTime $endDate
-     * @return void
      */
     public function setEndDate(\DateTime $endDate)
     {
@@ -367,14 +492,14 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'freeWeight' => $this->getFreeWeight(),
             'bookedWeight' => $this->getBookedWeight(),
             'feUsers' => $feUsers,
-            'entries' => $entries
+            'entries' => $entries,
         ];
     }
 
     /**
      * Returns the entries
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
+     * @return ObjectStorage<Entry> $entries
      */
     public function getEntries()
     {
@@ -384,10 +509,9 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the entries
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
-     * @return void
+     * @param ObjectStorage<Entry> $entries
      */
-    public function setEntries(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $entries)
+    public function setEntries(ObjectStorage $entries)
     {
         $this->entries = $entries;
     }
@@ -442,8 +566,10 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getBookedWeight()
     {
         $weight = 0;
-        foreach ($this->entries as $entry) {
-            $weight += $entry->getWeight();
+        if ($this->entries && $this->entries->count()) {
+            foreach ($this->entries as $entry) {
+                $weight += $entry->getWeight();
+            }
         }
         return $weight;
     }
@@ -460,7 +586,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
             // get the hook from offset of global registed hooks array, make instance and call it
             $hookClassName = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/bw_bookingmanager/timeslot']['isBookable'][$key];
-            $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($hookClassName);
+            $_procObj = GeneralUtility::makeInstance($hookClassName);
             if (!$_procObj->isBookable($this)) {
                 return false;
             }
@@ -473,7 +599,7 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * converts number of $isBookableHooks to array of activated hooks
      * e.g. 4 => 100 => [1,0,0] => [0,0,1] => [false,false,true]
      *
-     * @return Array
+     * @return array
      */
     public function getIsBookableHooksArray()
     {
@@ -499,7 +625,6 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the isBookableHooks
      *
      * @param int $isBookableHooks
-     * @return void
      */
     public function setIsBookableHooks($isBookableHooks)
     {
@@ -514,5 +639,4 @@ class Timeslot extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->maxWeight - $this->getBookedWeight();
     }
-
 }

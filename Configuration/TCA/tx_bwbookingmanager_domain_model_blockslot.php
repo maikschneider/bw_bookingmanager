@@ -1,9 +1,12 @@
 <?php
+
+use Blueways\BwBookingmanager\Helper\Tca;
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_blockslot',
         'label' => 'start_date',
-        'label_userFunc' => \Blueways\BwBookingmanager\Helper\Tca::class . '->getBlockslotLabel',
+        'label_userFunc' => Tca::class . '->getBlockslotLabel',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
@@ -12,10 +15,7 @@ return [
             'disabled' => 'hidden',
         ],
         'searchFields' => 'start_date,end_date,reason,calendars',
-        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_blockslot.svg'
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'hidden, start_date, end_date, reason, calendars',
+        'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_blockslot.svg',
     ],
     'types' => [
         '1' => ['showitem' => 'hidden, start_date, end_date, reason, calendars'],
@@ -23,13 +23,13 @@ return [
     'columns' => [
         'hidden' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_entry.hidden',
             'config' => [
                 'type' => 'check',
                 'items' => [
                     '1' => [
-                        '0' => 'LLL:EXT:lang/locallang_core.xlf:labels.enabled'
-                    ]
+                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
+                    ],
                 ],
             ],
         ],
@@ -59,7 +59,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'calendars' => [
@@ -67,7 +67,6 @@ return [
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_timeslot.calendars',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => 'tx_bwbookingmanager_domain_model_calendar',
                 'foreign_table' => 'tx_bwbookingmanager_domain_model_calendar',
                 'MM' => 'tx_bwbookingmanager_calendar_blockslot_mm',

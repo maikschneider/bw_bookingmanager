@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z"
+		  product-name="bw_bookingmanager">
+		<header/>
+		<body>
+			<trans-unit id="ics">
+				<source>Ics Feed</source>
+			</trans-unit>
+			<trans-unit id="hidden">
+				<source>Deactivated</source>
+			</trans-unit>
+			<trans-unit id="name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="options">
+				<source>Options</source>
+			</trans-unit>
+			<trans-unit id="options.0">
+				<source>Show bookable Timeslots</source>
+			</trans-unit>
+			<trans-unit id="options.1">
+				<source>Show non-bookable Timeslots</source>
+			</trans-unit>
+			<trans-unit id="options.2">
+				<source>Show confirmed Entries</source>
+			</trans-unit>
+			<trans-unit id="options.3">
+				<source>Show non-confirmed Entries</source>
+			</trans-unit>
+			<trans-unit id="options.4">
+				<source>Show Blockslots</source>
+			</trans-unit>
+			<trans-unit id="options.5">
+				<source>Show Holidays</source>
+			</trans-unit>
+			<trans-unit id="calendars">
+				<source>Calendars</source>
+			</trans-unit>
+			<trans-unit id="palette.general">
+				<source>General</source>
+			</trans-unit>
+			<trans-unit id="palette.entry">
+				<source>Entry template</source>
+			</trans-unit>
+			<trans-unit id="palette.timeslot">
+				<source>Timeslot template</source>
+			</trans-unit>
+			<trans-unit id="palette.blockslot">
+				<source>Blockslot template</source>
+			</trans-unit>
+			<trans-unit id="palette.holiday">
+				<source>Holiday template</source>
+			</trans-unit>
+			<trans-unit id="templates">
+				<source>Templates</source>
+			</trans-unit>
+			<trans-unit id="template.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="template.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="template.location">
+				<source>Location</source>
+			</trans-unit>
+			<trans-unit id="startDate">
+				<source>Start date</source>
+			</trans-unit>
+			<trans-unit id="startDate.0">
+				<source>Today</source>
+			</trans-unit>
+			<trans-unit id="startDate.1">
+				<source>Last month</source>
+			</trans-unit>
+			<trans-unit id="startDate.2">
+				<source>This year</source>
+			</trans-unit>
+			<trans-unit id="startDate.3">
+				<source>100 days in past</source>
+			</trans-unit>
+			<trans-unit id="endDate">
+				<source>End date</source>
+			</trans-unit>
+			<trans-unit id="endDate.0">
+				<source>6 months</source>
+			</trans-unit>
+			<trans-unit id="endDate.1">
+				<source>1 year</source>
+			</trans-unit>
+			<trans-unit id="endDate.2">
+				<source>2 years</source>
+			</trans-unit>
+			<trans-unit id="secret">
+				<source>Feed Url</source>
+			</trans-unit>
+			<trans-unit id="button.refresh">
+				<source>Generate New</source>
+			</trans-unit>
+			<trans-unit id="button.copy">
+				<source>Copy Url</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

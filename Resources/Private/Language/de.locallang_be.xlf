@@ -43,6 +43,22 @@
 				<source>New blockslot</source>
 				<target>Neuer Blockslot</target>
 			</trans-unit>
+			<trans-unit id="flexforms_general.mode.holiday_new">
+				<source>New holiday</source>
+				<target>Neue Ferien</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_timeslots">
+				<source>Show past timeslots</source>
+				<target>Zeige vergangene Timeslots</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_not_bookable_timeslots">
+				<source>Show not bookable timeslots</source>
+				<target>Zeige nicht-buchbare Timeslots</target>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_entries">
+				<source>Show past entries</source>
+				<target>Zeige vergangene Einträge</target>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
                 <target>Kalender</target>
@@ -135,6 +151,14 @@
                 <source>Additional</source>
                 <target>Zusatz</target>
             </trans-unit>
+			<trans-unit id="tca.entry.palettes.internal">
+				<source>Internal</source>
+				<target>Intern</target>
+			</trans-unit>
+			<trans-unit id="tca.entry.tabs.internal">
+				<source>Internal</source>
+				<target>Intern</target>
+			</trans-unit>
 			<trans-unit id="tca.tt_content.calendar">
 				<target>Kalender anzeigen</target>
 				<source>Show calendar</source>
@@ -165,9 +189,17 @@
 			<trans-unit id="module.shift">
 				<target>Schichtansicht</target>
 			</trans-unit>
+			<trans-unit id="module.calendar">
+				<source>Calendar</source>
+				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="administration.nocalendar">
+				<source>No calendar</source>
+				<target>Kein Kalender</target>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
-                <target>Für die Ausgewählte Seite wurden keine Kalendereinträge gefunden.</target>
+                <target>Für die ausgewählte Seite wurden keine Kalendereinträge gefunden.</target>
             </trans-unit>
             <trans-unit id="administration.entryListing.headline">
                 <source>Booked entries</source>
@@ -341,6 +373,42 @@
 			<trans-unit id="administration.sendmailWizard.replyToAddress">
 				<source>Reply-to address</source>
 				<target>Antwort-Adresse</target>
+			</trans-unit>
+			<trans-unit id="context.newTimeslot">
+				<source>New Timeslot</source>
+				<target>Neuer Timeslot</target>
+			</trans-unit>
+			<trans-unit id="context.newBlockslot">
+				<source>New Blockslot</source>
+				<target>Neuer Blockslot</target>
+			</trans-unit>
+			<trans-unit id="context.newHoliday">
+				<source>New Holiday</source>
+				<target>Neue Ferien</target>
+			</trans-unit>
+			<trans-unit id="context.newEntry">
+				<source>New Entry</source>
+				<target>Neuer Eintrag</target>
+			</trans-unit>
+			<trans-unit id="modal.save">
+				<source>Save</source>
+				<target>Speichern</target>
+			</trans-unit>
+			<trans-unit id="modal.cancel">
+				<source>Cancel</source>
+				<target>Abbrechen</target>
+			</trans-unit>
+			<trans-unit id="modal.warningTitle">
+				<source>Warning</source>
+				<target>Achtung</target>
+			</trans-unit>
+			<trans-unit id="modal.warningText">
+				<source>There is currently no visible selection that can be saved.</source>
+				<target>Es ist keine Auswahl sichtbar, die gespeichert werden kann.</target>
+			</trans-unit>
+			<trans-unit id="modal.warningButton">
+				<source>Close</source>
+				<target>Schließen</target>
 			</trans-unit>
         </body>
     </file>

@@ -1,4 +1,9 @@
-<h1>Reservierungsbestätigung</h1>
-<p>Start: <strong>{f:format.date(date:entry.startDate, format:'d.m.Y H:i')}</strong>
-<p>Ende: <strong>{f:format.date(date:entry.endDate, format:'d.m.Y H:i')}</strong>
-<p>Name: <strong>{entry.name}</strong></p>
+<f:layout name="SystemEmail"/>
+<f:section name="Title">Reservierungsbestätigung</f:section>
+<f:section name="Main">
+	<p>Kalender: <strong>{record.calendar.name}</strong></p>
+	<p>Start: <strong>{f:format.date(date:record.startDate, format:'d.m.Y H:i')}</strong>
+	<p>Ende: <strong>{f:format.date(date:record.endDate, format:'d.m.Y H:i')}</strong>
+	<p>Name: <strong>{record.name}</strong></p>
+	<p>User Id: <strong>{record.feUser.uid}</strong></p>
+</f:section>

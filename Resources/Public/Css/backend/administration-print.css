@@ -1,0 +1,28 @@
+@media print {
+	body{
+		overflow: visible;
+		height: auto;
+	}
+	.module-docheader,
+	td.col-selector,
+	th.col-selector,
+	.recordlist-heading,
+	.module-loading-indicator,
+	#setting-container {
+		display: none;
+	}
+	.module-body {
+		height: auto;
+		padding: 0;
+	}
+	a.btn, .col-icon, img, icon-markup, .panel-heading, typo3-recordlist-record-download-button {
+		display: none !important;
+	}
+	.recordlist, .border {
+		border: 0 !important;
+		box-shadow: none;
+	}
+	.recordlist table tr td{
+		box-shadow: none;
+	}
+}

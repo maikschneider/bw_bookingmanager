@@ -27,6 +27,18 @@
 			<trans-unit id="flexforms_general.mode.entry_new">
 				<source>New entry</source>
 			</trans-unit>
+			<trans-unit id="flexforms_general.mode.holiday_new">
+				<source>New holiday</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_timeslots">
+				<source>Show past timeslots</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_not_bookable_timeslots">
+				<source>Show not bookable timeslots</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_entries">
+				<source>Show past entries</source>
+			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
             </trans-unit>
@@ -114,6 +126,12 @@
             <trans-unit id="tca.entry.palettes.special">
                 <source>Additional</source>
             </trans-unit>
+			<trans-unit id="tca.entry.palettes.internal">
+				<source>Internal</source>
+			</trans-unit>
+			<trans-unit id="tca.entry.tabs.internal">
+				<source>Internal</source>
+			</trans-unit>
 			<trans-unit id="tca.tt_content.calendar">
 				<source>Show calendar</source>
 			</trans-unit>
@@ -138,9 +156,15 @@
 			<trans-unit id="module.shift">
 				<source>Shift listing</source>
 			</trans-unit>
+			<trans-unit id="module.calendar">
+				<source>Calendar</source>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
             </trans-unit>
+			<trans-unit id="administration.nocalendar">
+				<source>No calendar</source>
+			</trans-unit>
             <trans-unit id="administration.entryListing.headline">
                 <source>Booked entries</source>
             </trans-unit>
@@ -275,6 +299,33 @@
 			</trans-unit>
 			<trans-unit id="administration.sendmailWizard.replyToAddress">
 				<source>Reply-to address</source>
+			</trans-unit>
+			<trans-unit id="context.newTimeslot">
+				<source>New Timeslot</source>
+			</trans-unit>
+			<trans-unit id="context.newBlockslot">
+				<source>New Blockslot</source>
+			</trans-unit>
+			<trans-unit id="context.newHoliday">
+				<source>New Holiday</source>
+			</trans-unit>
+			<trans-unit id="context.newEntry">
+				<source>New Entry</source>
+			</trans-unit>
+			<trans-unit id="modal.save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="modal.cancel">
+				<source>Cancel</source>
+			</trans-unit>
+			<trans-unit id="modal.warningTitle">
+				<source>Warning</source>
+			</trans-unit>
+			<trans-unit id="modal.warningText">
+				<source>There is currently no visible selection that can be saved.</source>
+			</trans-unit>
+			<trans-unit id="modal.warningButton">
+				<source>Close</source>
 			</trans-unit>
         </body>
     </file>

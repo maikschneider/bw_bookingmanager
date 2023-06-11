@@ -2,32 +2,33 @@
 
 namespace Blueways\BwBookingmanager\Domain\Validator;
 
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use Blueways\BwBookingmanager\Domain\Model\Timeslot;
+use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
+use Blueways\BwBookingmanager\Utility\DstFixUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
  * Class EntryCreateValidator
- *
- * @package Blueways\BwBookingmanager\Domain\Validator
  */
-class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator
+class EntryCreateValidator extends AbstractValidator
 {
-
     /**
      * timeslot repository
      *
-     * @var \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository
-     *
+     * @var TimeslotRepository
      */
     protected $timeslotRepository;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Entry
+     * @var Entry
      */
     protected $entry;
 
     /**
-     * @var \Blueways\BwBookingmanager\Domain\Model\Timeslot
+     * @var Timeslot
      */
     protected $timeslot;
 
@@ -57,6 +58,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
      */
     public function isValid($entry)
     {
+        DstFixUtility::adjustEntryDates($entry);
         $this->entry = clone $entry;
 
         if (!$this->entry->getTimeslot() && !$this->entry->getCalendar()->isDirectBooking()) {
@@ -67,7 +69,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         $this->validateDirectBooking();
         $this->validateTimeslotBooking();
 
-        if (sizeof($this->result->getErrors())) {
+        if (count($this->result->getErrors())) {
             return false;
         }
         return true;
@@ -143,42 +145,14 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         $this->timeslot = clone $this->entry->getTimeslot();
 
         // timezone fix
-        $this->timeslot_startDate = $this->timeslot->getStartDate()->setTimezone(new \DateTimeZone('UTC'));
-        $this->timeslot_endDate = $this->timeslot->getEndDate()->setTimezone(new \DateTimeZone('UTC'));
+        $this->timeslot_startDate = $this->timeslot->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->timeslot_endDate = $this->timeslot->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
 
-        $this->entry_startDate = $this->entry->getStartDate()->setTimezone(new \DateTimeZone('UTC'));
-        $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('UTC'));
-
-        // DST fix
-        $timezone = new \DateTimeZone('Europe/Berlin');
-        $transitions = $timezone->getTransitions(
-            $this->timeslot_startDate->getTimestamp(),
-            $this->entry_startDate->getTimestamp()
-        );
-        $lastTransitionIndex = sizeof($transitions) - 1;
-        if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
-            $this->timeslot_startDate->modify('+1 hour');
-            $this->timeslot_endDate->modify('+1 hour');
-        }
-        if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
-            $this->timeslot_startDate->modify('-1 hour');
-            $this->timeslot_endDate->modify('-1 hour');
-        }
+        $this->entry_startDate = $this->entry->getStartDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
+        $this->entry_endDate = $this->entry->getEndDate()->setTimezone(new \DateTimeZone('Europe/Berlin'));
 
         $this->validateDates();
         $this->validateWeight();
-
-        // @Todo: strange bug: If i do not decrease the date by one hour after
-        // validation, the skater timeslot of 12 o'clock (not the 10 o'clock!?) gets updated to the +1 hour format
-        // -> so i decrease the hour again...
-        if ($transitions[0]['isdst'] && !$transitions[$lastTransitionIndex]['isdst']) {
-            $this->timeslot_startDate->modify('-1 hour');
-            $this->timeslot_endDate->modify('-1 hour');
-        }
-        if (!$transitions[0]['isdst'] && $transitions[$lastTransitionIndex]['isdst']) {
-            $this->timeslot_startDate->modify('+1 hour');
-            $this->timeslot_endDate->modify('+1 hour');
-        }
     }
 
     private function validateDates()
@@ -187,10 +161,10 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
         $this->validateTimes();
 
         switch ($this->timeslot->getRepeatType()) {
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_WEEKLY:
+            case Timeslot::REPEAT_WEEKLY:
                 $this->validateWeeklyRepeatDates();
                 break;
-            case \Blueways\BwBookingmanager\Domain\Model\Timeslot::REPEAT_MONTHLY:
+            case Timeslot::REPEAT_MONTHLY:
                 $this->validateMonthlyRepeatDates();
                 break;
         }
@@ -255,7 +229,7 @@ class EntryCreateValidator extends \TYPO3\CMS\Extbase\Validation\Validator\Abstr
     }
 
     public function injectTimeslotRepository(
-        \Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository $timeslotRepository
+        TimeslotRepository $timeslotRepository
     ) {
         $this->timeslotRepository = $timeslotRepository;
     }
