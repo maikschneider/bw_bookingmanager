@@ -101,7 +101,7 @@ class ApiController extends ActionController
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+        $this->view->setVariablesToRender(['configuration', 'calendar', 'user', 'title', 'message']);
     }
 
     public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year)
@@ -125,7 +125,7 @@ class ApiController extends ActionController
         ]);
 
         $this->view->setConfiguration($this->configuration);
-        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+        $this->view->setVariablesToRender(['configuration', 'calendar', 'user', 'title', 'message']);
     }
 
     /**

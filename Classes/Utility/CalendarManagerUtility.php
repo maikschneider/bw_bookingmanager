@@ -12,7 +12,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CalendarManagerUtility
 {
-
     protected Calendar $calendar;
 
     protected EntryRepository $entryRepository;
@@ -98,8 +97,10 @@ class CalendarManagerUtility
         $blockslots = $this->blockslotRepository->findAllInRange([$this->calendar], $dateConf->start, $dateConf->end);
 
         /** @var \Blueways\BwBookingmanager\Helper\RenderConfiguration $calendarConfiguration */
-        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration($dateConf,
-            $this->calendar);
+        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration(
+            $dateConf,
+            $this->calendar
+        );
         $calendarConfiguration->setTimeslots($timeslots);
         $calendarConfiguration->setEntries($entries);
         $calendarConfiguration->setBlockslots($blockslots);
@@ -107,5 +108,4 @@ class CalendarManagerUtility
 
         return $configuration;
     }
-
 }
