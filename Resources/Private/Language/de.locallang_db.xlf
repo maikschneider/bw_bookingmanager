@@ -35,6 +35,34 @@
 				<source>Notifications</source>
 				<target>Benachrichtigungen</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.entries">
+				<source>Entries</source>
+				<target>Einträge</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.direct_booking">
+				<source>Direct booking</source>
+				<target>Direktbuchung</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.allow_direct_booking">
+				<source>Allow direct bookings</source>
+				<target>Direktbuchungen erlauben</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_start_time">
+				<source>Default start time</source>
+				<target>Standardmäßige Startzeit</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_end_time">
+				<source>Default end time</source>
+				<target>Standardmäßige Endzeit</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_length">
+				<source>Minimal booking length</source>
+				<target>Mindestlänge</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_offset">
+				<source>Min. time between</source>
+				<target>Minimaler Zeitabstand</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
 				<target>Timeslots</target>
@@ -51,6 +79,9 @@
 				<source>Repeat Type</source>
 				<target>Wiederholungsart</target>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_days">
+				<target>Wochentage für Wiederholung</target>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.no">
 				<source>No repeat</source>
 				<target>keine Wiederholungen</target>
@@ -66,6 +97,10 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
 				<source>Monthly repeat</source>
 				<target>monatliche Wiederholung</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.weeklyMultiple">
+				<source>Multiple weekly repeat</source>
+				<target>mehrere wöchentliche Wiederholungen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting">
 				<target>Ferien Verhalten</target>
@@ -90,6 +125,14 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
 				<source>Calendars</source>
 				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendar">
+				<source>Calendar</source>
+				<target>Kalender</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.noCalendar">
+				<source>No calendar</source>
+				<target>Kein Kalender</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
 				<source>Repeat End</source>
@@ -205,6 +248,31 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.sendMail.button">
 				<source>Send E-Mail</source>
+				<target>E-Mail senden</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.fe_user">
+				<source>Frontend user</source>
+				<target>Benutzer</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender">
+				<source>Salutation</source>
+				<target>Anrede</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.0">
+				<source>None</source>
+				<target>Keine</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.1">
+				<source>Mr.</source>
+				<target>Herr</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.2">
+				<source>Mrs.</source>
+				<target>Frau</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.notes">
+				<source>Notes</source>
+				<target>Notizen</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
@@ -246,19 +314,23 @@
 				<source>Email</source>
 				<target>E-Mail</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
-				<source>Hook</source>
-				<target>Hook</target>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.placeholder">
+				<source>Email of booking entry</source>
+				<target>E-Mail der Buchung</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
-				<source>None</source>
-				<target>keine</target>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.description">
+				<source>Defaults to the email address of the incoming booking</source>
+				<target>Standardmäßig wird die E-Mail-Adresse der eingehenden Buchung verwendet.</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions">
+				<source>Conditions</source>
+				<target>Bedingungen</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special1IsChecked">
 				<source>Special 1 is checked</source>
 				<target>Special 1 ist ausgewählt</target>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special2IsChecked">
 				<source>Special 2 is checked</source>
 				<target>Special 2 ist ausgewählt</target>
 			</trans-unit>
@@ -279,8 +351,20 @@
 				<target>E-Mail Betreff</target>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
-				<source>New Booking</source>
-				<target>Neue Buchung</target>
+				<source>About your booking</source>
+				<target>Ihre Buchung</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
+				<source>Event</source>
+				<target>Ereignis</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.0">
+				<source>New entry</source>
+				<target>Neuer Eintrag</target>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.1">
+				<source>Entry deletion</source>
+				<target>Eintrag Löschung</target>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.0">
 				<source>Su</source>
@@ -313,6 +397,38 @@
 			<trans-unit id="date.dayNames.short.6">
 				<source>Sa</source>
 				<target>Sa</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.0">
+				<source>Sunday</source>
+				<target>Sonntag</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.7">
+				<source>Sunday</source>
+				<target>Sonntag</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.1">
+				<source>Monday</source>
+				<target>Montag</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.2">
+				<source>Tuesday</source>
+				<target>Dienstag</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.3">
+				<source>Wednesday</source>
+				<target>Mittwoch</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.4">
+				<source>Thursday</source>
+				<target>Donnerstag</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.5">
+				<source>Friday</source>
+				<target>Freitag</target>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.6">
+				<source>Saturday</source>
+				<target>Samstag</target>
 			</trans-unit>
 			<trans-unit id="date.monthNames.1">
 				<source>January</source>
@@ -421,6 +537,18 @@
 			<trans-unit id="date.oclock">
 				<source>o'clock</source>
 				<target>Uhr</target>
+			</trans-unit>
+			<trans-unit id="advanced">
+				<source>Advanced</source>
+				<target>Erweitert</target>
+			</trans-unit>
+			<trans-unit id="general">
+				<source>General</source>
+				<target>Allgemein</target>
+			</trans-unit>
+			<trans-unit id="exceptions">
+				<source>Exceptions</source>
+				<target>Ausnahmen</target>
 			</trans-unit>
 		</body>
 	</file>

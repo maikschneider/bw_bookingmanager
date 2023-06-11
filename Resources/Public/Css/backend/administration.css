@@ -1,0 +1,34 @@
+#recordlist-tx_bwbookingmanager_domain_model_entry th {
+	padding-left: 0;
+}
+
+
+#recordlist-tx_bwbookingmanager_domain_model_entry .t3js-record-edit-multiple {
+	display: none;
+}
+
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:not(.success) {
+	--bs-table-bg: #ffdcdc !important;
+	--bs-table-accent-bg: #f1cccc !important;
+}
+
+tr.not-confirmed[data-table="tx_bwbookingmanager_domain_model_entry"]:not(.success):hover {
+	--bs-table-bg: #f1cccc !important;
+	--bs-table-accent-bg: #e7c2c2 !important;
+}
+
+
+.media, .media-body {
+	overflow: visible;
+}
+
+/*
+Dashboard
+ */
+.chart1-view-button .icon-actions-unmarkstate, .chart1-view-button.active .icon-actions-markstate {
+	display: none;
+}
+
+.chart1-view-button.active .icon-actions-unmarkstate {
+	display: inline-block;
+}

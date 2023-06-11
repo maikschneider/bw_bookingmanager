@@ -3,6 +3,12 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2018-04-12T15:11:35Z" product-name="bw_bookingmanager">
 		<header/>
 		<body>
+			<trans-unit id="bwbookingmanager_pi1.title">
+				<source>Calendar plugin</source>
+			</trans-unit>
+			<trans-unit id="bwbookingmanager_pi1.description">
+				<source>Displays calendar with booking options</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar">
 				<source>Calendar</source>
 			</trans-unit>
@@ -27,6 +33,27 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.notifications">
 				<source>Notifications</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.entries">
+				<source>Entries</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.direct_booking">
+				<source>Direct booking</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.allow_direct_booking">
+				<source>Allow direct bookings</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_start_time">
+				<source>Default start time</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.default_end_time">
+				<source>Default end time</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_length">
+				<source>Minimal booking length</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_calendar.min_offset">
+				<source>Min. time between</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot">
 				<source>Timeslot</source>
 			</trans-unit>
@@ -39,6 +66,9 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type">
 				<source>Repeat Type</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_days">
+				<source>Week days for repeat</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.no">
 				<source>No repeat</source>
 			</trans-unit>
@@ -50,6 +80,9 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.monthly">
 				<source>Monthly repeat</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_type.weeklyMultiple">
+				<source>Multiple weekly repeat</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.holiday_setting">
 				<source>Holiday setting</source>
@@ -71,6 +104,12 @@
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendars">
 				<source>Calendars</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.calendar">
+				<source>Calendar</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.noCalendar">
+				<source>No calendar</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_timeslot.repeat_end">
 				<source>Repeat End</source>
@@ -156,6 +195,24 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_entry.form.headline.general">
 				<source>Personal details</source>
 			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.fe_user">
+				<source>Frontend user</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender">
+				<source>Salutation</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.0">
+				<source>None</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.1">
+				<source>Mr.</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.gender.2">
+				<source>Mrs.</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_entry.notes">
+				<source>Notes</source>
+			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_blockslot">
 				<source>Blockslot</source>
 			</trans-unit>
@@ -189,16 +246,19 @@
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email">
 				<source>Email</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook">
-				<source>Hook</source>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email.placeholder">
+				<source>Email of booking entry</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.none">
-				<source>None</source>
+            <trans-unit id="tx_bwbookingmanager_domain_model_notification.email.description">
+				<source>Defaults to the email address of the incoming booking</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special1IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions">
+				<source>Conditions</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special1IsChecked">
 				<source>Special 1 is checked</source>
 			</trans-unit>
-			<trans-unit id="tx_bwbookingmanager_domain_model_notification.hook.special2IsChecked">
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.conditions.special2IsChecked">
 				<source>Special 2 is checked</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.calendars">
@@ -214,7 +274,16 @@
 				<source>Email Subject</source>
 			</trans-unit>
 			<trans-unit id="tx_bwbookingmanager_domain_model_notification.email_subject.default">
-				<source>New Booking</source>
+				<source>About your booking</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event">
+				<source>Event</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.0">
+				<source>New entry</source>
+			</trans-unit>
+			<trans-unit id="tx_bwbookingmanager_domain_model_notification.event.1">
+				<source>Entry deletion</source>
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.0">
 				<source>Su</source>
@@ -239,6 +308,30 @@
 			</trans-unit>
 			<trans-unit id="date.dayNames.short.6">
 				<source>Sa</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.0">
+				<source>Sunday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.7">
+				<source>Sunday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.1">
+				<source>Monday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.2">
+				<source>Tuesday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.3">
+				<source>Wednesday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.4">
+				<source>Thursday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.5">
+				<source>Friday</source>
+			</trans-unit>
+			<trans-unit id="date.dayNames.long.6">
+				<source>Saturday</source>
 			</trans-unit>
 			<trans-unit id="date.monthNames.1">
 				<source>January</source>
@@ -320,6 +413,15 @@
 			</trans-unit>
 			<trans-unit id="date.oclock">
 				<source>o'clock</source>
+			</trans-unit>
+			<trans-unit id="advanced">
+				<source>Advanced</source>
+			</trans-unit>
+			<trans-unit id="general">
+				<source>General</source>
+			</trans-unit>
+			<trans-unit id="exceptions">
+				<source>Exceptions</source>
 			</trans-unit>
 		</body>
 	</file>

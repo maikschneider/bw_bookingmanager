@@ -15,6 +15,9 @@
 			<trans-unit id="notifications.description">
 				<source>notifications</source>
 			</trans-unit>
+			<trans-unit id="entries.description">
+				<source>entries</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

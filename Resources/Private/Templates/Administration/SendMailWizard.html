@@ -2,10 +2,10 @@
 	<div class="col-md-4">
 		<form action="{sendMailActionUri}" method="POST">
 			<input type="hidden" name="entryUid" value="{entry.uid}" />
-			<h2 class="form-section-headline">Settings</h2>
+			<h2 class="form-section-headline"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.settings"/></h2>
 			<fieldset class="form-section">
 				<div class="form-group">
-					<label for="emailTemplate"> Email-Template </label>
+					<label for="emailTemplate"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.emailTemplate"/></label>
 					<div class="form-control-wrap">
 						<select class="form-control" id="emailTemplate" name="emailTemplate">
 							<f:for each="{emailTemplates}" as="template">
@@ -33,28 +33,28 @@
 									 href="#collapseOne"
 									 aria-expanded="true"
 									 aria-controls="collapseOne">
-									Receiver settings
+									<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.recipientSettings"/>
 								</a>
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<div class="form-group">
-									<label for="senderAddress"> Recipient address</label>
-									<div class="form-control-wrap">
-										<input name="recipientAddress" id="recipientAddress" class="form-control" value="{entry.email}"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="senderAddress"> Recipient name</label>
+									<label for="recipientName"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.recipientName"/></label>
 									<div class="form-control-wrap">
 										<input name="recipientName" id="recipientName" class="form-control" value="{entry.prename} {entry.name}"/>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="senderAddress"> Email subject </label>
+									<label for="recipientAddress"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.recipientAddress"/></label>
 									<div class="form-control-wrap">
-										<input name="subject" id="subject" class="form-control" placeholder="{defaults.subject}"/>
+										<input name="recipientAddress" id="recipientAddress" class="form-control" value="{entry.email}"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="subject"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.emailSubject"/></label>
+									<div class="form-control-wrap">
+										<input name="subject" id="subject" class="form-control" value="{defaults.subject}"/>
 									</div>
 								</div>
 							</div>
@@ -70,28 +70,28 @@
 									 href="#collapseTwo"
 									 aria-expanded="false"
 									 aria-controls="collapseTwo">
-									Sender settings
+									<f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.senderSettings"/>
 								</a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 							<div class="panel-body">
 								<div class="form-group">
-									<label for="senderAddress"> Sender name </label>
+									<label for="senderName"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.senderName"/></label>
 									<div class="form-control-wrap">
-										<input name="senderName" id="senderName" class="form-control" placeholder="{defaults.senderName}"/>
+										<input name="senderName" id="senderName" class="form-control" value="{defaults.senderName}"/>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="senderAddress"> Sender address </label>
+									<label for="senderAddress"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.senderAddress"/></label>
 									<div class="form-control-wrap">
-										<input name="senderAddress" id="senderAddress" class="form-control" placeholder="{defaults.senderAddress}"/>
+										<input name="senderAddress" id="senderAddress" class="form-control" value="{defaults.senderAddress}"/>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="senderAddress"> Reply-To address </label>
+									<label for="replytoAddress"><f:translate key="LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.sendmailWizard.replyToAddress"/></label>
 									<div class="form-control-wrap">
-										<input name="replytoAddress" id="replytoAddress" class="form-control" placeholder="{defaults.replytoAddress}"/>
+										<input name="replytoAddress" id="replytoAddress" class="form-control" value="{defaults.replytoAddress}"/>
 									</div>
 								</div>
 							</div>

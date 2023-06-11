@@ -9,17 +9,35 @@
             <trans-unit id="flexforms_general.mode">
                 <source>Display mode</source>
             </trans-unit>
-            <trans-unit id="flexforms_general.mode.calendar_list">
+            <trans-unit id="flexforms_general.mode.0">
                 <source>Calendar list</source>
             </trans-unit>
-            <trans-unit id="flexforms_general.mode.calendar_show">
-                <source>Calendar show</source>
+            <trans-unit id="flexforms_general.mode.1">
+                <source>Single Calendar</source>
             </trans-unit>
-            <trans-unit id="flexforms_general.mode.entry_new">
+            <trans-unit id="flexforms_general.mode.2">
                 <source>New entry</source>
             </trans-unit>
+			<trans-unit id="flexforms_general.mode.3">
+				<source>Entry list</source>
+			</trans-unit>
             <trans-unit id="flexforms_general.mode.blockslot_new">
+				<source>New blockslot</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.entry_new">
 				<source>New entry</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.holiday_new">
+				<source>New holiday</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_timeslots">
+				<source>Show past timeslots</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_not_bookable_timeslots">
+				<source>Show not bookable timeslots</source>
+			</trans-unit>
+			<trans-unit id="flexforms_general.mode.show_past_entries">
+				<source>Show past entries</source>
 			</trans-unit>
             <trans-unit id="flexforms_general.calendarUid">
                 <source>Calendar</source>
@@ -75,6 +93,24 @@
             <trans-unit id="flexforms_email.template.default">
                 <source>Default</source>
             </trans-unit>
+			<trans-unit id="flexforms_template">
+				<source>Templates</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_calendar_list">
+				<source>Calendar list template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_calendar_show">
+				<source>Calendar show template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_entry_new">
+				<source>Entry new template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_entry_show">
+				<source>Entry show template</source>
+			</trans-unit>
+			<trans-unit id="flexforms_template_entry_delete">
+				<source>Entry delete template</source>
+			</trans-unit>
             <trans-unit id="bwbookingmanager-folder">
                 <source>Booking Manager</source>
             </trans-unit>
@@ -90,6 +126,21 @@
             <trans-unit id="tca.entry.palettes.special">
                 <source>Additional</source>
             </trans-unit>
+			<trans-unit id="tca.entry.palettes.internal">
+				<source>Internal</source>
+			</trans-unit>
+			<trans-unit id="tca.entry.tabs.internal">
+				<source>Internal</source>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.calendar">
+				<source>Show calendar</source>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.palette">
+				<source>Booking Manager</source>
+			</trans-unit>
+			<trans-unit id="tca.tt_content.none">
+				<source>None</source>
+			</trans-unit>
             <trans-unit id="module.entryListing">
                 <source>Entry listing</source>
             </trans-unit>
@@ -102,9 +153,18 @@
             <trans-unit id="module.dashboard">
                 <source>Dashboard</source>
             </trans-unit>
+			<trans-unit id="module.shift">
+				<source>Shift listing</source>
+			</trans-unit>
+			<trans-unit id="module.calendar">
+				<source>Calendar</source>
+			</trans-unit>
             <trans-unit id="administration.nocalendarfound">
                 <source>No calendar record was found on selected page.</source>
             </trans-unit>
+			<trans-unit id="administration.nocalendar">
+				<source>No calendar</source>
+			</trans-unit>
             <trans-unit id="administration.entryListing.headline">
                 <source>Booked entries</source>
             </trans-unit>
@@ -122,6 +182,15 @@
             </trans-unit>
             <trans-unit id="administration.filter.buttonTitle">
 				<source>Show/hide filter</source>
+			</trans-unit>
+			<trans-unit id="administration.listView.buttonTitle">
+				<source>List view</source>
+			</trans-unit>
+			<trans-unit id="administration.weekView.buttonTitle">
+				<source>Week view</source>
+			</trans-unit>
+			<trans-unit id="administration.monthView.buttonTitle">
+				<source>Month view</source>
 			</trans-unit>
 			<trans-unit id="administration.print.buttonTitle">
 				<source>Print current page</source>
@@ -189,6 +258,75 @@
             <trans-unit id="administration.recordlist.button.unconfirm">
                 <source>Unconfirm booking</source>
             </trans-unit>
+			<trans-unit id="administration.sendmailWizard.sendNewEmail">
+				<source>Send new E-Mail</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.emailPreview">
+				<source>E-Mail Preview</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.cancel">
+				<source>Cancel</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.send">
+				<source>Send</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.settings">
+				<source>Settings</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.emailTemplate">
+				<source>E-Mail template</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.recipientSettings">
+				<source>Recipient settings</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.recipientName">
+				<source>Recipient name</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.recipientAddress">
+				<source>Recipient address</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.emailSubject">
+				<source>E-Mail subject</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.senderSettings">
+				<source>Sender settings</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.senderName">
+				<source>Sender name</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.senderAddress">
+				<source>Sender address</source>
+			</trans-unit>
+			<trans-unit id="administration.sendmailWizard.replyToAddress">
+				<source>Reply-to address</source>
+			</trans-unit>
+			<trans-unit id="context.newTimeslot">
+				<source>New Timeslot</source>
+			</trans-unit>
+			<trans-unit id="context.newBlockslot">
+				<source>New Blockslot</source>
+			</trans-unit>
+			<trans-unit id="context.newHoliday">
+				<source>New Holiday</source>
+			</trans-unit>
+			<trans-unit id="context.newEntry">
+				<source>New Entry</source>
+			</trans-unit>
+			<trans-unit id="modal.save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="modal.cancel">
+				<source>Cancel</source>
+			</trans-unit>
+			<trans-unit id="modal.warningTitle">
+				<source>Warning</source>
+			</trans-unit>
+			<trans-unit id="modal.warningText">
+				<source>There is currently no visible selection that can be saved.</source>
+			</trans-unit>
+			<trans-unit id="modal.warningButton">
+				<source>Close</source>
+			</trans-unit>
         </body>
     </file>
 </xliff>

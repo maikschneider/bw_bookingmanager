@@ -1,0 +1,127 @@
+####################
+### DEPENDENCIES ###
+####################
+@import 'EXT:bw_email/Configuration/TypoScript/setup.typoscript'
+
+############################
+### COMMON CONFIGURATION ###
+############################
+plugin.tx_bwbookingmanager {
+
+  persistence {
+    storagePid = {$plugin.tx_bwbookingmanager_pi1.persistence.storagePid}
+  }
+
+  view {
+    templateRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Templates/
+    templateRootPaths.1 = {$plugin.tx_bwbookingmanager.view.templateRootPath}
+    partialRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Partials/
+    partialRootPaths.1 = {$plugin.tx_bwbookingmanager.view.partialRootPath}
+    layoutRootPaths.0 = EXT:bw_bookingmanager/Resources/Private/Layouts/
+    layoutRootPaths.1 = {$plugin.tx_bwbookingmanager.view.layoutRootPath}
+  }
+
+  settings {
+    userStoragePid = {$plugin.tx_bwbookingmanager.settings.userStoragePid}
+    mail {
+      senderAddress = {$plugin.tx_bwbookingmanager.settings.mail.senderAddress}
+      senderName = {$plugin.tx_bwbookingmanager.settings.mail.senderName}
+    }
+  }
+}
+
+##################
+### API PLUGIN ###
+##################
+plugin.tx_bwbookingmanager_api {
+  features.requireCHashArgumentForActionArguments = 0
+}
+
+################
+### API PAGE ###
+################
+BOOKINGMANAGER = PAGE
+BOOKINGMANAGER {
+  typeNum = 1556190329
+  config {
+    disableAllHeaderCode = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    no_cache = 1
+    contentObjectExceptionHandler = 0
+    disableCharsetHeader = 0
+    additionalHeaders.10.header = Content-type:application/json
+    debug = 0
+  }
+
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = BwBookingmanager
+    pluginName = Api
+    vendorName = Blueways
+  }
+}
+
+##################
+### ICS PLUGIN ###
+##################
+plugin.tx_bwbookingmanager_ics {
+  features.requireCHashArgumentForActionArguments = 0
+}
+
+################
+### ICS PAGE ###
+################
+BOOKINGMANAGERICS < BOOKINGMANAGER
+BOOKINGMANAGERICS {
+  typeNum = 1556190330
+  10 {
+    pluginName = Ics
+  }
+
+  config.additionalHeaders.10.header = Content-Type: text/calendar; charset=utf-8
+  config.additionalHeaders.20.header = Content-Disposition: attachment; filename="CalendarFeed.ics"
+}
+
+######################
+### BACKEND MODULE ###
+######################
+module.tx_bwbookingmanager {
+  view {
+    templateRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Templates/Backend/
+    }
+
+    layoutRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Layouts/Backend/
+    }
+
+    partialRootPaths {
+      10 = EXT:bw_bookingmanager/Resources/Private/Partials/Backend/
+    }
+  }
+
+  settings {
+    tableFields {
+      1 = name
+      2 = prename
+      3 = email
+      4 = phone
+      5 = weight
+      1650098229 = confirmed
+    }
+
+    showConfirmButton = 1
+    showEditButton = 1
+    showDeleteButton = 0
+    showHideButton = 0
+    showSecondaryButton = 0
+    showHistoryButton = 0
+    showViewBigButton = 0
+
+    calendarOptions {
+
+    }
+  }
+}

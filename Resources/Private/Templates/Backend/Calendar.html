@@ -1,0 +1,15 @@
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+
+<f:if condition="!{calendars->f:count()}">
+	<f:be.infobox iconName="info" state="-1" title="{f:translate(key: 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.nocalendar')}">
+		{f:translate(key:
+		'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_be.xlf:administration.nocalendarfound')}</f:be.infobox>
+</f:if>
+
+<f:if condition="{calendars->f:count()}">
+	<div id="calendar" data-view-state="{viewState}" class="backendCalendar"></div>
+</f:if>
+
+
+
+

@@ -1,0 +1,2 @@
+# cat=Basic; type=boolean; label=Use bw_email for sending mails instead of TYPO3 default
+useBwEmail = 0

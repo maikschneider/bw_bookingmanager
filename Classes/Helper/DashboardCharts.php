@@ -2,39 +2,44 @@
 
 namespace Blueways\BwBookingmanager\Helper;
 
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Model\Entry;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 class DashboardCharts
 {
+    /**
+     * @var ObjectStorage<Calendar> $calendars
+     */
+    protected $calendars;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @var ObjectStorage<Entry> $entries
      */
-    protected $calendars = null;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Entry> $entries
-     */
-    protected $entries = null;
+    protected $entries;
 
     /**
      * @var \DateTime $startDate
      */
-    protected $startDate = null;
+    protected $startDate;
 
     /**
      * @var string $view
      */
-    protected $view = null;
+    protected $view;
 
     /**
      * @var array $calendarColors
      */
-    protected $calendarColors = null;
+    protected $calendarColors;
 
     /**
-     * @var \TYPO3\CMS\Lang\LanguageService $languageService
+     * @var LanguageService $languageService
      */
-    protected $languageService = null;
-
+    protected $languageService;
 
     public function __construct($calendars, $entries, $startDate, $view)
     {
@@ -44,13 +49,13 @@ class DashboardCharts
         $this->view = $view;
 
         $this->generateCalendarColors();
-        $this->languageService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Lang\LanguageService::class);
+        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
     }
 
     public function getChart1()
     {
         $charts = [];
-        if (sizeof($this->calendars) > 1) {
+        if (count($this->calendars) > 1) {
             $charts['calendar-uid-0'] = $this->getChart1Ctx($this->calendars);
         }
         foreach ($this->calendars as $key => $calendar) {
@@ -74,26 +79,26 @@ class DashboardCharts
                         'scaleLabel' => [
                             'display' => true,
                             'labelString' => 'Bookings',
-                            'fontStyle' => 'bold'
+                            'fontStyle' => 'bold',
                         ],
                         'ticks' => [
-                            'beginAtZero' => true
-                        ]]
+                            'beginAtZero' => true,
+                        ], ],
                     ],
                     'xAxes' => [[
                         'scaleLabel' => [
                             'display' => true,
                             'labelString' => $this->getXLabel(),
-                            'fontStyle' => 'bold'
+                            'fontStyle' => 'bold',
                         ],
                         'ticks' => [
-                            'beginAtZero' => true
-                        ]]
+                            'beginAtZero' => true,
+                        ], ],
                     ],
                 ],
                 //'events' => ['click'],
-                'onClick' => ''
-            ]
+                'onClick' => '',
+            ],
         ];
 
         return $ctx;
@@ -102,16 +107,16 @@ class DashboardCharts
     // @TODO: label via languageservice
     private function getXLabel()
     {
-        if($this->view === 'year'){
+        if ($this->view === 'year') {
             return $this->startDate->format('Y');
         }
-        if($this->view === 'month'){
+        if ($this->view === 'month') {
             return $this->startDate->format('F Y');
         }
-        if($this->view === 'week'){
+        if ($this->view === 'week') {
             $endDate = clone $this->startDate;
             $endDate->modify('+6 days');
-            return 'Kalenderwoche '.$this->startDate->format('W').' ('.$this->startDate->format('d.m').'-'. $endDate->format('d.m').')';
+            return 'Kalenderwoche ' . $this->startDate->format('W') . ' (' . $this->startDate->format('d.m') . '-' . $endDate->format('d.m') . ')';
         }
     }
 
@@ -119,7 +124,6 @@ class DashboardCharts
     {
         $datasets = [];
         foreach ($calendars as $key => $calendar) {
-
             $datasets[] = [
                 'backgroundColor' => 'rgba(' . $this->calendarColors[$calendar->getUid()] . ', 0.5)',
                 'borderColor' => 'rgb(' . $this->calendarColors[$calendar->getUid()] . ')',
@@ -136,11 +140,9 @@ class DashboardCharts
         $data = [];
 
         if ($this->view === 'year') {
-
             $data = array_fill(0, 11, 0);
 
             foreach ($this->entries as $entry) {
-
                 if ($entry->getCalendar()->getUid() !== $calendar->getUid()) {
                     continue;
                 }
@@ -151,12 +153,10 @@ class DashboardCharts
         }
 
         if ($this->view === 'month') {
-
             $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->startDate->format('n'), $this->startDate->format('Y'));
             $data = array_fill(0, $daysInMonth, 0);
 
             foreach ($this->entries as $entry) {
-
                 if ($entry->getCalendar()->getUid() !== $calendar->getUid()) {
                     continue;
                 }
@@ -167,11 +167,9 @@ class DashboardCharts
         }
 
         if ($this->view === 'week') {
-
             $data = array_fill(0, 7, 0);
 
             foreach ($this->entries as $entry) {
-
                 if ($entry->getCalendar()->getUid() !== $calendar->getUid()) {
                     continue;
                 }
@@ -211,20 +209,24 @@ class DashboardCharts
     public function getDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
-            $routeName);
+        $uriArguments['signature'] = GeneralUtility::hmac(
+            $uriArguments['arguments'],
+            $routeName
+        );
 
-        $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
     }
 
     public static function getStaticDashboardChartUri(string $routeName, array $data): string
     {
         $uriArguments['arguments'] = json_encode($data);
-        $uriArguments['signature'] = \TYPO3\CMS\Core\Utility\GeneralUtility::hmac($uriArguments['arguments'],
-            $routeName);
+        $uriArguments['signature'] = GeneralUtility::hmac(
+            $uriArguments['arguments'],
+            $routeName
+        );
 
-        $uriBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return (string)$uriBuilder->buildUriFromRoute($routeName, $uriArguments);
     }
 
@@ -237,7 +239,7 @@ class DashboardCharts
             '75, 192, 192',
             '54, 162, 235',
             '153, 102, 255',
-            '201, 203, 207'
+            '201, 203, 207',
         ];
 
         foreach ($this->calendars as $key => $calendar) {

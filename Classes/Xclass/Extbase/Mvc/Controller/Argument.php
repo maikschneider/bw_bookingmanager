@@ -1,4 +1,5 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller;
 
 class Argument extends \TYPO3\CMS\Extbase\Mvc\Controller\Argument

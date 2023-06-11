@@ -2,19 +2,21 @@
 
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
  ***/
-
 /**
  * Blockslot
  */
-class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Holiday extends AbstractEntity
 {
-
     /**
      * startDate
      *
@@ -39,10 +41,10 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * calendars
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar>
-     * @lazy
+     * @var ObjectStorage<Calendar>
+     * @Extbase\ORM\Lazy
      */
-    protected $calendars = null;
+    protected $calendars;
 
     /**
      * Returns the startDate
@@ -58,7 +60,6 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the startDate
      *
      * @param \DateTime $startDate
-     * @return void
      */
     public function setStartDate(\DateTime $startDate)
     {
@@ -79,7 +80,6 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the endDate
      *
      * @param \DateTime $endDate
-     * @return void
      */
     public function setEndDate(\DateTime $endDate)
     {
@@ -100,7 +100,6 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Sets the name
      *
      * @param string $name
-     * @return void
      */
     public function setReason($name)
     {
@@ -110,10 +109,9 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Adds a Calendar
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
-     * @return void
+     * @param Calendar $calendar
      */
-    public function addCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendar)
+    public function addCalendar(Calendar $calendar)
     {
         $this->calendars->attach($calendar);
     }
@@ -121,10 +119,9 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Calendar
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove The Calendar to be removed
-     * @return void
+     * @param Calendar $calendarToRemove The Calendar to be removed
      */
-    public function removeCalendar(\Blueways\BwBookingmanager\Domain\Model\Calendar $calendarToRemove)
+    public function removeCalendar(Calendar $calendarToRemove)
     {
         $this->calendars->detach($calendarToRemove);
     }
@@ -132,7 +129,7 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the calendars
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
+     * @return ObjectStorage<Calendar> $calendars
      */
     public function getCalendars()
     {
@@ -142,10 +139,9 @@ class Holiday extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the calendars
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Calendar> $calendars
-     * @return void
+     * @param ObjectStorage<Calendar> $calendars
      */
-    public function setCalendars(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $calendars)
+    public function setCalendars(ObjectStorage $calendars)
     {
         $this->calendars = $calendars;
     }

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="34px" height="26px" viewBox="0 0 34 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+<svg width="16px" height="12px" viewBox="0 0 16 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
     <title>ext-bwbookingmanager-folder-tree</title>
     <desc>Created with Sketch.</desc>
-    <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="ext-bwbookingmanager-folder-tree" fill-rule="nonzero">
-            <polygon id="Shape" fill="#41AB31" points="34 4.33333333 34 26 0 26 0 0 14.875 0 17.6375 4.33333333"></polygon>
-            <polygon id="Shape" fill="#4D4D4D" points="34 6 17.6375 6 14.875 10 0 10 0 4 34 4"></polygon>
+        <g id="ext-bwbookingmanager-folder-tree">
+            <polygon id="Shape" fill="#41AB31" points="15.6923077 2 15.6923077 12 0 12 0 0 6.86538462 0 8.14038462 2"></polygon>
+            <polygon id="Shape" fill="#4D4D4D" points="15.6923077 2.76923077 8.14038462 2.76923077 6.86538462 4.61538462 0 4.61538462 0 1.84615385 15.6923077 1.84615385"></polygon>
         </g>
     </g>
 </svg>

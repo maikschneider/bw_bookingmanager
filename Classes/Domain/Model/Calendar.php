@@ -1,21 +1,21 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model;
 
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /***
- *
  * This file is part of the "Booking Manager" Extension for TYPO3 CMS.
- *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- *
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
- *
  ***/
-
 /**
  * Calendar
  */
-class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Calendar extends AbstractEntity
 {
     const ENTRY_TYPE_CLASSNAME = 'Blueways\\BwBookingmanager\\Domain\\Model\\Entry';
 
@@ -29,55 +29,120 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * timeslots
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot>
-     * @lazy
+     * @var ObjectStorage<Timeslot>
+     * @Extbase\ORM\Lazy
      */
-    protected $timeslots = null;
+    protected $timeslots;
 
     /**
      * blockslots
      *
-     * @lazy
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot>
+     * @var ObjectStorage<Blockslot>
+     * @Extbase\ORM\Lazy
      */
-    protected $blockslots = null;
+    protected $blockslots;
 
     /**
      * holidays
      *
-     * @lazy
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Holiday>
+     * @var ObjectStorage<Holiday>
+     * @Extbase\ORM\Lazy
      */
-    protected $holidays = null;
+    protected $holidays;
 
     /**
      * notifications
      *
-     * @lazy
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification>
+     * @var ObjectStorage<Notification>
+     * @Extbase\ORM\Lazy
      */
-    protected $notifications = null;
+    protected $notifications;
 
     /**
-     * Returns the name
+     * entries
      *
-     * @return string $name
+     * @var ObjectStorage<Entry>
+     * @Extbase\ORM\Lazy
      */
-    public function getName()
+    protected $entries;
+
+    /**
+     * @var bool
+     */
+    protected $directBooking;
+
+    /**
+     * @var int
+     */
+    protected $defaultStartTime;
+
+    /**
+     * @return int
+     */
+    public function getDefaultStartTime(): int
     {
-        return $this->name;
+        return $this->defaultStartTime;
     }
 
     /**
-     * Sets the name
-     *
-     * @param string $name
-     * @return void
+     * @return int
      */
-    public function setName($name)
+    public function getDefaultEndTime(): int
     {
-        $this->name = $name;
+        return $this->defaultEndTime;
     }
+
+    /**
+     * @var int
+     */
+    protected $defaultEndTime;
+
+    /**
+     * @var int
+     */
+    protected $minLength;
+
+    /**
+     * @return string
+     */
+    public function getColor(): string
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     */
+    public function setColor(string $color): void
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @var string
+     */
+    protected $color;
+
+    /**
+     * @return int
+     */
+    public function getMinLength(): int
+    {
+        return $this->minLength;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinOffset(): int
+    {
+        return $this->minOffset;
+    }
+
+    /**
+     * @var int
+     */
+    protected $minOffset;
 
     /**
      * __construct
@@ -93,22 +158,71 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Do not modify this method!
      * It will be rewritten on each save in the extension builder
      * You may modify the constructor of this class instead
-     *
-     * @return void
      */
     protected function initStorageObjects()
     {
-        $this->timeslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->blockslots = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->timeslots = new ObjectStorage();
+        $this->blockslots = new ObjectStorage();
+    }
+
+    /**
+     * @return ObjectStorage
+     */
+    public function getEntries()
+    {
+        return $this->entries;
+    }
+
+    /**
+     * @param ObjectStorage $entries
+     */
+    public function setEntries(ObjectStorage $entries)
+    {
+        $this->entries = $entries;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDirectBooking(): bool
+    {
+        return $this->directBooking;
+    }
+
+    /**
+     * @param bool $directBooking
+     */
+    public function setDirectBooking(bool $directBooking)
+    {
+        $this->directBooking = $directBooking;
+    }
+
+    /**
+     * Returns the name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Sets the name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
      * Adds a Blockslot
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot
-     * @return void
+     * @param Blockslot $blockslot
      */
-    public function addBlockslot(\Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslot)
+    public function addBlockslot(Blockslot $blockslot)
     {
         $this->blockslots->attach($blockslot);
     }
@@ -116,10 +230,9 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Blockslot
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslotToRemove The Blockslot to be removed
-     * @return void
+     * @param Blockslot $blockslotToRemove The Blockslot to be removed
      */
-    public function removeBlockslot(\Blueways\BwBookingmanager\Domain\Model\Blockslot $blockslotToRemove)
+    public function removeBlockslot(Blockslot $blockslotToRemove)
     {
         $this->blockslots->detach($blockslotToRemove);
     }
@@ -127,7 +240,7 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the blockslots
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot> $blockslots
+     * @return ObjectStorage<Blockslot> $blockslots
      */
     public function getBlockslots()
     {
@@ -135,39 +248,37 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
-     */
-    public function getHolidays(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
-    {
-        return $this->holidays;
-    }
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays
-     */
-    public function setHolidays(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $holidays): void
-    {
-        $this->holidays = $holidays;
-    }
-
-    /**
      * Sets the blockslots
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Blockslot> $blockslots
-     * @return void
+     * @param ObjectStorage<Blockslot> $blockslots
      */
-    public function setBlockslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $blockslots)
+    public function setBlockslots(ObjectStorage $blockslots)
     {
         $this->blockslots = $blockslots;
     }
 
     /**
+     * @return ObjectStorage
+     */
+    public function getHolidays(): ObjectStorage
+    {
+        return $this->holidays;
+    }
+
+    /**
+     * @param ObjectStorage $holidays
+     */
+    public function setHolidays(ObjectStorage $holidays): void
+    {
+        $this->holidays = $holidays;
+    }
+
+    /**
      * Adds a Timeslot
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot
-     * @return void
+     * @param Timeslot $timeslot
      */
-    public function addTimeslot(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslot)
+    public function addTimeslot(Timeslot $timeslot)
     {
         $this->timeslots->attach($timeslot);
     }
@@ -175,10 +286,9 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Timeslot
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslotToRemove The Timeslot to be removed
-     * @return void
+     * @param Timeslot $timeslotToRemove The Timeslot to be removed
      */
-    public function removeTimeslot(\Blueways\BwBookingmanager\Domain\Model\Timeslot $timeslotToRemove)
+    public function removeTimeslot(Timeslot $timeslotToRemove)
     {
         $this->timeslots->detach($timeslotToRemove);
     }
@@ -186,7 +296,7 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the timeslots
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
+     * @return ObjectStorage<Timeslot> $timeslots
      */
     public function getTimeslots()
     {
@@ -196,32 +306,19 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the timeslots
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Timeslot> $timeslots
-     * @return void
+     * @param ObjectStorage<Timeslot> $timeslots
      */
-    public function setTimeslots(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $timeslots)
+    public function setTimeslots(ObjectStorage $timeslots)
     {
         $this->timeslots = $timeslots;
     }
 
     /**
-     * Sets the notifications
-     *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
-     * @return void
-     */
-    public function setNotifications(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $notifications)
-    {
-        $this->notifications = $notifications;
-    }
-
-    /**
      * Adds a Notification
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Notification $notification
-     * @return void
+     * @param Notification $notification
      */
-    public function addNotification(\Blueways\BwBookingmanager\Domain\Model\Notification $notification)
+    public function addNotification(Notification $notification)
     {
         $this->notifications->attach($notification);
     }
@@ -229,10 +326,9 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Removes a Notification
      *
-     * @param \Blueways\BwBookingmanager\Domain\Model\Notification $NotificationToRemove The Notification to be removed
-     * @return void
+     * @param Notification $NotificationToRemove The Notification to be removed
      */
-    public function removeNotification(\Blueways\BwBookingmanager\Domain\Model\Notification $notificationToRemove)
+    public function removeNotification(Notification $notificationToRemove)
     {
         $this->notifications->detach($notificationToRemove);
     }
@@ -240,7 +336,7 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the notifications
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Blueways\BwBookingmanager\Domain\Model\Notification> $notifications
+     * @return ObjectStorage<Notification> $notifications
      */
     public function getNotifications()
     {
@@ -248,12 +344,22 @@ class Calendar extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Return the class name of entries that get associated with this type of calendar
+     * Sets the notifications
      *
-     * @return string
+     * @param ObjectStorage<Notification> $notifications
      */
-    public function getEntryTypeClassname()
+    public function setNotifications(ObjectStorage $notifications)
     {
-        return static::ENTRY_TYPE_CLASSNAME;
+        $this->notifications = $notifications;
+    }
+
+    public function getTimeslotEntries()
+    {
+        $entries = new ObjectStorage();
+        foreach ($this->timeslots as $timeslot) {
+            $entries->addAll($timeslot->getEntries());
+        }
+
+        return $entries;
     }
 }

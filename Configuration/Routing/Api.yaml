@@ -1,0 +1,28 @@
+routeEnhancers:
+  PageTypeSuffix:
+    type: PageType
+    default: ''
+    map:
+      .json: 1556190329
+  BookingManagerApi:
+    type: Extbase
+    extension: BwBookingmanager
+    plugin: Api
+    routes:
+      - routePath: /api/booking
+        _controller: 'Api::entryCreate'
+      - routePath: /api/login
+        _controller: 'Api::login'
+      - routePath: /api/logout
+        _controller: 'Api::logout'
+      - routePath: /api/v2/calendar/{calendar}
+        _controller: 'ApiV2::calendarShow'
+        _arguments:
+          - calendar: calendar
+    requirements:
+      calendar: \d+
+    aspects:
+      calendar:
+        type: PersistedAliasMapper
+        tableName: tx_bwbookingmanager_domain_model_calendar
+        routeFieldName: uid

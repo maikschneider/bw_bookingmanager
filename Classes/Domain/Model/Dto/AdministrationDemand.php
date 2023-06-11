@@ -1,5 +1,8 @@
 <?php
+
 namespace Blueways\BwBookingmanager\Domain\Model\Dto;
+
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /***
  *
@@ -11,11 +14,10 @@ namespace Blueways\BwBookingmanager\Domain\Model\Dto;
  *  (c) 2018 Maik Schneider <m.schneider@blueways.de>, blueways
  *
  ***/
-
 /**
  * Blockslot
  */
-class AdministrationDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class AdministrationDemand extends AbstractEntity
 {
     /**
      * @var string

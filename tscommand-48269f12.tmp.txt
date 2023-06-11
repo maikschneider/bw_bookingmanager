@@ -1,1 +1,0 @@
-Resources/Private/Typescript/TimeslotDatesSelect.ts --rootDir Resources/Public/JavaScript --pretty --target ES5 --module amd --outDir Resources/Public/JavaScript
