@@ -6,26 +6,11 @@ call_user_func(
     static function () {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'BwBookingmanager',
-            'Pi1',
-            [
-                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'list, show',
-                \Blueways\BwBookingmanager\Controller\EntryController::class => 'list, new, show, delete, create',
-            ],
-            [
-                \Blueways\BwBookingmanager\Controller\CalendarController::class => 'show',
-                \Blueways\BwBookingmanager\Controller\EntryController::class => 'create, list, delete',
-            ]
-        );
-
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'BwBookingmanager',
             'Api',
             [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarList, calendarShow, calendarShowDate, entryCreate, login, logout',
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow, calendarShowDate, entryCreate, login, logout',
+                \Blueways\BwBookingmanager\Controller\ApiV2Controller::class => 'calendarShow',
             ],
-            [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow',
-            ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
@@ -53,16 +38,16 @@ call_user_func(
         // Register hook for EntryList query modification
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][\TYPO3\CMS\Recordlist\RecordList\DatabaseRecordList::class]['modifyQuery'][] = \Blueways\BwBookingmanager\Hooks\TableListHook::class;
 
-        // entry validation hook
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Extbase\\Mvc\\Controller\\Argument'] = [
-            'className' => 'Blueways\\BwBookingmanager\\Xclass\\Extbase\\Mvc\\Controller\\Argument',
+        // xclass to make overrides of controller arguments possible in 3rd party extensions
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Extbase\Mvc\Controller\Argument::class] = [
+            'className' => \Blueways\BwBookingmanager\Xclass\Extbase\Mvc\Controller\Argument::class,
         ];
 
         // register custom TCA node field
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1533721566] = [
             'nodeName' => 'selectTimeslotDates',
             'priority' => '70',
-            'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslotDatesElement::class,
+            'class' => \Blueways\BwBookingmanager\Form\Element\SelectTimeslot::class,
         ];
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1607520481] = [
             'nodeName' => 'icsSecret',
@@ -80,5 +65,13 @@ call_user_func(
 
         // register backend js
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['constructPostProcess'][] = \Blueways\BwBookingmanager\Hooks\PreHeaderRenderHook::class . '->addFullCalendarJs';
+
+        // Register Mail Templates
+        $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][107] = 'EXT:bw_bookingmanager/Resources/Private/Templates/Email';
+
+        // register caching frontend
+        if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['bwbookingmanager_calendar'])) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['bwbookingmanager_calendar'] = [];
+        }
     }
 );

@@ -154,7 +154,6 @@ class TimeslotManager
         $this->timeslots = array_filter(
             $this->timeslots,
             function (Timeslot $timeslot) {
-
                 // check timeslot if holidays should move to 'in' or 'out' critera array
                 if ($timeslot->getHolidaySetting() === Timeslot::HOLIDAY_NOT_DURING) {
                     foreach ($this->filterCritera['holidays'] as $range) {

@@ -40,7 +40,6 @@ class Entry extends AbstractEntity
      *
      * @var string
      * @Extbase\Validate("NotEmpty")
-     * @Extbase\Validate("StringLengthValidator", options={"minimum": 3, "maximum": 50})
      */
     protected $name = '';
 

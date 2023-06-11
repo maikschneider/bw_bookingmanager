@@ -7,6 +7,7 @@ use Blueways\BwBookingmanager\Utility\IcsUtility;
 use DateTime;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CalendarEvent
 {
@@ -65,6 +66,7 @@ class CalendarEvent
         if (property_exists($this, $name)) {
             return $this->$name;
         }
+        return null;
     }
 
     public function getFullCalendarOutput(): array
@@ -73,7 +75,7 @@ class CalendarEvent
             'title' => $this->getTitle(),
             'start' => $this->start->format('Y-m-d\TH:i:s.v\Z'),
             'end' => $this->end->format('Y-m-d\TH:i:s.v\Z'),
-            'allDay' => static::isFullDay($this->start, $this->end),
+            'allDay' => $this->isAllDay(),
             'color' => $this->getColor(),
             'display' => $this->getDisplay(),
             'url' => $this->getUrl(),
@@ -139,6 +141,8 @@ class CalendarEvent
             'calendar' => $this->calendar,
             'isSelected' => false,
             'uniqueId' => $this->getUniqueId(),
+            'start' => $this->start->format('Y-m-d\TH:i:s.v\Z'),
+            'end' => $this->end->format('Y-m-d\TH:i:s.v\Z'),
         ];
     }
 
@@ -246,10 +250,15 @@ class CalendarEvent
 
     protected function getLanguageService(): LanguageService
     {
-        return $GLOBALS['LANG'];
+        return $GLOBALS['LANG'] ?? GeneralUtility::makeInstance(LanguageService::class);
     }
 
     public function addBackendModalSettings(UriBuilder $uriBuilder, BackendCalendarViewState $viewState): void
     {
+    }
+
+    public function isAllDay(): bool
+    {
+        return static::isFullDay($this->start, $this->end);
     }
 }

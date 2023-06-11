@@ -2,7 +2,7 @@
 
 namespace Blueways\BwBookingmanager\Task;
 
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
@@ -64,7 +64,7 @@ class RecycleEntriesAdditionalFieldProvider extends AbstractAdditionalFieldProvi
         // If not, fail validation and issue error message
         if (!is_numeric($submittedData['scheduler_recycleEntries_numberOfDays']) || (int)$submittedData['scheduler_recycleEntries_numberOfDays'] < 0) {
             $result = false;
-            $this->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/Resources/Private/Language/locallang.xlf:msg.invalidNumberOfDays'), FlashMessage::ERROR);
+            $this->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/Resources/Private/Language/locallang.xlf:msg.invalidNumberOfDays'), AbstractMessage::ERROR);
         }
         return $result;
     }

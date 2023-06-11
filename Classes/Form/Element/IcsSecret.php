@@ -6,7 +6,6 @@ use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class IcsSecret extends AbstractFormElement
 {
@@ -24,8 +23,7 @@ class IcsSecret extends AbstractFormElement
 
         $urlStart = $baseUrl . '/ics/' . $this->data['vanillaUid'];
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $languageService = $objectManager->get(LanguageService::class);
+        $languageService = GeneralUtility::makeInstance(LanguageService::class);
         $buttonTextCopy = $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:button.copy');
         $buttonTextRefresh = $languageService->sL('LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_csh_tx_bwbookingmanager_domain_model_ics.xlf:button.refresh');
 
@@ -72,7 +70,7 @@ class IcsSecret extends AbstractFormElement
                 </div>
         ';
 
-        $result['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/IcsSecret';
+        $result['requireJsModules'][] = 'TYPO3/CMS/BwBookingmanager/BackendFormElementIcsSecret';
 
         return $result;
     }

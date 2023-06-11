@@ -1,0 +1,15 @@
+.vscode
+node_modules
+.tscache
+vendor
+.idea
+public
+!Resources/Public
+!typo3_src/**/Resources/Public
+var
+bin
+.php_cs.cache
+yarn.lock
+.env
+psalm.xml
+.php-cs-fixer.cache

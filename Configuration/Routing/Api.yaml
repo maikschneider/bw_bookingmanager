@@ -9,27 +9,20 @@ routeEnhancers:
     extension: BwBookingmanager
     plugin: Api
     routes:
-      - routePath: /api/calendar
-        _controller: 'Api::calendarList'
-      - routePath: '/api/calendar/{calendar}'
-        _controller: 'Api::calendarShow'
-        _arguments:
-          - calendar: calendar
-      - routePath: '/api/calendar/{calendar}/{day}-{month}-{year}'
-        _controller: 'Api::calendarShowDate'
-        _arguments:
-          - calendar: calendar
-          - day: day
-          - month: month
-          - year: year
       - routePath: /api/booking
         _controller: 'Api::entryCreate'
       - routePath: /api/login
         _controller: 'Api::login'
       - routePath: /api/logout
         _controller: 'Api::logout'
+      - routePath: /api/v2/calendar/{calendar}
+        _controller: 'ApiV2::calendarShow'
+        _arguments:
+          - calendar: calendar
     requirements:
       calendar: \d+
-      day: \d+
-      month: \d+
-      year: \d+
+    aspects:
+      calendar:
+        type: PersistedAliasMapper
+        tableName: tx_bwbookingmanager_domain_model_calendar
+        routeFieldName: uid

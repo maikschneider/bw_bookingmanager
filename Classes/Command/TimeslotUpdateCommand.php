@@ -23,7 +23,7 @@ class TimeslotUpdateCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
@@ -50,6 +50,10 @@ class TimeslotUpdateCommand extends Command
         return 0;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Driver\Exception
+     */
     protected function getTimeslotsWithMultipleRelations()
     {
         $qb = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_bwbookingmanager_domain_model_timeslot');
@@ -64,9 +68,7 @@ class TimeslotUpdateCommand extends Command
                 $qb->expr()->gt('count', 1)
             );
 
-        $timeslots = $qb->execute()->fetchAll();
-
-        return $timeslots;
+        return $qb->execute()->fetchAllAssociative();
     }
 
     protected function copyCalendarRelationToTimeslots(SymfonyStyle $io)

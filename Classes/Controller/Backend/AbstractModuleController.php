@@ -205,7 +205,6 @@ abstract class AbstractModuleController
             $dataAttrs['title'] = $title;
 
             if (isset($tableConfiguration['table'])) {
-
                 // check persmissions
                 $isAdmin = $GLOBALS['BE_USER']->isAdmin();
                 $allowedToEditTable = $GLOBALS['BE_USER']->check(

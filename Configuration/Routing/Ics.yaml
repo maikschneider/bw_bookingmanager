@@ -20,3 +20,8 @@ routeEnhancers:
           - secret: secret
     requirements:
       ics: \d+
+    aspects:
+      ics:
+        type: PersistedAliasMapper
+        tableName: tx_bwbookingmanager_domain_model_ics
+        routeFieldName: uid

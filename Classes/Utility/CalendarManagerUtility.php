@@ -7,49 +7,42 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Repository\BlockslotRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Repository\TimeslotRepository;
-use Blueways\BwBookingmanager\Helper\RenderConfiguration;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 
 class CalendarManagerUtility
 {
-    /**
-     * @var Calendar
-     */
-    protected $calendar;
+    protected Calendar $calendar;
+
+    protected EntryRepository $entryRepository;
+
+    protected TimeslotRepository $timeslotRepository;
+
+    protected BlockslotRepository $blockslotRepository;
+
+    public function __construct(
+        EntryRepository $entryRepository,
+        TimeslotRepository $timeslotRepository,
+        BlockslotRepository $blockslotRepository
+    ) {
+        $this->entryRepository = $entryRepository;
+        $this->timeslotRepository = $timeslotRepository;
+        $this->blockslotRepository = $blockslotRepository;
+    }
 
     /**
-     * @var EntryRepository
+     * @param \Blueways\BwBookingmanager\Domain\Model\Calendar $calendar
      */
-    protected $entryRepository;
-
-    /**
-     * @var TimeslotRepository
-     */
-    protected $timeslotRepository;
-
-    /**
-     * @var BlockslotRepository
-     */
-    protected $blockslotRepository;
-
-    /**
-     * CalendarManagerUtility constructor.
-     *
-     * @param Calendar $calendar
-     */
-    public function __construct(Calendar $calendar)
+    public function setCalendar(Calendar $calendar): void
     {
         $this->calendar = $calendar;
     }
 
     /**
-     * @param DateConf $dateConf
+     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
      * @return mixed
-     * @throws NoSuchCacheException
-     * @throws InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     public function getConfiguration(DateConf $dateConf)
     {
@@ -64,10 +57,10 @@ class CalendarManagerUtility
     }
 
     /**
-     * @param DateConf $dateConf
+     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
      * @return array
-     * @throws NoSuchCacheException
-     * @throws InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     private function buildAndCacheConfiguration(DateConf $dateConf)
     {
@@ -92,10 +85,10 @@ class CalendarManagerUtility
     }
 
     /**
-     * @param DateConf $dateConf
+     * @param \Blueways\BwBookingmanager\Domain\Model\Dto\DateConf $dateConf
      * @return array
-     * @throws NoSuchCacheException
-     * @throws InvalidQueryException
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
     private function buildConfiguration(DateConf $dateConf)
     {
@@ -103,8 +96,8 @@ class CalendarManagerUtility
         $timeslots = $this->timeslotRepository->findInRange($this->calendar, $dateConf);
         $blockslots = $this->blockslotRepository->findAllInRange([$this->calendar], $dateConf->start, $dateConf->end);
 
-        /** @var RenderConfiguration $calendarConfiguration */
-        $calendarConfiguration = new RenderConfiguration(
+        /** @var \Blueways\BwBookingmanager\Helper\RenderConfiguration $calendarConfiguration */
+        $calendarConfiguration = new \Blueways\BwBookingmanager\Helper\RenderConfiguration(
             $dateConf,
             $this->calendar
         );
@@ -114,20 +107,5 @@ class CalendarManagerUtility
         $configuration = $calendarConfiguration->getRenderConfiguration();
 
         return $configuration;
-    }
-
-    public function injectEntryRepository(EntryRepository $entryRepository): void
-    {
-        $this->entryRepository = $entryRepository;
-    }
-
-    public function injectTimeslotRepository(TimeslotRepository $timeslotRepository): void
-    {
-        $this->timeslotRepository = $timeslotRepository;
-    }
-
-    public function injectBlockslotRepository(BlockslotRepository $blockslotRepository): void
-    {
-        $this->blockslotRepository = $blockslotRepository;
     }
 }

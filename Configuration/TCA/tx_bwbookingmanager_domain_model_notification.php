@@ -16,7 +16,7 @@ return [
         'iconfile' => 'EXT:bw_bookingmanager/Resources/Public/Icons/tx_bwbookingmanager_domain_model_notification.svg',
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden, event, name, email, email_subject, template, hook, calendars'],
+        '1' => ['showitem' => 'hidden, event, name, email, email_subject, template, conditions, calendars'],
     ],
     'columns' => [
         'hidden' => [
@@ -25,9 +25,7 @@ return [
             'config' => [
                 'type' => 'check',
                 'items' => [
-                    '1' => [
-                        '0' => 'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled',
-                    ],
+                    ['LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.enabled', '1'],
                 ],
             ],
         ],
@@ -43,10 +41,12 @@ return [
         'email' => [
             'exclude' => true,
             'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email',
+            'description' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim,required',
+                'eval' => 'trim',
+                'placeholder' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email.placeholder',
             ],
         ],
         'event' => [
@@ -67,14 +67,21 @@ return [
                 ],
             ],
         ],
-        'hook' => [
+        'conditions' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.hook',
+            'label' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.conditions',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectSingle',
+                'renderType' => 'selectCheckBox',
                 'items' => [
-                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.hook.none', '0'],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.conditions.special1IsChecked',
+                        \Blueways\BwBookingmanager\Event\NotificationCondition\Special1Condition::class,
+                    ],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.conditions.special2IsChecked',
+                        \Blueways\BwBookingmanager\Event\NotificationCondition\Special2Condition::class,
+                    ],
                 ],
             ],
         ],
@@ -85,7 +92,10 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.template.default', 'default'],
+                    [
+                        'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.template.default',
+                        'default',
+                    ],
                 ],
             ],
         ],
@@ -96,7 +106,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim,required',
-                'default' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email_subject.default',
+                'placeholder' => 'LLL:EXT:bw_bookingmanager/Resources/Private/Language/locallang_db.xlf:tx_bwbookingmanager_domain_model_notification.email_subject.default',
             ],
         ],
         'calendars' => [

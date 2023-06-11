@@ -18,7 +18,7 @@ class ApiController extends ActionController
         $calendarUtil = GeneralUtility::makeInstance(FullCalendarUtility::class);
         $viewState = BackendCalendarViewState::createFromApiRequest($request);
 
-        $events = $calendarUtil->getEvents($viewState);
+        $events = $calendarUtil->getEventsForBackend($viewState);
 
         return $this->jsonResponse(json_encode($events, JSON_THROW_ON_ERROR));
     }
