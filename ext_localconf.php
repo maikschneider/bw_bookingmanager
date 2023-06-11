@@ -8,7 +8,7 @@ call_user_func(
             'BwBookingmanager',
             'Api',
             [
-                \Blueways\BwBookingmanager\Controller\ApiController::class => 'entryCreate, login, logout',
+                \Blueways\BwBookingmanager\Controller\ApiController::class => 'calendarShow, calendarShowDate, entryCreate, login, logout',
                 \Blueways\BwBookingmanager\Controller\ApiV2Controller::class => 'calendarShow',
             ],
         );
@@ -68,5 +68,10 @@ call_user_func(
 
         // Register Mail Templates
         $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][107] = 'EXT:bw_bookingmanager/Resources/Private/Templates/Email';
+
+        // register caching frontend
+        if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['bwbookingmanager_calendar'])) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['bwbookingmanager_calendar'] = array();
+        }
     }
 );

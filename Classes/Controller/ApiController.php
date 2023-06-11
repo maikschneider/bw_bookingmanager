@@ -2,12 +2,15 @@
 
 namespace Blueways\BwBookingmanager\Controller;
 
+use Blueways\BwBookingmanager\Domain\Model\Calendar;
+use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
 use Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator;
 use Blueways\BwBookingmanager\Event\AfterEntryCreationEvent;
 use Blueways\BwBookingmanager\Service\AccessControlService;
+use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
@@ -16,6 +19,7 @@ use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
@@ -56,14 +60,72 @@ class ApiController extends ActionController
 
     protected AccessControlService $accessControlService;
 
+    protected FrontendUserRepository $frontendUserRepository;
+
+    protected CalendarManagerUtility $calendarManagerUtility;
+
     public function __construct(
         CalendarRepository $calendarRepository,
         EntryRepository $entryRepository,
-        AccessControlService $accessControlService
+        AccessControlService $accessControlService,
+        FrontendUserRepository $frontendUserRepository,
+        CalendarManagerUtility $calendarManagerUtility
     ) {
         $this->calendarRepository = $calendarRepository;
         $this->entryRepository = $entryRepository;
         $this->accessControlService = $accessControlService;
+        $this->frontendUserRepository = $frontendUserRepository;
+        $this->calendarManagerUtility = $calendarManagerUtility;
+    }
+
+    public function calendarShowAction(Calendar $calendar)
+    {
+        $startDate = new \DateTime('now');
+        $startDate->setTime(0, 0, 0);
+
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+
+        $this->calendarManagerUtility->setCalendar($calendar);
+        $configuration = $this->calendarManagerUtility->getConfiguration($dateConf);
+
+        if ($user = $this->accessControlService->getFrontendUserUid()) {
+            $user = $this->frontendUserRepository->findByIdentifier($user);
+        }
+
+        $this->view->assignMultiple([
+            'title' => $calendar->getName(),
+            'message' => 'Calendar listing from ' . $dateConf->start->format('d.m.Y') . ' to ' . $dateConf->end->format('d.m.Y'),
+            'configuration' => $configuration,
+            'calendar' => $calendar,
+            'user' => $user,
+        ]);
+
+        $this->view->setConfiguration($this->configuration);
+        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
+    }
+
+    public function calendarShowDateAction(Calendar $calendar, int $day, int $month, int $year)
+    {
+        $startDate = \DateTime::createFromFormat('j-n-Y H:i:s', $day . '-' . $month . '-' . $year . ' 00:00:00');
+        $dateConf = new DateConf((int)$this->settings['dateRange'], $startDate);
+
+        $this->calendarManagerUtility->setCalendar($calendar);
+        $configuration = $this->calendarManagerUtility->getConfiguration($dateConf);
+
+        if ($user = $this->accessControlService->getFrontendUserUid()) {
+            $user = $this->frontendUserRepository->findByIdentifier($user);
+        }
+
+        $this->view->assignMultiple([
+            'title' => $calendar->getName(),
+            'message' => 'Calendar listing from ' . $dateConf->start->format('d.m.Y') . ' to ' . $dateConf->end->format('d.m.Y'),
+            'configuration' => $configuration,
+            'calendar' => $calendar,
+            'user' => $user,
+        ]);
+
+        $this->view->setConfiguration($this->configuration);
+        $this->view->setVariablesToRender(array('configuration', 'calendar', 'user', 'title', 'message'));
     }
 
     /**
