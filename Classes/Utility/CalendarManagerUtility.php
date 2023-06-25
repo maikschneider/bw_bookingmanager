@@ -65,15 +65,15 @@ class CalendarManagerUtility
     private function buildAndCacheConfiguration(DateConf $dateConf)
     {
         $configuration = $this->buildConfiguration($dateConf);
-        $cacheTags = ['calendar' . $this->calendar->getUid()];
+        $cacheTags = ['tx_bwbookingmanager_domain_model_calendar_' . $this->calendar->getUid()];
 
         foreach ($configuration['timeslots'] as $key => $timeslot) {
-            $cacheTags[] = 'timeslot' . $timeslot->getUid();
+            $cacheTags[] = 'tx_bwbookingmanager_domain_model_timeslot_' . $timeslot->getUid();
             $configuration['timeslots'][$key] = $timeslot->getApiOutput();
         }
 
         foreach ($configuration['entries'] as $key => $entry) {
-            $cacheTags[] = 'entry' . $entry->getUid();
+            $cacheTags[] = 'tx_bwbookingmanager_domain_model_entry_' . $entry->getUid();
             $configuration['entries'][$key] = $entry->getApiOutput();
         }
 

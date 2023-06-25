@@ -12,6 +12,7 @@ use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
@@ -287,6 +288,10 @@ class ApiController extends ActionController
             $GLOBALS['TSFE']->fe_user->createUserSession($userArray[0]);
             $GLOBALS['TSFE']->fe_user->loginUser = 1;
         }
+
+        // flush cache
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('bwbookingmanager_calendar');
+        $cache->flushByTag('tx_bwbookingmanager_domain_model_calendar_' . $newEntry->getCalendar()->getUid());
 
         // send mails
         $this->eventDispatcher->dispatch(new AfterEntryCreationEvent($newEntry));
