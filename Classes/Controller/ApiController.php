@@ -7,7 +7,6 @@ use Blueways\BwBookingmanager\Domain\Model\Dto\DateConf;
 use Blueways\BwBookingmanager\Domain\Model\Entry;
 use Blueways\BwBookingmanager\Domain\Repository\CalendarRepository;
 use Blueways\BwBookingmanager\Domain\Repository\EntryRepository;
-use Blueways\BwBookingmanager\Domain\Validator\FeUserCreateValidator;
 use Blueways\BwBookingmanager\Event\AfterEntryCreationEvent;
 use Blueways\BwBookingmanager\Service\AccessControlService;
 use Blueways\BwBookingmanager\Utility\CalendarManagerUtility;
@@ -16,6 +15,7 @@ use ReflectionClass;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\InvalidPasswordHashException;
 use TYPO3\CMS\Core\Crypto\PasswordHashing\PasswordHashFactory;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\PropagateResponseException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
@@ -27,7 +27,6 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Property\TypeConverter\DateTimeConverter;
 use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 class ApiController extends ActionController
@@ -226,13 +225,6 @@ class ApiController extends ActionController
             );
             $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields(FrontendUser::class));
             $propertyMappingConfiguration->skipUnknownProperties();
-
-            // set user validator
-            $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
-            $validatorConjunction = $validatorResolver->getBaseValidatorConjunction(FrontendUser::class);
-            $userValidator = $validatorResolver->createValidator(FeUserCreateValidator::class);
-            $validatorConjunction->addValidator($userValidator);
-            $this->arguments->getArgument('user')->setValidator($validatorConjunction);
         }
     }
 
@@ -280,16 +272,19 @@ class ApiController extends ActionController
 
         // login the newly created user
         if ($user && !$user->getLastlogin()) {
-            $GLOBALS['TSFE']->fe_user->checkPid = 0;
-            $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
-            $userAuth = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
-            $userAuth->checkPid = false;
-            $tempUser = $userAuth->fetchUserRecord($info['db_user'], $user->getUsername());
+            $qb = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('fe_users');
+            $userArray = $qb->select('*')
+                ->from('fe_users')
+                ->where(
+                    $qb->expr()->eq('username', $qb->createNamedParameter($user->getUsername()))
+                )
+                ->execute()
+                ->fetchAllAssociative();
 
             $GLOBALS['TSFE']->fe_user->forceSetCookie = true;
             $GLOBALS['TSFE']->fe_user->dontSetCookie = false;
             $GLOBALS['TSFE']->fe_user->start();
-            $GLOBALS['TSFE']->fe_user->createUserSession($tempUser);
+            $GLOBALS['TSFE']->fe_user->createUserSession($userArray[0]);
             $GLOBALS['TSFE']->fe_user->loginUser = 1;
         }
 
@@ -321,22 +316,22 @@ class ApiController extends ActionController
             );
         }
 
-        $GLOBALS['TSFE']->fe_user->checkPid = 0;
-        $info = $GLOBALS['TSFE']->fe_user->getAuthInfoArray();
-        /** @var FrontendUserAuthentication $userAuth */
-        $userAuth = $this->objectManager->get(FrontendUserAuthentication::class);
-        $userAuth->checkPid = false;
-        $user = $userAuth->fetchUserRecord($info['db_user'], $loginData['uname']);
+        $qb = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('fe_users');
+        $user = $qb->select('*')
+            ->from('fe_users')
+            ->where(
+                $qb->expr()->eq('username', $qb->createNamedParameter($loginData['uname'], \PDO::PARAM_STR))
+            )
+            ->execute()
+            ->fetchAllAssociative();
 
-        if (!$user) {
+        if (!$user || count($user) !== 1 || !isset($user[0]['uid'])) {
             $this->throwStatus(404, 'User not found', json_encode(['errors' => ['username' => 'user not found']]));
         }
 
-        $passwordHashFactory = $this->objectManager->get(
-            PasswordHashFactory::class
-        );
+        $passwordHashFactory = GeneralUtility::makeInstance(PasswordHashFactory::class);
         $passwordHash = $passwordHashFactory->getDefaultHashInstance('FE');
-        $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user['password']);
+        $isValidLoginData = $passwordHash->checkPassword($loginData['uident_text'], $user[0]['password']);
 
         if (!$isValidLoginData) {
             $this->throwStatus(403, 'Login failed', json_encode(['errors' => ['password' => 'wrong password']]));
@@ -348,7 +343,7 @@ class ApiController extends ActionController
         $GLOBALS['TSFE']->fe_user->createUserSession($user);
         $GLOBALS['TSFE']->fe_user->loginUser = 1;
 
-        $this->view->assign('user', $user);
+        $this->view->assign('user', $user[0]);
         $this->view->setConfiguration($this->configuration);
         $this->view->setVariablesToRender(['user']);
         return $this->htmlResponse();
