@@ -116,12 +116,42 @@ parameters:
 			path: Classes/Controller/ApiController.php
 
 		-
-			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Frontend\\\\Authentication\\\\FrontendUserAuthentication\\:\\:fetchUserRecord\\(\\)\\.$#"
+			message: "#^Call to an undefined method TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\ValidatorInterface\\:\\:getValidators\\(\\)\\.$#"
+			count: 1
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Call to method getPropertyValidators\\(\\) on an unknown class Blueways\\\\BwBookingmanager\\\\Controller\\\\GenericObjectValidator\\.$#"
+			count: 1
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Call to method getValidators\\(\\) on an unknown class Blueways\\\\BwBookingmanager\\\\Controller\\\\ConjunctionValidator\\.$#"
+			count: 2
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Call to method removeValidator\\(\\) on an unknown class Blueways\\\\BwBookingmanager\\\\Controller\\\\ConjunctionValidator\\.$#"
+			count: 1
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Cannot call method fetchAllAssociative\\(\\) on Doctrine\\\\DBAL\\\\Result\\|int\\.$#"
 			count: 2
 			path: Classes/Controller/ApiController.php
 
 		-
 			message: "#^Cannot cast mixed to int\\.$#"
+			count: 1
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Class Blueways\\\\BwBookingmanager\\\\Controller\\\\ConjunctionValidator not found\\.$#"
+			count: 2
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Class Blueways\\\\BwBookingmanager\\\\Controller\\\\GenericObjectValidator not found\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
 
@@ -211,11 +241,6 @@ parameters:
 			path: Classes/Controller/ApiController.php
 
 		-
-			message: "#^Parameter \\#1 \\$validator of method TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\AbstractCompositeValidator\\:\\:addValidator\\(\\) expects TYPO3\\\\CMS\\\\Extbase\\\\Validation\\\\Validator\\\\ValidatorInterface, Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\FeUserCreateValidator\\|null given\\.$#"
-			count: 1
-			path: Classes/Controller/ApiController.php
-
-		-
 			message: "#^Parameter \\#2 \\$date of class Blueways\\\\BwBookingmanager\\\\Domain\\\\Model\\\\Dto\\\\DateConf constructor expects DateTime, DateTime\\|false given\\.$#"
 			count: 1
 			path: Classes/Controller/ApiController.php
@@ -223,6 +248,11 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$optionKey of method TYPO3\\\\CMS\\\\Extbase\\\\Property\\\\PropertyMappingConfiguration\\:\\:setTypeConverterOption\\(\\) expects string, int given\\.$#"
 			count: 3
+			path: Classes/Controller/ApiController.php
+
+		-
+			message: "#^Parameter \\#2 \\$saltedHashPW of method TYPO3\\\\CMS\\\\Core\\\\Crypto\\\\PasswordHashing\\\\PasswordHashInterface\\:\\:checkPassword\\(\\) expects string, mixed given\\.$#"
+			count: 1
 			path: Classes/Controller/ApiController.php
 
 		-
@@ -1489,26 +1519,6 @@ parameters:
 			message: "#^Result of \\|\\| is always false\\.$#"
 			count: 1
 			path: Classes/Domain/Validator/EntryCreateValidator.php
-
-		-
-			message: "#^Cannot call method getPassword\\(\\) on mixed\\.$#"
-			count: 1
-			path: Classes/Domain/Validator/FeUserCreateValidator.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\FeUserCreateValidator\\:\\:checkForUniqueUsername\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Validator/FeUserCreateValidator.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\FeUserCreateValidator\\:\\:checkForUniqueUsername\\(\\) has parameter \\$user with no type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Validator/FeUserCreateValidator.php
-
-		-
-			message: "#^Method Blueways\\\\BwBookingmanager\\\\Domain\\\\Validator\\\\FeUserCreateValidator\\:\\:injectFrontendUserRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: Classes/Domain/Validator/FeUserCreateValidator.php
 
 		-
 			message: "#^Property Blueways\\\\BwBookingmanager\\\\EventListener\\\\ModifyEntryListTable\\:\\:\\$settings type has no value type specified in iterable type array\\.$#"

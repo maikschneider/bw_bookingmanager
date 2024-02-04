@@ -166,10 +166,10 @@ class BackendCalendarViewState
         if (!$this->entryStart) {
             return null;
         }
-        $eventTomezoneOffset = (new \DateTime(gmdate("Y-m-d\TH:i:s", $this->entryStart), new \DateTimeZone('Europe/Berlin')))->getOffset();
+        $eventTimezoneOffset = (new \DateTime(gmdate("Y-m-d\TH:i:s", $this->entryStart), new \DateTimeZone('Europe/Berlin')))->getOffset();
         $newEntryStart = (new \DateTime())->setTimestamp((int)$this->entryStart);
-        $newEntryStart->modify('- '.($eventTomezoneOffset.'seconds'));
-        return ($newEntryStart);
+        $newEntryStart->modify('- ' . ($eventTimezoneOffset . 'seconds'));
+        return $newEntryStart;
     }
 
     public function getEntryEndDate()
@@ -177,10 +177,10 @@ class BackendCalendarViewState
         if (!$this->entryEnd) {
             return null;
         }
-        $eventTomezoneOffset = (new \DateTime(gmdate("Y-m-d\TH:i:s", $this->entryEnd), new \DateTimeZone('Europe/Berlin')))->getOffset();
+        $eventTimezoneOffset = (new \DateTime(gmdate("Y-m-d\TH:i:s", $this->entryEnd), new \DateTimeZone('Europe/Berlin')))->getOffset();
         $newEntryEnd = (new \DateTime())->setTimestamp((int)$this->entryEnd);
-        $newEntryEnd->modify('- '.($eventTomezoneOffset.'seconds'));
-        return ($newEntryEnd);
+        $newEntryEnd->modify('- ' . ($eventTimezoneOffset . 'seconds'));
+        return $newEntryEnd;
     }
 
     public function isNewModalView(): bool
