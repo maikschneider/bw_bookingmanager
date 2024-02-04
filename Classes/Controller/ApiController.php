@@ -177,6 +177,26 @@ class ApiController extends ActionController
             'U'
         );
 
+        // remove deep validation of calendar.* (entries in this calendar could be invalid)
+        $conjunctionValidator = $this->arguments->getArgument('newEntry')->getValidator();
+        foreach ($conjunctionValidator->getValidators() as $validator) {
+            if ($validator instanceof ConjunctionValidator) {
+                foreach ($validator->getValidators() as $validators) {
+                    //get all validators for property
+                    if ($validators instanceof GenericObjectValidator) {
+                        foreach ($validators->getPropertyValidators('calendar') as $propertyValidator) {
+                            //remove only standard validator
+                            if ($propertyValidator instanceof ConjunctionValidator) {
+                                foreach ($propertyValidator->getValidators() as $valid) {
+                                    $propertyValidator->removeValidator($valid);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // set allowed properties
         $propertyMappingConfiguration->allowProperties(...$this->getAllowedEntryFields($entityClass));
         $propertyMappingConfiguration->skipUnknownProperties();
